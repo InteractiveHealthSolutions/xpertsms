@@ -1,0 +1,52 @@
+ assayHostTestCode:Represents a code for type of GeneXpert test.\nThis is set in "Host communication settings" in Dx Software
+ assay:Complete name of GeneXpert test type.\nFor example Xpert MTB-RIF
+ assayVersion:Version of Assay
+ sampleId:*Unique specimen sample Id entered by operator
+ patientId:*Patient's unique Identifier entered by operator
+ user:*Username of Dx software
+ testStartedOn:*Date/Time that the test was started on
+ testEndedOn:*Date/Time that the test ended on
+ messageSentOn:*Date/Time that the test results was sent
+ reagentLotId:Lot Id of reagent used to process specimen
+ cartridgeExpirationDate:Expiry date of cartridge.\nEnable for historical data analysis
+ cartridgeSerial:Unique serial number of cartridge used to process a sample
+ moduleSerial:Serial number of module
+ instrumentSerial:Serial number of instrument
+ softwareVersion:Dx Software version
+ resultMtb:*MTB Results
+ resultRif:*Rif Resistance Results
+ resultText:*Detailed test results
+ deviceSerial:Unique identifier of GeneXpert device
+ hostId:Host ID entered in the "System Configuration" of the Dx software
+ systemName:Name of computer controlling GeneXpert.\nThis is set by Cepheid
+ computerName:Name of computer controlling GeneXpert.\nThis is set by Cepheid
+ notes:Notes entered by operator
+ errorCode:*Error code from Dx software in case of test failure
+ errorNotes:*Details of respective error code from Dx software
+ externalTestId:Test ID provided by operator from an external source,\nlike a Hospital's MR system's
+ probeA:Probe data for R&D. Not required for monitoring and evaluation
+ probeB:Probe data for R&D. Not required for monitoring and evaluation
+ probeC:Probe data for R&D. Not required for monitoring and evaluation
+ probeD:Probe data for R&D. Not required for monitoring and evaluation
+ probeE:Probe data for R&D. Not required for monitoring and evaluation
+ probeSpc:Probe data for R&D. Not required for monitoring and evaluation
+ qc1:Quality control data for R&D. Not required for monitoring and evaluation
+ qc2:Quality control data for R&D. Not required for monitoring and evaluation
+ probeACt:Probe data for R&D. Not required for monitoring and evaluation
+ probeBCt:Probe data for R&D. Not required for monitoring and evaluation
+ probeCCt:Probe data for R&D. Not required for monitoring and evaluation
+ probeDCt:Probe data for R&D. Not required for monitoring and evaluation
+ probeECt:Probe data for R&D. Not required for monitoring and evaluation
+ probeSpcCt:Probe data for R&D. Not required for monitoring and evaluation
+ qc1Ct:Quality control data for R&D. Not required for monitoring and evaluation
+ qc2Ct:Quality control data for R&D. Not required for monitoring and evaluation
+ probeAEndpt:Probe data for R&D. Not required for monitoring and evaluation
+ probeBEndpt:Probe data for R&D. Not required for monitoring and evaluation
+ probeCEndpt:Probe data for R&D. Not required for monitoring and evaluation
+ probeDEndpt:Probe data for R&D. Not required for monitoring and evaluation
+ probeEEndpt:Probe data for R&D. Not required for monitoring and evaluation
+ probeSpcEndpt:Probe data for R&D. Not required for monitoring and evaluation
+ qc1Endpt:Quality control data for R&D. Not required for monitoring and evaluation
+ qc2Endpt:Quality control data for R&D. Not required for monitoring and evaluation
+ validatedLab:
+ validatedLocal:
