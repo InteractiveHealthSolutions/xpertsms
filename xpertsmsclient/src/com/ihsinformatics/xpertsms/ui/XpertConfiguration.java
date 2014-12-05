@@ -315,7 +315,8 @@ public class XpertConfiguration extends JFrame implements ActionListener
 		}
 		else if (evt.getSource () == openMrsCheckBox && openMrsCheckBox.isSelected ())
 		{
-			// TODO: Show OpenMRS configuration dialog
+			OpenMrsDialog openMrsDialog = new OpenMrsDialog ();
+			openMrsDialog.setVisible (true);
 		}
 		else if (evt.getSource () == smsCheckBox && smsCheckBox.isSelected ())
 		{

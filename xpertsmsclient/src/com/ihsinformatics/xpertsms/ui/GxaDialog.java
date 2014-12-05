@@ -360,12 +360,12 @@ public class GxaDialog extends JDialog implements ActionListener
 			catch (HttpResponseException e)
 			{
 				e.printStackTrace ();
-				JOptionPane.showMessageDialog (new JFrame (), failureMessage + "\nServer wants to say something: " + e.getMessage (), "Nope! Something is wrong", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog (new JFrame (), failureMessage + "\nServer says: " + e.getMessage (), "Nope! Something is wrong", JOptionPane.ERROR_MESSAGE);
 			}
 			catch (Exception e)
 			{
 				e.printStackTrace ();
-				JOptionPane.showMessageDialog (new JFrame (), failureMessage + "\nServer wants to say something: " + e.getMessage (), "Nope! Something is wrong", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog (new JFrame (), failureMessage + "\nServer says: " + e.getMessage (), "Nope! Something is wrong", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
