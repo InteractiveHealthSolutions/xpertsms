@@ -161,8 +161,11 @@ public class HttpSender extends Thread
 			}
 			if (ControlPanel.props.getProperty (XpertProperties.OPENMRS_EXPORT).equals ("YES"))
 			{
-				OpenMrsApiAuthRest openMrsApiAuthRest = new OpenMrsApiAuthRest (message);
-				response = openMrsApiAuthRest.postRequest (message);
+				String username = ControlPanel.props.getProperty (XpertProperties.OPENMRS_USER);
+				String password = ControlPanel.props.getProperty (XpertProperties.OPENMRS_PASSWORD);
+				String url = ControlPanel.props.getProperty (XpertProperties.OPENMRS_REST_ADDRESS);
+				OpenMrsApiAuthRest openMrsApiAuthRest = new OpenMrsApiAuthRest (username, password, url);
+				response = openMrsApiAuthRest.postResults (message);
 				parseResponse (response, message);
 			}
 			if (ControlPanel.props.getProperty (XpertProperties.GXA_EXPORT).equals ("YES"))

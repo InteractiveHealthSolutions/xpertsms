@@ -274,7 +274,7 @@ public class GxaDialog extends JDialog implements ActionListener
 	 */
 	public void tryConfiguration ()
 	{
-		String successMessage = "Connection to the GXAlert server was successful, a test result was submitted to the server. The configuration seems Okay.";
+		String successMessage = "Connection to the GXAlert server was successful, a test result was submitted to the server. The configuration seems Okay. Do you want to save?";
 		String failureMessage = "Unable to submit dummy result to server.";
 		if (validateData ())
 		{
@@ -355,7 +355,11 @@ public class GxaDialog extends JDialog implements ActionListener
 				os.close ();
 				httpConnection.disconnect ();
 				System.out.println (response);
-				JOptionPane.showMessageDialog (new JFrame (), successMessage, "It works!", JOptionPane.INFORMATION_MESSAGE);
+				int selected = JOptionPane.showConfirmDialog (new JFrame (), successMessage, "It works! Save now?", JOptionPane.YES_NO_OPTION);
+				if (selected == JOptionPane.YES_OPTION)
+				{
+					saveConfiguration ();
+				}
 			}
 			catch (HttpResponseException e)
 			{

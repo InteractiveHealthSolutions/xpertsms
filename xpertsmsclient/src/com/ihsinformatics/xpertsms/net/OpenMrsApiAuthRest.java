@@ -5,6 +5,7 @@
 package com.ihsinformatics.xpertsms.net;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthenticationException;
@@ -18,6 +19,7 @@ import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import com.ihsinformatics.xpertsms.model.XpertResultUploadMessage;
+import com.ihsinformatics.xpertsms.net.exception.HttpResponseException;
 
 /**
  * 
@@ -31,23 +33,117 @@ public class OpenMrsApiAuthRest
 	String	password	= null;
 	String	UrlBase		= null;
 	
-	public OpenMrsApiAuthRest (XpertResultUploadMessage message)
+	public OpenMrsApiAuthRest (String username, String password, String UrlBase)
 	{
-		// TODO: Extract URI and credentials from restUri
-		this.UrlBase = "";
-		this.username = "";
-		this.password = "";
+		this.UrlBase = UrlBase;
+		this.username = username;
+		this.password = password;
+	}
+	
+	public String post (String entity, String jsonObj)
+	{
+		String response = "";
+		DefaultHttpClient httpClient = new DefaultHttpClient ();
+		try
+		{
+			HttpPost httpPost = new HttpPost (UrlBase + entity);
+			UsernamePasswordCredentials credentials = new UsernamePasswordCredentials (username, password);
+			BasicScheme scheme = new BasicScheme ();
+			Header authorizationHeader = scheme.authenticate (credentials, httpPost);
+			httpPost.setHeader (authorizationHeader);
+			System.out.println ("Executing request: " + httpPost.getRequestLine ());
+			StringEntity input = new StringEntity (jsonObj);
+			input.setContentType ("application/json");
+			httpPost.setEntity (input);
+			HttpResponse httpResponse = httpClient.execute (httpPost);
+			int responseCode = httpResponse.getStatusLine ().getStatusCode ();
+			if (responseCode != 204 && responseCode != 201)
+				throw new HttpResponseException (responseCode);
+			response = "SUCCESS";
+		}
+		catch (AuthenticationException e)
+		{
+			e.printStackTrace();
+			response = "ERROR:" + e.getMessage ();
+		}
+		catch (UnsupportedEncodingException e)
+		{
+			e.printStackTrace();
+			response = "ERROR:" + e.getMessage ();
+		}
+		catch (ClientProtocolException e)
+		{
+			e.printStackTrace();
+			response = "ERROR:" + e.getMessage ();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+			response = "ERROR:" + e.getMessage ();
+		}
+		catch (HttpResponseException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			httpClient.getConnectionManager ().shutdown ();
+		}		
+		return response;
 	}
 
 	/**
-	 * HTTP POST
+	 * HTTP GET
+	 * 
+	 * @param query
+	 * @return
+	 */
+	public String get (String query)
+	{
+		String URL = UrlBase + query;
+		String response = "";
+		DefaultHttpClient httpClient = new DefaultHttpClient ();
+		try
+		{
+			HttpGet httpGet = new HttpGet (URL);
+			UsernamePasswordCredentials credentials = new UsernamePasswordCredentials (username, password);
+			BasicScheme scheme = new BasicScheme ();
+			Header authorizationHeader = scheme.authenticate (credentials, httpGet);
+			httpGet.setHeader (authorizationHeader);
+			ResponseHandler<String> responseHandler = new BasicResponseHandler ();
+			response = httpClient.execute (httpGet, responseHandler);
+		}
+		catch (AuthenticationException e)
+		{
+			e.printStackTrace();
+			response = "ERROR:" + e.getMessage ();
+		}
+		catch (ClientProtocolException e)
+		{
+			e.printStackTrace();
+			response = "ERROR:" + e.getMessage ();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+			response = "ERROR:" + e.getMessage ();
+		}
+		finally
+		{
+			httpClient.getConnectionManager ().shutdown ();
+		}
+		return response;
+	}
+	
+	/**
+	 * HTTP POST GXP Results
 	 * 
 	 * @param URLPath
 	 * @param input
 	 * @return
 	 * @throws Exception
 	 */
-	public String postRequest (XpertResultUploadMessage message)
+	public String postResults (XpertResultUploadMessage message)
 	{
 		String URLPath = "/ws/rest/v1/";
 		StringEntity input = null; // TODO: create input object from message
@@ -70,57 +166,9 @@ public class OpenMrsApiAuthRest
 			}
 			else
 			{
-				response = "Success!";
+				response = "SUCCESS";
 			}
 			httpclient.getConnectionManager ().shutdown ();
-		}
-		catch (AuthenticationException e)
-		{
-			e.printStackTrace();
-		}
-		catch (ClientProtocolException e)
-		{
-			e.printStackTrace();
-		}
-		catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		finally
-		{
-			httpclient.getConnectionManager ().shutdown ();
-		}
-		return response;
-	}
-
-	/**
-	 * HTTP GET
-	 * 
-	 * @param URLPath
-	 * @return
-	 * @throws Exception
-	 */
-	public String getRequest (String URLPath)
-	{
-		String URL = UrlBase + URLPath;
-		String response = "";
-		DefaultHttpClient httpclient = new DefaultHttpClient ();
-		try
-		{
-			HttpGet httpGet = new HttpGet (URL);
-
-			UsernamePasswordCredentials credentials = new UsernamePasswordCredentials (username, password);
-			BasicScheme scheme = new BasicScheme ();
-			Header authorizationHeader = scheme.authenticate (credentials, httpGet);
-			httpGet.setHeader (authorizationHeader);
-			ResponseHandler<String> responseHandler = new BasicResponseHandler ();
-
-			// System.out.println("Executing request: " +
-			// httpGet.getRequestLine());
-			// System.out.println(response);
-			response = httpclient.execute (httpGet, responseHandler);
-
 		}
 		catch (AuthenticationException e)
 		{

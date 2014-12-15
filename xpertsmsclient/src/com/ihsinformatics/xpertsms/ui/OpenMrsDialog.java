@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -30,20 +31,17 @@ import javax.swing.border.EmptyBorder;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.http.Header;
-import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthenticationException;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import com.ihsinformatics.xpertsms.constant.GxVariables;
 import com.ihsinformatics.xpertsms.model.XpertProperties;
-import com.ihsinformatics.xpertsms.net.exception.HttpResponseException;
+import com.ihsinformatics.xpertsms.net.OpenMrsApiAuthRest;
 import com.ihsinformatics.xpertsms.util.RegexUtil;
 import com.ihsinformatics.xpertsms.util.SwingUtil;
 
@@ -392,7 +390,6 @@ public class OpenMrsDialog extends JDialog implements ActionListener
 				}
 			}
 		}
-		// TODO: Validate data
 		if (!valid)
 		{
 			JOptionPane.showMessageDialog (new JFrame (), error.toString (), "Error!", JOptionPane.ERROR_MESSAGE);
@@ -405,7 +402,7 @@ public class OpenMrsDialog extends JDialog implements ActionListener
 	 */
 	public void tryConfiguration ()
 	{
-		String successMessage = "Connection to OpenMRS was successful. Missing Concepts were created as specified. The configuration seems Okay.";
+		String successMessage = "Connection to OpenMRS was successful. Missing Concepts will be created as specified on save. Save now?";
 		String failureMessage = "Unable to process request to OpenMRS. This could be because of insufficient rights, wrong address or invalid username/password.";
 		if (validateData ())
 		{
@@ -426,36 +423,11 @@ public class OpenMrsDialog extends JDialog implements ActionListener
 				ResponseHandler<String> responseHandler = new BasicResponseHandler ();
 				System.out.println ("Executing request: " + httpGet.getRequestLine ());
 				response = httpclient.execute (httpGet, responseHandler);
-				// Create another request to get Encounter type entered
-				httpGet = new HttpGet (url + "encountertype?q=" + SwingUtil.get (encounterTypeTextField));
-				System.out.println ("Executing request: " + httpGet.getRequestLine ());
-				response = httpclient.execute (httpGet, responseHandler);
-				JSONObject encounterObj = new JSONObject (response);
-				JSONArray encounters = encounterObj.getJSONArray ("results");
-				if (encounters.length () == 0)
+				int selected = JOptionPane.showConfirmDialog (new JFrame (), successMessage, "It works! Save now?", JOptionPane.YES_NO_OPTION);
+				if (selected == JOptionPane.YES_OPTION)
 				{
-					int selected = JOptionPane.showConfirmDialog (new JFrame (),
-							"Given Encouter Type was not found in OpenMRS. Do you want to create one? (This operation required Encounter Type privileges in OpenMRS)", "Create new Encounter Type?",
-							JOptionPane.YES_NO_OPTION);
-					if (selected == JOptionPane.YES_OPTION)
-					{
-						HttpPost httpPost = new HttpPost (url + "encountertype");
-						System.out.println ("Executing request: " + httpPost.getRequestLine ());
-						httpPost.setHeader (authorizationHeader);
-						String data = "{\"name\":\"" + SwingUtil.get (encounterTypeTextField) + "\",\"description\":\"Encounter for GeneXpert results from XpertSMS\"";
-						StringEntity input = new StringEntity (data);
-						input.setContentType ("application/json");
-						httpPost.setEntity (input);
-						HttpResponse httpResponse = httpclient.execute (httpPost);
-						int responseCode = httpResponse.getStatusLine ().getStatusCode ();
-						if (responseCode != 204 && responseCode != 201)
-							throw new HttpResponseException (responseCode);
-						httpclient.getConnectionManager ().shutdown ();
-						JOptionPane.showMessageDialog (new JFrame (), "A new Encounter Type: " + SwingUtil.get (encounterTypeTextField) + " has been created in OpenMRS", "It works!",
-								JOptionPane.INFORMATION_MESSAGE);
-					}
+					saveConfiguration ();
 				}
-				JOptionPane.showMessageDialog (new JFrame (), successMessage, "It works!", JOptionPane.INFORMATION_MESSAGE);
 				System.out.println (response);
 			}
 			catch (UnknownHostException e)
@@ -469,11 +441,6 @@ public class OpenMrsDialog extends JDialog implements ActionListener
 				e.printStackTrace ();
 				JOptionPane.showMessageDialog (new JFrame (), failureMessage + "\nI suspect wrong username and/or password" + "\nServer says: " + e.getMessage (), "Nope! Something is wrong",
 						JOptionPane.ERROR_MESSAGE);
-			}
-			catch (HttpResponseException e)
-			{
-				e.printStackTrace ();
-				JOptionPane.showMessageDialog (new JFrame (), failureMessage + "\nServer says: " + e.getMessage (), "Nope! Something is wrong", JOptionPane.ERROR_MESSAGE);
 			}
 			catch (ClientProtocolException e)
 			{
@@ -497,8 +464,107 @@ public class OpenMrsDialog extends JDialog implements ActionListener
 	{
 		if (validateData ())
 		{
+			String prefix = sslCheckBox.isSelected () ? "https" : "http" + "://";
+			String url = prefix + SwingUtil.get (addressTextField);
+			String username = SwingUtil.get (usernameTextField);
+			String password = SwingUtil.get (passwordField);
+			String response = "";
+			try
+			{
+				// Check if the encounter type already exists
+				OpenMrsApiAuthRest api = new OpenMrsApiAuthRest (username, password, url);
+				response = api.get ("encountertype?q=" + SwingUtil.get (encounterTypeTextField) + "&v=custom:(uuid,name)");
+				JSONObject encounterObj = new JSONObject (response);
+				JSONArray encounters = encounterObj.getJSONArray ("results");
+				// If not, create one
+				if (encounters.isEmpty ())
+				{
+					String data = "{\"name\":\"" + SwingUtil.get (encounterTypeTextField) + "\",\"description\":\"Encounter for GeneXpert results from XpertSMS\"}";
+					response = api.post ("encountertype", data);
+					if (!response.equals ("SUCCESS"))
+					{
+						JOptionPane.showMessageDialog (new JFrame (), "Uh oh! A problem occurred while creating new Encounter type" + "\nServer says: " + response, "Nope! Something is wrong",
+								JOptionPane.ERROR_MESSAGE);
+						return false;
+					}
+				}
+				StringBuilder conceptMessage = new StringBuilder ();
+				StringBuilder created = new StringBuilder ();
+				StringBuilder existed = new StringBuilder ();
+				StringBuilder error = new StringBuilder ();
+				// Repeat the same with concepts
+				for (String key : conceptMap.keySet ())
+				{
+					String value = conceptMap.get (key);
+					// Check if a concept exists that matches value
+					response = api.get ("concept?q=" + value);
+					JSONObject conceptObj = new JSONObject (response);
+					JSONArray concepts = conceptObj.getJSONArray ("results");
+					// If not, create one
+					if (concepts.isEmpty ())
+					{
+						conceptObj = new JSONObject ();
+						JSONArray names = new JSONArray ();
+						JSONObject name = new JSONObject ();
+						name.put ("name", value);
+						name.put ("locale", "en");
+						name.put ("conceptNameType", "FULLY_SPECIFIED");
+						names.put (name);
+						conceptObj.put ("names", names);
+						conceptObj.put ("datatype", "TEXT");
+						conceptObj.put ("conceptClass", "LabSet");
+						JSONArray descriptions = new JSONArray ();
+						JSONObject description = new JSONObject ();
+						description.put ("description", "Auto-generated concept for " + key + " for GeneXpert Result");
+						description.put ("locale", "en");
+						descriptions.put (description);
+						conceptObj.put ("descriptions", descriptions);
+						response = api.post ("concept", conceptObj.toString ());
+						if (!response.equals ("SUCCESS"))
+						{
+							System.out.println (response);
+							error.append (value + " ");
+						}
+						else
+						{
+							created.append (value + " ");
+						}
+					}
+					else
+					{
+						existed.append (value + " ");
+					}
+				}
+				if (!created.equals (""))
+					conceptMessage.append ("New concepts created: " + created.toString () + "\n");
+				if (!existed.equals (""))
+					conceptMessage.append ("Concepts already existed: " + existed.toString () + "\n");
+				if (!created.equals (""))
+					conceptMessage.append ("Error(s) occurred while creating concpets: " + error.toString () + "\n");
+				JOptionPane.showMessageDialog (new JFrame (), "" + "\nServer says: " + response, "Important", JOptionPane.INFORMATION_MESSAGE);
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace ();
+			}
+			// Save configurations
 			Map<String, String> properties = new HashMap<String, String> ();
 			properties.put (XpertProperties.OPENMRS_DATE_FORMAT, dateFormatComboBox.getSelectedItem ().toString ());
+			properties.put (XpertProperties.OPENMRS_REST_ADDRESS, SwingUtil.get (addressTextField));
+			properties.put (XpertProperties.OPENMRS_USER, SwingUtil.get (usernameTextField));
+			properties.put (XpertProperties.OPENMRS_PASSWORD, SwingUtil.get (passwordField));
+			properties.put (XpertProperties.OPENMRS_ENCOUNTER_TYPE, SwingUtil.get (encounterTypeTextField));
+			properties.put (XpertProperties.OPENMRS_SSL_ENCRYPTION, sslCheckBox.isSelected () ? "NO" : "YES");
+			StringBuilder concepts = new StringBuilder ();
+			Set<String> keySet = conceptMap.keySet ();
+			for (String key : keySet)
+			{
+				String value = conceptMap.get (key);
+				concepts.append (key + ":" + value + ",");
+			}
+			// Remove additional comma at the end
+			concepts.replace (concepts.lastIndexOf (""), concepts.lastIndexOf (","), "");
+			properties.put (XpertProperties.OPENMRS_CONCEPT_MAP, concepts.toString ());
 			boolean saved = XpertProperties.writeProperties (properties);
 			return saved;
 		}
