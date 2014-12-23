@@ -42,4 +42,4 @@ Configured when data is to be collected on local computer:
 - Field separator defines how the columns will be separated
 - Check use quotes when text fields are to be enclosed in quotations
 - Select variables (keep Ctrl pressed to select multiple variables) from GeneXpert results to be shown in CSV file
-- Press "Try.." button to check if the configuration is correct. Finallly, Save to save your settings
+- Press "Try.." button to check if the configuration is correct. Finally, hit "Save" to save your settings
