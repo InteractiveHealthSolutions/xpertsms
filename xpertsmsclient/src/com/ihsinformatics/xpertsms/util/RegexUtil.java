@@ -101,7 +101,7 @@ public class RegexUtil
 	public static final String	timePattern_24			= "([01]?[0-9]|2[0-3]):[0-5][0-9]";
 	public static final String	nicPattern				= "^[]";
 	public static final String	urlPattern				= "^(((ht|f)tp(s?))\\://)?(www.|[a-zA-Z].)[a-zA-Z0-9\\-\\.]+\\.(com|edu|gov|mil|net|org|biz|info|name|museum|us|ca|uk|pk|co|)(\\:[0-9]+)*(/($|[a-zA-Z0-9\\.\\,\\;\\?\\'\\\\\\+&amp;%\\$#\\=~_\\-]+))*$";
-	public static final String	usernamePattern			= "^[A-Za-z0-9_.]";
+	public static final String	usernamePattern			= "^[A-Za-z0-9_.]+";
 	public static final String	smsPattern				= "[A-Z0-9]{2,2}[0-9]{9,9} [0-3][0-9](JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)20[1-3][0-9] [YN]";
 
 	public static final int		idLength				= 14;
@@ -309,6 +309,7 @@ public class RegexUtil
 			return false;
 		}
 	}
+
 	/**
 	 * Checks if given input is valid according to acceptable SMS format
 	 * 

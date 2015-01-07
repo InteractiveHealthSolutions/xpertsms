@@ -7,8 +7,11 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -25,8 +28,20 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import org.apache.http.Header;
+import org.apache.http.auth.AuthenticationException;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.auth.BasicScheme;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
 import com.ihsinformatics.xpertsms.constant.GxVariables;
 import com.ihsinformatics.xpertsms.model.XpertProperties;
+import com.ihsinformatics.xpertsms.net.OpenMrsApiAuthRest;
 import com.ihsinformatics.xpertsms.util.RegexUtil;
 import com.ihsinformatics.xpertsms.util.SwingUtil;
 
@@ -56,10 +71,10 @@ public class OpenMrsDialog extends JDialog implements ActionListener
 
 	private JButton				saveButton;
 	private JButton				tryButton;
-	
+
 	private Map<String, String>	conceptMap;
 
- 	public OpenMrsDialog ()
+	public OpenMrsDialog ()
 	{
 		initComponents ();
 		initEvents ();
@@ -128,7 +143,7 @@ public class OpenMrsDialog extends JDialog implements ActionListener
 		encounterTypeTextField = new JTextField ();
 		encounterTypeTextField.setName ("encounterType");
 		encounterTypeTextField.setToolTipText ("Here goes an Encounter Type you use in OpenMRS to save the GeneXpert results to. If one does not exist, it will be created automatically");
-		encounterTypeTextField.setText ("GeneXpert Results");
+		encounterTypeTextField.setText ("GeneXpert_Results");
 
 		encounterTypeLabel = new JLabel ();
 		encounterTypeLabel.setText ("Encounter Type:");
@@ -221,7 +236,8 @@ public class OpenMrsDialog extends JDialog implements ActionListener
 		conceptsTextArea = new JTextArea ();
 		conceptsTextArea.setName ("conceptMapping");
 		conceptsTextArea.setFont (new Font ("Monospaced", Font.PLAIN, 13));
-		conceptsTextArea.setToolTipText ("This map defines which concepts in OpenMRS correspond to the following variables used to store GeneXpert results:\r\nsampleId=X_SAMPLE_ID\r\ntestStartedOn=X_START_DATE\r\ntestEndedOn=X_END_DATE\r\nmessageSentOn=X_MESSAGE_DATE\r\nreagentLotId=X_LOT_ID\r\ncartridgeExpirationDate=X_EXP_DATE\r\ncartridgeSerial=X_CARTRIDGE_ID\r\nmoduleSerial=X_MODULE_ID\r\ninstrumentSerial=X_INSTRUMENT_ID\r\nmtbResultText=X_MTB\r\nrifResultText=X_RIF\r\nhostId=X_HOST_ID\r\ncomputerName=X_COMPUTER_NAME\r\nnotes=X_NOTES\r\nerrorCode=X_ERROR_CODE\r\nerrorNotes=X_ERROR_NOTES\r\nprobeA=X_PROBE_A\r\nprobeB=X_PROBE_B\r\nprobeC=X_PROBE_C\r\nprobeD=X_PROBE_D\r\nprobeE=X_PROBE_E\r\nprobeSpc=X_PROBE_SPC\r\nqc1=X_QC1\r\nqc2=X_QC2\r\nprobeACt=X_PROBE_ACT\r\nprobeBCt=X_PROBE_BCT\r\nprobeCCt=X_PROBE_CCT\r\nprobeDCt=X_PROBE_DCT\r\nprobeECt=X_PROBE_ECT\r\nprobeSpcCt=X_PROBE_SPC_CT\r\nqc1Ct=X_QC1_CT\r\nqc2Ct=X_QC2_CT\r\nprobeAEndpt=X_PROBE_A_END\r\nprobeBEndpt=X_PROBE_B_END\r\nprobeCEndpt=X_PROBE_C_END\r\nprobeDEndpt=X_PROBE_D_END\r\nprobeEEndpt=X_PROBE_E_END\r\nprobeSpcEndpt=X_PROBE_SPC_END\r\nqc1Endpt=X_QC1_END\r\nqc2Endpt=X_QC2_END");
+		conceptsTextArea
+				.setToolTipText ("This map defines which concepts in OpenMRS correspond to the following variables used to store GeneXpert results:\r\nsampleId=X_SAMPLE_ID\r\ntestStartedOn=X_START_DATE\r\ntestEndedOn=X_END_DATE\r\nmessageSentOn=X_MESSAGE_DATE\r\nreagentLotId=X_LOT_ID\r\ncartridgeExpirationDate=X_EXP_DATE\r\ncartridgeSerial=X_CARTRIDGE_ID\r\nmoduleSerial=X_MODULE_ID\r\ninstrumentSerial=X_INSTRUMENT_ID\r\nmtbResultText=X_MTB\r\nrifResultText=X_RIF\r\nhostId=X_HOST_ID\r\ncomputerName=X_COMPUTER_NAME\r\nnotes=X_NOTES\r\nerrorCode=X_ERROR_CODE\r\nerrorNotes=X_ERROR_NOTES\r\nprobeA=X_PROBE_A\r\nprobeB=X_PROBE_B\r\nprobeC=X_PROBE_C\r\nprobeD=X_PROBE_D\r\nprobeE=X_PROBE_E\r\nprobeSpc=X_PROBE_SPC\r\nqc1=X_QC1\r\nqc2=X_QC2\r\nprobeACt=X_PROBE_ACT\r\nprobeBCt=X_PROBE_BCT\r\nprobeCCt=X_PROBE_CCT\r\nprobeDCt=X_PROBE_DCT\r\nprobeECt=X_PROBE_ECT\r\nprobeSpcCt=X_PROBE_SPC_CT\r\nqc1Ct=X_QC1_CT\r\nqc2Ct=X_QC2_CT\r\nprobeAEndpt=X_PROBE_A_END\r\nprobeBEndpt=X_PROBE_B_END\r\nprobeCEndpt=X_PROBE_C_END\r\nprobeDEndpt=X_PROBE_D_END\r\nprobeEEndpt=X_PROBE_E_END\r\nprobeSpcEndpt=X_PROBE_SPC_END\r\nqc1Endpt=X_QC1_END\r\nqc2Endpt=X_QC2_END");
 		conceptsTextArea
 				.setText ("sampleId=X_SAMPLE_ID\r\ntestStartedOn=X_START_DATE\r\ntestEndedOn=X_END_DATE\r\nmessageSentOn=X_MESSAGE_DATE\r\nreagentLotId=X_LOT_ID\r\ncartridgeExpirationDate=X_EXP_DATE\r\ncartridgeSerial=X_CARTRIDGE_ID\r\nmoduleSerial=X_MODULE_ID\r\ninstrumentSerial=X_INSTRUMENT_ID\r\nmtbResultText=X_MTB\r\nrifResultText=X_RIF\r\nhostId=X_HOST_ID\r\ncomputerName=X_COMPUTER_NAME\r\nnotes=X_NOTES\r\nerrorCode=X_ERROR_CODE\r\nerrorNotes=X_ERROR_NOTES\r\nprobeA=X_PROBE_A\r\nprobeB=X_PROBE_B\r\nprobeC=X_PROBE_C\r\nprobeD=X_PROBE_D\r\nprobeE=X_PROBE_E\r\nprobeSpc=X_PROBE_SPC\r\nqc1=X_QC1\r\nqc2=X_QC2\r\nprobeACt=X_PROBE_ACT\r\nprobeBCt=X_PROBE_BCT\r\nprobeCCt=X_PROBE_CCT\r\nprobeDCt=X_PROBE_DCT\r\nprobeECt=X_PROBE_ECT\r\nprobeSpcCt=X_PROBE_SPC_CT\r\nqc1Ct=X_QC1_CT\r\nqc2Ct=X_QC2_CT\r\nprobeAEndpt=X_PROBE_A_END\r\nprobeBEndpt=X_PROBE_B_END\r\nprobeCEndpt=X_PROBE_C_END\r\nprobeDEndpt=X_PROBE_D_END\r\nprobeEEndpt=X_PROBE_E_END\r\nprobeSpcEndpt=X_PROBE_SPC_END\r\nqc1Endpt=X_QC1_END\r\nqc2Endpt=X_QC2_END");
 		conceptsTextArea.setRows (5);
@@ -336,10 +352,11 @@ public class OpenMrsDialog extends JDialog implements ActionListener
 		}
 		else
 		{
-			conceptMap = new HashMap<String, String>();
-			// Parse the text. The pattern of each line should be String=String strictly
+			conceptMap = new HashMap<String, String> ();
+			// Parse the text. The pattern of each line should be String=String
+			// strictly
 			String map = SwingUtil.get (conceptsTextArea);
-			String[] pairs = map.split ("\r");
+			String[] pairs = map.split ("\r\n");
 			for (String pairStr : pairs)
 			{
 				String[] pair = pairStr.split ("=");
@@ -347,6 +364,7 @@ public class OpenMrsDialog extends JDialog implements ActionListener
 				{
 					error.append ("Problem occurred while reading concept map " + pairStr);
 					valid = false;
+					break;
 				}
 				else if (pair.length < 0)
 				{
@@ -357,10 +375,12 @@ public class OpenMrsDialog extends JDialog implements ActionListener
 				{
 					String variable = pair[0];
 					String concept = pair[1];
-					// Check if the variable name is defined in qualified variables list
+					// Check if the variable name is defined in qualified
+					// variables list
 					if (!GxVariables.VARIABLES.contains (variable))
 					{
-						error.append (variable + " is undefined. Please write variable names properly (tooltip contains this list), these are case-sensitive, i.e. 'sampleId' is not equal to 'SampleID'\n");
+						error.append (variable
+								+ " is undefined. Please write variable names properly (tooltip contains this list), these are case-sensitive, i.e. 'sampleId' is not equal to 'SampleID'\n");
 						valid = false;
 					}
 					else
@@ -382,20 +402,60 @@ public class OpenMrsDialog extends JDialog implements ActionListener
 	 */
 	public void tryConfiguration ()
 	{
-		String successMessage = "Connection to OpenMRS was successful. Missing Concepts were created as specified. The configuration seems Okay.";
-		String failureMessage = "Unable to process request to OpenMRS. This could be because of insufficient rights, wrong address or invalid privileges.";
+		String successMessage = "Connection to OpenMRS was successful. Missing Concepts will be created as specified on save. Save now?";
+		String failureMessage = "Unable to process request to OpenMRS. This could be because of insufficient rights, wrong address or invalid username/password.";
 		if (validateData ())
 		{
+			String prefix = sslCheckBox.isSelected () ? "https" : "http" + "://";
+			String url = prefix + SwingUtil.get (addressTextField);
+			String username = SwingUtil.get (usernameTextField);
+			String password = SwingUtil.get (passwordField);
+			String response = "";
+			DefaultHttpClient httpclient = new DefaultHttpClient ();
 			try
 			{
-				// Create a REST request to OpenMRS server to look for entered EncounterType
-				
-				JOptionPane.showMessageDialog (new JFrame (), successMessage, "It works!", JOptionPane.INFORMATION_MESSAGE);
+				// Create a REST request to OpenMRS server to get a session
+				HttpGet httpGet = new HttpGet (url + "session");
+				UsernamePasswordCredentials credentials = new UsernamePasswordCredentials (username, password);
+				BasicScheme scheme = new BasicScheme ();
+				Header authorizationHeader = scheme.authenticate (credentials, httpGet);
+				httpGet.setHeader (authorizationHeader);
+				ResponseHandler<String> responseHandler = new BasicResponseHandler ();
+				System.out.println ("Executing request: " + httpGet.getRequestLine ());
+				response = httpclient.execute (httpGet, responseHandler);
+				int selected = JOptionPane.showConfirmDialog (new JFrame (), successMessage, "It works! Save now?", JOptionPane.YES_NO_OPTION);
+				if (selected == JOptionPane.YES_OPTION)
+				{
+					saveConfiguration ();
+				}
+				System.out.println (response);
 			}
-			catch (Exception e)
+			catch (UnknownHostException e)
 			{
 				e.printStackTrace ();
-				JOptionPane.showMessageDialog (new JFrame (), failureMessage + "\nServer wants to say something" + e.getMessage (), "Nope! Something is wrong", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog (new JFrame (), failureMessage + "\nI suspect wrong address or connectivity problem" + "\nServer says: " + e.getMessage (), "Nope! Something is wrong",
+						JOptionPane.ERROR_MESSAGE);
+			}
+			catch (AuthenticationException e)
+			{
+				e.printStackTrace ();
+				JOptionPane.showMessageDialog (new JFrame (), failureMessage + "\nI suspect wrong username and/or password" + "\nServer says: " + e.getMessage (), "Nope! Something is wrong",
+						JOptionPane.ERROR_MESSAGE);
+			}
+			catch (ClientProtocolException e)
+			{
+				e.printStackTrace ();
+				JOptionPane.showMessageDialog (new JFrame (), failureMessage + "\nServer says: " + e.getMessage (), "Nope! Something is wrong", JOptionPane.ERROR_MESSAGE);
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace ();
+				JOptionPane.showMessageDialog (new JFrame (), "The connection looks okay, but there was a problem in reading the response" + "\nServer says: " + e.getMessage (),
+						"Nope! Something is wrong", JOptionPane.ERROR_MESSAGE);
+			}
+			finally
+			{
+				httpclient.getConnectionManager ().shutdown ();
 			}
 		}
 	}
@@ -404,8 +464,107 @@ public class OpenMrsDialog extends JDialog implements ActionListener
 	{
 		if (validateData ())
 		{
+			String prefix = sslCheckBox.isSelected () ? "https" : "http" + "://";
+			String url = prefix + SwingUtil.get (addressTextField);
+			String username = SwingUtil.get (usernameTextField);
+			String password = SwingUtil.get (passwordField);
+			String response = "";
+			try
+			{
+				// Check if the encounter type already exists
+				OpenMrsApiAuthRest api = new OpenMrsApiAuthRest (username, password, url);
+				response = api.get ("encountertype?q=" + SwingUtil.get (encounterTypeTextField) + "&v=custom:(uuid,name)");
+				JSONObject encounterObj = new JSONObject (response);
+				JSONArray encounters = encounterObj.getJSONArray ("results");
+				// If not, create one
+				if (encounters.isEmpty ())
+				{
+					String data = "{\"name\":\"" + SwingUtil.get (encounterTypeTextField) + "\",\"description\":\"Encounter for GeneXpert results from XpertSMS\"}";
+					response = api.post ("encountertype", data);
+					if (!response.equals ("SUCCESS"))
+					{
+						JOptionPane.showMessageDialog (new JFrame (), "Uh oh! A problem occurred while creating new Encounter type" + "\nServer says: " + response, "Nope! Something is wrong",
+								JOptionPane.ERROR_MESSAGE);
+						return false;
+					}
+				}
+				StringBuilder conceptMessage = new StringBuilder ();
+				StringBuilder created = new StringBuilder ();
+				StringBuilder existed = new StringBuilder ();
+				StringBuilder error = new StringBuilder ();
+				// Repeat the same with concepts
+				for (String key : conceptMap.keySet ())
+				{
+					String value = conceptMap.get (key);
+					// Check if a concept exists that matches value
+					response = api.get ("concept?q=" + value);
+					JSONObject conceptObj = new JSONObject (response);
+					JSONArray concepts = conceptObj.getJSONArray ("results");
+					// If not, create one
+					if (concepts.isEmpty ())
+					{
+						conceptObj = new JSONObject ();
+						JSONArray names = new JSONArray ();
+						JSONObject name = new JSONObject ();
+						name.put ("name", value);
+						name.put ("locale", "en");
+						name.put ("conceptNameType", "FULLY_SPECIFIED");
+						names.put (name);
+						conceptObj.put ("names", names);
+						conceptObj.put ("datatype", "TEXT");
+						conceptObj.put ("conceptClass", "LabSet");
+						JSONArray descriptions = new JSONArray ();
+						JSONObject description = new JSONObject ();
+						description.put ("description", "Auto-generated concept for " + key + " for GeneXpert Result");
+						description.put ("locale", "en");
+						descriptions.put (description);
+						conceptObj.put ("descriptions", descriptions);
+						response = api.post ("concept", conceptObj.toString ());
+						if (!response.equals ("SUCCESS"))
+						{
+							System.out.println (response);
+							error.append (value + " ");
+						}
+						else
+						{
+							created.append (value + " ");
+						}
+					}
+					else
+					{
+						existed.append (value + " ");
+					}
+				}
+				if (!created.equals (""))
+					conceptMessage.append ("New concepts created: " + created.toString () + "\n");
+				if (!existed.equals (""))
+					conceptMessage.append ("Concepts already existed: " + existed.toString () + "\n");
+				if (!created.equals (""))
+					conceptMessage.append ("Error(s) occurred while creating concpets: " + error.toString () + "\n");
+				JOptionPane.showMessageDialog (new JFrame (), "" + "\nServer says: " + response, "Important", JOptionPane.INFORMATION_MESSAGE);
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace ();
+			}
+			// Save configurations
 			Map<String, String> properties = new HashMap<String, String> ();
 			properties.put (XpertProperties.OPENMRS_DATE_FORMAT, dateFormatComboBox.getSelectedItem ().toString ());
+			properties.put (XpertProperties.OPENMRS_REST_ADDRESS, SwingUtil.get (addressTextField));
+			properties.put (XpertProperties.OPENMRS_USER, SwingUtil.get (usernameTextField));
+			properties.put (XpertProperties.OPENMRS_PASSWORD, SwingUtil.get (passwordField));
+			properties.put (XpertProperties.OPENMRS_ENCOUNTER_TYPE, SwingUtil.get (encounterTypeTextField));
+			properties.put (XpertProperties.OPENMRS_SSL_ENCRYPTION, sslCheckBox.isSelected () ? "NO" : "YES");
+			StringBuilder concepts = new StringBuilder ();
+			Set<String> keySet = conceptMap.keySet ();
+			for (String key : keySet)
+			{
+				String value = conceptMap.get (key);
+				concepts.append (key + ":" + value + ",");
+			}
+			// Remove additional comma at the end
+			concepts.replace (concepts.lastIndexOf (""), concepts.lastIndexOf (","), "");
+			properties.put (XpertProperties.OPENMRS_CONCEPT_MAP, concepts.toString ());
 			boolean saved = XpertProperties.writeProperties (properties);
 			return saved;
 		}
@@ -415,5 +574,14 @@ public class OpenMrsDialog extends JDialog implements ActionListener
 	@Override
 	public void actionPerformed (ActionEvent e)
 	{
+		if (e.getSource () == tryButton)
+		{
+			tryConfiguration ();
+		}
+		else if (e.getSource () == saveButton)
+		{
+
+		}
+
 	}
 }

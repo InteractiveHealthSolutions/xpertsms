@@ -354,7 +354,7 @@ public class CsvDialog extends JDialog implements ActionListener
 	 */
 	public void tryConfiguration ()
 	{
-		String successMessage = "A temporary csv file was successfully created and deleted. The configuration seems Okay.";
+		String successMessage = "A temporary csv file was successfully created and deleted. The configuration seems Okay. Do you want to Save it?";
 		String failureMessage = "Unable to create temporary csv file in the target folder. This could be because of insufficient rights, zero disk space or wrong address.";
 		if (validateData ())
 		{
@@ -364,12 +364,16 @@ public class CsvDialog extends JDialog implements ActionListener
 			{
 				temp.createNewFile ();
 				temp.delete ();
-				JOptionPane.showMessageDialog (new JFrame (), successMessage, "It works!", JOptionPane.INFORMATION_MESSAGE);
+				int selected = JOptionPane.showConfirmDialog (new JFrame(), successMessage, "It works! Save now?", JOptionPane.YES_NO_OPTION);
+				if (selected == JOptionPane.YES_OPTION)
+				{
+					saveConfiguration ();
+				}
 			}
 			catch (IOException e)
 			{
 				e.printStackTrace ();
-				JOptionPane.showMessageDialog (new JFrame (), failureMessage + "\nServer wants to say something" + e.getMessage (), "Nope! Something is wrong", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog (new JFrame (), failureMessage + "\nServer says: " + e.getMessage (), "Nope! Something is wrong", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
