@@ -1,3 +1,13 @@
+/* Copyright(C) 2015 Interactive Health Solutions, Pvt. Ltd.
+
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as
+published by the Free Software Foundation; either version 3 of the License (GPLv3), or any later version.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program; if not, write to the Interactive Health Solutions, info@ihsinformatics.com
+You can also access the license on the internet at the address: http://www.gnu.org/licenses/gpl-3.0.html
+
+Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors. */
 /**
  * Main Configuration panel for XpertSMS to set up various results export channels
  */
@@ -136,11 +146,9 @@ public class XpertConfiguration extends JFrame implements ActionListener
 		topPanel.setLayout (topPanelLayout);
 
 		smsCheckBox.setText ("SMS: Ideal for exporting results in absence of a reliable internet connection. You need an Android phone to use this service");
-		smsCheckBox.addActionListener (this);
 		csvCheckBox.setText ("CSV Export: To export results to a text file. Caution! Not recommended for insecure computers");
 		webCheckBox.setText ("Web Service: Use this to post results to an external web service in Json/XML form. This option requires internet connectivity");
 		gxaCheckBox.setText ("GXAlert: Offers a strong reporting backbone. You will need to setup GXAlert server");
-		gxaCheckBox.addActionListener (this);
 		openMrsCheckBox.setText ("OpenMRS: Integrate with OpenMRS. You will need to setup OpenMRS server to use this service");
 		GroupLayout middlePanelLayout = new GroupLayout (middlePanel);
 		middlePanelLayout.setHorizontalGroup (middlePanelLayout.createParallelGroup (Alignment.LEADING).addGroup (

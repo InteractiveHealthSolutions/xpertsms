@@ -1,3 +1,13 @@
+/* Copyright(C) 2015 Interactive Health Solutions, Pvt. Ltd.
+
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as
+published by the Free Software Foundation; either version 3 of the License (GPLv3), or any later version.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program; if not, write to the Interactive Health Solutions, info@ihsinformatics.com
+You can also access the license on the internet at the address: http://www.gnu.org/licenses/gpl-3.0.html
+
+Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors. */
 
 package com.ihsinformatics.xpertsms.ui;
 
@@ -489,9 +499,9 @@ public class OpenMrsDialog extends JDialog implements ActionListener
 					}
 				}
 				StringBuilder conceptMessage = new StringBuilder ();
-				StringBuilder created = new StringBuilder ();
-				StringBuilder existed = new StringBuilder ();
-				StringBuilder error = new StringBuilder ();
+				int created = 0;
+				int existed = 0;
+				int error = 0;
 				// Repeat the same with concepts
 				for (String key : conceptMap.keySet ())
 				{
@@ -520,28 +530,28 @@ public class OpenMrsDialog extends JDialog implements ActionListener
 						descriptions.put (description);
 						conceptObj.put ("descriptions", descriptions);
 						response = api.post ("concept", conceptObj.toString ());
+						System.out.println (response);
 						if (!response.equals ("SUCCESS"))
 						{
-							System.out.println (response);
-							error.append (value + " ");
+							error++;
 						}
 						else
 						{
-							created.append (value + " ");
+							created++;
 						}
 					}
 					else
 					{
-						existed.append (value + " ");
+						existed++;
 					}
 				}
-				if (!created.equals (""))
-					conceptMessage.append ("New concepts created: " + created.toString () + "\n");
-				if (!existed.equals (""))
-					conceptMessage.append ("Concepts already existed: " + existed.toString () + "\n");
-				if (!created.equals (""))
-					conceptMessage.append ("Error(s) occurred while creating concpets: " + error.toString () + "\n");
-				JOptionPane.showMessageDialog (new JFrame (), "" + "\nServer says: " + response, "Important", JOptionPane.INFORMATION_MESSAGE);
+				if (created > 0)
+					conceptMessage.append (created + " new concepts created\n");
+				if (existed > 0)
+					conceptMessage.append (existed + " concepts already existed\n");
+				if (error > 0)
+					conceptMessage.append (error + " error(s) occurred while creating concpets. Please check the log file\n");
+				JOptionPane.showMessageDialog (new JFrame (), conceptMessage.toString () + "\nServer says: " + response, "Important", JOptionPane.INFORMATION_MESSAGE);
 			}
 			catch (Exception e)
 			{
@@ -563,7 +573,7 @@ public class OpenMrsDialog extends JDialog implements ActionListener
 				concepts.append (key + ":" + value + ",");
 			}
 			// Remove additional comma at the end
-			concepts.replace (concepts.lastIndexOf (""), concepts.lastIndexOf (","), "");
+			concepts = concepts.replace (concepts.length () - 1, concepts.length () - 1, "");
 			properties.put (XpertProperties.OPENMRS_CONCEPT_MAP, concepts.toString ());
 			boolean saved = XpertProperties.writeProperties (properties);
 			return saved;
