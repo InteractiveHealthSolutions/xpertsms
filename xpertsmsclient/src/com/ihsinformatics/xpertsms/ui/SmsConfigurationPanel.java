@@ -49,7 +49,6 @@ public class SmsConfigurationPanel extends javax.swing.JPanel
 
 	private void initComponents ()
 	{
-
 		topDialogPanel = new javax.swing.JPanel ();
 		addressLabel = new javax.swing.JLabel ();
 		addressTextField = new javax.swing.JTextField ();

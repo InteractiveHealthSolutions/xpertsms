@@ -53,10 +53,15 @@ import com.ihsinformatics.xpertsms.util.SwingUtil;
 public class XpertConfiguration extends JFrame implements ActionListener
 {
 	private static final long	serialVersionUID	= 4866613443914433909L;
-	public static Properties	props;
 	private JPanel				topPanel;
 	private JPanel				middlePanel;
 	private JLabel				headingLabel;
+
+	private JButton				smsConfigButton;
+	private JButton				csvConfigButton;
+	private JButton				webConfigButton;
+	private JButton				gxaConfigButton;
+	private JButton				openMrsConfigButton;
 
 	private JCheckBox			csvCheckBox;
 	private JCheckBox			gxaCheckBox;
@@ -114,6 +119,7 @@ public class XpertConfiguration extends JFrame implements ActionListener
 		setName ("mainFrame");
 		initComponents ();
 		initEvents ();
+		applyProperties ();
 	}
 
 	private void initComponents ()
@@ -282,21 +288,66 @@ public class XpertConfiguration extends JFrame implements ActionListener
 
 		startButton.setFont (new Font ("Tahoma", 2, 12)); // NOI18N
 		startButton.setText ("START");
-		startButton.addActionListener (this);
 		getContentPane ().add (startButton);
+
+		smsConfigButton = new JButton ("SMS Config");
+		smsConfigButton.setBounds (10, 308, 119, 28);
+		getContentPane ().add (smsConfigButton);
+
+		csvConfigButton = new JButton ("CSV Config");
+		csvConfigButton.setBounds (139, 308, 118, 28);
+		getContentPane ().add (csvConfigButton);
+
+		webConfigButton = new JButton ("Web Config");
+		webConfigButton.setBounds (267, 308, 118, 28);
+		getContentPane ().add (webConfigButton);
+
+		gxaConfigButton = new JButton ("GXA Config");
+		gxaConfigButton.setBounds (395, 308, 118, 28);
+		getContentPane ().add (gxaConfigButton);
+
+		openMrsConfigButton = new JButton ("OMRS Config");
+		openMrsConfigButton.setBounds (527, 308, 118, 28);
+		getContentPane ().add (openMrsConfigButton);
 
 		pack ();
 	}
 
 	public void initEvents ()
 	{
-		csvCheckBox.addActionListener (this);
-		gxaCheckBox.addActionListener (this);
-		openMrsCheckBox.addActionListener (this);
-		smsCheckBox.addActionListener (this);
-		webCheckBox.addActionListener (this);
+		smsConfigButton.addActionListener (this);
+		csvConfigButton.addActionListener (this);
+		webConfigButton.addActionListener (this);
+		gxaConfigButton.addActionListener (this);
+		openMrsConfigButton.addActionListener (this);
 		importButton.addActionListener (this);
 		startButton.addActionListener (this);
+	}
+
+	public void applyProperties ()
+	{
+		String csvExport = XpertProperties.getProperty (XpertProperties.CSV_EXPORT);
+		String smsExport = XpertProperties.getProperty (XpertProperties.SMS_EXPORT);
+		String gxaExport = XpertProperties.getProperty (XpertProperties.GXA_EXPORT);
+		String openMrsExport = XpertProperties.getProperty (XpertProperties.OPENMRS_EXPORT);
+		String webExport = XpertProperties.getProperty (XpertProperties.WEB_EXPORT);
+		String xpertUser = XpertProperties.getProperty (XpertProperties.XPERT_USER);
+		String xpertPassword = XpertProperties.getProperty (XpertProperties.XPERT_PASSWORD);
+		String mtbCode = XpertProperties.getProperty (XpertProperties.MTB_CODE);
+		String rifCode = XpertProperties.getProperty (XpertProperties.RIF_CODE);
+		String qcCode = XpertProperties.getProperty (XpertProperties.QC_CODE);
+		String localPort = XpertProperties.getProperty (XpertProperties.LOCAL_PORT);
+		csvCheckBox.setSelected (csvExport.equals ("YES"));
+		smsCheckBox.setSelected (smsExport.equals ("YES"));
+		gxaCheckBox.setSelected (gxaExport.equals ("YES"));
+		openMrsCheckBox.setSelected (openMrsExport.equals ("YES"));
+		webCheckBox.setSelected (webExport.equals ("YES"));
+		userTextField.setText (xpertUser);
+		passwordField.setText (xpertPassword);
+		mtbCodeTextField.setText (mtbCode);
+		rifCodeTextField.setText (rifCode);
+		qcCodeTextField.setText (qcCode);
+		localPortTextField.setText (localPort);
 	}
 
 	public boolean validateData ()
@@ -311,26 +362,27 @@ public class XpertConfiguration extends JFrame implements ActionListener
 	@Override
 	public void actionPerformed (ActionEvent evt)
 	{
-		if (evt.getSource () == csvCheckBox && csvCheckBox.isSelected ())
+		if (evt.getSource () == csvConfigButton)
 		{
 			CsvDialog csvDialog = new CsvDialog ();
 			csvDialog.setVisible (true);
 		}
-		else if (evt.getSource () == gxaCheckBox && gxaCheckBox.isSelected ())
+		else if (evt.getSource () == gxaConfigButton)
 		{
 			GxaDialog gxaDialog = new GxaDialog ();
 			gxaDialog.setVisible (true);
 		}
-		else if (evt.getSource () == openMrsCheckBox && openMrsCheckBox.isSelected ())
+		else if (evt.getSource () == openMrsConfigButton)
 		{
 			OpenMrsDialog openMrsDialog = new OpenMrsDialog ();
 			openMrsDialog.setVisible (true);
 		}
-		else if (evt.getSource () == smsCheckBox && smsCheckBox.isSelected ())
+		else if (evt.getSource () == smsConfigButton)
 		{
-			// TODO: Show SMS configuration dialog
+			SmsDialog smsDialog = new SmsDialog ();
+			smsDialog.setVisible (true);
 		}
-		else if (evt.getSource () == webCheckBox && webCheckBox.isSelected ())
+		else if (evt.getSource () == webConfigButton)
 		{
 			// TODO: Show Web configuration dialog
 		}
@@ -344,11 +396,11 @@ public class XpertConfiguration extends JFrame implements ActionListener
 				{
 					Properties newProps = new Properties ();
 					newProps.load (new FileInputStream (file.getAbsolutePath ()));
-					String p1 = props.getProperty (XpertProperties.CSV_EXPORT);
-					String p2 = props.getProperty (XpertProperties.SMS_EXPORT);
-					String p3 = props.getProperty (XpertProperties.GXA_EXPORT);
-					String p4 = props.getProperty (XpertProperties.OPENMRS_EXPORT);
-					String p5 = props.getProperty (XpertProperties.WEB_EXPORT);
+					String p1 = newProps.getProperty (XpertProperties.CSV_EXPORT);
+					String p2 = newProps.getProperty (XpertProperties.SMS_EXPORT);
+					String p3 = newProps.getProperty (XpertProperties.GXA_EXPORT);
+					String p4 = newProps.getProperty (XpertProperties.OPENMRS_EXPORT);
+					String p5 = newProps.getProperty (XpertProperties.WEB_EXPORT);
 					// Invalid if export properties are missing
 					if ("".equals (p1) || "".equals (p2) || "".equals (p3) || "".equals (p4) || "".equals (p5))
 					{
@@ -360,7 +412,8 @@ public class XpertConfiguration extends JFrame implements ActionListener
 						for (String property : newProps.stringPropertyNames ())
 							properties.put (property, newProps.getProperty (property));
 						XpertProperties.writeProperties (properties);
-						JOptionPane.showMessageDialog (new JFrame (), "Properties have been successfully imported.", "Imported!", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog (new JFrame (), "Properties have been successfully imported. Please restart the application to apply new configuration.", "Imported!",
+								JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 				catch (IOException e)
@@ -368,17 +421,23 @@ public class XpertConfiguration extends JFrame implements ActionListener
 					e.printStackTrace ();
 				}
 			}
-			else if (evt.getSource () == startButton)
-			{
-				Map<String, String> properties = new HashMap<String, String> ();
-				properties.put (XpertProperties.CSV_EXPORT, csvCheckBox.isSelected () ? "YES" : "NO");
-				properties.put (XpertProperties.SMS_EXPORT, smsCheckBox.isSelected () ? "YES" : "NO");
-				properties.put (XpertProperties.GXA_EXPORT, gxaCheckBox.isSelected () ? "YES" : "NO");
-				properties.put (XpertProperties.OPENMRS_EXPORT, openMrsCheckBox.isSelected () ? "YES" : "NO");
-				properties.put (XpertProperties.WEB_EXPORT, webCheckBox.isSelected () ? "YES" : "NO");
-				XpertProperties.writeProperties (properties);
-				// TODO: Launch Control panel
-			}
+		}
+		else if (evt.getSource () == startButton)
+		{
+			Map<String, String> properties = new HashMap<String, String> ();
+			properties.put (XpertProperties.CSV_EXPORT, csvCheckBox.isSelected () ? "YES" : "NO");
+			properties.put (XpertProperties.SMS_EXPORT, smsCheckBox.isSelected () ? "YES" : "NO");
+			properties.put (XpertProperties.GXA_EXPORT, gxaCheckBox.isSelected () ? "YES" : "NO");
+			properties.put (XpertProperties.OPENMRS_EXPORT, openMrsCheckBox.isSelected () ? "YES" : "NO");
+			properties.put (XpertProperties.WEB_EXPORT, webCheckBox.isSelected () ? "YES" : "NO");
+			properties.put (XpertProperties.XPERT_USER, SwingUtil.get (userTextField));
+			properties.put (XpertProperties.XPERT_PASSWORD, SwingUtil.get (passwordField));
+			properties.put (XpertProperties.MTB_CODE, SwingUtil.get (mtbCodeTextField));
+			properties.put (XpertProperties.RIF_CODE, SwingUtil.get (rifCodeTextField));
+			properties.put (XpertProperties.QC_CODE, SwingUtil.get (qcCodeTextField));
+			properties.put (XpertProperties.LOCAL_PORT, SwingUtil.get (localPortTextField));
+			XpertProperties.writeProperties (properties);
+			// TODO: Launch Control panel
 		}
 	}
 }

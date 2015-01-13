@@ -58,7 +58,7 @@ public class XpertSMSMain
 			splash.update ();
 			try
 			{
-				Thread.sleep (90);
+				Thread.sleep (10);
 			}
 			catch (InterruptedException e)
 			{
