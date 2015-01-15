@@ -428,6 +428,7 @@ public class OpenMrsDialog extends JDialog implements ActionListener
 				HttpGet httpGet = new HttpGet (url + "session");
 				UsernamePasswordCredentials credentials = new UsernamePasswordCredentials (username, password);
 				BasicScheme scheme = new BasicScheme ();
+				@SuppressWarnings("deprecation")
 				Header authorizationHeader = scheme.authenticate (credentials, httpGet);
 				httpGet.setHeader (authorizationHeader);
 				ResponseHandler<String> responseHandler = new BasicResponseHandler ();

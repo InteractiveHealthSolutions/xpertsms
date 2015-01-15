@@ -151,9 +151,9 @@ public class XpertConfiguration extends JFrame implements ActionListener
 		topPanelLayout.setVerticalGroup (topPanelLayout.createParallelGroup (Alignment.LEADING).addComponent (headingLabel, GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE));
 		topPanel.setLayout (topPanelLayout);
 
-		smsCheckBox.setText ("SMS: Ideal for exporting results in absence of a reliable internet connection. You need an Android phone to use this service");
+		smsCheckBox.setText ("SMS: Ideal for exporting results in absence of a reliable internet connection. Requires SMS Tarseel installed");
 		csvCheckBox.setText ("CSV Export: To export results to a text file. Caution! Not recommended for insecure computers");
-		webCheckBox.setText ("Web Service: Use this to post results to an external web service in Json/XML form. This option requires internet connectivity");
+		webCheckBox.setText ("Web Service: Use this to post results to an external web service in Json/XML form. This option requires internet");
 		gxaCheckBox.setText ("GXAlert: Offers a strong reporting backbone. You will need to setup GXAlert server");
 		openMrsCheckBox.setText ("OpenMRS: Integrate with OpenMRS. You will need to setup OpenMRS server to use this service");
 		GroupLayout middlePanelLayout = new GroupLayout (middlePanel);

@@ -16,8 +16,17 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.Set;
+import javax.management.InstanceAlreadyExistsException;
+import javax.swing.AbstractListModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -34,36 +43,43 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
+import net.jmatrix.eproperties.EProperties;
+import org.irdresearch.smstarseel.context.TarseelContext;
+import org.irdresearch.smstarseel.context.TarseelServices;
+import org.irdresearch.smstarseel.data.Project;
+import org.irdresearch.smstarseel.data.Setting;
 import com.ihsinformatics.xpertsms.model.XpertProperties;
 import com.ihsinformatics.xpertsms.util.RegexUtil;
 import com.ihsinformatics.xpertsms.util.SwingUtil;
-import javax.swing.AbstractListModel;
 
 /**
  * @author owais.hussain@irdresearch.org
  */
 public class SmsDialog extends JDialog implements ActionListener
 {
-	private static final long	serialVersionUID	= -6629569177787110764L;
-	private final JPanel		contentPanel		= new JPanel ();
-	private JPanel				topDialogPanel;
-	private JList				conceptsList;
-	private JScrollPane			verticalScrollPane;
+	private static final long		serialVersionUID	= -6629569177787110764L;
+	public static final String		TARSEEL_CFG			= "smstarseel.cfg.xml";
+	public static final String		TARSEEL_PROP		= "smstarseel.properties";
+	private static TarseelServices	tarseelService;
 
-	private JLabel				smsServerAddressLabel;
-	private JLabel				adminPhoneLabel;
-	private JLabel				dateTimeFormatLable;
-	private JLabel				variablesListLabel;
+	private final JPanel			contentPanel		= new JPanel ();
+	private JPanel					topDialogPanel;
+	private JList					variablesList;
+	private JScrollPane				verticalScrollPane;
 
-	private JTextField			smsServerAddressTextField;
-	private JTextField			adminPhoneTextField;
-	private JCheckBox			useSslCheckBox;
+	private JLabel					projectNameLabel;
+	private JLabel					adminPhoneLabel;
+	private JLabel					dateTimeFormatLable;
+	private JLabel					variablesListLabel;
 
-	private JComboBox			dateTimeFormatComboBox;
+	private JTextField				projectNameTextField;
+	private JTextField				adminPhoneTextField;
 
-	private JButton				recommendedButton;
-	private JButton				saveButton;
-	private JButton				tryButton;
+	private JComboBox				dateTimeFormatComboBox;
+
+	private JButton					recommendedButton;
+	private JButton					saveButton;
+	private JButton					tryButton;
 
 	public SmsDialog ()
 	{
@@ -72,22 +88,31 @@ public class SmsDialog extends JDialog implements ActionListener
 		initValues ();
 	}
 
+	public static Map<Object, Object> convertEntrySetToMap (Set<Entry<Object, Object>> entrySet)
+	{
+		Map<Object, Object> mapFromSet = new HashMap<Object, Object> ();
+		for (Entry<Object, Object> entry : entrySet)
+		{
+			mapFromSet.put (entry.getKey (), entry.getValue ());
+		}
+		return mapFromSet;
+	}
+
 	/**
 	 * Initialize form components and layout
 	 */
 	public void initComponents ()
 	{
 		topDialogPanel = new javax.swing.JPanel ();
-		smsServerAddressLabel = new JLabel ();
-		smsServerAddressTextField = new JTextField ();
+		projectNameLabel = new JLabel ();
+		projectNameTextField = new JTextField ();
 		adminPhoneLabel = new JLabel ();
 		adminPhoneTextField = new JTextField ();
 		dateTimeFormatLable = new JLabel ();
 		dateTimeFormatComboBox = new JComboBox ();
-		useSslCheckBox = new JCheckBox ();
 		variablesListLabel = new JLabel ();
 		verticalScrollPane = new JScrollPane ();
-		conceptsList = new JList ();
+		variablesList = new JList ();
 		recommendedButton = new JButton ("Recommended");
 		tryButton = new JButton ();
 		saveButton = new JButton ();
@@ -95,9 +120,9 @@ public class SmsDialog extends JDialog implements ActionListener
 		setName ("openMrsDialog");
 		setDefaultCloseOperation (JDialog.DISPOSE_ON_CLOSE);
 		setResizable (false);
-		setMinimumSize (new Dimension(400, 300));
-		setTitle ("OpenMRS Configuration");
-		setPreferredSize (new Dimension(400, 300));
+		setMinimumSize (new Dimension (400, 300));
+		setTitle ("SMS Configuration");
+		setPreferredSize (new Dimension (400, 300));
 		setBounds (100, 100, 415, 360);
 		getContentPane ().setLayout (new BorderLayout ());
 
@@ -107,10 +132,10 @@ public class SmsDialog extends JDialog implements ActionListener
 		saveButton.setFont (new java.awt.Font ("Tahoma", 2, 12)); // NOI18N
 		saveButton.setText ("Save");
 		saveButton.setToolTipText ("Creates database tables and save settings to configuration file.");
-		smsServerAddressLabel.setText ("SMS Server Address:");
-		smsServerAddressTextField.setToolTipText ("Must be a valid IP address, like \"127.0.0.1\" or a URL, like \"127.0.0.1/smstarseelweb/smstarseel\". Please do not write http(s)://");
-		smsServerAddressTextField.setText ("localhost:8080/smstarseelweb/smstarseel");
-		smsServerAddressTextField.setName ("smsTarseelAddress");
+		projectNameLabel.setText ("Project's Name:");
+		projectNameTextField.setToolTipText ("Project must be configured in the SMS Tarseel web application");
+		projectNameTextField.setText ("XSMSKHI");
+		projectNameTextField.setName ("projectName");
 		adminPhoneLabel.setText ("Admin's Phone No.:");
 		adminPhoneTextField.setToolTipText ("Here goes fully qualified mobile number of the receiver of results from GeneXpert. Please start from country code.");
 		adminPhoneTextField.setText ("+923452345345");
@@ -119,12 +144,11 @@ public class SmsDialog extends JDialog implements ActionListener
 				"dd/MM/yyyy", "d/M/yy", "EEE, d MMM yyyy HH:mm:ss", "yyyyMMddhhmmss", "yyyy-MM-dd'T'HH:mm:ss'Z'"}));
 		dateTimeFormatComboBox
 				.setToolTipText ("Choose a format for date and time fields.\n[yyyy-MM-dd'T'hh:mm:ss'Z'] is ISO-8601 standard date format, 2014-10-23T12:00:00Z\n[yyyy-MM-dd hh:mm:ss] is typical SQL format, e.g. 2014-10-23 14:00:00\n[yyyy-MM-dd] is date-only variant of SQL format, e.g. 2014-10-23\n[MM/dd/yyyy hh:mm:ssa] is standard USA date format, e.g. 10/23/2014 2:00:00pm\n[MM/dd/yyyy] is date-only variant of USA format, e.g. 10/23/2014\n[M/d/yy] is short USA format date, e.g. 10/23/14\n[dd/MM/yyyy hh:mm:ssa] is standard UK date format, e.g. 23/10/2014 2:00:00pm\n[dd/MM/yyyy] is date-only variant of UK format, e.g. 23/10/2014\n[d/M/yy] is short UK format date, e.g. 23/10/14\n[EEE, d MMM yyyy HH:mm:ss] is usually for printing, e.g. Thu, 23 Oct 2014 12:00:00\n[yyyyMMddhhmmss] is concatenated date/time, e.g. 20141023140000\n\nTip: longer date/time format will increase the length of your message. Choose shorter format whenever possible");
-		useSslCheckBox.setText ("Use SSL/TLS Encryption");
 		variablesListLabel.setText ("Variables to Send:");
-		conceptsList
+		variablesList
 				.setToolTipText ("Select all the attributes to be sent via SMS. Press Ctrl key and click multiple variables. In order to avoid long messages, choose only the essential ones. The default selections send an SMS of approximately 190 characters");
-		verticalScrollPane.setViewportView (conceptsList);
-		conceptsList.setModel (new AbstractListModel ()
+		verticalScrollPane.setViewportView (variablesList);
+		variablesList.setModel (new AbstractListModel ()
 		{
 			private static final long	serialVersionUID	= 8641812103569559442L;
 			String[]					values				= new String[] {"assayHostTestCode", "assay", "assayVersion", "sampleId", "patientId", "user", "testStartedOn", "testEndedOn",
@@ -151,32 +175,32 @@ public class SmsDialog extends JDialog implements ActionListener
 					.addContainerGap()
 					.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(topDialogPanelLayout.createSequentialGroup()
-							.addComponent(adminPhoneLabel, GroupLayout.PREFERRED_SIZE, 108, GroupLayout.PREFERRED_SIZE)
-							.addGap(19)
-							.addComponent(adminPhoneTextField, GroupLayout.PREFERRED_SIZE, 103, GroupLayout.PREFERRED_SIZE))
+							.addComponent(projectNameLabel, GroupLayout.PREFERRED_SIZE, 115, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(projectNameTextField, GroupLayout.PREFERRED_SIZE, 242, GroupLayout.PREFERRED_SIZE))
 						.addGroup(topDialogPanelLayout.createSequentialGroup()
 							.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.TRAILING)
 								.addGroup(topDialogPanelLayout.createSequentialGroup()
 									.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
-										.addComponent(dateTimeFormatLable, GroupLayout.PREFERRED_SIZE, 102, GroupLayout.PREFERRED_SIZE)
+										.addGroup(topDialogPanelLayout.createSequentialGroup()
+											.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
+												.addComponent(adminPhoneLabel, GroupLayout.PREFERRED_SIZE, 108, GroupLayout.PREFERRED_SIZE)
+												.addComponent(dateTimeFormatLable, GroupLayout.PREFERRED_SIZE, 102, GroupLayout.PREFERRED_SIZE))
+											.addGap(19))
 										.addComponent(variablesListLabel, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE))
-									.addGap(25))
+									.addGap(6))
 								.addGroup(topDialogPanelLayout.createSequentialGroup()
 									.addComponent(recommendedButton)
 									.addPreferredGap(ComponentPlacement.RELATED)))
-							.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(useSslCheckBox, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
-								.addComponent(dateTimeFormatComboBox, 0, 186, Short.MAX_VALUE)
-								.addGroup(topDialogPanelLayout.createSequentialGroup()
-									.addComponent(tryButton)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(saveButton))
-								.addComponent(verticalScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(topDialogPanelLayout.createSequentialGroup()
-							.addComponent(smsServerAddressLabel, GroupLayout.PREFERRED_SIZE, 115, GroupLayout.PREFERRED_SIZE)
-							.addGap(12)
-							.addComponent(smsServerAddressTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)))
+							.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(verticalScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING, false)
+									.addComponent(adminPhoneTextField, GroupLayout.PREFERRED_SIZE, 103, GroupLayout.PREFERRED_SIZE)
+									.addGroup(topDialogPanelLayout.createSequentialGroup()
+										.addComponent(tryButton)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(saveButton))
+									.addComponent(dateTimeFormatComboBox, 0, 0, Short.MAX_VALUE)))))
 					.addContainerGap(28, Short.MAX_VALUE))
 		);
 		topDialogPanelLayout.setVerticalGroup(
@@ -185,37 +209,37 @@ public class SmsDialog extends JDialog implements ActionListener
 					.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(topDialogPanelLayout.createSequentialGroup()
 							.addGap(12)
-							.addComponent(smsServerAddressLabel))
+							.addComponent(projectNameLabel))
 						.addGroup(topDialogPanelLayout.createSequentialGroup()
 							.addContainerGap()
-							.addComponent(smsServerAddressTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(projectNameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(topDialogPanelLayout.createSequentialGroup()
 							.addGap(6)
 							.addComponent(adminPhoneLabel))
 						.addComponent(adminPhoneTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(topDialogPanelLayout.createSequentialGroup()
-							.addGap(5)
+							.addGap(17)
 							.addComponent(dateTimeFormatLable))
-						.addComponent(dateTimeFormatComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(useSslCheckBox)
-					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.BASELINE)
 						.addGroup(topDialogPanelLayout.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(dateTimeFormatComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+					.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(topDialogPanelLayout.createSequentialGroup()
+							.addGap(28)
 							.addComponent(variablesListLabel)
-							.addPreferredGap(ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
-							.addComponent(recommendedButton)
-							.addGap(1))
-						.addComponent(verticalScrollPane, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
+							.addGap(51)
+							.addComponent(recommendedButton))
+						.addGroup(topDialogPanelLayout.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(verticalScrollPane, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)))
+					.addGap(41)
 					.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(saveButton)
 						.addComponent(tryButton))
-					.addGap(228))
+					.addGap(34))
 		);
 		topDialogPanel.setLayout (topDialogPanelLayout);
 		contentPanel.setLayout (new FlowLayout ());
@@ -240,7 +264,7 @@ public class SmsDialog extends JDialog implements ActionListener
 	 */
 	public void initValues ()
 	{
-		String address = XpertProperties.getProperty (XpertProperties.SMS_SERVER_ADDRESS);
+		String address = XpertProperties.getProperty (XpertProperties.SMS_PROJECT_NAME);
 		String adminPhone = XpertProperties.getProperty (XpertProperties.SMS_ADMIN_PHONE);
 		String dateFormat = XpertProperties.getProperty (XpertProperties.SMS_DATE_FORMAT);
 		String port = XpertProperties.getProperty (XpertProperties.SMS_PORT);
@@ -256,7 +280,7 @@ public class SmsDialog extends JDialog implements ActionListener
 	{
 		boolean valid = true;
 		StringBuilder error = new StringBuilder ();
-		if (SwingUtil.get (smsServerAddressTextField).equals (""))
+		if (SwingUtil.get (projectNameTextField).equals (""))
 		{
 			error.append ("SMS Server address must be provided.\n");
 			valid = false;
@@ -266,14 +290,9 @@ public class SmsDialog extends JDialog implements ActionListener
 			error.append ("Admin (mobile) phone number must be provided.\n");
 			valid = false;
 		}
-		if (conceptsList.getSelectedIndices ().length == 0)
+		if (variablesList.getSelectedIndices ().length == 0)
 		{
 			error.append ("At least one variable must be selected from the list.\n");
-			valid = false;
-		}
-		if (!RegexUtil.isValidURL (SwingUtil.get (smsServerAddressTextField)))
-		{
-			error.append ("SMS Server address seems to be invalid, it is recommended to copy-paste the key rather than typing.\n");
 			valid = false;
 		}
 		if (!RegexUtil.isContactNumber (SwingUtil.get (adminPhoneTextField)))
@@ -293,10 +312,36 @@ public class SmsDialog extends JDialog implements ActionListener
 	 */
 	public void tryConfiguration ()
 	{
-		String successMessage = "";
-		String failureMessage = "";
+		String successMessage = "Connection to SMS Tarseel was successful. The specified project name was located in SMS Tarseel.";
+		String failureMessage = "Unable to connect with the SMS Tarseel server. Please make sure that you can access it on the web first.";
+		String failureMessage2 = "Connection with SMS Tarseel seems okay, but the project specified was not found. Can you please confirm if you have written the same name as in SMS Tarseel web app?";
 		if (validateData ())
 		{
+			try
+			{
+				InputStream f = Thread.currentThread ().getContextClassLoader ().getResourceAsStream (TARSEEL_PROP);
+				EProperties root = new EProperties ();
+				root.load (f);
+				Properties prop = new Properties ();
+				prop.putAll (SmsDialog.convertEntrySetToMap (root.entrySet ()));
+				TarseelContext.instantiate (prop, TARSEEL_CFG);
+				tarseelService = TarseelContext.getServices ();
+				List<Project> projects = tarseelService.getDeviceService ().findProject (SwingUtil.get (projectNameTextField));
+				if (projects.size () == 0)
+					JOptionPane.showMessageDialog (new JFrame (), failureMessage2, "Error!", JOptionPane.ERROR_MESSAGE);
+				else
+				{
+					int selected = JOptionPane.showConfirmDialog (new JFrame (), successMessage, "It works! Save now?", JOptionPane.YES_NO_OPTION);
+					if (selected == JOptionPane.YES_OPTION)
+					{
+						saveConfiguration ();
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				JOptionPane.showMessageDialog (new JFrame (), failureMessage, "Error!", JOptionPane.ERROR_MESSAGE);
+			}
 		}
 	}
 
@@ -305,8 +350,10 @@ public class SmsDialog extends JDialog implements ActionListener
 		if (validateData ())
 		{
 			Map<String, String> properties = new HashMap<String, String> ();
-			// properties.put (XpertProperties.OPENMRS_DATE_FORMAT,
-			// dateFormatComboBox.getSelectedItem ().toString ());
+			properties.put (XpertProperties.SMS_PROJECT_NAME, SwingUtil.get (projectNameTextField));
+			properties.put (XpertProperties.SMS_ADMIN_PHONE, SwingUtil.get (adminPhoneTextField));
+			properties.put (XpertProperties.SMS_DATE_FORMAT, SwingUtil.get (dateTimeFormatComboBox));
+			properties.put (XpertProperties.SMS_VARIABLES, SwingUtil.concatenatedItems (variablesList, ';'));
 			boolean saved = XpertProperties.writeProperties (properties);
 			return saved;
 		}
@@ -318,8 +365,8 @@ public class SmsDialog extends JDialog implements ActionListener
 	{
 		if (e.getSource () == recommendedButton)
 		{
-			conceptsList.setSelectedIndices (new int[] {});
-			conceptsList.setSelectedIndices (new int[] {3, 4, 5, 7, 17, 23});
+			variablesList.setSelectedIndices (new int[] {});
+			variablesList.setSelectedIndices (new int[] {3, 4, 5, 7, 17, 23});
 		}
 		else if (e.getSource () == tryButton)
 		{

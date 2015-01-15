@@ -49,7 +49,7 @@ public final class XpertProperties
 	public static final String	XPERT_USER				= "xpert_user";
 	public static final String	XPERT_PASSWORD			= "xpert_password";
 
-	public static final String	SMS_SERVER_ADDRESS		= "sms_server_address";
+	public static final String	SMS_PROJECT_NAME		= "sms_server_address";
 	public static final String	SMS_PORT				= "sms_port";
 	public static final String	SMS_ADMIN_PHONE			= "sms_admin_phone";
 	public static final String	SMS_DATE_FORMAT			= "sms_date_format";
@@ -113,7 +113,7 @@ public final class XpertProperties
 			props.setProperty (LOCAL_PORT, "");
 			props.setProperty (XPERT_USER, "");
 			props.setProperty (XPERT_PASSWORD, "");
-			props.setProperty (SMS_SERVER_ADDRESS, "");
+			props.setProperty (SMS_PROJECT_NAME, "");
 			props.setProperty (SMS_PORT, "");
 			props.setProperty (SMS_ADMIN_PHONE, "");
 			props.setProperty (SMS_DATE_FORMAT, "");
