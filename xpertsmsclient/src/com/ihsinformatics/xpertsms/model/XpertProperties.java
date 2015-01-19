@@ -75,13 +75,20 @@ public final class XpertProperties
 	public static final String	OPENMRS_CONCEPT_MAP		= "openmrs_concept_map";
 	public static final String	OPENMRS_SSL_ENCRYPTION	= "openmrs_ssl_encryption";
 
-	public static final String	SERVER_URL	= null;
+	public static final String	WEB_ADDRESS				= "web_address";
+	public static final String	WEB_DATA_FORMAT			= "web_data_format";
+	public static final String	WEB_AUTHENTICATION		= "web_authentication";
+	public static final String	WEB_DATE_FORMAT			= "web_date_format";
+	public static final String	WEB_ENCODING			= "web_encoding";
+	public static final String	WEB_PARAMETERS			= "web_parameters";
 
-	public static final String	SERVER_PORT	= null;
+	public static final String	SERVER_URL				= null;
 
-	public static final String	WEB_APP_STRING	= null;
+	public static final String	SERVER_PORT				= null;
 
-	public static final String	EXPORT_PROBES	= null;
+	public static final String	WEB_APP_STRING			= null;
+
+	public static final String	EXPORT_PROBES			= null;
 
 	/**
 	 * Read properties from properties file
@@ -135,6 +142,12 @@ public final class XpertProperties
 			props.setProperty (OPENMRS_ENCOUNTER_TYPE, "");
 			props.setProperty (OPENMRS_CONCEPT_MAP, "");
 			props.setProperty (OPENMRS_SSL_ENCRYPTION, "");
+			props.setProperty (WEB_ADDRESS, "");
+			props.setProperty (WEB_DATA_FORMAT, "");
+			props.setProperty (WEB_AUTHENTICATION, "");
+			props.setProperty (WEB_DATE_FORMAT, "");
+			props.setProperty (WEB_ENCODING, "");
+			props.setProperty (WEB_PARAMETERS, "");
 		}
 	}
 
@@ -182,7 +195,7 @@ public final class XpertProperties
 		return success;
 	}
 
-	public static String getProperty(String key)
+	public static String getProperty (String key)
 	{
 		return props.getProperty (key);
 	}

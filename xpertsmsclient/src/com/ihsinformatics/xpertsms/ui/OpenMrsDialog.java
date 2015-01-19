@@ -306,8 +306,8 @@ public class OpenMrsDialog extends JDialog implements ActionListener
 		if (!"".equals (conceptMap))
 		{
 			StringBuilder sb = new StringBuilder ();
-			for (String str : conceptMap.split ("="))
-				sb.append (str + "\n");
+			for (String str : conceptMap.split (","))
+				sb.append (str + "\r\n");
 			conceptsTextArea.setText (sb.toString ());
 		}
 		if (!"".equals (encounterType))

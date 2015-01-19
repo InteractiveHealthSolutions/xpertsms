@@ -7,7 +7,8 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program; if not, write to the Interactive Health Solutions, info@ihsinformatics.com
 You can also access the license on the internet at the address: http://www.gnu.org/licenses/gpl-3.0.html
 
-Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors. */
+Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors. 
+*/
 
 package com.ihsinformatics.xpertsms.ui;
 
@@ -16,8 +17,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
@@ -25,13 +24,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
-import javax.management.InstanceAlreadyExistsException;
 import javax.swing.AbstractListModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -47,7 +44,6 @@ import net.jmatrix.eproperties.EProperties;
 import org.irdresearch.smstarseel.context.TarseelContext;
 import org.irdresearch.smstarseel.context.TarseelServices;
 import org.irdresearch.smstarseel.data.Project;
-import org.irdresearch.smstarseel.data.Setting;
 import com.ihsinformatics.xpertsms.model.XpertProperties;
 import com.ihsinformatics.xpertsms.util.RegexUtil;
 import com.ihsinformatics.xpertsms.util.SwingUtil;
@@ -69,7 +65,7 @@ public class SmsDialog extends JDialog implements ActionListener
 
 	private JLabel					projectNameLabel;
 	private JLabel					adminPhoneLabel;
-	private JLabel					dateTimeFormatLable;
+	private JLabel					dateTimeFormatLabel;
 	private JLabel					variablesListLabel;
 
 	private JTextField				projectNameTextField;
@@ -108,7 +104,7 @@ public class SmsDialog extends JDialog implements ActionListener
 		projectNameTextField = new JTextField ();
 		adminPhoneLabel = new JLabel ();
 		adminPhoneTextField = new JTextField ();
-		dateTimeFormatLable = new JLabel ();
+		dateTimeFormatLabel = new JLabel ();
 		dateTimeFormatComboBox = new JComboBox ();
 		variablesListLabel = new JLabel ();
 		verticalScrollPane = new JScrollPane ();
@@ -139,7 +135,7 @@ public class SmsDialog extends JDialog implements ActionListener
 		adminPhoneLabel.setText ("Admin's Phone No.:");
 		adminPhoneTextField.setToolTipText ("Here goes fully qualified mobile number of the receiver of results from GeneXpert. Please start from country code.");
 		adminPhoneTextField.setText ("+923452345345");
-		dateTimeFormatLable.setText ("Date/Time Format:");
+		dateTimeFormatLabel.setText ("Date/Time Format:");
 		dateTimeFormatComboBox.setModel (new DefaultComboBoxModel (new String[] {"yyyy-MM-dd", "yyyy-MM-dd hh:mm:ss", "MM/dd/yyyy hh:mm:ssa", "MM/dd/yyyy", "M/d/yy", "dd/MM/yyyy hh:mm:ssa",
 				"dd/MM/yyyy", "d/M/yy", "EEE, d MMM yyyy HH:mm:ss", "yyyyMMddhhmmss", "yyyy-MM-dd'T'HH:mm:ss'Z'"}));
 		dateTimeFormatComboBox
@@ -162,7 +158,6 @@ public class SmsDialog extends JDialog implements ActionListener
 			{
 				return values.length;
 			}
-
 			public Object getElementAt (int index)
 			{
 				return values[index];
@@ -185,7 +180,7 @@ public class SmsDialog extends JDialog implements ActionListener
 										.addGroup(topDialogPanelLayout.createSequentialGroup()
 											.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
 												.addComponent(adminPhoneLabel, GroupLayout.PREFERRED_SIZE, 108, GroupLayout.PREFERRED_SIZE)
-												.addComponent(dateTimeFormatLable, GroupLayout.PREFERRED_SIZE, 102, GroupLayout.PREFERRED_SIZE))
+												.addComponent(dateTimeFormatLabel, GroupLayout.PREFERRED_SIZE, 102, GroupLayout.PREFERRED_SIZE))
 											.addGap(19))
 										.addComponent(variablesListLabel, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE))
 									.addGap(6))
@@ -222,7 +217,7 @@ public class SmsDialog extends JDialog implements ActionListener
 					.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(topDialogPanelLayout.createSequentialGroup()
 							.addGap(17)
-							.addComponent(dateTimeFormatLable))
+							.addComponent(dateTimeFormatLabel))
 						.addGroup(topDialogPanelLayout.createSequentialGroup()
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(dateTimeFormatComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
@@ -264,11 +259,36 @@ public class SmsDialog extends JDialog implements ActionListener
 	 */
 	public void initValues ()
 	{
-		String address = XpertProperties.getProperty (XpertProperties.SMS_PROJECT_NAME);
+		String projectName = XpertProperties.getProperty (XpertProperties.SMS_PROJECT_NAME);
 		String adminPhone = XpertProperties.getProperty (XpertProperties.SMS_ADMIN_PHONE);
-		String dateFormat = XpertProperties.getProperty (XpertProperties.SMS_DATE_FORMAT);
-		String port = XpertProperties.getProperty (XpertProperties.SMS_PORT);
+		String dateTimeFormat = XpertProperties.getProperty (XpertProperties.SMS_DATE_FORMAT);
 		String variables = XpertProperties.getProperty (XpertProperties.SMS_VARIABLES);
+		if(!"".equals (projectName))
+		{
+			projectNameTextField.setText (projectName);
+		}
+		if(!"".equals (adminPhone))
+		{
+			adminPhoneTextField.setText (adminPhone);
+		}
+		if(!"".equals (dateTimeFormat))
+		{
+			dateTimeFormatComboBox.setSelectedItem (dateTimeFormat);
+		}
+		if (!"".equals (variables))
+		{
+			// Parse the list of variables
+			String[] split = variables.split (";");
+			int[] indices = new int[split.length];
+			int i = 0;
+			for (String var : split)
+			{
+				int index = SwingUtil.getIndex (variablesList, var);
+				if (index != -1)
+					indices[i++] = index;
+			}
+			variablesList.setSelectedIndices (indices);
+		}
 	}
 
 	/**
