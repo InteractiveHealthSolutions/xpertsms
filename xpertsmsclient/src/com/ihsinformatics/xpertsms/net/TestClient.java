@@ -18,21 +18,24 @@ import java.net.UnknownHostException;
 
 public class TestClient {
 	
-	public static void main (String[] args) {
+	public static void main(String[] args) {
 		Socket socket = null;
 		
 		try {
-			socket = new Socket("localhost",12221);
-		} catch (UnknownHostException e) {
+			socket = new Socket("localhost", 12221);
+		}
+		catch (UnknownHostException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 		System.out.println("connected to localhost:12222");
 		PrintWriter out = null;
 		try {
-			out = new PrintWriter(socket.getOutputStream(),true);
-		} catch (IOException e) {
+			out = new PrintWriter(socket.getOutputStream(), true);
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 		System.out.println("established output stream");
@@ -60,9 +63,11 @@ public class TestClient {
 			//socket.setSoLinger(true, 60);
 			out.close();
 			socket.close();
-		} catch (SocketException e) {
+		}
+		catch (SocketException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 	}

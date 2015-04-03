@@ -16,130 +16,114 @@ import java.util.Date;
 /**
  * @author ali.habib@irdresearch.org
  */
-public class TestTransmissionContent
-{
-
-	private String	sampleId;
-	private Date	resultDate;
-	private String	mtbResult;
-	private String	rifResult;
-	private String	serverAddres;
-	private int		serverPort;
-
+public class TestTransmissionContent {
+	
+	private String sampleId;
+	
+	private Date resultDate;
+	
+	private String mtbResult;
+	
+	private String rifResult;
+	
+	private String serverAddres;
+	
+	private int serverPort;
+	
 	/**
 	 * @return the sampleId
 	 */
-	public String getSampleId ()
-	{
+	public String getSampleId() {
 		return sampleId;
 	}
-
+	
 	/**
-	 * @param sampleId
-	 *            the sampleId to set
+	 * @param sampleId the sampleId to set
 	 */
-	public void setSampleId (String sampleId)
-	{
+	public void setSampleId(String sampleId) {
 		this.sampleId = sampleId;
 	}
-
+	
 	/**
 	 * @return the resultDate
 	 */
-	public Date getResultDate ()
-	{
+	public Date getResultDate() {
 		return resultDate;
 	}
-
+	
 	/**
-	 * @param resultDate
-	 *            the resultDate to set
+	 * @param resultDate the resultDate to set
 	 */
-	public void setResultDate (Date resultDate)
-	{
+	public void setResultDate(Date resultDate) {
 		this.resultDate = resultDate;
 	}
-
+	
 	/**
 	 * @return the mtbResult
 	 */
-	public String getMtbResult ()
-	{
+	public String getMtbResult() {
 		return mtbResult;
 	}
-
+	
 	/**
-	 * @param mtbResult
-	 *            the mtbResult to set
+	 * @param mtbResult the mtbResult to set
 	 */
-	public void setMtbResult (String mtbResult)
-	{
+	public void setMtbResult(String mtbResult) {
 		this.mtbResult = mtbResult;
 	}
-
+	
 	/**
 	 * @return the rifResult
 	 */
-	public String getRifResult ()
-	{
+	public String getRifResult() {
 		return rifResult;
 	}
-
+	
 	/**
-	 * @param rifResult
-	 *            the rifResult to set
+	 * @param rifResult the rifResult to set
 	 */
-	public void setRifResult (String rifResult)
-	{
+	public void setRifResult(String rifResult) {
 		this.rifResult = rifResult;
 	}
-
+	
 	/**
 	 * @return the serverAddres
 	 */
-	public String getServerAddres ()
-	{
+	public String getServerAddres() {
 		return serverAddres;
 	}
-
+	
 	/**
-	 * @param serverAddres
-	 *            the serverAddres to set
+	 * @param serverAddres the serverAddres to set
 	 */
-	public void setServerAddres (String serverAddres)
-	{
+	public void setServerAddres(String serverAddres) {
 		this.serverAddres = serverAddres;
 	}
-
+	
 	/**
 	 * @return the serverPort
 	 */
-	public int getServerPort ()
-	{
+	public int getServerPort() {
 		return serverPort;
 	}
-
+	
 	/**
-	 * @param serverPort
-	 *            the serverPort to set
+	 * @param serverPort the serverPort to set
 	 */
-	public void setServerPort (int serverPort)
-	{
+	public void setServerPort(int serverPort) {
 		this.serverPort = serverPort;
 	}
-
-	public String getUrl ()
-	{
+	
+	public String getUrl() {
 		String url = null;
-
+		
 		return url;
 	}
-
-	public String getPostParams ()
-	{
+	
+	public String getPostParams() {
 		String postParams = null;
-
+		
 		return postParams;
 	}
-
+	
 }

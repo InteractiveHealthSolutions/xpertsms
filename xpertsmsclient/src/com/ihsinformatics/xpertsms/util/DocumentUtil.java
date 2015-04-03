@@ -20,30 +20,26 @@ import com.ihsinformatics.xpertsms.constant.FileConstants;
 
 /**
  * @author owais.hussain@irdresearch.org
- *
  */
-public class DocumentUtil
-{
+public class DocumentUtil {
+	
 	private Properties props;
+	
 	/**
 	 * @param args
 	 */
-	public static void main (String[] args)
-	{
-		DocumentUtil docUtil = new DocumentUtil (FileConstants.XPERT_DOCUMENT_FILE);
-		String description = docUtil.getDescription ("assay");
-		System.out.println (description);
+	public static void main(String[] args) {
+		DocumentUtil docUtil = new DocumentUtil(FileConstants.XPERT_DOCUMENT_FILE);
+		String description = docUtil.getDescription("assay");
+		System.out.println(description);
 	}
-
-	public DocumentUtil (String file)
-	{
-		try
-		{
-			props = new Properties ();
-			props.load (new FileInputStream (file));
+	
+	public DocumentUtil(String file) {
+		try {
+			props = new Properties();
+			props.load(new FileInputStream(file));
 		}
-		catch (IOException e)
-		{
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -55,11 +51,10 @@ public class DocumentUtil
 	 * @param field
 	 * @return
 	 */
-	public String getDescription (String key)
-	{
+	public String getDescription(String key) {
 		String description = "";
-		if(props.containsKey (key))
-			description = props.getProperty (key);
+		if (props.containsKey(key))
+			description = props.getProperty(key);
 		return description;
 	}
 }

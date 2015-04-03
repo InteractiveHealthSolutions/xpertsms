@@ -18,16 +18,14 @@ import java.util.ArrayList;
 
 /**
  * @author owais.hussain@irdresearch.org
- *
  */
-public class StringUtil
-{
-	public static ArrayList<String> toArrayList (String[] array)
-	{
-		ArrayList<String> arrayList = new ArrayList<String> (array.length);
+public class StringUtil {
+	
+	public static ArrayList<String> toArrayList(String[] array) {
+		ArrayList<String> arrayList = new ArrayList<String>(array.length);
 		for (String s : array)
-			arrayList.add (s);
+			arrayList.add(s);
 		return arrayList;
 	}
-
+	
 }
