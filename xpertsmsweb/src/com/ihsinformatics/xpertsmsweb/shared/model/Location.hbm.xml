@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Nov 25, 2014 12:30:47 PM by Hibernate Tools 3.4.0.Beta1 -->
+<hibernate-mapping>
+    <class name="com.ihsinformatics.xpertsmsweb.shared.model.Location" table="LOCATION">
+        <id name="locationId" type="java.lang.String">
+            <column name="LOCATIONID" />
+            <generator class="assigned" />
+        </id>
+        <property name="locationName" type="java.lang.String">
+            <column name="LOCATIONNAME" />
+        </property>
+        <property name="locationType" type="java.lang.String">
+            <column name="LOCATIONTYPE" />
+        </property>
+        <property name="addressHouse" type="java.lang.String">
+            <column name="ADDRESSHOUSE" />
+        </property>
+        <property name="addressStreet" type="java.lang.String">
+            <column name="ADDRESSSTREET" />
+        </property>
+        <property name="addressSector" type="java.lang.String">
+            <column name="ADDRESSSECTOR" />
+        </property>
+        <property name="addressColony" type="java.lang.String">
+            <column name="ADDRESSCOLONY" />
+        </property>
+        <property name="addressTown" type="java.lang.String">
+            <column name="ADDRESSTOWN" />
+        </property>
+        <property name="cityId" type="java.lang.String">
+            <column name="CITYID" />
+        </property>
+        <property name="countryId" type="java.lang.Integer">
+            <column name="COUNTRYID" />
+        </property>
+        <property name="addressLocationLat" type="java.lang.Float">
+            <column name="ADDRESSLOCATIONLAT" />
+        </property>
+        <property name="addressLocationLon" type="java.lang.Float">
+            <column name="ADDRESSLOCATIONLON" />
+        </property>
+        <property name="phone" type="java.lang.String">
+            <column name="PHONE" />
+        </property>
+        <property name="mobile" type="java.lang.String">
+            <column name="MOBILE" />
+        </property>
+        <property name="fax" type="java.lang.String">
+            <column name="FAX" />
+        </property>
+        <property name="email" type="java.lang.String">
+            <column name="EMAIL" />
+        </property>
+        <property name="secondaryPhone" type="java.lang.String">
+            <column name="SECONDARYPHONE" />
+        </property>
+        <property name="secondaryMobile" type="java.lang.String">
+            <column name="SECONDARYMOBILE" />
+        </property>
+        <property name="secondaryFax" type="java.lang.String">
+            <column name="SECONDARYFAX" />
+        </property>
+        <property name="secondaryEmail" type="java.lang.String">
+            <column name="SECONDARYEMAIL" />
+        </property>
+        <property name="detail" type="java.lang.String">
+            <column name="DETAIL" />
+        </property>
+        <property name="addressLandMark" type="java.lang.String">
+            <column name="ADDRESSLANDMARK" />
+        </property>
+    </class>
+</hibernate-mapping>

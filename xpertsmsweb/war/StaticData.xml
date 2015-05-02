@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StaticList>
+	<BLOOD_GROUP>
+		<ItemName>O-</ItemName>
+		<ItemName>O+</ItemName>
+		<ItemName>A-</ItemName>
+		<ItemName>A+</ItemName>
+		<ItemName>B-</ItemName>
+		<ItemName>B+</ItemName>
+		<ItemName>AB-</ItemName>
+		<ItemName>AB+</ItemName>
+	</BLOOD_GROUP>
+	<DISEASE_FORM>
+		<ItemName>SUSCEPTIBLE TB</ItemName>
+		<ItemName>MDR-TB</ItemName>
+		<ItemName>PDR-TB</ItemName>
+		<ItemName>MONO-RESISTANT</ItemName>
+	</DISEASE_FORM>
+	<FORM_OPTION>
+		<ItemName>NO</ItemName>
+		<ItemName>YES</ItemName>
+		<ItemName>DONT_KNOW</ItemName>
+		<ItemName>REJECTED</ItemName>
+	</FORM_OPTION>
+	<MARITAL_STATUS>
+		<ItemName>MARRIED</ItemName>
+		<ItemName>SINGLE</ItemName>
+		<ItemName>DIVORCED</ItemName>
+		<ItemName>WIDOW(ER)</ItemName>
+	</MARITAL_STATUS>
+	<MENU_NAME>
+		<ItemName>DATALOG</ItemName>
+		<ItemName>ENCOUNTER</ItemName>
+		<ItemName>LOCATION</ItemName>
+		<ItemName>PATIENT</ItemName>
+		<ItemName>SETUP</ItemName>
+		<ItemName>SMS</ItemName>
+		<ItemName>USERS</ItemName>
+	</MENU_NAME>
+	<DETECTION_REPORT>
+		<ItemName>Gene Xpert Positive Report</ItemName>
+	</DETECTION_REPORT>
+	<SALUTATION>
+		<ItemName>MR</ItemName>
+		<ItemName>MS</ItemName>
+		<ItemName>MRS</ItemName>
+		<ItemName>DR</ItemName>
+		<ItemName>PROF</ItemName>
+	</SALUTATION>
+	<USER_ROLE>
+		<ItemName>SCREENER</ItemName>
+		<ItemName>PROVIDER</ItemName>
+		<ItemName>GUEST</ItemName>
+		<ItemName>LABORATORY</ItemName>
+		<ItemName>SUPERVISOR</ItemName>
+	</USER_ROLE>
+	<USER_STATUS>
+		<ItemName>ACTIVE</ItemName>
+		<ItemName>SUSPENDED</ItemName>
+	</USER_STATUS>
+	<LOCATION_TYPE>
+		<ItemName>DISTRICT</ItemName>
+		<ItemName>HEALTH FACILITY</ItemName>
+	</LOCATION_TYPE>
+</StaticList>
