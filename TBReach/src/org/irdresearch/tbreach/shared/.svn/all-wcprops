@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/2263/XpertSMS_gwt/src/org/irdresearch/tbreach/shared
+END
+AccessType.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/2263/XpertSMS_gwt/src/org/irdresearch/tbreach/shared/AccessType.java
+END
+Parameter.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/2263/XpertSMS_gwt/src/org/irdresearch/tbreach/shared/Parameter.java
+END
+RegexUtil.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/2263/XpertSMS_gwt/src/org/irdresearch/tbreach/shared/RegexUtil.java
+END
+InfoType.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/2263/XpertSMS_gwt/src/org/irdresearch/tbreach/shared/InfoType.java
+END
+ListType.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/2263/XpertSMS_gwt/src/org/irdresearch/tbreach/shared/ListType.java
+END
+CustomMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/2263/XpertSMS_gwt/src/org/irdresearch/tbreach/shared/CustomMessage.java
+END
+TBR.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/2263/XpertSMS_gwt/src/org/irdresearch/tbreach/shared/TBR.java
+END
+DataType.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/2263/XpertSMS_gwt/src/org/irdresearch/tbreach/shared/DataType.java
+END
+UserRightsUtil.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/2263/XpertSMS_gwt/src/org/irdresearch/tbreach/shared/UserRightsUtil.java
+END
+ErrorType.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/2263/XpertSMS_gwt/src/org/irdresearch/tbreach/shared/ErrorType.java
+END

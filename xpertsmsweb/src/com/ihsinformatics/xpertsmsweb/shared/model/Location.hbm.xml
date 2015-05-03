@@ -12,64 +12,64 @@
             <column name="LOCATIONNAME" />
         </property>
         <property name="locationType" type="java.lang.String">
-            <column name="LOCATIONTYPE" />
+            <column name="LocationType" />
         </property>
         <property name="addressHouse" type="java.lang.String">
-            <column name="ADDRESSHOUSE" />
+            <column name="AddressHouse" />
         </property>
         <property name="addressStreet" type="java.lang.String">
-            <column name="ADDRESSSTREET" />
+            <column name="AddressStreet" />
         </property>
         <property name="addressSector" type="java.lang.String">
-            <column name="ADDRESSSECTOR" />
+            <column name="AddressSector" />
         </property>
         <property name="addressColony" type="java.lang.String">
-            <column name="ADDRESSCOLONY" />
+            <column name="AddressColony" />
         </property>
         <property name="addressTown" type="java.lang.String">
-            <column name="ADDRESSTOWN" />
+            <column name="AddressTown" />
         </property>
         <property name="cityId" type="java.lang.String">
-            <column name="CITYID" />
+            <column name="CityID" />
         </property>
         <property name="countryId" type="java.lang.Integer">
-            <column name="COUNTRYID" />
+            <column name="CountryID" />
         </property>
         <property name="addressLocationLat" type="java.lang.Float">
-            <column name="ADDRESSLOCATIONLAT" />
+            <column name="AddressLocationLAt" />
         </property>
         <property name="addressLocationLon" type="java.lang.Float">
-            <column name="ADDRESSLOCATIONLON" />
+            <column name="AddressLocationLon" />
         </property>
         <property name="phone" type="java.lang.String">
-            <column name="PHONE" />
+            <column name="Phone" />
         </property>
         <property name="mobile" type="java.lang.String">
-            <column name="MOBILE" />
+            <column name="Mobile" />
         </property>
         <property name="fax" type="java.lang.String">
-            <column name="FAX" />
+            <column name="Fax" />
         </property>
         <property name="email" type="java.lang.String">
-            <column name="EMAIL" />
+            <column name="Email" />
         </property>
         <property name="secondaryPhone" type="java.lang.String">
-            <column name="SECONDARYPHONE" />
+            <column name="SecondaryPhone" />
         </property>
         <property name="secondaryMobile" type="java.lang.String">
-            <column name="SECONDARYMOBILE" />
+            <column name="SecondaryMobile" />
         </property>
         <property name="secondaryFax" type="java.lang.String">
-            <column name="SECONDARYFAX" />
+            <column name="SecondaryFax" />
         </property>
         <property name="secondaryEmail" type="java.lang.String">
-            <column name="SECONDARYEMAIL" />
+            <column name="SecondaryEmail" />
         </property>
         <property name="detail" type="java.lang.String">
-            <column name="DETAIL" />
+            <column name="Detail" />
         </property>
         <property name="addressLandMark" type="java.lang.String">
-            <column name="ADDRESSLANDMARK" />
+            <column name="AddressLandmark" />
         </property>
     </class>
 </hibernate-mapping>

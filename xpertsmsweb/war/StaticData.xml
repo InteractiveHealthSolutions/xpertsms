@@ -10,12 +10,9 @@
 		<ItemName>AB-</ItemName>
 		<ItemName>AB+</ItemName>
 	</BLOOD_GROUP>
-	<DISEASE_FORM>
-		<ItemName>SUSCEPTIBLE TB</ItemName>
-		<ItemName>MDR-TB</ItemName>
-		<ItemName>PDR-TB</ItemName>
-		<ItemName>MONO-RESISTANT</ItemName>
-	</DISEASE_FORM>
+	<ENCOUNTER_TYPE>
+		<ItemName>P_INFO</ItemName>
+	</ENCOUNTER_TYPE>
 	<FORM_OPTION>
 		<ItemName>NO</ItemName>
 		<ItemName>YES</ItemName>
@@ -37,9 +34,15 @@
 		<ItemName>SMS</ItemName>
 		<ItemName>USERS</ItemName>
 	</MENU_NAME>
-	<DETECTION_REPORT>
-		<ItemName>Gene Xpert Positive Report</ItemName>
-	</DETECTION_REPORT>
+	<REPORT>
+		<ItemName>XpertSMS Report</ItemName>
+		<ItemName>XpertSMS Results by Month</ItemName>
+		<ItemName>XpertSMS Results by Year</ItemName>
+		<ItemName>XpertSMS Results by Facility</ItemName>
+		<ItemName>XpertSMS Results by User</ItemName>
+		<ItemName>XpertSMS Positive Results</ItemName>
+		<ItemName>XpertSMS Progress Report</ItemName>
+	</REPORT>
 	<SALUTATION>
 		<ItemName>MR</ItemName>
 		<ItemName>MS</ItemName>
@@ -49,10 +52,9 @@
 	</SALUTATION>
 	<USER_ROLE>
 		<ItemName>SCREENER</ItemName>
-		<ItemName>PROVIDER</ItemName>
+		<ItemName>ADMIN</ItemName>
 		<ItemName>GUEST</ItemName>
 		<ItemName>LABORATORY</ItemName>
-		<ItemName>SUPERVISOR</ItemName>
 	</USER_ROLE>
 	<USER_STATUS>
 		<ItemName>ACTIVE</ItemName>
@@ -60,6 +62,9 @@
 	</USER_STATUS>
 	<LOCATION_TYPE>
 		<ItemName>DISTRICT</ItemName>
+		<ItemName>HOSPITAL</ItemName>
+		<ItemName>LABORATORY</ItemName>
+		<ItemName>CLINIC</ItemName>
 		<ItemName>HEALTH FACILITY</ItemName>
 	</LOCATION_TYPE>
 </StaticList>

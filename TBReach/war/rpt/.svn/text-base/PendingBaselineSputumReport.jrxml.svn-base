@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PendingDiagnosis" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="SansSerif" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="SansSerif" fontSize="18"/>
+	<style name="Detail" mode="Transparent" forecolor="#010101" backcolor="#FFFFFF" fill="Solid" fontName="SansSerif" fontSize="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Border" fill="Solid" fontName="SansSerif" fontSize="9">
+		<box topPadding="2" leftPadding="2">
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Column header" mode="Transparent" forecolor="#010101" fontName="SansSerif" fontSize="9" isBold="true">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+			<pen lineWidth="1.0" lineColor="#333333"/>
+			<topPen lineWidth="1.0" lineColor="#333333"/>
+			<leftPen lineWidth="1.0" lineColor="#333333"/>
+			<bottomPen lineWidth="1.0" lineColor="#333333"/>
+			<rightPen lineWidth="1.0" lineColor="#333333"/>
+		</box>
+	</style>
+	<parameter name="UserName" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select PatientID, GPID, CHWID, MonitorID, Attempts, Verified, Pending, SmearNegative from tbreach_rpt._SputumCounts;]]>
+	</queryString>
+	<field name="PatientID" class="java.lang.String"/>
+	<field name="GPID" class="java.lang.String"/>
+	<field name="CHWID" class="java.lang.String"/>
+	<field name="MonitorID" class="java.lang.String"/>
+	<field name="Attempts" class="java.lang.Long"/>
+	<field name="Verified" class="java.lang.Long"/>
+	<field name="Pending" class="java.lang.Long"/>
+	<field name="SmearNegative" class="java.lang.Long"/>
+	<variable name="CURRENT_DATE" class="java.lang.String" calculation="System"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="60" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="524" height="40"/>
+				<textElement textAlignment="Center">
+					<font size="24"/>
+				</textElement>
+				<text><![CDATA[PENDING BASELINE SPUTUM REPORT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="0" y="40" width="70" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[PatientID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="70" y="40" width="70" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[GPID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="140" y="40" width="70" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[CHWID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="210" y="40" width="70" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[MonitorID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="280" y="40" width="61" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Attempts]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="341" y="40" width="61" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Verified]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="402" y="40" width="61" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Pending]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="463" y="40" width="61" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Smear -Ve]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="20">
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="0" y="0" width="70" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{PatientID}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="70" y="0" width="70" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{GPID}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="140" y="0" width="70" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{CHWID}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="210" y="0" width="70" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{MonitorID}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="280" y="0" width="61" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.Long"><![CDATA[$F{Attempts}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="341" y="0" width="61" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.Long"><![CDATA[$F{Verified}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="402" y="0" width="61" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.Long"><![CDATA[$F{Pending}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="463" y="0" width="61" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.Long"><![CDATA[$F{SmearNegative}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="13">
+			<textField>
+				<reportElement x="0" y="0" width="142" height="13" forecolor="#010101"/>
+				<textElement>
+					<font fontName="SansSerif" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Total Records: "+$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+</jasperReport>

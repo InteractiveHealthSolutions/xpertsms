@@ -6,7 +6,7 @@
     <class name="com.ihsinformatics.xpertsmsweb.shared.model.UserRights" table="UserRights" catalog="xpertsms">
         <composite-id name="id" class="com.ihsinformatics.xpertsmsweb.shared.model.UserRightsId">
             <key-property name="role" type="string">
-                <column name="Role" length="10" />
+                <column name="Role" length="20" />
             </key-property>
             <key-property name="menuName" type="string">
                 <column name="MenuName" length="50" />

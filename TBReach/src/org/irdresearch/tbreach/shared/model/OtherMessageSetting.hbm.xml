@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Sep 15, 2014 5:46:19 PM by Hibernate Tools 3.4.0.Beta1 -->
+<hibernate-mapping>
+    <class name="org.irdresearch.tbreach.shared.model.OtherMessageSetting" table="othermessagesetting">
+        <id name="id" type="java.lang.String" access="field">
+            <column name="ID" />
+            <generator class="identity" />
+        </id>
+        <property name="name" type="java.lang.String" access="field">
+            <column name="NAME" />
+        </property>
+        <property name="districtId" type="java.lang.String" access="field">
+            <column name="DISTRICTID" />
+        </property>
+        <property name="healthFacilityId" type="java.lang.String" access="field">
+            <column name="HEALTHFACILITYID" />
+        </property>
+        <property name="cellNumber" type="java.lang.String" access="field">
+            <column name="CELLNUMBER" />
+        </property>
+    </class>
+</hibernate-mapping>

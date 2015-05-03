@@ -216,16 +216,6 @@ public class EventHandler {
 
 	System.out.println("--->" + serverDate.toString());
 
-	// Interval i = new Interval(phoneDate.getTime(), serverDate.getTime());
-
-	// java.sql.Date nowDate = new
-	// java.sql.Date(System.currentTimeMillis());
-
-	//
-
-	//
-	// System.out.println("nowDate: " + dt);
-
 	long milliDiff = Math.abs(phoneDate.getTime() - serverDate.getTime());
 	// long milliDiff = Math.abs(i.toDuration().getMillis());
 	System.out.println(milliDiff);

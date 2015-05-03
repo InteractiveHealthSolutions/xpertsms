@@ -17,7 +17,6 @@ import com.ihsinformatics.xpertsmsweb.shared.model.MessageSettings;
 import com.ihsinformatics.xpertsmsweb.shared.model.OtherMessageSetting;
 import com.ihsinformatics.xpertsmsweb.shared.model.Patient;
 import com.ihsinformatics.xpertsmsweb.shared.model.Person;
-import com.ihsinformatics.xpertsmsweb.shared.model.SputumResults;
 import com.ihsinformatics.xpertsmsweb.shared.model.UserRights;
 import com.ihsinformatics.xpertsmsweb.shared.model.Users;
 
@@ -60,8 +59,6 @@ public interface ServerService extends RemoteService {
 
     Boolean deletePerson(Person person) throws Exception;
 
-    Boolean deleteSputumResults(SputumResults sputumResults) throws Exception;
-
     Boolean deleteUser(Users user) throws Exception;
 
     Boolean deleteUserRights(UserRights userRights) throws Exception;
@@ -94,15 +91,6 @@ public interface ServerService extends RemoteService {
 	    throws Exception;
 
     Person findPersonsByNIC(String NIC) throws Exception;
-
-    SputumResults findSputumResults(String patientID, String sputumTestID)
-	    throws Exception;
-
-    SputumResults[] findSputumResultsByPatientID(String patientID)
-	    throws Exception;
-
-    SputumResults findSputumResultsBySputumTestID(String sputumTestID)
-	    throws Exception;
 
     Location[] findLocationsByType(String locationType) throws Exception;
 
@@ -141,8 +129,6 @@ public interface ServerService extends RemoteService {
 
     Boolean savePerson(Person person) throws Exception;
 
-    Boolean saveSputumResults(SputumResults sputumResults) throws Exception;
-
     Boolean saveUser(Users user) throws Exception;
 
     Boolean saveUserRights(UserRights userRights) throws Exception;
@@ -172,9 +158,6 @@ public interface ServerService extends RemoteService {
     Boolean updatePatient(Patient patient) throws Exception;
 
     Boolean updatePerson(Person person) throws Exception;
-
-    Boolean updateSputumResults(SputumResults sputumResults,
-	    Boolean isTBPositive) throws Exception;
 
     Boolean updateUser(Users user) throws Exception;
 
@@ -224,10 +207,6 @@ public interface ServerService extends RemoteService {
     void recordLogin(String userName) throws Exception;
 
     void recordLogout(String userName) throws Exception;
-
-    Boolean saveSputumCollection(GeneXpertResults geneXpertResults,
-	    SputumResults sputumResults, Encounter encounter,
-	    ArrayList<String> encounterResults) throws Exception;
 
     OtherMessageSetting[] findOtherMessageRecipient();
 

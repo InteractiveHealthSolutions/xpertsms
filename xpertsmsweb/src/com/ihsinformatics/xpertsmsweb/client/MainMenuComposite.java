@@ -46,8 +46,6 @@ public class MainMenuComposite extends Composite {
     private MenuItem reportsMenuItem = new MenuItem("Reports", false,
 	    (Command) null);
     private MenuItem logsMenuItem = new MenuItem("Logs", false, (Command) null);
-    // private MenuItem smsMenuItem = new MenuItem("SMS", false, (Command)
-    // null);
 
     private MenuItem aboutMenuItem = new MenuItem("About Us", false,
 	    (Command) null);
@@ -58,15 +56,8 @@ public class MainMenuComposite extends Composite {
     private MenuItem logoutMenuItem = new MenuItem("Logout", false,
 	    (Command) null);
 
-    private MenuItem sputumReceivingMenuItem = new MenuItem("Sputum Receiving",
-	    false, (Command) null);
     private MenuItem geneXpertResultsMenuItem = new MenuItem(
 	    "Gene Xpert Results", false, (Command) null);
-
-    private MenuItem AsuspectIdentificationMenuItem = new MenuItem(
-	    "Suspect Identification", false, (Command) null);
-    private MenuItem DPatientInformationMenuItem = new MenuItem(
-	    "Patient Information", false, (Command) null);
 
     @SuppressWarnings("deprecation")
     public MainMenuComposite() {
@@ -88,10 +79,7 @@ public class MainMenuComposite extends Composite {
 	setupMenuBar.setAnimationEnabled(true);
 	formsMenuBar.setAutoOpen(true);
 	formsMenuBar.setAnimationEnabled(true);
-	/*
-	 * mobileFormsMenuBar.setAutoOpen(true);
-	 * mobileFormsMenuBar.setAnimationEnabled(true);
-	 */
+
 	reportingMenuBar.setAutoOpen(true);
 	reportingMenuBar.setAnimationEnabled(true);
 	helpMenuBar.setAutoOpen(true);
@@ -220,9 +208,6 @@ public class MainMenuComposite extends Composite {
 	setupMenuBar.addItem(locationsMenuItem);
 	setupMenuBar.addItem(messageSettingsMenuItem);
 
-	formsMenuBar.addItem(AsuspectIdentificationMenuItem);
-	formsMenuBar.addItem(DPatientInformationMenuItem);
-	formsMenuBar.addItem(sputumReceivingMenuItem);
 	formsMenuBar.addItem(geneXpertResultsMenuItem);
 	formsMenuBar.addItem(encounterMenuItem);
 

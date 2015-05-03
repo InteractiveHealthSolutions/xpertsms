@@ -9,16 +9,16 @@
             <generator class="identity" />
         </id>
         <property name="name" type="java.lang.String" access="field">
-            <column name="NAME" />
+            <column name="Name" />
         </property>
         <property name="districtId" type="java.lang.String" access="field">
-            <column name="DISTRICTID" />
+            <column name="DistrictID" />
         </property>
         <property name="healthFacilityId" type="java.lang.String" access="field">
-            <column name="HEALTHFACILITYID" />
+            <column name="HealthFacilityID" />
         </property>
         <property name="cellNumber" type="java.lang.String" access="field">
-            <column name="CELLNUMBER" />
+            <column name="CellNumber" />
         </property>
     </class>
 </hibernate-mapping>

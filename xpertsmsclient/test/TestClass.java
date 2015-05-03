@@ -144,7 +144,7 @@ public class TestClass {
 				sampleMessages[i].setSystemId(data[i][j++]);
 				sampleMessages[i].setSystemName(data[i][j++]);
 				sampleMessages[i].setComputerName(data[i][j++]);
-				j++; // Notes not implemented
+				sampleMessages[i].setNotes(data[i][j++]);
 				sampleMessages[i].setErrorCode(data[i][j++]);
 				sampleMessages[i].setErrorNotes(data[i][j++]);
 				sampleMessages[i].setMessageId(data[i][j++]);

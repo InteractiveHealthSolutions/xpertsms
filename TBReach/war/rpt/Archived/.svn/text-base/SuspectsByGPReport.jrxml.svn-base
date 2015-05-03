@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SuspectsByGPReport" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="SansSerif" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="SansSerif" fontSize="18"/>
+	<style name="Column header" mode="Transparent" forecolor="#666666" fontName="SansSerif" fontSize="12" isBold="true">
+		<box>
+			<pen lineWidth="0.0" lineColor="#333333"/>
+			<topPen lineWidth="0.0" lineColor="#333333"/>
+			<leftPen lineWidth="0.0" lineColor="#333333"/>
+			<bottomPen lineWidth="0.0" lineColor="#333333"/>
+			<rightPen lineWidth="0.0" lineColor="#333333"/>
+		</box>
+	</style>
+	<style name="Detail" mode="Transparent" forecolor="#404040" backcolor="#FFFFFF" fill="Solid" fontName="SansSerif" fontSize="12">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Border" fill="Solid" fontName="SansSerif" fontSize="9">
+		<box topPadding="2" leftPadding="2">
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<parameter name="MonitorID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="GPID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CHWID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="UserName" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT PatientID, CHWID, GPID, MonitorID, MRNo, DateRegistered, DiseaseSuspected, DiseaseConfirmed, DiseaseCategory, DiseaseSite, Severity, Regimen, DoseCombination, OtherDoseDescription, TreatmentPhase, PatientStatus, PatientType, DiseaseHistory, TreatedPreviously, CompletedPreviousTreatment, FullDescription, FirstName, MiddleName, LastName, Gender, DOB FROM tbreach_rpt.Patient
+INNER JOIN tbreach_rpt.Person ON Patient.PatientID = Person.PID
+WHERE GPID LIKE $P{GPID}]]>
+	</queryString>
+	<field name="PatientID" class="java.lang.String"/>
+	<field name="CHWID" class="java.lang.String"/>
+	<field name="GPID" class="java.lang.String"/>
+	<field name="MonitorID" class="java.lang.String"/>
+	<field name="MRNo" class="java.lang.String"/>
+	<field name="DateRegistered" class="java.sql.Timestamp"/>
+	<field name="DiseaseSuspected" class="java.lang.Boolean"/>
+	<field name="DiseaseConfirmed" class="java.lang.Boolean"/>
+	<field name="DiseaseCategory" class="java.lang.String"/>
+	<field name="DiseaseSite" class="java.lang.String"/>
+	<field name="Severity" class="java.lang.String"/>
+	<field name="Regimen" class="java.lang.String"/>
+	<field name="DoseCombination" class="java.lang.Float"/>
+	<field name="OtherDoseDescription" class="java.lang.String"/>
+	<field name="TreatmentPhase" class="java.lang.String"/>
+	<field name="PatientStatus" class="java.lang.String"/>
+	<field name="PatientType" class="java.lang.String"/>
+	<field name="DiseaseHistory" class="java.lang.String"/>
+	<field name="TreatedPreviously" class="java.lang.Boolean"/>
+	<field name="CompletedPreviousTreatment" class="java.lang.Boolean"/>
+	<field name="FullDescription" class="java.lang.String"/>
+	<field name="FirstName" class="java.lang.String"/>
+	<field name="MiddleName" class="java.lang.String"/>
+	<field name="LastName" class="java.lang.String"/>
+	<field name="Gender" class="java.lang.String"/>
+	<field name="DOB" class="java.sql.Date"/>
+	<sortField name="GPID"/>
+	<sortField name="PatientID"/>
+	<variable name="CURRENT_DATE" class="java.lang.String" calculation="System"/>
+	<group name="GP Group">
+		<groupExpression><![CDATA[$F{GPID}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField>
+					<reportElement x="0" y="0" width="100" height="20"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{GPID}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement style="Border" x="0" y="0" width="77" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Patient ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Border" x="77" y="0" width="84" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[CHWID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Border" x="161" y="0" width="80" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[MR No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Border" x="241" y="0" width="228" height="20"/>
+				<textElement>
+					<font isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Border" x="469" y="0" width="86" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Patient Status]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="20">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="77" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{PatientID}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="77" y="0" width="84" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{CHWID}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="161" y="0" width="80" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{MRNo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="241" y="0" width="228" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{FirstName} + $F{LastName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="469" y="0" width="86" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{PatientStatus}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="13">
+			<textField>
+				<reportElement x="0" y="0" width="142" height="13" forecolor="#010101"/>
+				<textElement>
+					<font fontName="SansSerif" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Total Records: "+$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

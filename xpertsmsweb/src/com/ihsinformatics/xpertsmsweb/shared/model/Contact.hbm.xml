@@ -5,7 +5,7 @@
 <hibernate-mapping>
     <class name="com.ihsinformatics.xpertsmsweb.shared.model.Contact" table="Contact" catalog="xpertsms">
         <id name="pid" type="string">
-            <column name="PID" length="12" />
+            <column name="PID" length="20" />
             <generator class="assigned" />
         </id>
         <property name="addressHouse" type="string">

@@ -26,9 +26,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
 import com.google.gwt.user.datepicker.client.DateBox.DefaultFormat;
 import com.ihsinformatics.xpertsmsweb.shared.AccessType;
-import com.ihsinformatics.xpertsmsweb.shared.Parameter;
-import com.ihsinformatics.xpertsmsweb.shared.XSMS;
 import com.ihsinformatics.xpertsmsweb.shared.UserRightsUtil;
+import com.ihsinformatics.xpertsmsweb.shared.XSMS;
 import com.ihsinformatics.xpertsmsweb.shared.model.Users;
 
 public class Report_ReportsComposite extends Composite implements IReport,
@@ -99,7 +98,8 @@ public class Report_ReportsComposite extends Composite implements IReport,
 	rightFlexTable.setWidget(0, 1, snapshotLabel);
 	rightFlexTable.setWidget(1, 0, lblSelectCategory);
 	categoryComboBox.addItem("-- Select Category --");
-	categoryComboBox.addItem("Case Detection Reports");
+	categoryComboBox.addItem("GeneXpert Reports");
+	categoryComboBox.addItem("Data Dumps");
 	rightFlexTable.setWidget(1, 1, categoryComboBox);
 	categoryComboBox.setWidth("100%");
 	rightFlexTable.setWidget(2, 0, lblSelectReport);
@@ -245,73 +245,7 @@ public class Report_ReportsComposite extends Composite implements IReport,
      */
     @SuppressWarnings("deprecation")
     private String filterData(String patientColumnName, String dateColumnName,
-	    String gpColumnName, String monitorColumnName, String chwColumnName) {
-	filter = "";
-	startDate = "";
-	endDate = "";
-	patientId = "";
-	operatorId = "";
-	if (dateRangeFilterCheckBox.getValue()) {
-	    Date start = new Date(fromDateBox.getValue().getTime());
-	    Date end = new Date(toDateBox.getValue().getTime());
-	    StringBuilder startString = new StringBuilder();
-	    StringBuilder endString = new StringBuilder();
-	    if (timeRangeFilterCheckBox.getValue()) {
-		start.setHours(fromTimeDateBox.getValue().getHours());
-		start.setMinutes(fromTimeDateBox.getValue().getMinutes());
-		end.setHours(toTimeDateBox.getValue().getHours());
-		end.setMinutes(toTimeDateBox.getValue().getMinutes());
-	    }
-	    startString.append((start.getYear() + 1900) + "-"
-		    + (start.getMonth() + 1) + "-" + start.getDate() + " "
-		    + start.getHours() + ":" + start.getMinutes() + ":00");
-	    endString.append((end.getYear() + 1900) + "-"
-		    + (end.getMonth() + 1) + "-" + end.getDate() + " "
-		    + end.getHours() + ":" + end.getMinutes() + ":00");
-	    startDate = startString.toString();
-	    endDate = endString.toString();
-	}
-	if (patientIdCheckBox.getValue()) {
-	    switch (patientFilterTypeComboBox.getSelectedIndex()) {
-	    case 0:
-		patientId = " = '" + XpertSmsWebClient.get(patientIdTextBox)
-			+ "'";
-		break;
-	    case 1:
-		patientId = " LIKE '" + XpertSmsWebClient.get(patientIdTextBox)
-			+ "%'";
-		break;
-	    case 2:
-		patientId = " LIKE '%"
-			+ XpertSmsWebClient.get(patientIdTextBox) + "'";
-		break;
-	    case 3:
-		patientId = " LIKE '%"
-			+ XpertSmsWebClient.get(patientIdTextBox) + "%'";
-		break;
-	    }
-	}
-	if (dateRangeFilterCheckBox.getValue() && !dateColumnName.equals(""))
-	    filter += " AND " + dateColumnName + " BETWEEN '" + startDate
-		    + "' AND '" + endDate + "'";
-	if (patientIdCheckBox.getValue() && !patientColumnName.equals(""))
-	    filter += " AND " + patientColumnName + patientId;
-	return filter;
-    }
-
-    /**
-     * Creates appropriate filter for given column names
-     * 
-     * @param patientColumnName
-     * @param dateColumnName
-     * @param gpColumnName
-     * @param monitorColumnName
-     * @param chwColumnName
-     */
-    @SuppressWarnings("deprecation")
-    private String filterData(String patientColumnName, String dateColumnName,
-	    String gpColumnName, String monitorColumnName,
-	    String chwColumnName, String operatorColumnName) {
+	    String operatorColumnName) {
 	filter = "";
 	startDate = "";
 	endDate = "";
@@ -403,69 +337,47 @@ public class Report_ReportsComposite extends Composite implements IReport,
 		.replace(" ", "");
 	String query = "";
 	// Case Detection Reports
-	if (XpertSmsWebClient.get(categoryComboBox).equals(
-		"Case Detection Reports")) {
-	    if (reportSelected.equals("GeneXpertAutoPositiveReport")) {
-		query = "SELECT G.PatientID, G.SputumTestID AS SampleID, G.MTBBurden,G.DrugResistance, G.DateTested  FROM GeneXpertResults G where GeneXpertResult='MTB DETECTED'"
-			+ filterData("G.PatientID", "G.DateTested", "", "", "",
-				"G.OperatorID");
+	if (XpertSmsWebClient.get(categoryComboBox).equals("GeneXpert Reports")) {
+	    if (reportSelected.equals("GeneXpertPositiveReport")) {
+		query = "SELECT G.TestID, G.PatientID, G.SputumTestID AS SampleID, G.LaboratoryID, G.MTBBurden, G.DrugResistance, G.DateTested, Remarks FROM GeneXpertResults G WHERE G.GeneXpertResult = 'MTB DETECTED' "
+			+ filterData("G.PatientID", "G.DateTested", "G.OperatorID");
+	    } else if (reportSelected.equals("GeneXpertRifResistantReport")) {
+		query = "SELECT G.PatientID, G.SputumTestID AS SampleID, G.LaboratoryID, G.MTBBurden, G.DateTested  FROM GeneXpertResults G WHERE DrugResistance='DETECTED' "
+			+ filterData("G.PatientID", "G.DateTested", "G.OperatorID");
+	    } else if (reportSelected.equals("GeneXpertErrorReport")) {
+		query = "SELECT G.TestID, G.PatientID, G.SputumTestID AS SampleID, G.LaboratoryID, G.DateTested,G.ErrorCode, G.InstrumentID, G.ModuleID, G.CartridgeID, G.ReagentLotID  FROM GeneXpertResults G WHERE IFNULL(G.ErrorCode, 0) <> 0 "
+			+ filterData("G.PatientID", "G.DateTested", "G.OperatorID");
+	    } else if (reportSelected.equals("GeneXpertFailedTestReport")) {
+		query = "SELECT G.TestID, G.PatientID, G.SputumTestID, G.LaboratoryID, G.DateTested, G.OperatorID, G.GeneXpertResult, G.DrugResistance, G.ErrorCode, G.InstrumentID, G.ModuleID, G.CartridgeID, G.ReagentLotID FROM GeneXpertResults AS G WHERE GeneXpertResult in ('ERROR', 'INVALID', 'NO RESULT') "
+			+ filterData("G.PatientID", "G.DateTested", "G.OperatorID");
+	    } else if (reportSelected.equals("GeneXpertProbeReport")) {
+		query = "SELECT G.PatientID, G.SputumTestID AS SampleID, G.LaboratoryID AS LabID, G.DateTested, G.GeneXpertResult AS Result, G.MTBBurden, G.DrugResistance AS Resistance, G.ProbeResultA AS A, G.ProbeCtA AS CtA, G.ProbeEndptA AS EndPtA, G.ProbeResultB AS B, G.ProbeCtB AS CtB, G.ProbeEndptB AS EndPtB, G.ProbeResultC AS C, G.ProbeCtC AS CtC, G.ProbeEndptC AS EndPtC, G.ProbeResultD AS D, G.ProbeCtD AS CtD, G.ProbeEndptD AS EndPtD, G.ProbeResultE AS E, G.ProbeCtE AS CtE, G.ProbeEndptE AS EndPtE, G.ProbeResultSPC AS SPC, G.ProbeCtSPC AS CtSPC, G.ProbeEndptSPC AS EndPtSPC FROM GeneXpertResults G WHERE 1 = 1 "
+			+ filterData("G.PatientID", "G.DateTested", "G.OperatorID");
+	    } else {
+		query = "";
 	    }
-
-	    else if (reportSelected.equals("GeneXpertAutoRifResistantReport")) {
-		query = "SELECT G.PatientID, G.SputumTestID AS SampleID, G.MTBBurden,G.DateTested  FROM GeneXpertResults G where DrugResistance='DETECTED'"
-			+ filterData("G.PatientID", "G.DateTested", "", "", "",
-				"G.OperatorID");
-	    }
-
-	    else if (reportSelected.equals("GeneXpertAutoErrorReport")) {
-		query = "SELECT G.PatientID, G.SputumTestID AS SampleID, G.DateTested,G.ErrorCode,G.InstrumentID,G.ModuleID,G.CartridgeID,G.ReagentLotID  FROM GeneXpertResults G where (G.ErrorCode != 0 AND G.ErrorCode IS NOT NULL)"
-			+ filterData("G.PatientID", "G.DateTested", "", "", "",
-				"G.OperatorID");
-	    }
-
-	    else if (reportSelected.equals("GeneXpertAutoProbeReport")) {
-		query = "SELECT G.PatientID, G.SputumTestID AS SampleID,G.MTBBurden, G.DateTested,G.GeneXpertResult,G.DrugResistance,G.ProbeResultA,G.ProbeCtA,G.ProbeEndptA,G.ProbeResultB,G.ProbeCtB,G.ProbeEndptB,G.ProbeResultC,G.ProbeCtC,G.ProbeEndptC,G.ProbeResultD,G.ProbeCtD,G.ProbeEndptD,G.ProbeResultE,G.ProbeCtE,G.ProbeEndptE,G.ProbeResultSPC,G.ProbeCtSPC,G.ProbeEndptSPC  FROM GeneXpertResults G"
-			+ filterData("G.PatientID", "G.DateTested", "", "", "",
-				"G.OperatorID");
-	    }
-
-	    else if (reportSelected
-		    .equals("GeneXpertResultswithAgeandGenderReport")) {
-		query = "SELECT G.PatientID,floor(datediff(G.DateTested,P.DOB) / 365) as Age,P.Gender,G.SputumTestID AS SampleID, G.GeneXpertResult,G.MTBBurden,G.DrugResistance, G.DateTested  FROM GeneXpertResults G JOIN Person P ON G.PatientID=P.PID where G.GeneXpertResult IS NOT NULL";
+	} else if (XpertSmsWebClient.get(categoryComboBox).equals("Data Dumps")) {
+	    if (reportSelected.equals("GeneXpertResultsDump")) {
+		query = "SELECT TestID, PatientID, SputumTestID, LaboratoryID, DateSubmitted, DateTested, GeneXpertResult, IsPositive, MTBBurden, DrugResistance, ErrorCode, Remarks, PcID, InstrumentID, ModuleID, CartridgeID, ReagentLotID, OperatorID, ProbeResultA, ProbeResultB, ProbeResultC, ProbeResultD, ProbeResultE, ProbeResultSPC, ProbeCtA, ProbeCtB, ProbeCtC, ProbeCtD, ProbeCtE, ProbeCtSPC, ProbeEndptA, ProbeEndptB, ProbeEndptC, ProbeEndptD, ProbeEndptE, ProbeEndptSPC FROM GeneXpertResults ORDER BY TestID";
 	    } else {
 		query = "";
 	    }
 	}
-
 	load(true);
 	if (query.equals("")) {
 	    try {
-		service.generateReport(reportSelected, new Parameter[] {},
-			export, new AsyncCallback<String>() {
-			    @Override
-			    public void onSuccess(String result) {
-				Window.open(result, "_blank", "");
-				load(false);
-			    }
-
-			    @Override
-			    public void onFailure(Throwable caught) {
-				caught.printStackTrace();
-				load(false);
-			    }
-			});
+		Window.alert("Report is either out of format or does not match the schema. Please report to the developers.");
 	    } catch (Exception e) {
 		load(false);
 		e.printStackTrace();
 	    }
 	} else {
-	    if (XpertSmsWebClient.get(categoryComboBox).equals("Form Dumps")) {
+	    if (XpertSmsWebClient.get(categoryComboBox).equals("Data Dumps")) {
 		try {
 		    service.generateCSVfromQuery(query,
 			    new AsyncCallback<String>() {
 				@Override
 				public void onSuccess(String result) {
-
 				    Window.open(result, "_blank", "");
 				    load(false);
 				}
@@ -570,19 +482,19 @@ public class Report_ReportsComposite extends Composite implements IReport,
 	// Fill report names
 	if (sender == categoryComboBox) {
 	    String text = XpertSmsWebClient.get(sender);
-	    if (text.equals("Case Detection Reports")) {
-		reportsListComboBox.addItem("GeneXpert Auto Positive Report");
-		reportsListComboBox
-			.addItem("GeneXpert Auto Rif Resistant Report");
-		reportsListComboBox.addItem("GeneXpert Auto Error Report");
-		reportsListComboBox.addItem("GeneXpert Auto Probe Report");
-		reportsListComboBox
-			.addItem("GeneXpertResults with Age and Gender Report");
+	    reportsListComboBox.clear();
+	    if (text.equals("GeneXpert Reports")) {
+		reportsListComboBox.addItem("GeneXpert Positive Report");
+		reportsListComboBox.addItem("GeneXpert Rif Resistant Report");
+		reportsListComboBox.addItem("GeneXpert Error Report");
+		reportsListComboBox.addItem("GeneXpert Failed Test Report");
+		reportsListComboBox.addItem("GeneXpert Probe Report");
+	    } else if (text.equals("Data Dumps")) {
+		reportsListComboBox.addItem("GeneXpert Results Dump");
 	    }
-	}
-	if (sender == reportsListComboBox) {
-	    viewButton.setEnabled(!XpertSmsWebClient.get(reportsListComboBox)
-		    .equals("Form Dumps"));
+	    // Disable view on data dumps
+	    viewButton.setEnabled(!XpertSmsWebClient.get(categoryComboBox)
+		    .equals("Data Dumps"));
 	}
     }
 

@@ -10,13 +10,13 @@
    <generator class="assigned"/>
   </id>
   <property generated="never" lazy="false" name="screenerId" type="string">
-   <column length="12" name="ScreenerID"/>
+   <column length="20" name="ScreenerID"/>
   </property>
   <property generated="never" lazy="false" name="providerId" type="string">
-   <column length="12" name="ProviderID"/>
+   <column length="20" name="ProviderID"/>
   </property>
   <property generated="never" lazy="false" name="externalMrno" type="string">
-   <column length="11" name="ExternalMRNo">
+   <column length="20" name="ExternalMRNo">
     <comment>Case/File/Patient No. used outside treatment center (District level etc.)</comment>
    </column>
   </property>
@@ -36,7 +36,7 @@
    <column length="12" name="TreatmentSupporter"/>
   </property>
   <property generated="never" lazy="false" name="treatmentCenter" type="string">
-   <column length="10" name="TreatmentCenter"/>
+   <column length="20" name="TreatmentCenter"/>
   </property>
   <property generated="never" lazy="false" name="diseaseSuspected" type="java.lang.Boolean">
    <column name="DiseaseSuspected"/>
@@ -45,19 +45,19 @@
    <column name="DiseaseConfirmed"/>
   </property>
   <property generated="never" lazy="false" name="diseaseCategory" type="string">
-   <column length="10" name="DiseaseCategory"/>
+   <column length="20" name="DiseaseCategory"/>
   </property>
   <property generated="never" lazy="false" name="diseaseSite" type="string">
    <column length="50" name="DiseaseSite"/>
   </property>
   <property generated="never" lazy="false" name="severity" type="string">
-   <column length="10" name="Severity"/>
+   <column length="20" name="Severity"/>
   </property>
   <property generated="never" lazy="false" name="medicationForm" type="string">
-   <column length="10" name="MedicationForm"/>
+   <column length="20" name="MedicationForm"/>
   </property>
   <property name="regimenType" type="string">
-   <column length="10" name="RegimenType"/>
+   <column length="20" name="RegimenType"/>
   </property>
   <property generated="never" lazy="false" name="RDose" type="java.lang.Float">
    <column name="R_Dose" precision="12" scale="0"/>
@@ -72,7 +72,7 @@
    <column name="E_Dose" precision="12" scale="0"/>
   </property>
   <property generated="never" lazy="false" name="regimen" type="string">
-   <column length="10" name="Regimen"/>
+   <column length="20" name="Regimen"/>
   </property>
   <property generated="never" lazy="false" name="doseCombination" type="java.lang.Float">
    <column name="DoseCombination" precision="12" scale="0"/>
@@ -81,10 +81,10 @@
    <column name="OtherDoseDescription"/>
   </property>
   <property generated="never" lazy="false" name="treatmentPhase" type="string">
-   <column length="10" name="TreatmentPhase"/>
+   <column length="20" name="TreatmentPhase"/>
   </property>
   <property generated="never" lazy="false" name="patientStatus" type="string">
-   <column length="10" name="PatientStatus"/>
+   <column length="20" name="PatientStatus"/>
   </property>
   <property generated="never" lazy="false" name="patientType" type="string">
    <column length="50" name="PatientType"/>

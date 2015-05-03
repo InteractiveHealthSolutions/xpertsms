@@ -112,13 +112,13 @@ public final class XpertProperties {
 	
 	public static final String WEB_PARAMETERS = "web_parameters";
 	
-	public static final String SERVER_URL = null;
+	public static final String SERVER_URL = "server_url";
 	
-	public static final String SERVER_PORT = null;
+	public static final String SERVER_PORT = "server_port";
 	
-	public static final String WEB_APP_STRING = null;
+	public static final String WEB_APP_STRING = "server_app_string";
 	
-	public static final String EXPORT_PROBES = null;
+	public static final String EXPORT_PROBES = "export_probes";
 	
 	/**
 	 * Read properties from properties file

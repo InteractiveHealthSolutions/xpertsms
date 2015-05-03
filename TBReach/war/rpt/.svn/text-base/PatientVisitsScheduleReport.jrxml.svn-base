@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReportFormat" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="SansSerif" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="SansSerif" fontSize="18"/>
+	<style name="Detail" mode="Transparent" forecolor="#010101" backcolor="#FFFFFF" fill="Solid" fontName="SansSerif" fontSize="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Border" fill="Solid" fontName="SansSerif" fontSize="9">
+		<box topPadding="2" leftPadding="2">
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Column header" mode="Transparent" forecolor="#010101" fontName="SansSerif" fontSize="9" isBold="true">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+			<pen lineWidth="1.0" lineColor="#333333"/>
+			<topPen lineWidth="1.0" lineColor="#333333"/>
+			<leftPen lineWidth="1.0" lineColor="#333333"/>
+			<bottomPen lineWidth="1.0" lineColor="#333333"/>
+			<rightPen lineWidth="1.0" lineColor="#333333"/>
+		</box>
+	</style>
+	<parameter name="UserName" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select PatientID, MRNo, PatientStatus, DiseaseCategory, DateBaselineVisit from tbreach_rpt._PatientVisitSchedule;]]>
+	</queryString>
+	<field name="PatientID" class="java.lang.String"/>
+	<field name="MRNo" class="java.lang.String"/>
+	<field name="PatientStatus" class="java.lang.String"/>
+	<field name="DiseaseCategory" class="java.lang.String"/>
+	<field name="DateBaselineVisit" class="java.sql.Timestamp"/>
+	<sortField name="DateBaselineVisit"/>
+	<variable name="CURRENT_DATE" class="java.lang.String" calculation="System"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement style="Column header" x="0" y="0" width="80" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[PatientID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="80" y="0" width="57" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Category]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="205" y="0" width="70" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Baseline Visit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="275" y="0" width="70" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Month 2]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="345" y="0" width="70" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Month 3]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="415" y="0" width="70" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Month 5]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="485" y="0" width="70" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Month 7]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="137" y="0" width="68" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="20">
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="0" y="0" width="80" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{PatientID}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="80" y="0" width="57" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{DiseaseCategory}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MMM-yy" isBlankWhenNull="true">
+				<reportElement style="Detail" x="205" y="0" width="70" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{DateBaselineVisit}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MMM-yyyy" isBlankWhenNull="true">
+				<reportElement style="Detail" x="275" y="0" width="70" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{DateBaselineVisit} + 54]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MMM-yyyy" isBlankWhenNull="true">
+				<reportElement style="Detail" x="345" y="0" width="70" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{DateBaselineVisit} + 84]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MMM-yyyy" isBlankWhenNull="true">
+				<reportElement style="Detail" x="415" y="0" width="70" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{DateBaselineVisit} + 144]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MMM-yyyy" isBlankWhenNull="true">
+				<reportElement style="Detail" x="485" y="0" width="70" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{DateBaselineVisit} + 204]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="137" y="0" width="68" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{PatientStatus}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="14">
+			<textField>
+				<reportElement x="0" y="0" width="137" height="13" forecolor="#010101"/>
+				<textElement>
+					<font fontName="SansSerif" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Total Records: "+$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+</jasperReport>

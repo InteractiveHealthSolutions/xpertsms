@@ -11,17 +11,17 @@
     <column name="EncounterID"/>
    </key-property>
    <key-property name="pid1" type="string">
-    <column length="12" name="PID1"/>
+    <column length="20" name="PID1"/>
    </key-property>
    <key-property name="pid2" type="string">
-    <column length="12" name="PID2"/>
+    <column length="20" name="PID2"/>
    </key-property>
   </composite-id>
   <property generated="never" lazy="false" name="encounterType" type="string">
-   <column length="10" name="EncounterType" not-null="true"/>
+   <column length="20" name="EncounterType" not-null="true"/>
   </property>
   <property generated="never" lazy="false" name="locationId" type="string">
-   <column length="10" name="LocationID"/>
+   <column length="20" name="LocationID"/>
   </property>
   <property generated="never" lazy="false" name="dateEncounterStart" type="timestamp">
    <column length="19" name="DateEncounterStart" not-null="true"/>

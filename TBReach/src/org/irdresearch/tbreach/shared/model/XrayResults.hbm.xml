@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 6, 2011 10:24:45 AM by Hibernate Tools 3.4.0.Beta1 -->
+<hibernate-mapping>
+    <class name="org.irdresearch.tbreach.shared.model.XrayResults" table="XRayResults" catalog="xpertsms">
+        <composite-id name="id" class="org.irdresearch.tbreach.shared.model.XrayResultsId">
+            <key-property name="irs" type="string">
+                <column name="IRS" length="15" />
+            </key-property>
+            <key-property name="patientId" type="string">
+                <column name="PatientID" length="12" />
+            </key-property>
+        </composite-id>
+        <property name="xrayDate" type="timestamp">
+            <column name="XRayDate" length="19" />
+        </property>
+        <property name="dateReported" type="timestamp">
+            <column name="DateReported" length="19" />
+        </property>
+        <property name="xrayResults" type="string">
+            <column name="XRayResults" length="255" />
+        </property>
+        <property name="remarks" type="string">
+            <column name="Remarks" length="255"/>
+        </property>
+    </class>
+</hibernate-mapping>

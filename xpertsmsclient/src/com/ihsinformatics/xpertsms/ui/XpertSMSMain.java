@@ -28,6 +28,8 @@ public class XpertSMSMain {
 	
 	private static ControlPanel settingsPanel;
 	
+	private static final boolean developmentMode = true;
+	
 	// private static JTextPane monitorPanel;
 	
 	public XpertSMSMain() {
@@ -38,25 +40,27 @@ public class XpertSMSMain {
 		JFrame mainFrame = new JFrame("XpertSMS");
 		
 		// Show splash screen
-		final SplashScreen splash = SplashScreen.getSplashScreen();
-		if (splash == null) {
-			System.out.println("SplashScreen.getSplashScreen() returned null");
-			return;
-		}
-		Graphics2D g = splash.createGraphics();
-		if (g == null) {
-			System.out.println("g is null");
-			return;
-		}
-		for (int i = 0; i < 100; i++) {
-			renderSplashFrame(g, i);
-			splash.update();
-			try {
-				Thread.sleep(10);
+		if (!developmentMode) {
+			final SplashScreen splash = SplashScreen.getSplashScreen();
+			if (splash == null) {
+				System.out.println("SplashScreen.getSplashScreen() returned null");
+				return;
 			}
-			catch (InterruptedException e) {}
+			Graphics2D g = splash.createGraphics();
+			if (g == null) {
+				System.out.println("g is null");
+				return;
+			}
+			for (int i = 0; i < 100; i++) {
+				renderSplashFrame(g, i);
+				splash.update();
+				try {
+					Thread.sleep(10);
+				}
+				catch (InterruptedException e) {}
+			}
+			splash.close();
 		}
-		splash.close();
 		
 		// set Frame size and location
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();

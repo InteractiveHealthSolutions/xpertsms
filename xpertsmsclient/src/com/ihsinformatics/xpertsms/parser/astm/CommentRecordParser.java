@@ -35,6 +35,9 @@ public class CommentRecordParser extends BaseParser {
 			record.setError(true);
 			setErrorDetails(fields[3]);
 		}
+		else if (fields[4].charAt(0) == ASTMMessageConstants.COMMENT_TYPE_NOTES) {
+			setNotes(fields[3]);
+		}
 	}
 	
 	public void setErrorDetails(String field) throws InvalidASTMMessageFormatException {
@@ -44,18 +47,43 @@ public class CommentRecordParser extends BaseParser {
 			        + ASTMMessageConstants.MAX_COMMENT_SOURCE_COMPONENTS + " components");
 		}
 		record.setErrorCode(errorDetails[1]);
+		if (errorDetails.length > 3)
+			record.setErrorNotes(errorDetails[3] + ": " + errorDetails[3]);
 	}
 	
-	/*
-	 * public static void main(String[] args) {
-	 * 
-	 * XpertASTMResultUploadMessage message = new
-	 * XpertASTMResultUploadMessage(); String messageString =
-	 * "C|1|I|Error^5011^Post-run analysis error^Error 5011: Signal loss detected in the amplification curve for analyte [Probe B]. 12.6 decrease in signal with 23.6% decrease at cycle 5.^20111025171012|N"
-	 * ; CommentRecordParser cp = new
-	 * CommentRecordParser(message,messageString); try { cp.parse(); } catch
-	 * (InvalidASTMMessageFormatException e) { e.printStackTrace(); }
-	 * System.out.println(message.toString()); }
+	/**
+	 * Parses the Notes field and sets to ASTMMessage object
+	 * @param field
+	 * @throws InvalidASTMMessageFormatException
 	 */
+	public void setNotes(String field) throws InvalidASTMMessageFormatException {
+		String[] notesParts = field.split("\\" + XpertASTMResultUploadMessage.COMPONENT_DELIMITER);
+		if (notesParts.length != ASTMMessageConstants.MAX_NOTES_COMPONENTS) {
+			throw new InvalidASTMMessageFormatException("C004 - Notes source must have "
+			        + ASTMMessageConstants.MAX_NOTES_COMPONENTS + " components");
+		}
+		record.setNotes(notesParts[2]);
+	}
 	
+	public static void main(String[] args) {
+		XpertASTMResultUploadMessage message = new XpertASTMResultUploadMessage();
+		String messageString = "C|1|I|Error^5011^Post-run analysis error^Error 5011: Signal loss detected in the amplification curve for analyte [Probe B]. 12.6 decrease in signal with 23.6% decrease at cycle 5.^20111025171012|N";
+		CommentRecordParser cp = new CommentRecordParser(message, messageString);
+		try {
+			cp.parse();
+		}
+		catch (InvalidASTMMessageFormatException e) {
+			e.printStackTrace();
+		}
+		System.out.println(message.toString());
+		messageString = "C|1|I|Notes^^Iducing Error - Test|I";
+		cp = new CommentRecordParser(message, messageString);
+		try {
+			cp.parse();
+		}
+		catch (InvalidASTMMessageFormatException e) {
+			e.printStackTrace();
+		}
+		System.out.println(message.toString());
+	}
 }

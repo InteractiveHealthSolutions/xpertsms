@@ -1,16 +1,12 @@
 package com.ihsinformatics.xpertsmsweb.server;
 
-import java.io.IOException;
-
-import javax.management.InstanceAlreadyExistsException;
 
 public class XpertSmsWebMain {
     public static void main(String[] args) {
 	try {
-	    SmsTarseel.Instantiate();
-	} catch (InstanceAlreadyExistsException e) {
-	    e.printStackTrace();
-	} catch (IOException e) {
+	    System.out.println(System.getProperty("user.dir"));
+	    //SmsTarseel.Instantiate();
+	} catch (Exception e) {
 	    e.printStackTrace();
 	}
 	System.out.println("HELLO!");

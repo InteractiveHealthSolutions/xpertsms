@@ -8,9 +8,6 @@ import java.util.Date;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-/*import com.ihsinformatics.xpertsmsweb.mobileevent.DateTimeUtil;
- import com.ihsinformatics.xpertsmsweb.mobileevent.ModelUtil;
- import com.ihsinformatics.xpertsmsweb.mobileevent.XmlUtil;*/
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -33,9 +30,12 @@ import com.ihsinformatics.xpertsmsweb.shared.model.MessageSettings;
 import com.ihsinformatics.xpertsmsweb.shared.model.OtherMessageSetting;
 import com.ihsinformatics.xpertsmsweb.shared.model.Patient;
 import com.ihsinformatics.xpertsmsweb.shared.model.Person;
-import com.ihsinformatics.xpertsmsweb.shared.model.SputumResults;
 import com.ihsinformatics.xpertsmsweb.shared.model.UserRights;
 import com.ihsinformatics.xpertsmsweb.shared.model.Users;
+
+/*import com.ihsinformatics.xpertsmsweb.mobileevent.DateTimeUtil;
+ import com.ihsinformatics.xpertsmsweb.mobileevent.ModelUtil;
+ import com.ihsinformatics.xpertsmsweb.mobileevent.XmlUtil;*/
 
 /**
  * The server side implementation of the RPC service.
@@ -85,411 +85,10 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
     }
 
     /**
-     * Sends multiple SMS
-     * 
-     * @param sms
-     */
-    /*
-     * 
-     * public void sendGenericSMSAlert(Sms[] sms) throws Exception { for (Sms s
-     * : sms) sendGenericSMSAlert(s); }
-     *//**
-     * Sends a generic SMS
-     * 
-     * @param sms
-     */
-    /*
-     * 
-     * public void sendGenericSMSAlert(Sms sms) { if
-     * (!sms.getTargetNumber().equals("")) HibernateUtil.util.save(sms); }
-     *//**
-     * Records messages to be send to various roles BUSINESS LOGIC: 1. If
-     * isTBPositive is true, then: - Send alert to Monitor, GP and CHW about
-     * Patient confirmation - Send alert to CHW, GP about their updated
-     * incentive balance
-     */
-    /*
-     * public void sendAlertsOnClinicalDiagnosis(EncounterId encounterId,
-     * boolean isTBPositive, SetupIncentive gpIncentive, SetupIncentive
-     * chwIncentive) throws Exception { try { Patient patient = (Patient)
-     * HibernateUtil.util.findObject("from Patient where PatientID='" +
-     * encounterId.getPid1() + "'"); // Get IDs String[] IDs =
-     * getRowRecord("Patient", new String[] { "MonitorID", "GPID", "CHWID" },
-     * "PatientID='" + patient.getPatientId() + "'"); String monitorID = IDs[0];
-     * String GPID = IDs[1]; String CHWID = IDs[2]; // Get mobile numbers String
-     * monitorMobile = getMobileNumber(monitorID); String GPMobile =
-     * getMobileNumber(GPID); String CHWMobile = null;
-     * 
-     * if (CHWID != null) CHWMobile = getMobileNumber(CHWID); // Set SMS param
-     * String targetNumber = ""; String messageText = ""; Date dueDateTime = new
-     * Date(); String status = "PENDING";
-     * 
-     * if (isTBPositive) { // Send alert to Monitor, GP and CHW about Patient
-     * confirmation targetNumber = monitorMobile; messageText =
-     * "Dear Monitor! Suspect: " + patient.getPatientId() +
-     * " has been confirmed as Patient based on clinical diagnosis. GP attending: "
-     * + GPID; sendGenericSMSAlert(new Sms(targetNumber, messageText,
-     * dueDateTime, null, status, null, null)); targetNumber = GPMobile;
-     * sendGenericSMSAlert(new Sms(targetNumber, messageText, dueDateTime, null,
-     * status, null, null));
-     * 
-     * if (CHWMobile != null) { targetNumber = CHWMobile; messageText =
-     * "Dear Health worker! Suspect: " + patient.getPatientId() +
-     * " has been confirmed as Patient based on clinical diagnosis. GP attending: "
-     * + GPID; sendGenericSMSAlert(new Sms(targetNumber, messageText,
-     * dueDateTime, null, status, null, null)); } // Send alert to CHW, GP about
-     * their updated incentive balance targetNumber = GPMobile; messageText =
-     * "Dear GP! You have been incentivised amount of " +
-     * gpIncentive.getCurrency() + gpIncentive.getAmount() +
-     * " on clinical confirmation of Suspect: " + patient.getPatientId();
-     * sendGenericSMSAlert(new Sms(targetNumber, messageText, dueDateTime, null,
-     * status, null, null));
-     * 
-     * if (CHWMobile != null) { targetNumber = CHWMobile; messageText =
-     * "Dear Health worker! You have been incentivised amount of " +
-     * chwIncentive.getCurrency() + chwIncentive.getAmount() +
-     * " on clinical confirmation of Suspect: " + patient.getPatientId();
-     * sendGenericSMSAlert(new Sms(targetNumber, messageText, dueDateTime, null,
-     * status, null, null)); } } }
-     * 
-     * catch (Exception e) { e.printStackTrace(); } }
-     *//**
-     * Records messages to be sent to various roles BUSINESS LOGIC: 1. If the
-     * suspect is not confirmed, then: - Do nothing 2. If the suspect is
-     * confirmed, then: - Send alert to Monitor
-     */
-    /*
-     * public void sendAlertsOnGPConfirmation(EncounterId encounterID) throws
-     * Exception { try { Patient patient = (Patient)
-     * HibernateUtil.util.findObject("from Patient where PatientID='" +
-     * encounterID.getPid1() + "'");
-     * 
-     * Object[] obj = HibernateUtil.util.selectObjects(
-     * "select MonitorID from GPMapping where GPID='" + encounterID.getPid2() +
-     * "'"); String[] monitorIDs = new String[obj.length]; for (int i = 0; i <
-     * obj.length; i++) monitorIDs[i] = obj[i].toString(); if
-     * (patient.getPatientStatus().equalsIgnoreCase("GP_CONF")) { String
-     * targetNumber = ""; String messageText = ""; Date dueDateTime = new
-     * Date(); String status = "PENDING"; for (int i = 0; i < monitorIDs.length;
-     * i++) { String monitorMobile = getMobileNumber(monitorIDs[i]);
-     * targetNumber = monitorMobile; messageText = "Alert! Patient " +
-     * patient.getPatientId() + " confirmed as suspect by GP " +
-     * encounterID.getPid2(); HibernateUtil.util.save(new Sms(targetNumber,
-     * messageText, dueDateTime, null, status, null, null)); } } } catch
-     * (Exception e) { e.printStackTrace(); } }
-     *//**
-     * Records messages to be sent to various roles BUSINESS LOGIC: - Send
-     * alert to Monitor - Send alert to GP about their updated incentive balance
-     */
-    /*
-     * public void sendAlertsOnGPVisit(Encounter encounter, SetupIncentive
-     * gpIncentive) throws Exception { try { Patient patient = (Patient)
-     * HibernateUtil.util.findObject("from Patient where PatientID='" +
-     * encounter.getId().getPid1() + "'");
-     * 
-     * Object[] obj = HibernateUtil.util.selectObjects(
-     * "select MonitorID from GPMapping where GPID='" +
-     * encounter.getId().getPid2() + "'"); String[] monitorIDs = new
-     * String[obj.length]; for (int i = 0; i < obj.length; i++) monitorIDs[i] =
-     * obj[i].toString();
-     * 
-     * String targetNumber = ""; String messageText = ""; Date dueDateTime = new
-     * Date(); String status = "PENDING"; Incentive incentive = new Incentive();
-     * 
-     * for (int i = 0; i < monitorIDs.length; i++) { String monitorMobile =
-     * getMobileNumber(monitorIDs[i]); targetNumber = monitorMobile; messageText
-     * = "Alert! Patient/Suspect " + patient.getPatientId() + " visited GP " +
-     * encounter.getId().getPid2() + " on " + encounter.getDateEncounterStart();
-     * sendGenericSMSAlert(new Sms(targetNumber, messageText, dueDateTime, null,
-     * status, null, null)); } messageText =
-     * "Congratulations! You have been incentivised amount of " +
-     * gpIncentive.getAmount() + " on visit of Patient/Suspect " +
-     * patient.getPatientId(); targetNumber =
-     * getMobileNumber(encounter.getId().getPid2()); incentive = new
-     * Incentive(new IncentiveId(encounter.getId().getPid2(),
-     * gpIncentive.getIncentiveId(), 0), "", new Date(), status,
-     * "Original message sent: " + messageText);
-     * HibernateUtil.util.save(incentive); sendGenericSMSAlert(new
-     * Sms(targetNumber, messageText, dueDateTime, null, status, null, null)); }
-     * catch (Exception e) { e.printStackTrace(); } }
-     *//**
-     * Records messages to be sent to various roles BUSINESS LOGIC: 1. If
-     * isCured is true - Send alert to whole population - Send alert to GP and
-     * CHW about their updated incentive balance 2. If isCured is false and
-     * isTreatmentCompleted is true - Send alert to Monitor - Send alert to GP
-     * and CHW about their updated incentive balance 3. If isCured is false and
-     * isTreatmentCompleted is false - Send alert to Monitor
-     */
-    /*
-     * public void sendAlertsOnEndFollowUp(EncounterId encounterID,
-     * SetupIncentive GPIncentive, SetupIncentive CHWIncentive, boolean isCured,
-     * boolean isTreatmentCompleted) throws Exception { try { Patient patient =
-     * (Patient) HibernateUtil.util.findObject("from Patient where PatientID='"
-     * + encounterID.getPid1() + "'");
-     * 
-     * String[] monitorIDs = (String[]) HibernateUtil.util.selectObjects(
-     * "select MonitorID from GPMapping where GPID='" + encounterID.getPid2() +
-     * "'"); Monitor[] monitors = new Monitor[monitorIDs.length]; for (int i =
-     * 0; i < monitorIDs.length; i++) { monitors[i] = (Monitor)
-     * HibernateUtil.util.selectObject("from Monitor where MonitorID='" +
-     * monitorIDs[i] + "'"); }
-     * 
-     * String targetNumber = ""; String messageText = ""; Date dueDateTime = new
-     * Date(); String status = "PENDING";
-     * 
-     * String[] monitorMobile = new String[monitorIDs.length]; for (int i = 0; i
-     * < monitorIDs.length; i++) { monitorMobile[i] =
-     * getMobileNumber(monitorIDs[i]); } String GPMobile =
-     * getMobileNumber(patient.getProviderId()); String CHWMobile =
-     * getMobileNumber(patient.getScreenerId());
-     * 
-     * if (isCured) { // Send alerts messageText = "Congratulations! Patient " +
-     * patient.getPatientId() + " has been cured successfully"; String[]
-     * supervisorMobiles = (String[]) HibernateUtil.util.selectObjects(
-     * "select Mobile from Contact where PID LIKE 'S%'"); for (int i = 0; i <
-     * supervisorMobiles.length; i++) { targetNumber = supervisorMobiles[i];
-     * sendGenericSMSAlert(new Sms(targetNumber, messageText, dueDateTime, null,
-     * status, null, null)); } for (int i = 0; i < monitorMobile.length; i++) {
-     * targetNumber = monitorMobile[i]; sendGenericSMSAlert(new
-     * Sms(targetNumber, messageText, dueDateTime, null, status, null, null)); }
-     * targetNumber = GPMobile; sendGenericSMSAlert(new Sms(targetNumber,
-     * messageText, dueDateTime, null, status, null, null)); targetNumber =
-     * CHWMobile; sendGenericSMSAlert(new Sms(targetNumber, messageText,
-     * dueDateTime, null, status, null, null)); // Send incentive alerts
-     * messageText = "Congratulations! You have been incentivised amount of " +
-     * GPIncentive.getAmount() + " on successful treatment of Patient " +
-     * patient.getPatientId(); targetNumber = GPMobile; sendGenericSMSAlert(new
-     * Sms(targetNumber, messageText, dueDateTime, null, status, null, null));
-     * messageText = "Congratulations! You have been incentivised amount of " +
-     * CHWIncentive.getAmount() + " on successful treatment of Patient " +
-     * patient.getPatientId(); targetNumber = CHWMobile; sendGenericSMSAlert(new
-     * Sms(targetNumber, messageText, dueDateTime, null, status, null, null)); }
-     * else if (!isCured && isTreatmentCompleted) { // Send alerts messageText =
-     * "Alert! Patient " + patient.getPatientId() + " has completed treatment";
-     * for (int i = 0; i < monitorMobile.length; i++) { targetNumber =
-     * monitorMobile[i]; sendGenericSMSAlert(new Sms(targetNumber, messageText,
-     * dueDateTime, null, status, null, null)); } targetNumber = GPMobile;
-     * sendGenericSMSAlert(new Sms(targetNumber, messageText, dueDateTime, null,
-     * status, null, null)); targetNumber = CHWMobile; sendGenericSMSAlert(new
-     * Sms(targetNumber, messageText, dueDateTime, null, status, null, null));
-     * // Send incentive alerts messageText =
-     * "Congratulations! You have been incentivised amount of " +
-     * GPIncentive.getAmount() + " on treatment completion of Patient " +
-     * patient.getPatientId(); targetNumber = GPMobile; sendGenericSMSAlert(new
-     * Sms(targetNumber, messageText, dueDateTime, null, status, null, null));
-     * messageText = "Congratulations! You have been incentivised amount of " +
-     * CHWIncentive.getAmount() + " on treatment completion of Patient " +
-     * patient.getPatientId(); targetNumber = CHWMobile; sendGenericSMSAlert(new
-     * Sms(targetNumber, messageText, dueDateTime, null, status, null, null)); }
-     * else if (!isCured && !isTreatmentCompleted) { // Send alerts messageText
-     * = "Alert! Treatment of Patient " + patient.getPatientId() +
-     * " was incomplete"; for (int i = 0; i < monitorMobile.length; i++) {
-     * targetNumber = monitorMobile[i]; sendGenericSMSAlert(new
-     * Sms(targetNumber, messageText, dueDateTime, null, status, null, null)); }
-     * } } catch (Exception e) { e.printStackTrace(); } }
-     *//**
-     * Records messages to be sent to various roles BUSINESS LOGIC: 1. If
-     * isTBPositive is true, then: - Send alert to Monitor, GP and CHW about
-     * Patient confirmation - Send alert to CHW, GP about their updated
-     * incentive balance 2. If isTBPositive is false (suspect with result
-     * negative), then: - Send alert to Monitor about negative results
-     */
-    /*
-     * public void sendAlertsOnGeneXpertResults(GeneXpertResults
-     * geneXpertResults, boolean isTBPositive, SetupIncentive gpIncentive,
-     * SetupIncentive chwIncentive) throws Exception { try { Patient patient =
-     * (Patient) HibernateUtil.util.findObject("from Patient where PatientID='"
-     * + geneXpertResults.getPatientId() + "'");
-     * 
-     * // Get IDs String[] IDs = getRowRecord("Patient", new String[] {
-     * "MonitorID", "GPID", "CHWID" }, "PatientID='" + patient.getPatientId() +
-     * "'"); String monitorID = IDs[0].toString(); String GPID =
-     * IDs[1].toString(); String CHWID = IDs[2].toString(); // Get mobile
-     * numbers String monitorMobile = getMobileNumber(monitorID); String
-     * GPMobile = getMobileNumber(GPID); String CHWMobile =
-     * getMobileNumber(CHWID); // Set SMS param String targetNumber = ""; String
-     * messageText = ""; Date dueDateTime = new Date(); String status =
-     * "PENDING"; Incentive incentive = new Incentive();
-     * 
-     * try { if (isTBPositive) { try { if (patient.getDiseaseConfirmed()) { //
-     * Do nothing } else throw new Exception(); } catch (Exception e) {
-     * 
-     * 
-     * // Send alert to Monitor, GP and CHW about Patient confirmation
-     * targetNumber = monitorMobile; messageText = "Dear Monitor! Suspect: " +
-     * patient.getPatientId() + " has been confirmed as Patient. GP attending: "
-     * + GPID; sendGenericSMSAlert(new Sms(targetNumber, messageText,
-     * dueDateTime, null, status, null, null)); targetNumber = GPMobile;
-     * sendGenericSMSAlert(new Sms(targetNumber, messageText, dueDateTime, null,
-     * status, null, null)); targetNumber = CHWMobile; messageText =
-     * "Dear Health worker! Suspect: " + patient.getPatientId() +
-     * " has been confirmed as Patient. GP attending: " + GPID;
-     * sendGenericSMSAlert(new Sms(targetNumber, messageText, dueDateTime, null,
-     * status, null, null)); // Send alert to CHW, GP about their updated
-     * incentive balance targetNumber = GPMobile; messageText =
-     * "Dear Treatment Provider! You have been incentivised amount of " +
-     * gpIncentive.getCurrency() + gpIncentive.getAmount() +
-     * " on confirmation of Suspect: " + patient.getPatientId(); incentive = new
-     * Incentive(new IncentiveId(GPID, gpIncentive.getIncentiveId(), 0), "", new
-     * Date(), status, "Original message sent: " + messageText);
-     * HibernateUtil.util.save(incentive); sendGenericSMSAlert(new
-     * Sms(targetNumber, messageText, dueDateTime, null, status, null, null));
-     * targetNumber = CHWMobile; messageText =
-     * "Dear Health worker! You have been incentivised amount of " +
-     * chwIncentive.getCurrency() + chwIncentive.getAmount() +
-     * " on confirmation of Suspect: " + patient.getPatientId(); incentive = new
-     * Incentive(new IncentiveId(CHWID, chwIncentive.getIncentiveId(), 0), "",
-     * new Date(), status, "Original message sent: " + messageText);
-     * HibernateUtil.util.save(incentive); sendGenericSMSAlert(new
-     * Sms(targetNumber, messageText, dueDateTime, null, status, null, null)); }
-     * } else { // Send alert to Monitor targetNumber = monitorMobile;
-     * messageText = "Dear Monitor! Gene Xpert Results for Suspect: " +
-     * patient.getPatientId() + "  were found NEGATIVE.";
-     * sendGenericSMSAlert(new Sms(targetNumber, messageText, dueDateTime, null,
-     * status, null, null)); } } catch (Exception e) { e.printStackTrace(); } }
-     * catch (Exception e) { e.printStackTrace(); } }
-     */
-
-    /**
-     * Records messages to be sent to various roles BUSINESS LOGIC: 1. If
-     * Suspect in screening is true, then: - Send alert to Monitor and CHW about
-     * Suspect confirmation
-     */
-    /*
-     * public void sendAlertsOnScreening(Screening screening) { if
-     * (screening.getSuspect()) { try { screening.getChwid();
-     * screening.getPatientId(); // Get IDs String monitorID =
-     * getObject("Worker", "MonitorID", "WorkerID='" + screening.getChwid() +
-     * "'"); // Get mobile numbers String monitorMobile =
-     * getMobileNumber(monitorID); String CHWMobile = null;
-     * 
-     * if (screening.getChwid() != null) CHWMobile =
-     * getMobileNumber(screening.getChwid()); // Set SMS param String
-     * targetNumber = ""; String messageText = ""; Date dueDateTime = new
-     * Date(); String status = "PENDING";
-     * 
-     * if (screening.getSuspect()) { // Send alert to Monitor, GP and CHW about
-     * Patient confirmation targetNumber = monitorMobile; messageText =
-     * "Dear Monitor! A Suspect has been identified by CHW: " +
-     * screening.getChwid() + ". ID assigned: " + screening.getPatientId();
-     * sendGenericSMSAlert(new Sms(targetNumber, messageText, dueDateTime, null,
-     * status, null, null));
-     * 
-     * if (CHWMobile != null) { targetNumber = CHWMobile; messageText =
-     * "Dear Screener! A Suspect has been identified. ID assigned: " +
-     * screening.getPatientId(); sendGenericSMSAlert(new Sms(targetNumber,
-     * messageText, dueDateTime, null, status, null, null)); } } }
-     * 
-     * catch (Exception e) { e.printStackTrace(); } } }
-     *//**
-     * Records messages to be sent to various roles BUSINESS LOGIC: 1. If the
-     * disease is not confirmed and isTBPositive is true, then: - Send alert to
-     * Monitor, GP and CHW about Patient confirmation - Send alert to CHW, GP
-     * about their updated incentive balance 2. If the disease is not confirmed
-     * and isTBPositive is false (suspect with result negative), then: - Send
-     * alert to Monitor about negative results 3. If the disease is confirmed
-     * and isTBPositive is true (existing Patient with result still positive),
-     * then: - Do nothing 4. If the disease is confirmed and isTBPositive is
-     * false (existing Patient with improvement), then: - Send alert to Monitor
-     * - Send alert to CHW about his updated incentive balance 5. If the disease
-     * is not confirmed and isTBPositive is false and Chest X-Ray has also been
-     * taken (Cleared from suspicion), then: - Send alert to Monitor EXCEPTION:
-     * If the Patient is like '086%' then skip the alert
-     */
-    /*
-     * public void sendAlertsOnSputumResults(SputumResults sputumResults,
-     * boolean isTBPositive, SetupIncentive gpIncentive, SetupIncentive
-     * chwIncentive) throws Exception { try { Patient patient = (Patient)
-     * HibernateUtil.util.findObject("from Patient where PatientID='" +
-     * sputumResults.getPatientId() + "'"); // Return on Contact Tracing
-     * Patients (ID like P86%) if (patient.getPatientId().contains("086"))
-     * return; // Get IDs String[] IDs = getRowRecord("Patient", new String[] {
-     * "MonitorID", "ProviderID", "ScreenerID" }, "PatientID='" +
-     * patient.getPatientId() + "'"); String monitorID = IDs[0]; String GPID =
-     * IDs[1]; String CHWID = IDs[2]; // Get mobile numbers String monitorMobile
-     * = getMobileNumber(monitorID); String GPMobile = getMobileNumber(GPID);
-     * String CHWMobile = getMobileNumber(CHWID); // Set SMS param String
-     * targetNumber = ""; String messageText = ""; Date dueDateTime = new
-     * Date(); String status = "PENDING"; Incentive incentive = new Incentive();
-     * 
-     * if (isTBPositive) { try { if (patient.getDiseaseConfirmed()) { // Do
-     * nothing } else throw new Exception(); } catch (Exception e) {
-     * 
-     * 
-     * // Send alert to Monitor, GP and CHW about Patient confirmation
-     * targetNumber = monitorMobile; messageText = "Dear Monitor! Suspect: " +
-     * patient.getPatientId() + " has been confirmed as Patient. GP attending: "
-     * + GPID; sendGenericSMSAlert(new Sms(targetNumber, messageText,
-     * dueDateTime, null, status, null, null)); targetNumber = GPMobile;
-     * sendGenericSMSAlert(new Sms(targetNumber, messageText, dueDateTime, null,
-     * status, null, null)); targetNumber = CHWMobile; messageText =
-     * "Dear Screener! Suspect: " + patient.getPatientId() +
-     * " has been confirmed as Patient. GP attending: " + GPID;
-     * sendGenericSMSAlert(new Sms(targetNumber, messageText, dueDateTime, null,
-     * status, null, null)); // Send alert to CHW, GP about their updated
-     * incentive balance targetNumber = GPMobile; messageText =
-     * "Dear Treatment Provider! You have been incentivised amount of " +
-     * gpIncentive.getCurrency() + gpIncentive.getAmount() +
-     * " on confirmation of Suspect: " + patient.getPatientId(); // Record GP
-     * incentive incentive = new Incentive(new IncentiveId(GPID,
-     * gpIncentive.getIncentiveId(), 0), "", new Date(), status,
-     * "Original message sent: " + messageText);
-     * HibernateUtil.util.save(incentive); // Send alert sendGenericSMSAlert(new
-     * Sms(targetNumber, messageText, dueDateTime, null, status, null, null));
-     * targetNumber = CHWMobile; messageText =
-     * "Dear Screener! You have been incentivised amount of " +
-     * chwIncentive.getCurrency() + chwIncentive.getAmount() +
-     * " on confirmation of Suspect: " + patient.getPatientId(); incentive = new
-     * Incentive(new IncentiveId(CHWID, chwIncentive.getIncentiveId(), 0), "",
-     * new Date(), status, "Original message sent: " + messageText);
-     * HibernateUtil.util.save(incentive); sendGenericSMSAlert(new
-     * Sms(targetNumber, messageText, dueDateTime, null, status, null, null)); }
-     * } else { try { if (patient.getDiseaseConfirmed()) { // Send alert to
-     * Monitor targetNumber = monitorMobile; messageText =
-     * "Dear Monitor! Sputum Results of Patient: " + patient.getPatientId() +
-     * " for the month of " + sputumResults.getMonth() +
-     * " were found NEGATIVE."; sendGenericSMSAlert(new Sms(targetNumber,
-     * messageText, dueDateTime, null, status, null, null)); targetNumber =
-     * CHWMobile; messageText =
-     * "Dear Screener! You have been incentivised amount of " +
-     * chwIncentive.getCurrency() + chwIncentive.getAmount() +
-     * " on improvement of Patient: " + patient.getPatientId(); // Record GP
-     * incentive incentive = new Incentive(new IncentiveId(CHWID,
-     * chwIncentive.getIncentiveId(), 0), "", new Date(), "",
-     * "Original message sent: " + messageText);
-     * HibernateUtil.util.save(incentive); sendGenericSMSAlert(new
-     * Sms(targetNumber, messageText, dueDateTime, null, status, null, null)); }
-     * else throw new Exception(); } catch (Exception e) { e.printStackTrace();
-     * } } } catch (Exception e) { e.printStackTrace(); } }
-     *//**
-     * Records messages to be sent to various roles BUSINESS LOGIC: 1. If
-     * isTBPositive is true, then: - Send alert to Monitor M-VICTOR-##
-     */
-    /*
-     * public void sendAlertsOnXRay(XrayResults xRayResults, boolean
-     * isTBPositive) throws Exception { try { Patient patient = (Patient)
-     * HibernateUtil.util.findObject("from Patient where PatientID = '" +
-     * xRayResults.getId().getPatientId() + "'"); // Get mobile number String
-     * monitorMobile = getMobileNumber("M-VICTOR-01"); // Set SMS param String
-     * targetNumber = ""; String messageText = ""; Date dueDateTime = new
-     * Date(); String status = "PENDING";
-     * 
-     * if (isTBPositive) { try { // Send alert to Monitor about Patient
-     * confirmation targetNumber = monitorMobile; messageText =
-     * "Dear Monitor! Suspect: " + patient.getPatientId() + " was found " +
-     * xRayResults.getXrayResults() + " by the X-Ray results. (SMS sent on " +
-     * dueDateTime.toString() + ")"; sendGenericSMSAlert(new Sms(targetNumber,
-     * messageText, dueDateTime, null, status, null, null)); } catch (Exception
-     * e) { e.printStackTrace(); } } } catch (Exception e) {
-     * e.printStackTrace(); } }
-     */
-
-    /**
      * User authentication: Checks whether user exists, then match his password
      * 
      * @return Boolean
      */
-
     public Boolean authenticate(String userName, String password)
 	    throws Exception {
 	if (!UserAuthentication.userExsists(userName))
@@ -781,11 +380,6 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 	return HibernateUtil.util.delete(person);
     }
 
-    public Boolean deleteSputumResults(SputumResults sputumResults)
-	    throws Exception {
-	return HibernateUtil.util.delete(sputumResults);
-    }
-
     public Boolean deleteUser(Users user) throws Exception {
 	return HibernateUtil.util.delete(user);
     }
@@ -896,27 +490,6 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
     public Person findPersonsByNIC(String NIC) throws Exception {
 	return (Person) HibernateUtil.util.findObject("from Person where NIC='"
 		+ NIC + "'");
-    }
-
-    public SputumResults findSputumResults(String patientID, String sputumTestID)
-	    throws Exception {
-	return (SputumResults) HibernateUtil.util
-		.findObject("from SputumResults where PatientID='" + patientID
-			+ "' and SputumTestID='" + sputumTestID + "'");
-    }
-
-    public SputumResults[] findSputumResultsByPatientID(String patientID)
-	    throws Exception {
-	return (SputumResults[]) HibernateUtil.util
-		.findObjects("from SputumResults where PatientID='" + patientID
-			+ "'");
-    }
-
-    public SputumResults findSputumResultsBySputumTestID(String sputumTestID)
-	    throws Exception {
-	return (SputumResults) HibernateUtil.util
-		.findObject("from SputumResults where SputumTestID='"
-			+ sputumTestID + "'");
     }
 
     public Users findUser(String userName) throws Exception {
@@ -1049,11 +622,6 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 	return HibernateUtil.util.save(person);
     }
 
-    public Boolean saveSputumResults(SputumResults sputumResults)
-	    throws Exception {
-	return HibernateUtil.util.save(sputumResults);
-    }
-
     public Boolean saveUser(Users user) throws Exception {
 	user.setPassword(MDHashUtil.getHashString(user.getPassword()));
 	user.setSecretAnswer(MDHashUtil.getHashString(user.getSecretAnswer()));
@@ -1132,12 +700,6 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 	return HibernateUtil.util.update(person);
     }
 
-    public Boolean updateSputumResults(SputumResults sputumResults,
-	    Boolean isTBPositive) throws Exception {
-	Boolean result = HibernateUtil.util.update(sputumResults);
-	return result;
-    }
-
     public Boolean updateUser(Users user) throws Exception {
 	user.setPassword(MDHashUtil.getHashString(user.getPassword()));
 	user.setSecretAnswer(MDHashUtil.getHashString(user.getSecretAnswer()));
@@ -1193,40 +755,6 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 		.findObject("from OtherMessageSetting where id = '" + id + "'");
     }
 
-    public Boolean saveSputumCollection(GeneXpertResults geneXpertResults,
-	    SputumResults sputumResults, Encounter encounter,
-	    ArrayList<String> encounterResults) throws Exception {
-	if (sputumResults != null) {
-	    System.out.println("saving sputum");
-	    try {
-		exists("EncounterResults",
-			" where Element='SAMPLE_BARCODE' AND Value='"
-				+ sputumResults.getSputumTestId() + "'");
-	    } catch (Exception e) {
-		e.printStackTrace();
-		return false;
-	    }
-
-	    saveSputumResults(sputumResults);
-	}
-
-	if (geneXpertResults != null) {
-	    System.out.println("xpert");
-	    try {
-		exists("EncounterResults",
-			" where Element='SAMPLE_BARCODE' AND Value='"
-				+ geneXpertResults.getSputumTestId() + "'");
-	    } catch (Exception e) {
-		e.printStackTrace();
-		return false;
-	    }
-
-	    saveGeneXpertResults(geneXpertResults);
-	}
-	saveEncounterWithResults(encounter, encounterResults);
-	return true;
-    }
-
     @Override
     public String[][] getLists() throws Exception {
 	String[][] lists = null;
@@ -1274,5 +802,4 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 	}
 	return lists;
     }
-
 }

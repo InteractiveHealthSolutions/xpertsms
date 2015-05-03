@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DailySummary_TotalBaselineSputumCollected" language="groovy" pageWidth="148" pageHeight="210" columnWidth="148" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Subreport" mode="Transparent" fontName="Arial" fontSize="8">
+		<box leftPadding="0">
+			<pen lineWidth="0.25"/>
+			<topPen lineWidth="0.25"/>
+			<leftPen lineWidth="0.25"/>
+			<bottomPen lineWidth="0.25"/>
+			<rightPen lineWidth="0.25"/>
+		</box>
+	</style>
+	<queryString>
+		<![CDATA[SELECT G.GPID, (SELECT COUNT(*) AS Total FROM Encounter AS E, EncounterResults AS ER1, EncounterResults AS ER2, EncounterResults AS ER3, GP, Patient AS P
+WHERE GP.GPID = G.GPID AND E.EncounterType = 'SPUTUM_COL' AND ER1.Element = 'COLLECTION_MONTH' AND ER1.Value = 'BASELINE' AND ER2.Element = 'SPUTUM_COLLECTED' AND ER2.Value = 'YES' AND ER3.Element = 'SUSPECT_SAMPLE' AND ER3.Value = '1' AND
+E.EncounterID = ER1.EncounterID AND E.PID1 = ER1.PID1 AND E.PID2 = ER2.PID2 AND E.EncounterID = ER2.EncounterID AND E.PID1 = ER2.PID1 AND E.PID1 = ER2.PID1 AND E.EncounterID = ER3.EncounterID AND E.PID1 = ER3.PID1 AND E.PID2 = ER3.PID2 AND
+ER1.EncounterID = ER2.EncounterID AND ER1.PID1 = ER2.PID1 AND ER1.PID2 = ER2.PID2 AND ER1.EncounterID = ER3.EncounterID AND ER1.PID1 = ER3.PID1 AND ER1.PID2 = ER3.PID2 AND ER2.EncounterID = ER3.EncounterID AND ER2.PID1 = ER3.PID1 AND ER2.PID2 = ER3.PID2 AND
+P.GPID = GP.GPID AND P.PatientID = ER1.PID1 AND P.PatientID = ER2.PID1 AND P.PatientID = ER3.PID1 AND P.PatientID = E.PID1) AS Total FROM GP G
+GROUP BY G.GPID]]>
+	</queryString>
+	<field name="GPID" class="java.lang.String"/>
+	<field name="Total" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="19" splitType="Stretch">
+			<staticText>
+				<reportElement style="Subreport" x="0" y="0" width="148" height="19"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL BASELINE SPUTUM SAMPLES COLLECTED BY GP]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="10" splitType="Stretch">
+			<staticText>
+				<reportElement style="Subreport" x="0" y="0" width="74" height="10"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[GPID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Subreport" x="74" y="0" width="74" height="10"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="10" splitType="Stretch">
+			<textField>
+				<reportElement style="Subreport" x="0" y="0" width="74" height="10"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{GPID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Subreport" x="74" y="0" width="74" height="10"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.Long"><![CDATA[$F{Total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

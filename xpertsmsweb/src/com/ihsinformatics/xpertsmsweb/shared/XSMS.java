@@ -9,15 +9,36 @@ package com.ihsinformatics.xpertsmsweb.shared;
  * 
  */
 public final class XSMS {
-    private static final String resourcesPath = System.getProperty("user.home") + "xpertsms";
-    private static String currentUser = "";
-    private static String passCode = "";
-    public static final String hashingAlgorithm = "SHA";
-    public static final String packageName = "com.ihsinformatics.xpertsmsweb";
-    public static final String projectTitle = "Xpert SMS";
-    public static final char separatorChar = ',';
-    public static final int sessionLimit = 15 * 60 * 1000;
+    public static final XSMS xsms = new XSMS();
+    private static String resourcesPath;
+    private static String currentUser;
+    private static String passCode;
+    public static String hashingAlgorithm;
+    public static String packageName;
+    public static String projectTitle;
+    public static char separatorChar;
+    public static int sessionLimit;
     public static String[][] lists;
+
+    private XSMS() {
+	if (System.getProperty("os.name", "unix").toLowerCase()
+		.startsWith("windows"))
+	    resourcesPath = System.getProperty("user.dir",
+		    "c:\\workspace\\xpertsms\\xpertsmsweb")
+		    + System.getProperty("file.separator", "/")
+		    + "war"
+		    + System.getProperty("file.separator", "/");
+	else
+	    resourcesPath = "/var/lib/tomcat6/webapps/xpertsmsweb"
+		    + System.getProperty("file.separator", "/");
+	currentUser = "";
+	passCode = "";
+	hashingAlgorithm = "SHA";
+	packageName = "com.ihsinformatics.xpertsmsweb";
+	projectTitle = "Xpert SMS";
+	separatorChar = ',';
+	sessionLimit = 900000;
+    }
 
     public static void fillLists(String[][] lists) {
 	XSMS.lists = lists;
@@ -106,7 +127,7 @@ public final class XSMS {
      * @return the reportPath
      */
     public static String getReportPath() {
-	return getResourcesPath() + "rpt/";
+	return getResourcesPath() + "rpt";
     }
 
     /**
@@ -120,6 +141,6 @@ public final class XSMS {
      * @return the resourcesPath
      */
     public static String getResourcesPath() {
-	return resourcesPath;
+	return resourcesPath + System.getProperty("file.separator", "/");
     }
 }

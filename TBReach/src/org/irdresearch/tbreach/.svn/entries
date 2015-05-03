@@ -1,0 +1,71 @@
+10
+
+dir
+3689
+http://199.172.1.29/svn/XpertSMS_gwt/src/org/irdresearch/tbreach
+http://199.172.1.29/svn
+
+
+
+2014-09-09T06:34:30.413876Z
+3684
+rabbiahassan
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+80b92b61-5a4c-4797-adb2-c77371d9bb0d
+
+TBReach.gwt.xml
+file
+
+
+
+
+2014-09-11T04:45:57.268000Z
+2ff8cc3106d39f2d26f8fefef9e8db10
+2013-04-03T12:05:07.912749Z
+2263
+ahabib
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+988
+
+client
+dir
+
+server
+dir
+
+shared
+dir
+

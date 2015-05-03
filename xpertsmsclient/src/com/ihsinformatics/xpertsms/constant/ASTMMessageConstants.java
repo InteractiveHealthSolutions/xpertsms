@@ -140,6 +140,8 @@ public class ASTMMessageConstants {
 	public static final char COMMENT_TYPE_ERROR = 'N';
 	
 	public static final char COMMENT_TYPE_NOTES = 'I';
+
+	public static final int MAX_NOTES_COMPONENTS = 3;
 	
 	// PROBE DATA
 	public static final String PROBE_A = "PROBE A";

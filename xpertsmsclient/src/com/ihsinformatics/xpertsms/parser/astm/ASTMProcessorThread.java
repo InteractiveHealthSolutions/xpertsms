@@ -18,6 +18,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
+
 import com.ihsinformatics.xpertsms.constant.ASTMMessageConstants;
 import com.ihsinformatics.xpertsms.constant.FileConstants;
 import com.ihsinformatics.xpertsms.constant.SendMethods;
@@ -153,7 +154,6 @@ public class ASTMProcessorThread extends Thread {
 					// TODO: check
 					println("***NEW***:|" + line + "|", true);
 			}
-			;
 		}
 		
 		// TODO check condition

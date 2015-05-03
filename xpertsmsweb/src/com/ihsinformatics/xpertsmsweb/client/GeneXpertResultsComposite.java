@@ -109,7 +109,6 @@ public class GeneXpertResultsComposite extends Composite implements IForm,
 
     private TextBox patientIdTextBox = new TextBox();
     private TextBox sputumTestID = new TextBox();
-    // private TextBox irsTextBox = new TextBox();
     private TextBox testIdSearchTextBox = new TextBox();
     private TextBox pidSearchTextBox = new TextBox();
     private TextBox remarksTextBox = new TextBox();
@@ -278,8 +277,6 @@ public class GeneXpertResultsComposite extends Composite implements IForm,
 	instrumentFlexTable.setWidget(5, 0, lblOperatorId);
 	instrumentFlexTable.setWidget(5, 1, operatorIdTextBox);
 
-	// //////////////////////////////////////////////////////
-
 	mainStackPanel.add(probeFlexTable, "Probe Data", false);
 
 	// Probe A
@@ -401,48 +398,27 @@ public class GeneXpertResultsComposite extends Composite implements IForm,
 
     public void refreshList() {
 	try {
-	    /*
-	     * service.getObject("GeneXpertResults", "TestID", "SputumTestID='"
-	     * + XpertSmsWebClient.get(testIdSearchTextBox) +
-	     * "' AND PatientID='" + XpertSmsWebClient.get(pidSearchTextBox) +
-	     * "'", new AsyncCallback<String>() {
-	     * 
-	     * @Override public void onSuccess(String result) { currentPatientID
-	     * = result;
-	     */
-	    try {
-		service.getColumnData(
-			"GeneXpertResults",
-			"TestID",
-			"SputumTestID='"
-				+ XpertSmsWebClient.get(testIdSearchTextBox)
-				+ "' AND PatientID='"
-				+ XpertSmsWebClient.get(pidSearchTextBox) + "'",
-			new AsyncCallback<String[]>() {
-			    @Override
-			    public void onSuccess(String[] result) {
-				sputumIdListBox.clear();
-				for (int i = 0; i < result.length; i++)
-				    sputumIdListBox.insertItem(result[i], i);
-				load(false);
-			    }
+	    service.getColumnData(
+		    "GeneXpertResults",
+		    "TestID",
+		    "SputumTestID='"
+			    + XpertSmsWebClient.get(testIdSearchTextBox)
+			    + "' AND PatientID='"
+			    + XpertSmsWebClient.get(pidSearchTextBox) + "'",
+		    new AsyncCallback<String[]>() {
+			@Override
+			public void onSuccess(String[] result) {
+			    sputumIdListBox.clear();
+			    for (int i = 0; i < result.length; i++)
+				sputumIdListBox.insertItem(result[i], i);
+			    load(false);
+			}
 
-			    @Override
-			    public void onFailure(Throwable caught) {
-				load(false);
-			    }
-			});
-	    } catch (Exception e) {
-		e.printStackTrace();
-		load(false);
-	    }
-
-	    /*
-	     * }
-	     * 
-	     * @Override public void onFailure(Throwable caught) { load(false);
-	     * } });
-	     */
+			@Override
+			public void onFailure(Throwable caught) {
+			    load(false);
+			}
+		    });
 	} catch (Exception e) {
 	    e.printStackTrace();
 	    load(false);
@@ -452,8 +428,6 @@ public class GeneXpertResultsComposite extends Composite implements IForm,
     public void fillData() {
 	System.out.println("filldata");
 	try {
-	    // service.findGeneXpertResults(XpertSmsWebClient.get(sputumIdListBox),
-	    // new AsyncCallback<GeneXpertResults>()
 	    service.findGeneXpertResultsByTestID(
 		    XpertSmsWebClient.get(sputumIdListBox),
 		    new AsyncCallback<GeneXpertResults>() {
@@ -464,7 +438,6 @@ public class GeneXpertResultsComposite extends Composite implements IForm,
 			    sputumTestID.setText(String.valueOf(current
 				    .getSputumTestId()));
 			    patientIdTextBox.setText(current.getPatientId());
-			    // irsTextBox.setText(String.valueOf(current.getIrs()));
 			    geneXpertResultComboBox.setSelectedIndex(XpertSmsWebClient
 				    .getIndex(geneXpertResultComboBox,
 					    current.getGeneXpertResult()));

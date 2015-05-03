@@ -11,13 +11,14 @@
   <property name="hibernate.connection.pool_size">0</property>
   <property name="hibernate.connection.autocommit">true</property>
   <property name="hibernate.show_sql">true</property>
-  <!-- <property name="hibernate.hbm2ddl.auto">update</property> -->
+  <property name="hibernate.hbm2ddl.auto">update</property>
   <property name="hibernate.use_sql_comments">false</property>
   <property name="hibernate.format_sql">false</property>
   <property name="hibernate.transaction.auto_close_session">true</property>
   <mapping resource="com/ihsinformatics/xpertsmsweb/shared/model/Contact.hbm.xml"/>
   <mapping resource="com/ihsinformatics/xpertsmsweb/shared/model/Encounter.hbm.xml"/>
   <mapping resource="com/ihsinformatics/xpertsmsweb/shared/model/EncounterResults.hbm.xml"/>
+  <mapping resource="com/ihsinformatics/xpertsmsweb/shared/model/GeneXpertResults.hbm.xml"/>
   <mapping resource="com/ihsinformatics/xpertsmsweb/shared/model/GeneXpertResultsUnlinked.hbm.xml"/>
   <mapping resource="com/ihsinformatics/xpertsmsweb/shared/model/Location.hbm.xml"/>
   <mapping resource="com/ihsinformatics/xpertsmsweb/shared/model/LogDataChange.hbm.xml"/>
@@ -27,7 +28,6 @@
   <mapping resource="com/ihsinformatics/xpertsmsweb/shared/model/MessageSettings.hbm.xml"/>
   <mapping resource="com/ihsinformatics/xpertsmsweb/shared/model/Patient.hbm.xml"/>
   <mapping resource="com/ihsinformatics/xpertsmsweb/shared/model/Person.hbm.xml"/>
-  <mapping resource="com/ihsinformatics/xpertsmsweb/shared/model/SputumResults.hbm.xml"/>
   <mapping resource="com/ihsinformatics/xpertsmsweb/shared/model/UserRights.hbm.xml"/>
   <mapping resource="com/ihsinformatics/xpertsmsweb/shared/model/Users.hbm.xml"/>
   <mapping resource="com/ihsinformatics/xpertsmsweb/shared/model/OtherMessageSetting.hbm.xml"/>

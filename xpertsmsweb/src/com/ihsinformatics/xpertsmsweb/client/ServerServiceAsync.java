@@ -16,7 +16,6 @@ import com.ihsinformatics.xpertsmsweb.shared.model.MessageSettings;
 import com.ihsinformatics.xpertsmsweb.shared.model.OtherMessageSetting;
 import com.ihsinformatics.xpertsmsweb.shared.model.Patient;
 import com.ihsinformatics.xpertsmsweb.shared.model.Person;
-import com.ihsinformatics.xpertsmsweb.shared.model.SputumResults;
 import com.ihsinformatics.xpertsmsweb.shared.model.UserRights;
 import com.ihsinformatics.xpertsmsweb.shared.model.Users;
 
@@ -71,9 +70,6 @@ public interface ServerServiceAsync {
     void deletePerson(Person person, AsyncCallback<Boolean> asyncCallback)
 	    throws Exception;
 
-    void deleteSputumResults(SputumResults sputumResults,
-	    AsyncCallback<Boolean> asyncCallback) throws Exception;
-
     void deleteUser(Users user, AsyncCallback<Boolean> asyncCallback)
 	    throws Exception;
 
@@ -122,15 +118,6 @@ public interface ServerServiceAsync {
     void findPersonsByNIC(String NIC, AsyncCallback<Person> callback)
 	    throws Exception;
 
-    void findSputumResults(String patientID, String sputumTestID,
-	    AsyncCallback<SputumResults> callback) throws Exception;
-
-    void findSputumResultsByPatientID(String patientID,
-	    AsyncCallback<SputumResults[]> callback) throws Exception;
-
-    void findSputumResultsBySputumTestID(String sputumTestID,
-	    AsyncCallback<SputumResults> callback) throws Exception;
-
     void findUser(String currentUserName, AsyncCallback<Users> asyncCallback)
 	    throws Exception;
 
@@ -174,9 +161,6 @@ public interface ServerServiceAsync {
     void savePerson(Person person, AsyncCallback<Boolean> asyncCallback)
 	    throws Exception;
 
-    void saveSputumResults(SputumResults sputumResults,
-	    AsyncCallback<Boolean> asyncCallback) throws Exception;
-
     void saveUser(Users user, AsyncCallback<Boolean> asyncCallback)
 	    throws Exception;
 
@@ -215,9 +199,6 @@ public interface ServerServiceAsync {
     void updatePerson(Person person, AsyncCallback<Boolean> asyncCallback)
 	    throws Exception;
 
-    void updateSputumResults(SputumResults sputumResults, Boolean isTBPositive,
-	    AsyncCallback<Boolean> asyncCallback) throws Exception;
-
     void updateUserRights(UserRights userRights, AsyncCallback<Boolean> callback)
 	    throws Exception;
 
@@ -239,7 +220,7 @@ public interface ServerServiceAsync {
 
     void getCurrentUser(AsyncCallback<String> callback) throws Exception;
 
-    void getLists(AsyncCallback<String[][]> asyncCallback) throws Exception;
+    void getLists(AsyncCallback<String[][]> asyncCallback);
 
     void findLocationsByType(String locationType,
 	    AsyncCallback<Location[]> asyncCallback) throws Exception;
@@ -277,17 +258,6 @@ public interface ServerServiceAsync {
 
     void recordLogout(String userName, AsyncCallback<Void> callback)
 	    throws Exception;
-
-    // void sendGenericSMSAlert(Sms sms, AsyncCallback<Void> callback) throws
-    // Exception;
-
-    // void sendGenericSMSAlert(Sms[] sms, AsyncCallback<Void> callback) throws
-    // Exception;
-
-    void saveSputumCollection(GeneXpertResults geneXpertResults,
-	    SputumResults sputumResults, Encounter encounter,
-	    ArrayList<String> encounterResults,
-	    AsyncCallback<Boolean> asyncCallback) throws Exception;
 
     void saveOtherMessageSetting(OtherMessageSetting setting,
 	    AsyncCallback<Boolean> callback);
