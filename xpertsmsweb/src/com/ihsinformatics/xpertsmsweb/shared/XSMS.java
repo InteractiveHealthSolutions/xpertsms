@@ -18,19 +18,20 @@ public final class XSMS {
     public static String projectTitle;
     public static char separatorChar;
     public static int sessionLimit;
-    public static String[][] lists;
+    public static String[] formOptions = { "YES", "NO", "DONT KNOW", "REJECTED" };
+    public static String[] locationTypes = { "DISTRICT", "HEALTH FACILITY",
+	    "LABORATORY" };
+    public static String[] menuNames = { "DATALOG", "ENCOUNTER", "LOCATION",
+	    "PATIENT", "SETUP", "SMS", "USERS" };
+    public static String[] userRoles = { "ADMIN", "GUEST", "SCREENER" };
+    public static String[] userStatuses = { "ACTIVE", "SUSPENDED" };
 
     private XSMS() {
 	if (System.getProperty("os.name", "unix").toLowerCase()
 		.startsWith("windows"))
-	    resourcesPath = System.getProperty("user.dir",
-		    "c:\\workspace\\xpertsms\\xpertsmsweb")
-		    + System.getProperty("file.separator", "/")
-		    + "war"
-		    + System.getProperty("file.separator", "/");
+	    resourcesPath = System.getProperty("user.dir", "c:\\workspace\\xpertsms\\xpertsmsweb") + System.getProperty("file.separator", "/");
 	else
-	    resourcesPath = "/var/lib/tomcat6/webapps/xpertsmsweb"
-		    + System.getProperty("file.separator", "/");
+	    resourcesPath = "/var/lib/tomcat6/webapps/xpertsmsweb" + System.getProperty("file.separator", "/");
 	currentUser = "";
 	passCode = "";
 	hashingAlgorithm = "SHA";
@@ -38,10 +39,6 @@ public final class XSMS {
 	projectTitle = "Xpert SMS";
 	separatorChar = ',';
 	sessionLimit = 900000;
-    }
-
-    public static void fillLists(String[][] lists) {
-	XSMS.lists = lists;
     }
 
     /**
@@ -56,9 +53,7 @@ public final class XSMS {
 	    concatenated.append(s);
 	    concatenated.append(XSMS.separatorChar);
 	}
-	concatenated.deleteCharAt(concatenated.length() - 1); // Remove
-							      // additional
-							      // separator
+	concatenated.deleteCharAt(concatenated.length() - 1);
 	return concatenated.toString();
     }
 
@@ -69,7 +64,21 @@ public final class XSMS {
      * @return array
      */
     public static String[] getList(ListType listType) {
-	return lists[listType.ordinal()];
+	switch (listType) {
+	case LOCATION_TYPE:
+	    return locationTypes;
+	case MENU_NAME:
+	    return menuNames;
+	case FORM_OPTION:
+	    return formOptions;
+	case USER_ROLE:
+	    return userRoles;
+	case USER_STATUS:
+	    return userStatuses;
+	default:
+	    break;
+	}
+	return new String[] {};
     }
 
     /**
@@ -127,7 +136,7 @@ public final class XSMS {
      * @return the reportPath
      */
     public static String getReportPath() {
-	return getResourcesPath() + "rpt";
+	return getResourcesPath() + "rpt" + System.getProperty("file.separator", "/");
     }
 
     /**
@@ -141,6 +150,6 @@ public final class XSMS {
      * @return the resourcesPath
      */
     public static String getResourcesPath() {
-	return resourcesPath + System.getProperty("file.separator", "/");
+	return resourcesPath;
     }
 }

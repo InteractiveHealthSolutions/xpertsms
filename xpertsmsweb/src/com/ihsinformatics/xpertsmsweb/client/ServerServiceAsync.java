@@ -213,7 +213,8 @@ public interface ServerServiceAsync {
 	    AsyncCallback<String> callback) throws Exception;
 
     void generateReportFromQuery(String reportName, String query,
-	    Boolean export, AsyncCallback<String> callback) throws Exception;
+	    Parameter[] params, Boolean export, AsyncCallback<String> callback)
+	    throws Exception;
 
     void getColumnData(String tableName, String columnName, String filter,
 	    AsyncCallback<String[]> asyncCallback) throws Exception;

@@ -41,8 +41,6 @@ public class MainMenuComposite extends Composite {
     private MenuItem messageSettingsMenuItem = new MenuItem("Message Settings",
 	    false, (Command) null);
 
-    private MenuItem encounterMenuItem = new MenuItem("Encounters", false,
-	    (Command) null);
     private MenuItem reportsMenuItem = new MenuItem("Reports", false,
 	    (Command) null);
     private MenuItem logsMenuItem = new MenuItem("Logs", false, (Command) null);
@@ -128,15 +126,6 @@ public class MainMenuComposite extends Composite {
 	    }
 	});
 
-	encounterMenuItem.setCommand(new Command() {
-	    @Override
-	    public void execute() {
-		clear();
-		Cookies.setCookie("CurrentMenu", "ENCOUNTER");
-		mainVerticalPanel.add(new EncounterComposite().asWidget());
-	    }
-	});
-
 	reportsMenuItem.setCommand(new Command() {
 	    @Override
 	    public void execute() {
@@ -209,7 +198,6 @@ public class MainMenuComposite extends Composite {
 	setupMenuBar.addItem(messageSettingsMenuItem);
 
 	formsMenuBar.addItem(geneXpertResultsMenuItem);
-	formsMenuBar.addItem(encounterMenuItem);
 
 	reportingMenuBar.addItem(reportsMenuItem);
 	reportingMenuBar.addItem(logsMenuItem);

@@ -170,7 +170,7 @@ public interface ServerService extends RemoteService {
 	    throws Exception;
 
     String generateReportFromQuery(String reportName, String query,
-	    Boolean export) throws Exception;
+	    Parameter[] params, Boolean export) throws Exception;
 
     String[] getColumnData(String tableName, String columnName, String filter)
 	    throws Exception;

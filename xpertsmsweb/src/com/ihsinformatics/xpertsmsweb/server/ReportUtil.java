@@ -73,7 +73,7 @@ public class ReportUtil {
 		output.close();
 		output.flush();
 	    } catch (Exception e) {
-		// Not implemented
+		e.printStackTrace();
 	    }
 	    return dest.substring(dest.lastIndexOf(File.separatorChar) + 1);
 	} catch (Exception e) {
@@ -82,8 +82,8 @@ public class ReportUtil {
 	}
     }
 
-    @SuppressWarnings({ "deprecation", "rawtypes" })
-    public static String generateReportFromQuery(String fileName, String query,
+    @SuppressWarnings({ "deprecation" })
+    public static String generateReportFromQuery(String fileName, String query, Parameter[] params,
 	    boolean export) {
 	try {
 	    Connection con = HibernateUtil.util.getSession().connection();
@@ -92,13 +92,19 @@ public class ReportUtil {
 	    ResultSet result = statement.executeQuery(query);
 	    JRResultSetDataSource resultSource = new JRResultSetDataSource(
 		    result);
-
+	    HashMap<String, Object> map = new HashMap<String, Object>();
+	    for (int i = 0; i < params.length; i++) {
+		/**
+		 * Cast the parameter into appropriate type
+		 */
+		map.put(params[i].getName(), toObject(params[i]));
+	    }
 	    JasperReport jasperReport = JasperCompileManager.compileReport(XSMS
 		    .getReportPath()
 		    + fileName
 		    + (fileName.endsWith(".jrxml") ? "" : ".jrxml"));
 	    JasperPrint print = JasperFillManager.fillReport(jasperReport,
-		    new HashMap(), resultSource);
+		    map, resultSource);
 	    String dest = XSMS.getResourcesPath()
 		    + String.valueOf(new Date().getTime())
 		    + (export == true ? ".csv" : ".pdf");

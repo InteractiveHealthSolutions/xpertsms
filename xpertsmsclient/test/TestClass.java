@@ -1,21 +1,25 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import net.sf.json.JSONObject;
+
+import com.ihsinformatics.xpertsms.model.XpertResultUploadMessage;
 import com.ihsinformatics.xpertsms.model.astm.XpertASTMResultUploadMessage;
 import com.ihsinformatics.xpertsms.util.CsvUtil;
 
 public class TestClass {
-
+	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-
+		
 		JSONObject sampleObj = new JSONObject();
 		sampleObj.put("apiKey", "ph8trUgestejugudR6fRa6he5u6heveZpruwuWrAthUruFuhuxuRe8ruGunuthub");
 		sampleObj.put("assayHostTestCode", "MTB-RIF");
@@ -35,8 +39,7 @@ public class TestClass {
 		sampleObj.put("softwareVersion", "4.4a");
 		sampleObj.put("resultIdMtb", 2);
 		sampleObj.put("resultIdRif", 2);
-		sampleObj.put("resultText",
-				"MTB DETECTED MEDIUM|Rif Resistance NOT DETECTED");
+		sampleObj.put("resultText", "MTB DETECTED MEDIUM|Rif Resistance NOT DETECTED");
 		sampleObj.put("deviceSerial", "CEPHEID5G183R1");
 		sampleObj.put("hostId", "Machine API Test");
 		sampleObj.put("systemName", "GeneXpert PC");
@@ -63,13 +66,14 @@ public class TestClass {
 		sampleObj.put("probeDEndpt", 2.3);
 		sampleObj.put("probeEEndpt", 3.4);
 		sampleObj.put("probeSpcEndpt", 4.5);
-		String response = post(sampleObj.toString());
+		String response = postToGxa(sampleObj.toString());
 		System.out.println(response);
 		
-		tryMore();
+		tryPostToGxa("GXA");
+		tryPostToGxa("WEB");
 	}
-
-	public static String post(String jsonString) {
+	
+	public static String postToGxa(String jsonString) {
 		HttpURLConnection httpConnection = null;
 		OutputStream outStream = null;
 		int responseCode = 0;
@@ -79,10 +83,8 @@ public class TestClass {
 			URL gxaUrl = new URL(url);
 			byte[] content = jsonString.getBytes();
 			httpConnection = (HttpURLConnection) gxaUrl.openConnection();
-			httpConnection.setRequestProperty("Content-Length",
-					String.valueOf(content.length));
-			httpConnection.setRequestProperty("Content-Type",
-					"application/json; charset=UTF-8");
+			httpConnection.setRequestProperty("Content-Length", String.valueOf(content.length));
+			httpConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
 			httpConnection.setRequestProperty("Host", "dev.gxalert.com");
 			httpConnection.setRequestMethod("POST");
 			httpConnection.setDoOutput(true);
@@ -94,8 +96,7 @@ public class TestClass {
 			if (responseCode != HttpURLConnection.HTTP_OK) {
 				System.out.println("Response Code: " + responseCode);
 			}
-			BufferedReader br = new BufferedReader(new InputStreamReader(
-					httpConnection.getInputStream()));
+			BufferedReader br = new BufferedReader(new InputStreamReader(httpConnection.getInputStream()));
 			String line = "";
 			response = "";
 			while ((line = br.readLine()) != null) {
@@ -104,16 +105,84 @@ public class TestClass {
 			try {
 				outStream.close();
 				httpConnection.disconnect();
-			} catch (Exception e) {
+			}
+			catch (Exception e) {
 				e.printStackTrace();
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 		return response;
 	}
-
-	public static void tryMore() {
+	
+	public static String postToWeb(XpertResultUploadMessage message) {
+		String address = "http://localhost:8080/xpertsmsweb/xpertsmsweb.jsp";
+		HttpURLConnection hc = null;
+		OutputStream os = null;
+		int responseCode = 0;
+		String response = null;
+		URL url;
+		try {
+			url = new URL(address);
+			hc = (HttpURLConnection) url.openConnection();
+			hc.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			hc.setRequestProperty("Content-Language", "en-US");
+			hc.setDoOutput(true);
+			try {
+				os = hc.getOutputStream();
+				os.write(message.toPostParams().getBytes());
+				os.flush();
+				responseCode = hc.getResponseCode();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+			if (responseCode != HttpURLConnection.HTTP_OK) {
+				System.out.println("Response Code " + responseCode + " for Sample ID " + message.getSampleId()
+				        + ": Could not submit");
+			}
+			BufferedReader br = new BufferedReader(new InputStreamReader(hc.getInputStream()));
+			String line = "";
+			response = "";
+			while ((line = br.readLine()) != null) {
+				response += line;
+			}
+		}
+		catch (ClassCastException e) {
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		catch (SecurityException e) {
+			e.printStackTrace();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			if (os != null) {
+				try {
+					os.close();
+				}
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (hc != null) {
+				try {
+					hc.disconnect();
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return response;
+	}
+	
+	public static void tryPostToGxa(String target) {
 		CsvUtil csvUtil = new CsvUtil("res/Samples.csv", true);
 		String[][] data = csvUtil.readData();
 		XpertASTMResultUploadMessage[] sampleMessages = new XpertASTMResultUploadMessage[data.length];
@@ -139,7 +208,7 @@ public class TestClass {
 				sampleMessages[i].setMtbResult(data[i][j++]);
 				sampleMessages[i].setRifResult(data[i][j++]);
 				j++; // Result Text is implemented in
-						// XpertASTMResultUploadMethod
+				     // XpertASTMResultUploadMethod
 				sampleMessages[i].setPcId(data[i][j++]);
 				sampleMessages[i].setSystemId(data[i][j++]);
 				sampleMessages[i].setSystemName(data[i][j++]);
@@ -166,15 +235,18 @@ public class TestClass {
 				sampleMessages[i].setProbeEndPtD(data[i][j++]);
 				sampleMessages[i].setProbeEndPtE(data[i][j++]);
 				sampleMessages[i].setProbeEndPtSPC(data[i][j++]);
-				SimpleDateFormat messageFormat = new SimpleDateFormat(
-						"yyyy-MM-dd'T'HH:mm:ss'Z'");
-				sampleMessages[i].setMessageDateTime(messageFormat
-						.format(new Date()));
-				JSONObject json = sampleMessages[i].toJson();
-				json.put("apiKey", "ph8trUgestejugudR6fRa6he5u6heveZpruwuWrAthUruFuhuxuRe8ruGunuthub");
-				String response = post(json.toString());
-				System.out.println(response);
-			} catch (Exception e) {
+				SimpleDateFormat messageFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+				sampleMessages[i].setMessageDateTime(messageFormat.format(new Date()));
+				if (target.equals("GXA")) {
+					JSONObject json = sampleMessages[i].toJson();
+					json.put("apiKey", "ph8trUgestejugudR6fRa6he5u6heveZpruwuWrAthUruFuhuxuRe8ruGunuthub");
+					String response = postToGxa(json.toString());
+					System.out.println(response);
+				} else if (target.equals("WEB")) {
+					postToWeb(sampleMessages[i]);
+				}
+			}
+			catch (Exception e) {
 				e.printStackTrace();
 			}
 		}

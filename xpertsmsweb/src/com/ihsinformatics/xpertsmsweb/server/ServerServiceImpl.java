@@ -183,9 +183,9 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
      * @return
      */
 
-    public String generateReportFromQuery(String reportName, String query,
+    public String generateReportFromQuery(String reportName, String query,  Parameter[] params,
 	    Boolean export) throws Exception {
-	return ReportUtil.generateReportFromQuery(reportName, query, export);
+	return ReportUtil.generateReportFromQuery(reportName, query, params, export);
     }
 
     public String[] getColumnData(String tableName, String columnName,
@@ -225,16 +225,9 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 	return user.getSecretQuestion();
     }
 
-    @SuppressWarnings("deprecation")
     public String getSnapshotTime() throws Exception {
 	Date dt = new Date();
-	Object obj = HibernateUtil.util
-		.selectObject("select Max(DateEncounterEnd) from Encounter where DATE(DateEncounterEnd) < '"
-			+ (dt.getYear() + 1900)
-			+ "-"
-			+ (dt.getMonth() + 1)
-			+ "-" + dt.getDate() + "'");
-	return obj.toString();
+	return DateTimeUtil.getSQLDate(dt);
     }
 
     public String[][] getTableData(String tableName, String[] columnNames,
@@ -263,6 +256,10 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 
     public Boolean[] getUserRgihts(String userName, String menuName)
 	    throws Exception {
+	if (userName.equalsIgnoreCase("ADMIN")) {
+	    Boolean[] rights = { true, true, true, true, true };
+	    return rights;
+	}
 	String role = HibernateUtil.util.selectObject(
 		"select Role from Users where UserName='" + userName + "'")
 		.toString();
@@ -666,12 +663,7 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
     public Boolean updateGeneXpertResults(GeneXpertResults geneXpertResults,
 	    Boolean isTBPositive) throws Exception {
 	Boolean result = HibernateUtil.util.update(geneXpertResults);
-
-	SMSUtil.util.sendAlertsOnAutoGXPResults(geneXpertResults);// ,
-								  // isTBPositive,
-								  // gpIncentive,
-								  // chwIncentive);
-
+	SMSUtil.util.sendAlertsOnAutoGXPResults(geneXpertResults);
 	return result;
     }
 

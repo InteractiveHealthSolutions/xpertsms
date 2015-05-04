@@ -1,2 +1,0 @@
-serviceClass: org.irdresearch.tbreach.client.ServerService
-path: FE2846038CC0F9D55571BE123196148C.gwt.rpc

@@ -67,14 +67,14 @@ public class GeneXpertResultsComposite extends Composite implements IForm,
 
     private Label lblXpertSmsLab = new Label("XpertSMS Gene Xpert Results");
     private Label lblPatientId = new Label("Patient ID:");
-    private Label lblSputumTestId = new Label("Test ID:");
+    private Label lblSputumTestId = new Label("Sample ID:");
     private Label lblGeneXpertResults = new Label("GeneXpert Results:");
     private Label lblResult = new Label("MTB Result:");
     private Label lblErrorCode = new Label("Error Code:");
     private Label lblMtbBurden = new Label("MTB Burden:");
     private Label lblSmearResults = new Label("Rif Resistance:");
     private Label lblRemarks = new Label("Remarks:");
-    private Label lblSputumTestIdSearch = new Label("Test ID");
+    private Label lblSputumTestIdSearch = new Label("Sample ID");
     private Label lblPatientIdSearch = new Label("Patient ID");
 
     // newly added for Xpert
@@ -109,7 +109,7 @@ public class GeneXpertResultsComposite extends Composite implements IForm,
 
     private TextBox patientIdTextBox = new TextBox();
     private TextBox sputumTestID = new TextBox();
-    private TextBox testIdSearchTextBox = new TextBox();
+    private TextBox sampleIdSearchTextBox = new TextBox();
     private TextBox pidSearchTextBox = new TextBox();
     private TextBox remarksTextBox = new TextBox();
     private IntegerBox errorCodeIntegerBox = new IntegerBox();
@@ -157,14 +157,14 @@ public class GeneXpertResultsComposite extends Composite implements IForm,
 	topFlexTable.setWidget(0, 0, lblXpertSmsLab);
 	flexTable.setWidget(1, 0, leftFlexTable);
 	leftFlexTable.setWidget(0, 0, lblSputumTestIdSearch);
-	leftFlexTable.setWidget(0, 1, testIdSearchTextBox);
-	testIdSearchTextBox.setVisibleLength(12);
-	testIdSearchTextBox.setMaxLength(12);
+	leftFlexTable.setWidget(0, 1, sampleIdSearchTextBox);
+	sampleIdSearchTextBox.setVisibleLength(12);
+	sampleIdSearchTextBox.setMaxLength(12);
 
 	leftFlexTable.setWidget(1, 0, lblPatientIdSearch);
 	leftFlexTable.setWidget(1, 1, pidSearchTextBox);
-	testIdSearchTextBox.setVisibleLength(12);
-	testIdSearchTextBox.setMaxLength(12);
+	sampleIdSearchTextBox.setVisibleLength(12);
+	sampleIdSearchTextBox.setMaxLength(12);
 
 	searchButton.setEnabled(false);
 	searchButton.setText("Search");
@@ -398,13 +398,18 @@ public class GeneXpertResultsComposite extends Composite implements IForm,
 
     public void refreshList() {
 	try {
-	    service.getColumnData(
-		    "GeneXpertResults",
-		    "TestID",
-		    "SputumTestID='"
-			    + XpertSmsWebClient.get(testIdSearchTextBox)
-			    + "' AND PatientID='"
-			    + XpertSmsWebClient.get(pidSearchTextBox) + "'",
+	    final String sampleId = XpertSmsWebClient
+		    .get(sampleIdSearchTextBox);
+	    final String patientId = XpertSmsWebClient.get(pidSearchTextBox);
+	    if (sampleId.equals("") & patientId.equals("")) {
+		Window.alert(CustomMessage
+			.getErrorMessage(ErrorType.PARAMETER_MISSING));
+		load(false);
+		return;
+	    }
+	    service.getColumnData("GeneXpertResults", "TestID",
+		    "SputumTestID LIKE '" + sampleId
+			    + "%' AND PatientID LIKE '" + patientId + "%'",
 		    new AsyncCallback<String[]>() {
 			@Override
 			public void onSuccess(String[] result) {
@@ -852,7 +857,6 @@ public class GeneXpertResultsComposite extends Composite implements IForm,
 	    fillData();
 	} else if (sender == searchButton) {
 	    refreshList();
-	    // fillData();
 	} else if (sender == saveButton) {
 	    updateData();
 	} else if (sender == closeButton) {

@@ -112,7 +112,7 @@ public class XpertSmsService extends HttpServlet {
 	 * MTB DETECTED (HIGH|LOW|MEDIUM|VERY LOW); RIF Resistance (DETECTED|NOT
 	 * DETECTED|INDETERMINATE) MTB NOT DETECTED NO RESULT ERROR INVALID
 	 */
-	String patientId = request.getParameter("sampleid");
+	String patientId = request.getParameter("pid"); // Why was this sampleId before?
 	String sampleId = request.getParameter("sampleid");
 	String mtb = request.getParameter("mtb");
 	String systemId = request.getParameter("systemid");
@@ -127,6 +127,8 @@ public class XpertSmsService extends HttpServlet {
 	String resultCorrected = request.getParameter("correction");
 	String resultDate = request.getParameter("enddate");
 	String errorCode = request.getParameter("errorcode");
+	String errorNotes = request.getParameter("errornotes");
+	String notes = request.getParameter("notes");
 
 	String operatorId = request.getParameter("operatorid");
 	String pcId = request.getParameter("pcid");

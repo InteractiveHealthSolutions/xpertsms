@@ -91,24 +91,9 @@ public class XpertSmsWeb implements EntryPoint, ClickHandler {
 	// 4. If cookies don't exist, then proceed to Login panel
 
 	load(true);
-	try {
-	    service.getLists(new AsyncCallback<String[][]>() {
-		@Override
-		public void onSuccess(String[][] result) {
-		    XSMS.fillLists(result);
-		    loginNameTextBox.setFocus(true);
-		    login();
-		    load(false);
-		}
-
-		@Override
-		public void onFailure(Throwable caught) {
-		    load(false);
-		}
-	    });
-	} catch (Exception e) {
-	    e.printStackTrace();
-	}
+	loginNameTextBox.setFocus(true);
+	login();
+	load(false);
     }
 
     /**
