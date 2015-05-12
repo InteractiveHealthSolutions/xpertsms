@@ -1,7 +1,7 @@
 /**
  * Provides scheduling features (uses quartz scheduler)
  */
-package com.ihsinformatics.xpertsmsweb.server;
+package com.ihsinformatics.xpertsmsweb.server.util;
 
 import java.util.Date;
 

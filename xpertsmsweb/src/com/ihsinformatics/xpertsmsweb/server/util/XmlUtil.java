@@ -1,4 +1,4 @@
-package com.ihsinformatics.xpertsmsweb.server;
+package com.ihsinformatics.xpertsmsweb.server.util;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -17,6 +17,8 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
+
+import com.ihsinformatics.xpertsmsweb.server.XmlStrings;
 
 public class XmlUtil {
 

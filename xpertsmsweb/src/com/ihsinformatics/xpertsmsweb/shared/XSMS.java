@@ -9,6 +9,8 @@ package com.ihsinformatics.xpertsmsweb.shared;
  * 
  */
 public final class XSMS {
+    private static final boolean devMode = false;
+
     public static final XSMS xsms = new XSMS();
     private static String resourcesPath;
     private static String currentUser;
@@ -27,9 +29,14 @@ public final class XSMS {
     public static String[] userStatuses = { "ACTIVE", "SUSPENDED" };
 
     private XSMS() {
-	if (System.getProperty("os.name", "unix").toLowerCase()
+	if (System.getProperty("os.name", "windows").toLowerCase()
 		.startsWith("windows"))
-	    resourcesPath = System.getProperty("user.dir", "c:\\workspace\\xpertsms\\xpertsmsweb") + System.getProperty("file.separator", "/");
+	{
+	    if (devMode)
+		resourcesPath = "c:\\Users\\Owais\\SkyDrive\\workspace\\xpertsms\\xpertsmsweb\\war" + System.getProperty("file.separator", "/");
+	    else
+		resourcesPath = "c:\\apache-tomcat-6.0\\webapps\\xpertsmsweb" + System.getProperty("file.separator", "/");
+	}
 	else
 	    resourcesPath = "/var/lib/tomcat6/webapps/xpertsmsweb" + System.getProperty("file.separator", "/");
 	currentUser = "";

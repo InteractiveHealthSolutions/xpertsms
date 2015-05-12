@@ -1,64 +1,61 @@
 package com.ihsinformatics.xpertsmsweb.server;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.ParseException;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Properties;
 
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import net.jmatrix.eproperties.EProperties;
 
 import org.irdresearch.smstarseel.context.TarseelContext;
-//import com.ihsinformatics.xpertsmsweb.server.XmlUtil;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeFieldType;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Text;
 
+import com.ihsinformatics.xpertsmsweb.server.util.DateTimeUtil;
+import com.ihsinformatics.xpertsmsweb.server.util.XmlUtil;
 import com.ihsinformatics.xpertsmsweb.shared.SmsTarseelUtil;
 import com.ihsinformatics.xpertsmsweb.shared.model.GeneXpertResults;
-import com.ihsinformatics.xpertsmsweb.shared.model.Users;
 
-public class EventHandler {
+//import com.ihsinformatics.xpertsmsweb.server.XmlUtil;
 
+public class EventHandler extends HttpServlet {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -1089336095687159274L;
+
+    private static final Properties prop = new Properties();
     private HttpServletRequest request;
     private ServerServiceImpl ssl;
-    private Date encounterStartDate;
-    private Date encounterEndDate;
     private static EventHandler service = new EventHandler();
 
+    @SuppressWarnings("unchecked")
     public EventHandler() {
 	ssl = new ServerServiceImpl();
-
 	try {
 	    System.out.println(">>>>LOADING SYSTEM PROPERTIES...");
 	    InputStream f = Thread.currentThread().getContextClassLoader()
 		    .getResourceAsStream("smstarseel.properties");
-	    // Java Properties donot seem to support substitutions hence
-	    // EProperties are used to accomplish the task
+	    // Java Properties do not seem to support substitutions hence
+	    // EProperties are used
 	    EProperties root = new EProperties();
 	    root.load(f);
-
-	    // Java Properties to send to context and other APIs for
-	    // configuration
-	    Properties prop = new Properties();
+	    // Java Properties to send to context and other APIs
 	    prop.putAll(SmsTarseelUtil.convertEntrySetToMap(root.entrySet()));
-
 	    TarseelContext.instantiate(prop, "smstarseel.cfg.xml");
-
 	    System.out.println("......PROPERTIES LOADED SUCCESSFULLY......");
-
+	    System.out
+		    .println(">>>>>READING PROPERTY FOR BACKUP POST URL......");
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
-
-	// TODO uncomment if doing via socket initSocket();
     }
 
     public static EventHandler getService() {
@@ -74,231 +71,32 @@ public class EventHandler {
     }
 
     public String handleEvent(HttpServletRequest request) {
-
 	setRequest(request);
-
 	String xmlResponse = null;
-
 	String reqType = request.getParameter("type");
-	System.out.println("----->" + reqType);
-
-	String id = request.getParameter("id");
-	if (id != null && id.length() > 0 && id.charAt(0) == 'P') {
-	    return XmlUtil
-		    .createErrorXml("Phone update karain aur dobara form bharain.");
+	System.out.println("Request Type: " + reqType);
+	if (reqType.equals(RequestType.REMOTE_ASTM_RESULT)) {
+	    xmlResponse = doRemoteASTMResult();
 	}
-
-	if (reqType.equals(RequestType.LOGIN)) {
-	    return doLogin();
-	}
-
-	else if (reqType.equals(RequestType.REMOTE_ASTM_RESULT)) {
-	    return doRemoteASTMResult();
-	}
-
-	else {
-
-	    String startDate = request.getParameter("sd");
-	    String startTime = request.getParameter("st");
-	    String endTime = request.getParameter("et");
-
-	    try {
-		encounterStartDate = DateTimeUtil.getDateFromString(startDate
-			+ " " + startTime, DateTimeUtil.FE_FORMAT);
-		encounterEndDate = DateTimeUtil.getDateFromString(startDate
-			+ " " + endTime, DateTimeUtil.FE_FORMAT);
-
-	    } catch (ParseException e2) {
-		// Auto-generated catch block
-		return XmlUtil
-			.createErrorXml("Invalid Date Format. Please contact technical support!");
+	// If the response was successful, make another request to backup URL
+	Runnable backupRun = new Runnable() {
+	    @Override
+	    public void run() {
+		postToBackup(getRequest());
 	    }
-
-	    if (!reqType.equals(RequestType.DFR)
-		    && !reqType.equals(RequestType.SUSPECT_ID)
-		    && !reqType.equals(RequestType.DOTS_ASSIGN)
-		    && !reqType.equals(RequestType.REMOTE_ASTM_RESULT)) {
-		Boolean closed = null;
-		if (request.getParameter("id") != null) {
-		    try {
-			closed = ModelUtil.isPatientClosed(request
-				.getParameter("id"));
-		    } catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return XmlUtil
-				.createErrorXml("Error tracking patient status. Please try again!");
-		    }
-
-		    if (closed == null) {
-			return XmlUtil
-				.createErrorXml("Error tracking patient status. Please try again!");
-		    }
-
-		    if (closed.booleanValue() == true) {
-			return XmlUtil
-				.createErrorXml("Is Patient ka End of Follow-up form bhar diya gaya hai. In ka koi bhi form bhara nahin ja sakta!");
-		    }
-		}
-	    }
-	    return xmlResponse;
-	}
+	};
+	backupRun.run();
+	return xmlResponse;
     }
 
-    private String doLogin() {
-	String xml = null;
-
-	String username = request.getParameter("username");
-	String password = request.getParameter("password");
-	String role = "";
-	String pid = "";
-
-	// START TIME CHECK
-	String phoneTime = request.getParameter("phoneTime");
-
-	if (phoneTime == null) {
-	    return XmlUtil
-		    .createErrorXml("Phone update karain aur dobara login karain");
-	}
-
-	Date phoneDate = null;
-	try {
-	    phoneDate = DateTimeUtil.getDateFromString(phoneTime,
-		    DateTimeUtil.FE_FORMAT);
-	    System.out.println("pdate: " + phoneDate.toString());
-	} catch (ParseException e1) {
-	    // TODO Auto-generated catch block
-	    e1.printStackTrace();
-	    return XmlUtil.createErrorXml("Bad date!");
-	}
-
-	// .GregorianCalendar phoneCal = new GregorianCalendar();
-	// phoneCal.setTimeInMillis(phoneDate.getTime());
-	DateTime dt = new DateTime();
-
-	String year = new Integer(dt.get(DateTimeFieldType.year())).toString();
-	String month = new Integer(dt.get(DateTimeFieldType.monthOfYear()))
-		.toString();
-	String day = new Integer(dt.get(DateTimeFieldType.dayOfMonth()))
-		.toString();
-	String hour = new Integer(dt.get(DateTimeFieldType.hourOfDay()))
-		.toString();
-	String minute = new Integer(dt.get(DateTimeFieldType.minuteOfHour()))
-		.toString();
-	String second = new Integer(dt.get(DateTimeFieldType.secondOfMinute()))
-		.toString();
-
-	String dateTimeString = "";
-	dateTimeString = day.length() == 2 ? dateTimeString + day
-		: dateTimeString + "0" + day;
-	dateTimeString += "/";
-	dateTimeString = month.length() == 2 ? dateTimeString + month
-		: dateTimeString + "0" + month;
-	dateTimeString += "/" + year;
-	dateTimeString += " ";
-	dateTimeString = hour.length() == 2 ? dateTimeString + hour
-		: dateTimeString + "0" + hour;
-	dateTimeString += ":";
-	dateTimeString = minute.length() == 2 ? dateTimeString + minute
-		: dateTimeString + "0" + minute;
-	dateTimeString += ":";
-	dateTimeString = second.length() == 2 ? dateTimeString + second
-		: dateTimeString + "0" + second;
-
-	Date serverDate = null;
-	try {
-	    serverDate = DateTimeUtil.getDateFromString(dateTimeString,
-		    DateTimeUtil.FE_FORMAT);
-	} catch (ParseException e1) {
-	    // TODO Auto-generated catch block
-	    e1.printStackTrace();
-	}
-
-	System.out.println("--->" + serverDate.toString());
-
-	long milliDiff = Math.abs(phoneDate.getTime() - serverDate.getTime());
-	// long milliDiff = Math.abs(i.toDuration().getMillis());
-	System.out.println(milliDiff);
-	double secDiff = milliDiff / 1000;
-	System.out.println(secDiff);
-	double hrDiff = secDiff / 3600;
-
-	System.out.println(hrDiff);
-
-	if (hrDiff > 1) {
-	    return XmlUtil
-		    .createErrorXml("Aap ke phone par date ya time ghalat hai. Sahih date aur time set kar ke phir koshish karain");
-	}
-	try {
-	    if (ssl.authenticate(username, password)) {
-
-		try {
-		    Users users = ssl.findUser(username);
-		    pid = users.getPid();
-		    role = users.getRole();
-
-		} catch (Exception e) {
-		    // Auto-generated catch block
-		    e.printStackTrace();
-		    return XmlUtil
-			    .createErrorXml("Error logging in. Please try again");
-		}
-		ssl.recordLogin(username);
-	    }
-
-	    else {
-		return XmlUtil
-			.createErrorXml("Invalid Username or Password. Please try again");
-	    }
-	} catch (Exception e) {
-	    return XmlUtil.createErrorXml("Error logging in. Please try again");
-	}
-
-	Document doc = null;
-
-	try {
-	    doc = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-		    .newDocument();
-	} catch (ParserConfigurationException e) {
-	    // Auto-generated catch block
-	    e.printStackTrace();
-	    return "";
-	}
-	Element responseNode = doc.createElement(XmlStrings.RESPONSE);
-	// responseNode.setAttribute(XmlStrings.TYPE, XmlStrings.LOGIN_TYPE);
-
-	Element statusNode = doc.createElement("role");
-	Text statusValue = doc.createTextNode(role.toUpperCase());
-	statusNode.appendChild(statusValue);
-
-	responseNode.appendChild(statusNode);
-
-	Element uidNode = doc.createElement("uid");
-	Text uidValue = doc.createTextNode(pid);
-	uidNode.appendChild(uidValue);
-
-	responseNode.appendChild(uidNode);
-
-	doc.appendChild(responseNode);
-
-	xml = XmlUtil.docToString(doc);
-
-	return xml;
-    }
-
-    @SuppressWarnings("unused")
     private String doRemoteASTMResult() {
 	String xml = null;
-	boolean insert = false;
 	boolean update = false;
-
 	/*
 	 * MTB DETECTED (HIGH|LOW|MEDIUM|VERY LOW); RIF Resistance (DETECTED|NOT
 	 * DETECTED|INDETERMINATE) MTB NOT DETECTED NO RESULT ERROR INVALID
 	 */
-
-	System.out.println("iside func");
-	String patientId = request.getParameter("sampleid");
+	String patientId = request.getParameter("pid");
 	String sampleId = request.getParameter("sampleid");
 	String mtb = request.getParameter("mtb");
 	String systemId = request.getParameter("systemid");
@@ -307,85 +105,43 @@ public class EventHandler {
 	if (rif != null && rif.equalsIgnoreCase("null"))
 	    rif = null;
 
-	String rFinal = request.getParameter("final");
-	String rPending = request.getParameter("pending");
-	String rError = request.getParameter("error");
-	String rCorrected = request.getParameter("correction");
-	String resultDate = request.getParameter("enddate");
+	// String rFinal = request.getParameter("final");
+	// String rPending = request.getParameter("pending");
+	// String rError = request.getParameter("error");
+	// String rCorrected = request.getParameter("correction");
+	String resultDateStr = request.getParameter("enddate");
 	String errorCode = request.getParameter("errorcode");
+	String errorNotes = request.getParameter("errornotes");
+	String notes = request.getParameter("notes");
 
-	String operatorId = request.getParameter("operatorid");// =" +
-							       // operatorId;//
-							       // e.g Karachi
-							       // Xray
+	String operatorId = request.getParameter("operatorid");
 	String pcId = request.getParameter("pcid");
 	String instrumentSerial = request.getParameter("instserial");
 	String moduleId = request.getParameter("moduleid");
 	String cartridgeId = request.getParameter("cartrigeid");
 	String reagentLotId = request.getParameter("reagentlotid");
-	String expDate = request.getParameter("expdate");
+	String expDateStr = request.getParameter("expdate");
 	System.out.println("------>" + operatorId);
+
 	String probeResultA = request.getParameter("probea");
 	String probeResultB = request.getParameter("probeb");
 	String probeResultC = request.getParameter("probec");
 	String probeResultD = request.getParameter("probed");
 	String probeResultE = request.getParameter("probee");
 	String probeResultSPC = request.getParameter("probespc");
-
 	String probeCtA = request.getParameter("probeact");
 	String probeCtB = request.getParameter("probebct");
 	String probeCtC = request.getParameter("probecct");
 	String probeCtD = request.getParameter("probedct");
 	String probeCtE = request.getParameter("probeect");
 	String probeCtSPC = request.getParameter("probespcct");
-
 	String probeEndptA = request.getParameter("probeaendpt");
 	String probeEndptB = request.getParameter("probebendpt");
 	String probeEndptC = request.getParameter("probecendpt");
 	String probeEndptD = request.getParameter("probedendpt");
 	String probeEndptE = request.getParameter("probeeendpt");
 	String probeEndptSPC = request.getParameter("probespcendpt");
-	Date resultDateObj = null;
-	if (resultDate != null) {
-	    System.out.println("handling time");
-	    String year = resultDate.substring(0, 4);
-	    String month = resultDate.substring(4, 6);
-	    String date = resultDate.substring(6, 8);
-	    String hour = null;
-	    String minute = null;
-	    String second = null;
-
-	    if (resultDate.length() == 14) {
-		hour = resultDate.substring(8, 10);
-		minute = resultDate.substring(10, 12);
-		second = resultDate.substring(12, 14);
-
-	    }
-
-	    GregorianCalendar cal = new GregorianCalendar();
-	    cal.set(Calendar.YEAR, Integer.parseInt(year));
-	    cal.set(Calendar.MONTH, Integer.parseInt(month) - 1);
-	    cal.set(Calendar.DATE, Integer.parseInt(date));
-	    if (hour != null)
-		cal.set(Calendar.HOUR, Integer.parseInt(hour));
-	    else
-		cal.set(Calendar.HOUR, 0);
-	    if (minute != null)
-		cal.set(Calendar.MINUTE, Integer.parseInt(minute));
-	    else
-		cal.set(Calendar.MINUTE, 0);
-	    if (second != null)
-		cal.set(Calendar.SECOND, Integer.parseInt(second));
-	    cal.set(Calendar.SECOND, 0);
-
-	    cal.set(Calendar.MILLISECOND, 0);
-
-	    resultDateObj = cal.getTime();
-	    System.out.println("TIME" + resultDateObj.getTime());
-
-	}
-
-	// if(rPending!=null) {
+	System.out.println("DATE/TIME: " + resultDateStr);
 
 	ssl = new ServerServiceImpl();
 	GeneXpertResults[] gxp = null;
@@ -404,13 +160,14 @@ public class EventHandler {
 	    GeneXpertResults gxpU = null;
 	    try {
 		gxpU = createGeneXpertResults(patientId, sampleId, mtb, rif,
-			resultDate, instrumentSerial, moduleId, cartridgeId,
-			reagentLotId, expDate, operatorId, pcId, probeResultA,
-			probeResultB, probeResultC, probeResultD, probeResultE,
+			parseDate(resultDateStr), instrumentSerial, moduleId,
+			cartridgeId, reagentLotId, parseDate(expDateStr),
+			operatorId, pcId, probeResultA, probeResultB,
+			probeResultC, probeResultD, probeResultE,
 			probeResultSPC, probeCtA, probeCtB, probeCtC, probeCtD,
 			probeCtE, probeCtSPC, probeEndptA, probeEndptB,
 			probeEndptC, probeEndptD, probeEndptE, probeEndptSPC,
-			errorCode, systemId);
+			errorCode, errorNotes, notes, systemId);
 
 		// ssl.updateGeneXpertResultsAuto(gxp,
 		// gxp.getIsPositive(),operatorId,pcId,instrumentSerial,moduleId,cartridgeId,reagentLotId);
@@ -423,26 +180,19 @@ public class EventHandler {
 			.createErrorXml("Could not save data for Sample ID "
 				+ gxpU.getSputumTestId());
 	    }
-
-	}
-
-	else {
-
+	} else {
 	    for (int i = 0; i < gxp.length; i++) {
 		if (gxp[i].getDateTested() != null) {
 		    System.out.println("STORED TIME:"
 			    + gxp[i].getDateTested().getTime());
-		    if (resultDateObj.getTime() == gxp[i].getDateTested()
-			    .getTime()) {
+		    if (parseDate(resultDateStr).getTime() == gxp[i]
+			    .getDateTested().getTime()) {
 			gxpNew = gxp[i];
 			update = true;
-			// System.out.println("date match");
 			break;
 		    }
-
 		}
 	    }
-
 	    if (!update) {
 		for (int i = 0; i < gxp.length; i++) {
 		    if (gxp[i].getGeneXpertResult() == null) {// F form filled
@@ -450,13 +200,10 @@ public class EventHandler {
 			gxpNew = gxp[i];
 			System.out.println("ID match null result");
 			break;
-
 		    }
 		}
 	    }
-
 	}
-
 	// set mtb
 	if (update == true) {
 	    if (mtb != null) {
@@ -466,7 +213,6 @@ public class EventHandler {
 		if (index != -1) {
 		    mtbBurden = mtb.substring(index + "MTB DETECTED".length()
 			    + 1);
-
 		    gxpNew.setGeneXpertResult("MTB DETECTED");
 		    gxpNew.setIsPositive(new Boolean(true));
 		    gxpNew.setMtbBurden(mtbBurden);
@@ -480,9 +226,7 @@ public class EventHandler {
 			gxpNew.setGeneXpertResult("MTB NOT DETECTED");
 			gxpNew.setIsPositive(new Boolean(false));
 			mtbBurden = null;
-		    }
-
-		    else {
+		    } else {
 			gxpNew.setGeneXpertResult(mtb);
 			mtbBurden = null;
 		    }
@@ -492,31 +236,33 @@ public class EventHandler {
 	    if (rif != null) {
 		int index = rif.indexOf("NOT DETECTED");
 		String rifResult = null;
-		if (index != -1) {
+		if (index != -1)
 		    rifResult = "NOT DETECTED";
-		}
-
-		else if (rif.indexOf("DETECTED") != -1) {
+		else if (rif.indexOf("DETECTED") != -1)
 		    rifResult = "DETECTED";
-		}
-
-		else {
+		else
 		    rifResult = rif.toUpperCase();
-		}
-
 		gxpNew.setDrugResistance(rifResult);
 	    }
-
-	    gxpNew.setDateTested(resultDateObj);
+	    gxpNew.setDateTested(parseDate(resultDateStr));
 	    gxpNew.setInstrumentSerial(instrumentSerial);
 	    gxpNew.setModuleId(moduleId);
 	    gxpNew.setReagentLotId(reagentLotId);
-	    gxpNew.setExpDate(expDate);
+	    gxpNew.setExpDate(parseDate(expDateStr));
 	    gxpNew.setCartridgeId(cartridgeId);
 	    gxpNew.setPcId(pcId);
 	    gxpNew.setOperatorId(operatorId);
-	    if (errorCode != null)
+	    String remarks = "";
+	    if (errorCode != null) {
 		gxpNew.setErrorCode(Integer.parseInt(errorCode));
+		if (!"".equals(errorNotes)) {
+		    remarks += errorNotes + ". ";
+		}
+	    }
+	    if (!"".equals(notes)) {
+		remarks += notes;
+	    }
+	    gxpNew.setRemarks(remarks);
 	    // Probes
 	    gxpNew.setProbeResultA(probeResultA);
 	    gxpNew.setProbeResultB(probeResultB);
@@ -524,7 +270,6 @@ public class EventHandler {
 	    gxpNew.setProbeResultD(probeResultD);
 	    gxpNew.setProbeResultE(probeResultE);
 	    gxpNew.setProbeResultSPC(probeResultSPC);
-
 	    if (probeCtA != null)
 		gxpNew.setProbeCtA(Double.parseDouble(probeCtA));
 	    if (probeCtB != null)
@@ -537,7 +282,6 @@ public class EventHandler {
 		gxpNew.setProbeCtE(Double.parseDouble(probeCtE));
 	    if (probeCtSPC != null)
 		gxpNew.setProbeCtSPC(Double.parseDouble(probeCtSPC));
-
 	    if (probeEndptA != null)
 		gxpNew.setProbeEndptA(Double.parseDouble(probeEndptA));
 	    if (probeEndptB != null)
@@ -559,24 +303,40 @@ public class EventHandler {
 		e.printStackTrace();
 	    }
 	}
-
 	xml = XmlUtil.createSuccessXml();
 	return xml;
     }
 
+    private Date parseDate(String dateStr) {
+	Date dateObj = null;
+	if (dateStr != null) {
+	    try {
+		if (dateStr.length() > 10)
+		    dateObj = DateTimeUtil.getDateFromString(dateStr,
+			    DateTimeUtil.SQL_DATETIME);
+		else
+		    dateObj = DateTimeUtil.getDateFromString(dateStr,
+			    DateTimeUtil.SQL_DATE);
+	    } catch (ParseException e) {
+		e.printStackTrace();
+	    }
+	}
+	return dateObj;
+    }
+
     public GeneXpertResults createGeneXpertResults(String patientId,
-	    String SampleID, String mtb, String rif, String resultDate,
+	    String sampleId, String mtb, String rif, Date resultDate,
 	    String instrumentSerial, String moduleId, String cartridgeId,
-	    String reagentLotId, String expDate, String operatorId,
-	    String pcId, String probeResultA, String probeResultB,
-	    String probeResultC, String probeResultD, String probeResultE,
-	    String probeResultSPC, String probeCtA, String probeCtB,
-	    String probeCtC, String probeCtD, String probeCtE,
-	    String probeCtSPC, String probeEndptA, String probeEndptB,
-	    String probeEndptC, String probeEndptD, String probeEndptE,
-	    String probeEndptSPC, String errorCode, String systemId) {
+	    String reagentLotId, Date expDate, String operatorId, String pcId,
+	    String probeResultA, String probeResultB, String probeResultC,
+	    String probeResultD, String probeResultE, String probeResultSPC,
+	    String probeCtA, String probeCtB, String probeCtC, String probeCtD,
+	    String probeCtE, String probeCtSPC, String probeEndptA,
+	    String probeEndptB, String probeEndptC, String probeEndptD,
+	    String probeEndptE, String probeEndptSPC, String errorCode,
+	    String errorNotes, String notes, String systemId) {
 	GeneXpertResults gxp = new GeneXpertResults();
-	gxp.setSputumTestId(SampleID);
+	gxp.setSputumTestId(sampleId);
 	gxp.setPatientId(patientId);
 	gxp.setLaboratoryId(systemId);
 
@@ -589,7 +349,6 @@ public class EventHandler {
 	    String mtbBurden = null;
 	    if (index != -1) {
 		mtbBurden = mtb.substring(index + "MTB DETECTED".length() + 1);
-
 		gxp.setGeneXpertResult("MTB DETECTED");
 		gxp.setIsPositive(new Boolean(true));
 		gxp.setMtbBurden(mtbBurden);
@@ -603,9 +362,7 @@ public class EventHandler {
 		    gxp.setGeneXpertResult("MTB NOT DETECTED");
 		    gxp.setIsPositive(new Boolean(false));
 		    mtbBurden = null;
-		}
-
-		else {
+		} else {
 		    gxp.setGeneXpertResult(mtb);
 		    mtbBurden = null;
 		}
@@ -630,40 +387,7 @@ public class EventHandler {
 	    gxp.setDrugResistance(rifResult);
 	}
 
-	if (resultDate != null) {
-	    String year = resultDate.substring(0, 4);
-	    String month = resultDate.substring(4, 6);
-	    String date = resultDate.substring(6, 8);
-	    String hour = null;
-	    String minute = null;
-	    String second = null;
-
-	    if (resultDate.length() == 14) {
-		hour = resultDate.substring(8, 10);
-		minute = resultDate.substring(10, 12);
-		second = resultDate.substring(12, 14);
-
-	    }
-
-	    GregorianCalendar cal = new GregorianCalendar();
-	    cal.set(Calendar.YEAR, Integer.parseInt(year));
-	    cal.set(Calendar.MONTH, Integer.parseInt(month) - 1);
-	    cal.set(Calendar.DATE, Integer.parseInt(date));
-	    if (hour != null)
-		cal.set(Calendar.HOUR, Integer.parseInt(hour));
-	    else
-		cal.set(Calendar.HOUR, 0);
-	    if (minute != null)
-		cal.set(Calendar.MINUTE, Integer.parseInt(minute));
-	    cal.set(Calendar.MINUTE, 0);
-	    if (second != null)
-		cal.set(Calendar.SECOND, Integer.parseInt(second));
-	    cal.set(Calendar.SECOND, 0);
-	    cal.set(Calendar.MILLISECOND, 0);
-	    gxp.setDateTested(cal.getTime());
-
-	}
-
+	gxp.setDateTested(resultDate);
 	gxp.setInstrumentSerial(instrumentSerial);
 	gxp.setModuleId(moduleId);
 	gxp.setReagentLotId(reagentLotId);
@@ -671,9 +395,17 @@ public class EventHandler {
 	gxp.setCartridgeId(cartridgeId);
 	gxp.setPcId(pcId);
 	gxp.setOperatorId(operatorId);
-	if (errorCode != null)
+	String remarks = "";
+	if (errorCode != null) {
 	    gxp.setErrorCode(Integer.parseInt(errorCode));
-
+	    if (!"".equals(errorNotes)) {
+		remarks += errorNotes + ". ";
+	    }
+	}
+	if (!"".equals(notes)) {
+	    remarks += notes;
+	}
+	gxp.setRemarks(remarks);
 	// Probes
 	gxp.setProbeResultA(probeResultA);
 	gxp.setProbeResultB(probeResultB);
@@ -707,8 +439,56 @@ public class EventHandler {
 	    gxp.setProbeEndptE(Double.parseDouble(probeEndptE));
 	if (probeEndptSPC != null)
 	    gxp.setProbeEndptSPC(Double.parseDouble(probeEndptSPC));
-
 	return gxp;
     }
 
+    public static String postToBackup(HttpServletRequest request) {
+	HttpURLConnection hc = null;
+	OutputStream os = null;
+	int responseCode = 0;
+	String response = null;
+	URL url;
+	try {
+	    String backupPostUrl = prop.getProperty("backup.post.url");
+	    url = new URL(backupPostUrl);
+	    hc = (HttpURLConnection) url.openConnection();
+	    hc.setRequestProperty("Content-Type",
+		    "application/x-www-form-urlencoded");
+	    hc.setRequestProperty("Content-Language", "en-US");
+	    hc.setDoOutput(true);
+	    try {
+		os = hc.getOutputStream();
+		String requestStr = request.toString();
+		os.write(requestStr.getBytes());
+		os.flush();
+		responseCode = hc.getResponseCode();
+	    } catch (Exception e) {
+		e.printStackTrace();
+	    }
+	    if (responseCode != HttpURLConnection.HTTP_OK) {
+		System.out.println("Could not submit to Backup. Response Code "
+			+ responseCode + "");
+	    }
+	    BufferedReader br = new BufferedReader(new InputStreamReader(
+		    hc.getInputStream()));
+	    String line = "";
+	    response = "";
+	    while ((line = br.readLine()) != null) {
+		response += line;
+	    }
+	} catch (Exception e) {
+	    e.printStackTrace();
+	} finally {
+	    if (os != null) {
+		try {
+		    os.close();
+		    hc.disconnect();
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
+	    }
+	}
+	System.out.println("Response from Backup URL: " + response);
+	return response;
+    }
 }

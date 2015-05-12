@@ -1,4 +1,4 @@
-package com.ihsinformatics.xpertsmsweb.server;
+package com.ihsinformatics.xpertsmsweb.server.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

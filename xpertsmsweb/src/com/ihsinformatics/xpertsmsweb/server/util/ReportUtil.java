@@ -1,7 +1,7 @@
 /**
  * Implements reporting features. 
  */
-package com.ihsinformatics.xpertsmsweb.server;
+package com.ihsinformatics.xpertsmsweb.server.util;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -70,8 +70,8 @@ public class ReportUtil {
 		Writer output = null;
 		output = new BufferedWriter(new FileWriter(file));
 		output.write(text.toString());
-		output.close();
 		output.flush();
+		output.close();
 	    } catch (Exception e) {
 		e.printStackTrace();
 	    }

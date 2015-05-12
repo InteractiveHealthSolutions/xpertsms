@@ -4,6 +4,8 @@
 
 package com.ihsinformatics.xpertsmsweb.server;
 
+import com.ihsinformatics.xpertsmsweb.server.util.HibernateUtil;
+import com.ihsinformatics.xpertsmsweb.server.util.MDHashUtil;
 import com.ihsinformatics.xpertsmsweb.shared.model.Users;
 
 /**

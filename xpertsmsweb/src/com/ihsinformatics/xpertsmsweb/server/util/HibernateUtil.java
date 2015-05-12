@@ -2,7 +2,7 @@
  * Implements hibernate features. This class must be initialized before performing any hibernate operation 
  */
 
-package com.ihsinformatics.xpertsmsweb.server;
+package com.ihsinformatics.xpertsmsweb.server.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +23,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
+import com.ihsinformatics.xpertsmsweb.server.LogType;
 import com.ihsinformatics.xpertsmsweb.shared.XSMS;
 import com.ihsinformatics.xpertsmsweb.shared.model.LogDataChange;
 import com.ihsinformatics.xpertsmsweb.shared.model.LogDataDelete;

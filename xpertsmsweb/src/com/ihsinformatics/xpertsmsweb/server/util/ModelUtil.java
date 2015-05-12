@@ -1,5 +1,6 @@
-package com.ihsinformatics.xpertsmsweb.server;
+package com.ihsinformatics.xpertsmsweb.server.util;
 
+import com.ihsinformatics.xpertsmsweb.server.ServerServiceImpl;
 import com.ihsinformatics.xpertsmsweb.shared.model.Encounter;
 import com.ihsinformatics.xpertsmsweb.shared.model.EncounterResults;
 import com.ihsinformatics.xpertsmsweb.shared.model.EncounterResultsId;

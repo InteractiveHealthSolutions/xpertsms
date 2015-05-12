@@ -22,7 +22,7 @@
 
 	<servlet>
 		<servlet-name>xpertSmsService</servlet-name>
-		<servlet-class>com.ihsinformatics.xpertsmsweb.server.XpertSmsService</servlet-class>
+		<servlet-class>com.ihsinformatics.xpertsmsweb.server.EventHandler</servlet-class>
 	</servlet>
 
 	<servlet-mapping>

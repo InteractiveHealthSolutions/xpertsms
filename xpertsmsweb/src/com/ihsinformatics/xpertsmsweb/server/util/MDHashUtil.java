@@ -2,7 +2,7 @@
  * This class provides hashing functionality
  */
 
-package com.ihsinformatics.xpertsmsweb.server;
+package com.ihsinformatics.xpertsmsweb.server.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

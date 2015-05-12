@@ -10,6 +10,7 @@ import org.irdresearch.smstarseel.context.TarseelServices;
 import org.irdresearch.smstarseel.data.OutboundMessage.PeriodType;
 import org.irdresearch.smstarseel.data.OutboundMessage.Priority;
 
+import com.ihsinformatics.xpertsmsweb.server.util.HibernateUtil;
 import com.ihsinformatics.xpertsmsweb.shared.model.GeneXpertResults;
 import com.ihsinformatics.xpertsmsweb.shared.model.MessageSettings;
 import com.ihsinformatics.xpertsmsweb.shared.model.OtherMessageSetting;
