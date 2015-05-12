@@ -37,6 +37,7 @@ import com.ihsinformatics.xpertsms.model.XpertProperties;
 import com.ihsinformatics.xpertsms.model.XpertResultUploadMessage;
 import com.ihsinformatics.xpertsms.parser.astm.ASTMProcessorThread;
 import com.ihsinformatics.xpertsms.ui.ControlPanel;
+
 //import com.ihsinformatics.xpertsms.constants.astm.ASTMNetworkConstants;
 
 public class ResultServer extends Thread {
@@ -83,11 +84,9 @@ public class ResultServer extends Thread {
 		        + fileNameFormatter.format(new Date()) + "_xpertdump.csv");
 		try {
 			csvWriter = new PrintWriter(csv);
-			String header = "\"messageId\",\"systemId\",\"systemName\",\"softwareVersion\",\"receiverId\",\"processingId\",\"versionNumber\",\"messageDateTime\",\"instrumentSpecimenId\",\"universalTestId\",\"priority\",\"orderDateTime\",\"actionCode\",\"";
-			header += "specimenType\",\"reportType\",\"systemDefinedTestName\",\"systemDefinedTestVersion\",\"resultStatus\",\"operatorId\",\"testStartDate\",\"testEndDate\",\"pcId\",\"instrumentSerial\",\"moduleId\",\"cartridgeId\",\"reagentLotId\",\"expDate\",\"";
-			header += "isFinal\",\"isPending\",\"isError\",\"isCorrection\",\"errorCode\",\"patientId\",\"sampleId\",\"mtbResult\",\"rifResult\",\"probeResultA\",\"probeResultB\",\"probeResultC\",\"probeResultD\",\"";
-			header += "probeResultE\",\"probeResultSpc\",\"probeCtA\",\"probeCtB\",\"probeCtC\",\"probeCtD\",\"probeCtE\",\"probeCtSPC\",\"probeEndptA\",\"probeEndptB\",\"probeEndptC\",\"probeEndptD\",\"probeEndptE\",\"probeEndptSpc\"";
-			
+			String header = "\"patientId\",\"sampleId\",\"mtbResult\",\"rifResult\",\"isFinal\",\"isPending\",\"isError\",\"isCorrection\",\"resultStatus\",\"operatorId\",\"testStartDate\",\"testEndDate\",\"pcId\",\"instrumentSerial\",\"moduleId\",\"cartridgeId\",\"reagentLotId\",\"expDate\","
+			        + "\"errorCode\",\"errorNotes\",\"notes\",\"messageId\",\"systemId\",\"softwareVersion\",\"versionNumber\",\"receiverId\",\"processingId\",\"messageDateTime\",\"instrumentSpecimenId\",\"universalTestId\",\"priority\",\"orderDateTime\",\"actionCode\",\"specimenType\",\"reportType\",\"systemDefinedTestName\",\"systemDefinedTestVersion\","
+			        + "\"probeResultA\",\"probeResultB\",\"probeResultC\",\"probeResultD\",\"probeResultE\",\"probeResultSpc\",\"probeCtA\",\"probeCtB\",\"probeCtC\",\"probeCtD\",\"probeCtE\",\"probeCtSpc\",\"probeEndptA\",\"probeEndptB\",\"probeEndptC\",\"probeEndptD\",\"probeEndptE\",\"probeEndptSpc\",\"";
 			writeToCSV(header);
 		}
 		catch (FileNotFoundException e1) {

@@ -51,7 +51,7 @@ public abstract class XpertResultUploadMessage {
 	
 	protected String probeCtE;
 	
-	protected String probeCtSPC;
+	protected String probeCtSpc;
 	
 	protected String probeEndptA;
 	
@@ -97,7 +97,7 @@ public abstract class XpertResultUploadMessage {
 		probeCtC = null;
 		probeCtD = null;
 		probeCtE = null;
-		probeCtSPC = null;
+		probeCtSpc = null;
 		
 		probeEndptA = null;
 		probeEndptB = null;
@@ -162,10 +162,6 @@ public abstract class XpertResultUploadMessage {
 	 */
 	public void setRifResult(String rifResult) {
 		this.rifResult = rifResult;
-	}
-	
-	public String toPostParams() {
-		return "";
 	}
 	
 	/**
@@ -323,17 +319,17 @@ public abstract class XpertResultUploadMessage {
 	}
 	
 	/**
-	 * @return the probeCtSPC
+	 * @return the probeCtSpc
 	 */
 	public String getProbeCtSPC() {
-		return probeCtSPC;
+		return probeCtSpc;
 	}
 	
 	/**
-	 * @param probeCtSPC the probeCtSPC to set
+	 * @param probeCtSpc the probeCtSpc to set
 	 */
 	public void setProbeCtSPC(String probeCtSPC) {
-		this.probeCtSPC = probeCtSPC;
+		this.probeCtSpc = probeCtSPC;
 	}
 	
 	/**
@@ -518,30 +514,14 @@ public abstract class XpertResultUploadMessage {
 		this.retries = retries;
 	}
 	
-	public String toSMS() {
-		String smsText = "";
-		smsText += replaceNull(sampleId) + "^" + replaceNull(mtbResult) + "^" + replaceNull(rifResult) + "^"
-		        + replaceNull(probeResultA) + "^" + replaceNull(probeResultB) + "^" + replaceNull(probeResultC) + "^"
-		        + replaceNull(probeResultD) + "^" + replaceNull(probeResultE) + "^" + replaceNull(probeResultSpc) + "^"
-		        + replaceNull(probeCtA) + "^" + replaceNull(probeCtB) + "^" + replaceNull(probeCtC) + "^"
-		        + replaceNull(probeCtD) + "^" + replaceNull(probeCtE) + "^" + replaceNull(probeCtSPC) + "^"
-		        + replaceNull(probeEndptA) + "^" + replaceNull(probeEndptB) + "^" + replaceNull(probeEndptB) + "^"
-		        + replaceNull(probeEndptC) + "^" + replaceNull(probeEndptD) + "^" + replaceNull(probeEndptE) + "^"
-		        + replaceNull(probeEndptSpc);
-		
-		return smsText;
-	}
-	
 	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return patientId + ", " + sampleId + ", " + mtbResult + ", " + rifResult + ", " + probeResultA + ", " + probeResultB
 		        + ", " + probeResultC + ", " + probeResultD + ", " + probeResultE + ", " + probeResultSpc + ", " + probeCtA
-		        + ", " + probeCtB + ", " + probeCtC + ", " + probeCtD + ", " + probeCtE + ", " + probeCtSPC + ", "
+		        + ", " + probeCtB + ", " + probeCtC + ", " + probeCtD + ", " + probeCtE + ", " + probeCtSpc + ", "
 		        + probeEndptA + ", " + probeEndptB + ", " + probeEndptC + ", " + probeEndptD + ", " + probeEndptE + ", "
 		        + probeEndptSpc + ", " + qc1 + ", " + qc2 + ", " + qc1Ct + ", " + qc2Ct + ", " + qc1Endpt + ", " + qc2Endpt
 		        + ", " + retries;
@@ -558,6 +538,10 @@ public abstract class XpertResultUploadMessage {
 			return "";
 		return text.toString();
 	}
+	
+	public abstract String toSMS(boolean exportProbes);
+	
+	public abstract String toPostParams(boolean exportProbes, String username, String password);
 	
 	public abstract String toCsv();
 	

@@ -92,10 +92,9 @@ public class CsvUtil {
 	 * @return
 	 */
 	public String[][] readData() {
-		String[] lines = readAllLines();
+		String[] lines = readAllLines(false);
 		String[][] data = new String[lines.length][];
-		int i = header ? 1 : 0;
-		for (int j = 0; i < data.length; i++, j++) {
+		for (int i = 0, j = 0; i < data.length; i++, j++) {
 			String[] values = lines[i].split(String.valueOf(fieldSeparator));
 			data[j] = values;
 		}
@@ -104,13 +103,13 @@ public class CsvUtil {
 	
 	public String readAllText() {
 		StringBuilder sb = new StringBuilder();
-		for (String line : readAllLines()) {
+		for (String line : readAllLines(true)) {
 			sb.append(line);
 		}
 		return sb.toString();
 	}
 	
-	public String[] readAllLines() {
+	public String[] readAllLines(boolean includeHeader) {
 		File file = new File(filePath);
 		ArrayList<String> lines = new ArrayList<String>();
 		try {
@@ -118,6 +117,10 @@ public class CsvUtil {
 			DataInputStream dis = new DataInputStream(fis);
 			BufferedReader br = new BufferedReader(new InputStreamReader(dis));
 			String strLine;
+			if (header & !includeHeader) {
+				// Leave first line alone
+				br.readLine();
+			}
 			while ((strLine = br.readLine()) != null) {
 				lines.add(strLine);
 			}

@@ -32,6 +32,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
+
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -41,11 +42,14 @@ import javax.net.ssl.X509TrustManager;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
+import com.ihsinformatics.xpertsms.constant.ASTMMessageConstants;
 import com.ihsinformatics.xpertsms.constant.FileConstants;
 import com.ihsinformatics.xpertsms.constant.XML;
 import com.ihsinformatics.xpertsms.model.XpertProperties;
@@ -57,6 +61,12 @@ import com.ihsinformatics.xpertsms.ui.ControlPanel;
  */
 @SuppressWarnings("deprecation")
 public class HttpSender extends Thread {
+	
+	String username;
+	
+	String password;
+	
+	boolean exportProbes;
 	
 	private ResultServer server;
 	
@@ -76,6 +86,11 @@ public class HttpSender extends Thread {
 		this.server = server;
 		errorMsg = null;
 		msg = "";
+		// Get required properties
+		username = ControlPanel.props.getProperty("serveruser");
+		password = ControlPanel.props.getProperty("serverpass");
+		exportProbes = ControlPanel.props.getProperty("exportprobes").equalsIgnoreCase(ASTMMessageConstants.TRUE);
+		
 	}
 	
 	public void run() {
@@ -185,6 +200,7 @@ public class HttpSender extends Thread {
 	}
 	
 	public String doPost(XpertResultUploadMessage message) {
+		
 		HttpURLConnection hc = null;
 		OutputStream os = null;
 		// String url = null;
@@ -208,7 +224,7 @@ public class HttpSender extends Thread {
 			hc.setDoOutput(true);
 			try {
 				os = hc.getOutputStream();
-				os.write(message.toPostParams().getBytes());
+				os.write(message.toPostParams(exportProbes, username, password).getBytes());
 				os.flush();
 				responseCode = hc.getResponseCode();
 			}
@@ -490,11 +506,11 @@ public class HttpSender extends Thread {
 			hc = (HttpsURLConnection) url.openConnection();
 			hc.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 			hc.setRequestProperty("Content-Language", "en-US");
-			System.out.println("Post Paramters :" + message.toPostParams());
+			System.out.println("Post Paramters :" + message.toPostParams(exportProbes, username, password));
 			hc.setDoOutput(true);
 			try {
 				os = hc.getOutputStream();
-				os.write(message.toPostParams().getBytes());
+				os.write(message.toPostParams(exportProbes, username, password).getBytes());
 				os.write("lang=ru".getBytes());
 				os.flush();
 				responseCode = hc.getResponseCode();

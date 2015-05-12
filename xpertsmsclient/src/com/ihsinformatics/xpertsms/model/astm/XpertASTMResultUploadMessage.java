@@ -18,10 +18,13 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
 import net.sf.json.JSONObject;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -29,9 +32,8 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import com.ihsinformatics.xpertsms.constant.ASTMMessageConstants;
+
 import com.ihsinformatics.xpertsms.model.XpertResultUploadMessage;
-import com.ihsinformatics.xpertsms.ui.ControlPanel;
 
 /**
  * @author ali.habib@irdresearch.org
@@ -677,29 +679,63 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 	
 	@Override
 	public String toCsv() {
-		String csv = null;
-		csv = "\"" + replaceNull(messageId) + "\",\"" + replaceNull(systemId) + "\",\"" + replaceNull(instrumentSpecimenID)
-		        + "\",\"" + replaceNull(softwareVersion) + "\",\"" + replaceNull(receiverId) + "\",\""
-		        + replaceNull(processingId) + "\",\"" + replaceNull(versionNumber) + "\",\"" + replaceNull(messageDateTime)
-		        + "\",\"" + replaceNull(instrumentSpecimenId) + "\",\"" + replaceNull(universalTestId) + "\",\""
-		        + replaceNull(priority) + "\",\"" + replaceNull(orderDateTime) + "\",\"" + replaceNull(actionCode) + "\",\""
-		        + replaceNull(specimenType) + "\",\"" + replaceNull(reportType) + "\",\""
-		        + replaceNull(systemDefinedTestName) + "\",\"" + replaceNull(systemDefinedTestVersion) + "\",\""
-		        + replaceNull(resultStatus) + "\",\"" + replaceNull(operatorId) + "\",\"" + replaceNull(testStartDate)
-		        + "\",\"" + replaceNull(testEndDate) + "\",\"" + replaceNull(pcId) + "\",\"" + replaceNull(instrumentSerial)
-		        + "\",\"" + replaceNull(moduleId) + "\",\"" + replaceNull(cartridgeId) + "\",\"" + replaceNull(reagentLotId)
-		        + "\",\"" + replaceNull(expDate) + "\",\"" + replaceNull(isFinal) + "\",\"" + replaceNull(isPending)
-		        + "\",\"" + replaceNull(isError) + "\",\"" + replaceNull(isCorrection) + "\",\"" + replaceNull(errorCode)
-		        + "\",\"" + replaceNull(errorNotes) + "\",\"" + replaceNull(notes) + "\",\"" + replaceNull(patientId)
-		        + "\",\"" + replaceNull(sampleId) + "\",\"" + replaceNull(mtbResult) + "\",\"" + replaceNull(rifResult)
-		        + "\",\"" + replaceNull(probeResultA) + "\",\"" + replaceNull(probeResultB) + "\",\""
-		        + replaceNull(probeResultC) + "\",\"" + replaceNull(probeResultD) + "\",\"" + replaceNull(probeResultE)
-		        + "\",\"" + replaceNull(probeResultSpc) + "\",\"" + replaceNull(probeCtA) + "\",\"" + replaceNull(probeCtB)
-		        + "\",\"" + replaceNull(probeCtC) + "\",\"" + replaceNull(probeCtD) + "\",\"" + replaceNull(probeCtE)
-		        + "\",\"" + replaceNull(probeCtSPC) + "\",\"" + replaceNull(probeEndptA) + "\",\""
-		        + replaceNull(probeEndptB) + "\",\"" + replaceNull(probeEndptC) + "\",\"" + replaceNull(probeEndptD)
-		        + "\",\"" + replaceNull(probeEndptE) + "\",\"" + replaceNull(probeEndptSpc) + "\"";
-		return csv;
+		StringBuilder csv = new StringBuilder();
+		csv.append("\"" + replaceNull(patientId) + "\",");
+		csv.append("\"" + replaceNull(sampleId) + "\",");
+		csv.append("\"" + replaceNull(mtbResult) + "\",");
+		csv.append("\"" + replaceNull(rifResult) + "\",");
+		csv.append("\"" + replaceNull(isFinal) + "\",");
+		csv.append("\"" + replaceNull(isPending) + "\",");
+		csv.append("\"" + replaceNull(isError) + "\",");
+		csv.append("\"" + replaceNull(isCorrection) + "\",");
+		csv.append("\"" + replaceNull(resultStatus) + "\",");
+		csv.append("\"" + replaceNull(operatorId) + "\",");
+		csv.append("\"" + replaceNull(testStartDate) + "\",");
+		csv.append("\"" + replaceNull(testEndDate) + "\",");
+		csv.append("\"" + replaceNull(pcId) + "\",");
+		csv.append("\"" + replaceNull(instrumentSerial) + "\",");
+		csv.append("\"" + replaceNull(moduleId) + "\",");
+		csv.append("\"" + replaceNull(cartridgeId) + "\",");
+		csv.append("\"" + replaceNull(reagentLotId) + "\",");
+		csv.append("\"" + replaceNull(expDate) + "\",");
+		csv.append("\"" + replaceNull(errorCode) + "\",");
+		csv.append("\"" + replaceNull(errorNotes) + "\",");
+		csv.append("\"" + replaceNull(notes) + "\",");
+		csv.append("\"" + replaceNull(messageId) + "\",");
+		csv.append("\"" + replaceNull(systemId) + "\",");
+		csv.append("\"" + replaceNull(softwareVersion) + "\",");
+		csv.append("\"" + replaceNull(versionNumber) + "\",");
+		csv.append("\"" + replaceNull(receiverId) + "\",");
+		csv.append("\"" + replaceNull(processingId) + "\",");
+		csv.append("\"" + replaceNull(messageDateTime) + "\",");
+		csv.append("\"" + replaceNull(instrumentSpecimenId) + "\",");
+		csv.append("\"" + replaceNull(universalTestId) + "\",");
+		csv.append("\"" + replaceNull(priority) + "\",");
+		csv.append("\"" + replaceNull(orderDateTime) + "\",");
+		csv.append("\"" + replaceNull(actionCode) + "\",");
+		csv.append("\"" + replaceNull(specimenType) + "\",");
+		csv.append("\"" + replaceNull(reportType) + "\",");
+		csv.append("\"" + replaceNull(systemDefinedTestName) + "\",");
+		csv.append("\"" + replaceNull(systemDefinedTestVersion) + "\",");
+		csv.append("\"" + replaceNull(probeResultA) + "\",");
+		csv.append("\"" + replaceNull(probeResultB) + "\",");
+		csv.append("\"" + replaceNull(probeResultC) + "\",");
+		csv.append("\"" + replaceNull(probeResultD) + "\",");
+		csv.append("\"" + replaceNull(probeResultE) + "\",");
+		csv.append("\"" + replaceNull(probeResultSpc) + "\",");
+		csv.append("\"" + replaceNull(probeCtA) + "\",");
+		csv.append("\"" + replaceNull(probeCtB) + "\",");
+		csv.append("\"" + replaceNull(probeCtC) + "\",");
+		csv.append("\"" + replaceNull(probeCtD) + "\",");
+		csv.append("\"" + replaceNull(probeCtE) + "\",");
+		csv.append("\"" + replaceNull(probeCtSpc) + "\",");
+		csv.append("\"" + replaceNull(probeEndptA) + "\",");
+		csv.append("\"" + replaceNull(probeEndptB) + "\",");
+		csv.append("\"" + replaceNull(probeEndptC) + "\",");
+		csv.append("\"" + replaceNull(probeEndptD) + "\",");
+		csv.append("\"" + replaceNull(probeEndptE) + "\",");
+		csv.append("\"" + replaceNull(probeEndptSpc) + "\"");
+		return csv.toString();
 	}
 	
 	public Element toXmlNode() {
@@ -890,7 +926,7 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 		messageNode.appendChild(probeResultSPCNode);
 		
 		Element probeCtSPCNode = doc.createElement("probectspc");
-		Text probeCtSPCText = doc.createTextNode(replaceNull(probeCtSPC));
+		Text probeCtSPCText = doc.createTextNode(replaceNull(probeCtSpc));
 		probeCtSPCNode.appendChild(probeCtSPCText);
 		messageNode.appendChild(probeCtSPCText);
 		
@@ -1149,53 +1185,61 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 			}
 		}
 		
-		query.append("insert into genexpertresults (PatientID,SputumTestID,DateTested,DrugResistance,GeneXpertResult,MTBBurden,ErrorCode,Remarks,InstrumentID,ModuleID,CartridgeID,ReagentLotID,PcID,ProbeResultA,ProbeResultB,ProbeResultC,ProbeResultD,ProbeResultE,ProbeResultSPC,ProbeCtA,ProbeCtB,ProbeCtC,ProbeCtD,ProbeCtE,ProbeCtSPC,ProbeEndptA,ProbeEndptB,ProbeEndptC,ProbeEndptD,ProbeEndptE,ProbeEndptSPC,OperatorID,CartridgeExpiryDate)");
-		query.append("VALUES ");
+		query.append("insert into genexpertresults (PatientID,SputumTestID,LaboratoryID,DateTested,DrugResistance,GeneXpertResult,MTBBurden,ErrorCode,Remarks,InstrumentID,ModuleID,CartridgeID,ReagentLotID,PcID,OperatorID,CartridgeExpiryDate,ProbeResultA,ProbeResultB,ProbeResultC,ProbeResultD,ProbeResultE,ProbeResultSPC,ProbeCtA,ProbeCtB,ProbeCtC,ProbeCtD,ProbeCtE,ProbeCtSPC,ProbeEndptA,ProbeEndptB,ProbeEndptC,ProbeEndptD,ProbeEndptE,ProbeEndptSPC)");
+		query.append(" VALUES ");
 		query.append("('" + getPatientId() + "',");
 		query.append("'" + getSampleId() + "',");
-		query.append("'" + this.getTestEndDate() + "',");
-		query.append("'" + this.getRifResult() + "',");
-		query.append("'" + this.getMtbResult() + "',");
+		query.append("'" + getSystemName() + "',");
+		query.append("'" + getTestEndDate() + "',");
+		query.append("'" + getRifResult() + "',");
+		query.append("'" + getMtbResult() + "',");
 		query.append("'" + mtbBurden + "',");
-		query.append("'" + this.getErrorCode() + "',");
-		query.append("'" + this.getErrorNotes() + ". " + this.getNotes() + "',");
-		query.append("'" + this.getInstrumentSerial() + "',");
-		query.append("'" + this.getModuleId() + "',");
-		query.append("'" + this.getCartridgeId() + "',");
-		query.append("'" + this.getReagentLotId() + "',");
-		query.append("'" + this.getPcId() + "',");
-		query.append("'" + this.getProbeResultA() + "',");
-		query.append("'" + this.getProbeResultB() + "',");
-		query.append("'" + this.getProbeResultC() + "',");
-		query.append("'" + this.getProbeResultD() + "',");
-		query.append("'" + this.getProbeResultE() + "',");
-		query.append("'" + this.getProbeResultSPC() + "',");
-		query.append("'" + this.getProbeCtA() + "',");
-		query.append("'" + this.getProbeCtB() + "',");
-		query.append("'" + this.getProbeCtC() + "',");
-		query.append("'" + this.getProbeCtD() + "',");
-		query.append("'" + this.getProbeCtE() + "',");
-		query.append("'" + this.getProbeCtSPC() + "',");
-		query.append("'" + this.getProbeEndptA() + "',");
-		query.append("'" + this.getProbeEndptB() + "',");
-		query.append("'" + this.getProbeEndptC() + "',");
-		query.append("'" + this.getProbeEndptD() + "',");
-		query.append("'" + this.getProbeEndptE() + "',");
-		query.append("'" + this.getProbeEndptSPC() + "',");
-		query.append("'" + this.getOperatorId() + "',");
-		query.append("'" + this.getExpDate() + "')");
+		query.append("'" + getErrorCode() + "',");
+		query.append("'" + getErrorNotes() + ". " + getNotes() + "',");
+		query.append("'" + getInstrumentSerial() + "',");
+		query.append("'" + getModuleId() + "',");
+		query.append("'" + getCartridgeId() + "',");
+		query.append("'" + getReagentLotId() + "',");
+		query.append("'" + getPcId() + "',");
+		query.append("'" + getOperatorId() + "',");
+		query.append("'" + getExpDate() + "',");
+		query.append("'" + getProbeResultA() + "',");
+		query.append("'" + getProbeResultB() + "',");
+		query.append("'" + getProbeResultC() + "',");
+		query.append("'" + getProbeResultD() + "',");
+		query.append("'" + getProbeResultE() + "',");
+		query.append("'" + getProbeResultSPC() + "',");
+		query.append("'" + getProbeCtA() + "',");
+		query.append("'" + getProbeCtB() + "',");
+		query.append("'" + getProbeCtC() + "',");
+		query.append("'" + getProbeCtD() + "',");
+		query.append("'" + getProbeCtE() + "',");
+		query.append("'" + getProbeCtSPC() + "',");
+		query.append("'" + getProbeEndptA() + "',");
+		query.append("'" + getProbeEndptB() + "',");
+		query.append("'" + getProbeEndptC() + "',");
+		query.append("'" + getProbeEndptD() + "',");
+		query.append("'" + getProbeEndptE() + "',");
+		query.append("'" + getProbeEndptSPC() + "')");
 		return query.toString();
 	}
 	
+	/**
+	 * Convert result object into query string for HTTP(s) post
+	 * 
+	 * @param exportProbes
+	 * @param username as in Property: serveruser
+	 * @param password as in Property: serverpass
+	 * @return
+	 */
 	@Override
-	public String toPostParams() {
+	public String toPostParams(boolean exportProbes, String username, String password) {
 		String postParams = "";
-		// send test ID, username, password, xpert detail, result,
 		postParams += "type=astmresult";
-		if (ControlPanel.props.getProperty("serveruser") != null)
-			postParams += "&username=" + ControlPanel.props.getProperty("serveruser");
-		if (ControlPanel.props.getProperty("serverpass") != null)
-			postParams += "&password=" + ControlPanel.props.getProperty("serverpass");
+		if (username != null)
+			postParams += "&username=" + username;
+		if (password != null)
+			postParams += "&password=" + password;
 		if (patientId != null)
 			postParams += "&pid=" + patientId;
 		if (sampleId != null)
@@ -1209,7 +1253,7 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 		if (isError() != null && isError()) {
 			postParams += "&error=yes";
 			postParams += "&errorcode=" + errorCode;
-			postParams += "&errornotes=" + errorNotes;
+			postParams += "&errornotes=" + errorNotes.replaceAll("([&+!@#$%^&*()\\/<>\"\'=,.])", " ");
 		}
 		if (notes != null)
 			postParams += "&notes=" + notes.replaceAll("([&+!@#$%^&*()\\/<>\"\'=,.])", " ");
@@ -1226,7 +1270,7 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 		postParams += "&receiverid=" + receiverId;
 		postParams += "&expdate=" + expDate;
 		
-		if (ControlPanel.props.getProperty("exportprobes").equalsIgnoreCase(ASTMMessageConstants.TRUE)) {
+		if (exportProbes) {
 			postParams += "&probea=" + probeResultA;
 			postParams += "&probeb=" + probeResultB;
 			postParams += "&probec=" + probeResultC;
@@ -1238,7 +1282,7 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 			postParams += "&probecct=" + probeCtC;
 			postParams += "&probedct=" + probeCtD;
 			postParams += "&probeect=" + probeCtE;
-			postParams += "&probespcct=" + probeCtSPC;
+			postParams += "&probespcct=" + probeCtSpc;
 			postParams += "&probeaendpt=" + probeEndptA;
 			postParams += "&probebendpt=" + probeEndptB;
 			postParams += "&probecendpt=" + probeEndptC;
@@ -1250,7 +1294,7 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 	}
 	
 	@Override
-	public String toSMS() {
+	public String toSMS(boolean exportProbes) {
 		String smsText = "";
 		smsText += replaceNull(patientId) + "^" + replaceNull(sampleId) + "^" + replaceNull(mtbResult) + "^"
 		        + replaceNull(rifResult) + "^" + replaceNull(systemId);
@@ -1274,14 +1318,13 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 			smsText += "^" + "yes";
 		else
 			smsText += "^" + "no";
-		if (ControlPanel.props.getProperty("exportprobes").equalsIgnoreCase(ASTMMessageConstants.TRUE)) {
+		if (exportProbes) {
 			smsText += "^" + replaceNull(probeResultA) + "^" + replaceNull(probeResultB) + "^" + replaceNull(probeResultC)
 			        + "^" + replaceNull(probeResultD) + "^" + replaceNull(probeResultE) + "^" + replaceNull(probeResultSpc)
 			        + "^" + replaceNull(probeCtA) + "^" + replaceNull(probeCtB) + "^" + replaceNull(probeCtC) + "^"
-			        + replaceNull(probeCtD) + "^" + replaceNull(probeCtE) + "^" + replaceNull(probeCtSPC) + "^"
+			        + replaceNull(probeCtD) + "^" + replaceNull(probeCtE) + "^" + replaceNull(probeCtSpc) + "^"
 			        + replaceNull(probeEndptA) + "^" + replaceNull(probeEndptB) + "^" + replaceNull(probeEndptC) + "^"
 			        + replaceNull(probeEndptD) + "^" + replaceNull(probeEndptE) + "^" + replaceNull(probeEndptSpc);
-			// + "^" + spaceIfNull(probeEndptSpc);
 		}
 		return smsText;
 	}
@@ -1337,8 +1380,8 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 			jsonObj.put("probeDCt", Double.parseDouble(probeCtD));
 		if (!"".equals(probeCtE) && probeCtE != null)
 			jsonObj.put("probeECt", Double.parseDouble(probeCtE));
-		if (!"".equals(probeCtSPC) && probeCtSPC != null)
-			jsonObj.put("probeSpcCt", Double.parseDouble(probeCtSPC));
+		if (!"".equals(probeCtSpc) && probeCtSpc != null)
+			jsonObj.put("probeSpcCt", Double.parseDouble(probeCtSpc));
 		if (!"".equals(probeEndptA) && probeEndptA != null)
 			jsonObj.put("probeAEndpt", Double.parseDouble(probeEndptA));
 		if (!"".equals(probeEndptB) && probeEndptB != null)
@@ -1385,8 +1428,8 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 		        + mtbResult + ", rifResult=" + rifResult + ", probeResultA=" + probeResultA + ", probeResultB="
 		        + probeResultB + ", probeResultC=" + probeResultC + ", probeResultD=" + probeResultD + ", probeResultE="
 		        + probeResultE + ", probeResultSpc=" + probeResultSpc + ", probeCtA=" + probeCtA + ", probeCtB=" + probeCtB
-		        + ", probeCtC=" + probeCtC + ", probeCtD=" + probeCtD + ", probeCtE=" + probeCtE + ", probeCtSPC="
-		        + probeCtSPC + ", probeEndptA=" + probeEndptA + ", probeEndptB=" + probeEndptB + ", probeEndptC="
+		        + ", probeCtC=" + probeCtC + ", probeCtD=" + probeCtD + ", probeCtE=" + probeCtE + ", probeCtSpc="
+		        + probeCtSpc + ", probeEndptA=" + probeEndptA + ", probeEndptB=" + probeEndptB + ", probeEndptC="
 		        + probeEndptC + ", probeEndptD=" + probeEndptD + ", probeEndptE=" + probeEndptE + ", probeEndptSpc="
 		        + probeEndptSpc + ", retries=" + retries + "]";
 	}
