@@ -14,6 +14,7 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 package com.ihsinformatics.xpertsms.parser.astm;
 
 import com.ihsinformatics.xpertsms.constant.ASTMMessageConstants;
+import com.ihsinformatics.xpertsms.model.XpertProperties;
 import com.ihsinformatics.xpertsms.model.astm.XpertASTMResultUploadMessage;
 import com.ihsinformatics.xpertsms.net.exception.InvalidASTMMessageFormatException;
 import com.ihsinformatics.xpertsms.ui.ControlPanel;
@@ -62,9 +63,7 @@ public class ResultRecordParser extends BaseParser {
 			if (fields[13].length() != 0)
 				setInstrumentData(fields[13]);
 		}
-		
-		else if (ControlPanel.props.getProperty("exportprobes").equalsIgnoreCase(ASTMMessageConstants.TRUE)) {
-			// deal with probe now
+		else if (ControlPanel.props.getProperty(XpertProperties.EXPORT_PROBES).equals("YES")) {
 			setProbeResult(fields[2], fields[3]);
 		}
 	}
@@ -75,10 +74,10 @@ public class ResultRecordParser extends BaseParser {
 			throw new InvalidASTMMessageFormatException("R002 - Universal Test Id must contain at least 7 fields");
 		}
 		// if the result isn't MTB or Rif, return
-		if (universalTestId[3].equals(ControlPanel.props.getProperty("mtbcode"))) {
+		if (universalTestId[3].equals(ControlPanel.props.getProperty(XpertProperties.MTB_CODE))) {
 			isMtbResult = true;
 			isRifResult = false;
-		} else if (universalTestId[3].equals(ControlPanel.props.getProperty("rifcode"))) {
+		} else if (universalTestId[3].equals(ControlPanel.props.getProperty(XpertProperties.RIF_CODE))) {
 			isMtbResult = false;
 			isRifResult = true;
 		} else

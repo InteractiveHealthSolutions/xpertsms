@@ -31,6 +31,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -42,7 +43,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
-import com.ihsinformatics.xpertsms.constant.ASTMMessageConstants;
+
 import com.ihsinformatics.xpertsms.constant.FileConstants;
 import com.ihsinformatics.xpertsms.constant.SendMethods;
 import com.ihsinformatics.xpertsms.model.XpertProperties;
@@ -196,12 +197,12 @@ public class ControlPanel extends JPanel implements ActionListener {
 		
 		extUsernameField = new JTextField(DEFAULT_WIDTH);
 		extUsernameField.setActionCommand(extUsernameString);
-		extUsernameField.setText(props.getProperty(XpertProperties.XPERT_USER));
+		extUsernameField.setText(props.getProperty(XpertProperties.SERVER_USER));
 		extUsernameField.addActionListener(this);
 		
 		extPasswordField = new JPasswordField(DEFAULT_WIDTH);
 		extPasswordField.setActionCommand(extPasswordString);
-		extPasswordField.setText(props.getProperty(XpertProperties.XPERT_PASSWORD));
+		extPasswordField.setText(props.getProperty(XpertProperties.SERVER_PASSWORD));
 		extPasswordField.addActionListener(this);
 		
 		serverSMSNumberField = new JTextField(DEFAULT_WIDTH);
@@ -234,29 +235,25 @@ public class ControlPanel extends JPanel implements ActionListener {
 		gxAlertsApiKeyField.setText(props.getProperty(XpertProperties.GXA_API_KEY));
 		gxAlertsApiKeyField.addActionListener(this);
 		
-		String[] methods = { SendMethods.HTTPS, SendMethods.HTTP, SendMethods.SMS, SendMethods.GX_ALERTS,
+		String[] methods = { SendMethods.HTTP, SendMethods.HTTPS, SendMethods.SMS, SendMethods.GX_ALERTS,
 		        SendMethods.CSV_DUMP };
 		sendMethodComboBox = new JComboBox(methods);
 		sendMethodComboBox.addActionListener(this);
 		
-		if (props.getProperty("sendmethod") != null) {
-			String sendMethod = props.getProperty("sendmethod");
-			if (sendMethod.equalsIgnoreCase(SendMethods.CSV_DUMP))
-				sendMethodComboBox.setSelectedIndex(4);
-			else if (sendMethod.equalsIgnoreCase(SendMethods.GX_ALERTS))
-				sendMethodComboBox.setSelectedIndex(3);
-			else if (sendMethod.equalsIgnoreCase(SendMethods.SMS))
-				sendMethodComboBox.setSelectedIndex(2);
-			else if (sendMethod.equalsIgnoreCase(SendMethods.HTTP))
-				sendMethodComboBox.setSelectedIndex(1);
-		} else
+		String sendMethod = props.getProperty(XpertProperties.DEFAULT_SEND_METHOD);
+		if (sendMethod.equalsIgnoreCase(SendMethods.CSV_DUMP))
+			sendMethodComboBox.setSelectedIndex(4);
+		else if (sendMethod.equalsIgnoreCase(SendMethods.GX_ALERTS))
+			sendMethodComboBox.setSelectedIndex(3);
+		else if (sendMethod.equalsIgnoreCase(SendMethods.SMS))
+			sendMethodComboBox.setSelectedIndex(2);
+		else if (sendMethod.equalsIgnoreCase(SendMethods.HTTPS))
+			sendMethodComboBox.setSelectedIndex(1);
+		else
 			sendMethodComboBox.setSelectedIndex(0);
-		
 		exportProbesCheckBox = new JCheckBox(exportProbeString);
 		exportProbesCheckBox.setMnemonic(KeyEvent.VK_C);
-		if (props.getProperty(XpertProperties.EXPORT_PROBES) != null
-		        && props.getProperty(XpertProperties.EXPORT_PROBES).equalsIgnoreCase(ASTMMessageConstants.TRUE))
-			exportProbesCheckBox.setSelected(true);
+		exportProbesCheckBox.setSelected(props.getProperty(XpertProperties.EXPORT_PROBES).equals("YES"));
 		
 		// Create some labels for the fields.
 		JLabel mtbCodeFieldLabel = new JLabel(mtbCodeString + ": ");
@@ -539,13 +536,19 @@ public class ControlPanel extends JPanel implements ActionListener {
 			props.setProperty(XpertProperties.SERVER_PORT, "8080");
 			props.setProperty(XpertProperties.WEB_APP_STRING, webappString);
 			props.setProperty(XpertProperties.LOCAL_PORT, "0");
-			props.setProperty(XpertProperties.XPERT_USER, "XpertUser");
-			props.setProperty(XpertProperties.SMS_EXPORT, SendMethods.SMS);
+			props.setProperty(XpertProperties.SERVER_USER, "XpertUser");
+			props.setProperty(XpertProperties.CSV_EXPORT, "YES");
+			props.setProperty(XpertProperties.GXA_EXPORT, "YES");
+			props.setProperty(XpertProperties.OPENMRS_EXPORT, "YES");
+			props.setProperty(XpertProperties.SMS_EXPORT, "YES");
+			props.setProperty(XpertProperties.WEB_EXPORT, "YES");
+			props.setProperty(XpertProperties.DEFAULT_SEND_METHOD, SendMethods.HTTP);
 			props.setProperty("dbport", "3306");
 			props.setProperty("dbname", "xpertsms");
 			props.setProperty("dbuser", "root");
 			props.setProperty(XpertProperties.GXA_API_KEY,
 			    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+			props.setProperty(XpertProperties.EXPORT_PROBES, "NO");
 		}
 	}
 	
@@ -580,18 +583,25 @@ public class ControlPanel extends JPanel implements ActionListener {
 			props.setProperty(XpertProperties.SERVER_PORT, serverPort);
 			props.setProperty(XpertProperties.WEB_APP_STRING, webappString);
 			props.setProperty(XpertProperties.LOCAL_PORT, localPort);
-			props.setProperty(XpertProperties.XPERT_USER, serverUser);
-			props.setProperty(XpertProperties.XPERT_PASSWORD, serverPassword);
-			props.setProperty("sendmethod", sendMethod);
+			props.setProperty(XpertProperties.SERVER_USER, serverUser);
+			props.setProperty(XpertProperties.SERVER_PASSWORD, serverPassword);
+			props.setProperty(XpertProperties.DEFAULT_SEND_METHOD, sendMethod);
+			props.setProperty(XpertProperties.CSV_EXPORT, sendMethod.equals(SendMethods.CSV_DUMP) ? "YES" : "NO");
+			props.setProperty(XpertProperties.GXA_EXPORT, sendMethod.equals(SendMethods.GX_ALERTS) ? "YES" : "NO");
+			props.setProperty(XpertProperties.OPENMRS_EXPORT, sendMethod.equals(SendMethods.OPENMRS) ? "YES" : "NO");
+			props.setProperty(XpertProperties.SMS_EXPORT, sendMethod.equals(SendMethods.SMS) ? "YES" : "NO");
+			props.setProperty(XpertProperties.WEB_EXPORT,
+			    sendMethod.equals(SendMethods.HTTP) | sendMethod.equals(SendMethods.HTTPS) ? "YES" : "NO");
+			
 			props.setProperty("dbport", localDBPort);
 			props.setProperty("dbname", localDBName);
 			props.setProperty("dbuser", localDBUser);
 			props.setProperty("dbpassword", localDBPassword);
 			props.setProperty(XpertProperties.GXA_API_KEY, gxAlertsApiKey);
 			if (probeExport)
-				props.setProperty(XpertProperties.EXPORT_PROBES, "true");
+				props.setProperty(XpertProperties.EXPORT_PROBES, "YES");
 			else
-				props.setProperty(XpertProperties.EXPORT_PROBES, "false");
+				props.setProperty(XpertProperties.EXPORT_PROBES, "NO");
 			props.setProperty(XpertProperties.SMS_ADMIN_PHONE, serverSMSNumber);
 			try {
 				if (!(new File(FileConstants.XPERT_SMS_DIR).exists())) {

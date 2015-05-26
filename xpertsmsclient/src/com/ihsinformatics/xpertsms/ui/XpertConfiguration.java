@@ -371,8 +371,8 @@ public class XpertConfiguration extends JFrame implements ActionListener {
 		String gxaExport = XpertProperties.getProperty(XpertProperties.GXA_EXPORT);
 		String openMrsExport = XpertProperties.getProperty(XpertProperties.OPENMRS_EXPORT);
 		String webExport = XpertProperties.getProperty(XpertProperties.WEB_EXPORT);
-		String xpertUser = XpertProperties.getProperty(XpertProperties.XPERT_USER);
-		String xpertPassword = XpertProperties.getProperty(XpertProperties.XPERT_PASSWORD);
+		String xpertUser = XpertProperties.getProperty(XpertProperties.SERVER_USER);
+		String xpertPassword = XpertProperties.getProperty(XpertProperties.SERVER_PASSWORD);
 		String mtbCode = XpertProperties.getProperty(XpertProperties.MTB_CODE);
 		String rifCode = XpertProperties.getProperty(XpertProperties.RIF_CODE);
 		String qcCode = XpertProperties.getProperty(XpertProperties.QC_CODE);
@@ -453,8 +453,8 @@ public class XpertConfiguration extends JFrame implements ActionListener {
 			properties.put(XpertProperties.GXA_EXPORT, gxaCheckBox.isSelected() ? "YES" : "NO");
 			properties.put(XpertProperties.OPENMRS_EXPORT, openMrsCheckBox.isSelected() ? "YES" : "NO");
 			properties.put(XpertProperties.WEB_EXPORT, webCheckBox.isSelected() ? "YES" : "NO");
-			properties.put(XpertProperties.XPERT_USER, SwingUtil.get(userTextField));
-			properties.put(XpertProperties.XPERT_PASSWORD, SwingUtil.get(passwordField));
+			properties.put(XpertProperties.SERVER_USER, SwingUtil.get(userTextField));
+			properties.put(XpertProperties.SERVER_PASSWORD, SwingUtil.get(passwordField));
 			properties.put(XpertProperties.MTB_CODE, SwingUtil.get(mtbCodeTextField));
 			properties.put(XpertProperties.RIF_CODE, SwingUtil.get(rifCodeTextField));
 			properties.put(XpertProperties.QC_CODE, SwingUtil.get(qcCodeTextField));

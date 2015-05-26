@@ -51,6 +51,7 @@ import org.xml.sax.SAXException;
 
 import com.ihsinformatics.xpertsms.constant.ASTMMessageConstants;
 import com.ihsinformatics.xpertsms.constant.FileConstants;
+import com.ihsinformatics.xpertsms.constant.SendMethods;
 import com.ihsinformatics.xpertsms.constant.XML;
 import com.ihsinformatics.xpertsms.model.XpertProperties;
 import com.ihsinformatics.xpertsms.model.XpertResultUploadMessage;
@@ -87,10 +88,9 @@ public class HttpSender extends Thread {
 		errorMsg = null;
 		msg = "";
 		// Get required properties
-		username = ControlPanel.props.getProperty("serveruser");
-		password = ControlPanel.props.getProperty("serverpass");
-		exportProbes = ControlPanel.props.getProperty("exportprobes").equalsIgnoreCase(ASTMMessageConstants.TRUE);
-		
+		username = ControlPanel.props.getProperty(XpertProperties.SERVER_USER);
+		password = ControlPanel.props.getProperty(XpertProperties.SERVER_PASSWORD);
+		exportProbes = ControlPanel.props.getProperty(XpertProperties.EXPORT_PROBES).equals("YES");
 	}
 	
 	public void run() {
@@ -170,7 +170,10 @@ public class HttpSender extends Thread {
 				}
 			}
 			if (ControlPanel.props.getProperty(XpertProperties.WEB_EXPORT).equals("YES")) {
-				response = doSecurePost(message);
+				if (ControlPanel.props.getProperty(XpertProperties.DEFAULT_SEND_METHOD).equals(SendMethods.HTTP))
+					response = doSecurePost(message);
+				else
+					response = doPost(message);
 				parseResponse(response, message);
 			}
 			if (ControlPanel.props.getProperty(XpertProperties.OPENMRS_EXPORT).equals("YES")) {
@@ -292,16 +295,11 @@ public class HttpSender extends Thread {
 	public String getURL(boolean secure) {
 		String url = "";
 		// url += "http://" + ASTMNetworkConstants.smsServerAddress + ":" + ASTMNetworkConstants.smsServerPort + ASTMNetworkConstants.webappString;
-		String webappString = ControlPanel.props.getProperty("webappstring");
+		String webappString = ControlPanel.props.getProperty(XpertProperties.WEB_APP_STRING);
 		if (webappString.charAt(0) != '/')
 			webappString = "/" + webappString;
-		
-		if (!secure)
-			url += "http://" + ControlPanel.props.getProperty("serverurl") + ":"
-			        + ControlPanel.props.getProperty("serverport") + webappString;
-		else
-			url += "https://" + ControlPanel.props.getProperty("serverurl") + ":"
-			        + ControlPanel.props.getProperty("serverport") + webappString;
+		url += "http" + (secure ? "s" : "") + "://" + ControlPanel.props.getProperty(XpertProperties.SERVER_URL) + ":"
+		        + ControlPanel.props.getProperty(XpertProperties.SERVER_PORT) + webappString;
 		return url;
 	}
 	

@@ -11,6 +11,7 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 
 package com.ihsinformatics.xpertsms.net;
 
+import com.ihsinformatics.xpertsms.model.XpertProperties;
 import com.ihsinformatics.xpertsms.ui.ControlPanel;
 
 /**
@@ -21,7 +22,7 @@ public class MessageCodes {
 	public static final String PROPERTIES_NOT_SET = "Please click on ControlPanel to configure the system before you start!";
 	
 	public static final String PORT_INACCESSIBLE = "Could not listen on port "
-	        + ControlPanel.props.getProperty("serverport");
+	        + ControlPanel.props.getProperty(XpertProperties.SERVER_PORT);
 	
 	public static final String ERROR_LOADING_PROPERTIES = "Error while loading system configuration. Please recheck your ControlPanel";
 	

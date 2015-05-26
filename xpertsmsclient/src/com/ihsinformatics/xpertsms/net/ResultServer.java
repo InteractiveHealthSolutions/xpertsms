@@ -127,7 +127,7 @@ public class ResultServer extends Thread {
 		HttpSender hs = new HttpSender(this);
 		hs.start();
 		
-		int port = Integer.parseInt(ControlPanel.props.getProperty("localport"));
+		int port = Integer.parseInt(ControlPanel.props.getProperty(XpertProperties.LOCAL_PORT));
 		try {
 			socket = new ServerSocket(port);
 		}

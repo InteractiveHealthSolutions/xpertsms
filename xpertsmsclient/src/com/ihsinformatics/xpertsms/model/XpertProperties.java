@@ -24,8 +24,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
+
 import javax.swing.JOptionPane;
+
 import com.ihsinformatics.xpertsms.constant.FileConstants;
+import com.ihsinformatics.xpertsms.constant.SendMethods;
 
 /**
  * @author owais.hussain@irdresearch.org
@@ -51,10 +54,6 @@ public final class XpertProperties {
 	public static final String QC_CODE = "qc_code";
 	
 	public static final String LOCAL_PORT = "local_port";
-	
-	public static final String XPERT_USER = "xpert_user";
-	
-	public static final String XPERT_PASSWORD = "xpert_password";
 	
 	public static final String SMS_PROJECT_NAME = "sms_server_address";
 	
@@ -112,13 +111,19 @@ public final class XpertProperties {
 	
 	public static final String WEB_PARAMETERS = "web_parameters";
 	
+	public static final String WEB_APP_STRING = "server_app_string";
+	
+	public static final String SERVER_USER = "xpert_user";
+	
+	public static final String SERVER_PASSWORD = "xpert_password";
+	
 	public static final String SERVER_URL = "server_url";
 	
 	public static final String SERVER_PORT = "server_port";
 	
-	public static final String WEB_APP_STRING = "server_app_string";
-	
 	public static final String EXPORT_PROBES = "export_probes";
+	
+	public static final String DEFAULT_SEND_METHOD = "default_send_method";
 	
 	/**
 	 * Read properties from properties file
@@ -142,8 +147,8 @@ public final class XpertProperties {
 			props.setProperty(RIF_CODE, "");
 			props.setProperty(QC_CODE, "");
 			props.setProperty(LOCAL_PORT, "");
-			props.setProperty(XPERT_USER, "");
-			props.setProperty(XPERT_PASSWORD, "");
+			props.setProperty(SERVER_USER, "");
+			props.setProperty(SERVER_PASSWORD, "");
 			props.setProperty(SMS_PROJECT_NAME, "");
 			props.setProperty(SMS_PORT, "");
 			props.setProperty(SMS_ADMIN_PHONE, "");
@@ -172,6 +177,7 @@ public final class XpertProperties {
 			props.setProperty(WEB_DATE_FORMAT, "");
 			props.setProperty(WEB_ENCODING, "");
 			props.setProperty(WEB_PARAMETERS, "");
+			props.setProperty(DEFAULT_SEND_METHOD, SendMethods.HTTP);
 		}
 	}
 	

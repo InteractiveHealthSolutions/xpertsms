@@ -789,12 +789,12 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 		Text errorCodeText = doc.createTextNode(replaceNull(errorCode));
 		errorCodeNode.appendChild(errorCodeText);
 		messageNode.appendChild(errorCodeNode);
-
+		
 		Element errorNotesNode = doc.createElement("errornotes");
 		Text errorNotesText = doc.createTextNode(replaceNull(errorNotes));
 		errorCodeNode.appendChild(errorNotesText);
 		messageNode.appendChild(errorNotesNode);
-
+		
 		Element notesNode = doc.createElement("notes");
 		Text notesNodeText = doc.createTextNode(replaceNull(notes));
 		errorCodeNode.appendChild(notesNodeText);
@@ -1424,13 +1424,13 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 		        + ", pcId=" + pcId + ", instrumentSerial=" + instrumentSerial + ", moduleId=" + moduleId + ", cartridgeId="
 		        + cartridgeId + ", reagentLotId=" + reagentLotId + ", expDate=" + expDate + ", isFinal=" + isFinal
 		        + ", isPending=" + isPending + ", isError=" + isError + ", isCorrection=" + isCorrection + ", errorCode="
-		        + errorCode + ", errorNotes=" + errorNotes + ", notes=" + notes + ", patientId=" + patientId + ", sampleId=" + sampleId + ", mtbResult="
-		        + mtbResult + ", rifResult=" + rifResult + ", probeResultA=" + probeResultA + ", probeResultB="
-		        + probeResultB + ", probeResultC=" + probeResultC + ", probeResultD=" + probeResultD + ", probeResultE="
-		        + probeResultE + ", probeResultSpc=" + probeResultSpc + ", probeCtA=" + probeCtA + ", probeCtB=" + probeCtB
-		        + ", probeCtC=" + probeCtC + ", probeCtD=" + probeCtD + ", probeCtE=" + probeCtE + ", probeCtSpc="
-		        + probeCtSpc + ", probeEndptA=" + probeEndptA + ", probeEndptB=" + probeEndptB + ", probeEndptC="
-		        + probeEndptC + ", probeEndptD=" + probeEndptD + ", probeEndptE=" + probeEndptE + ", probeEndptSpc="
-		        + probeEndptSpc + ", retries=" + retries + "]";
+		        + errorCode + ", errorNotes=" + errorNotes + ", notes=" + notes + ", patientId=" + patientId + ", sampleId="
+		        + sampleId + ", mtbResult=" + mtbResult + ", rifResult=" + rifResult + ", probeResultA=" + probeResultA
+		        + ", probeResultB=" + probeResultB + ", probeResultC=" + probeResultC + ", probeResultD=" + probeResultD
+		        + ", probeResultE=" + probeResultE + ", probeResultSpc=" + probeResultSpc + ", probeCtA=" + probeCtA
+		        + ", probeCtB=" + probeCtB + ", probeCtC=" + probeCtC + ", probeCtD=" + probeCtD + ", probeCtE=" + probeCtE
+		        + ", probeCtSpc=" + probeCtSpc + ", probeEndptA=" + probeEndptA + ", probeEndptB=" + probeEndptB
+		        + ", probeEndptC=" + probeEndptC + ", probeEndptD=" + probeEndptD + ", probeEndptE=" + probeEndptE
+		        + ", probeEndptSpc=" + probeEndptSpc + ", retries=" + retries + "]";
 	}
 }

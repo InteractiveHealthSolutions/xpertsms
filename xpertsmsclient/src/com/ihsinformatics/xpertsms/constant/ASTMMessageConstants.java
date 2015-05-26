@@ -159,8 +159,4 @@ public class ASTMMessageConstants {
 	public static final String CT = "Ct";
 	
 	public static final String ENDPT = "EndPt";
-	
-	public static final String TRUE = "true";
-	
-	public static final String FALSE = "false";
 }
