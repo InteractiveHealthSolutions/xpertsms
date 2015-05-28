@@ -89,164 +89,164 @@ package com.ihsinformatics.xpertsmsweb.shared;
  * 
  */
 public class RegexUtil {
-    private static final String numericPattern = "^[0-9]+";
-    private static final String floatingPointPattern = "^[0-9]+.[0-9]+";
-    private static final String alphaPattern = "^[A-Za-z_ ]+";
-    private static final String alphaNumPattern = "^[A-Za-z0-9]+";
-    private static final String emailPattern = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-    private static final String contactNoPattern = "[+0-9]+[0-9]+";
-    private static final String datePattern = "(0[1-9]|[1-9]|[12][0-9]|3[01])[-/](0[1-9]|1[012]|[1-9])[-/](19|20)\\d{2}";
-    private static final String timePattern_am_pm = "(1[012]|[1-9]):[0-5][0-9](\\s)?(?i)(am|pm)";
-    private static final String timePattern_24 = "([01]?[0-9]|2[0-3]):[0-5][0-9]";
-    private static final String nicPattern = "^[]";
-    private static final String urlPattern = "^(((ht|f)tp(s?))\\://)?(www.|[a-zA-Z].)[a-zA-Z0-9\\-\\.]+\\.(com|edu|gov|mil|net|org|biz|info|name|museum|us|ca|uk|pk|co|)(\\:[0-9]+)*(/($|[a-zA-Z0-9\\.\\,\\;\\?\\'\\\\\\+&amp;%\\$#\\=~_\\-]+))*$";
+	private static final String numericPattern = "^[0-9]+";
+	private static final String floatingPointPattern = "^[0-9]+.[0-9]+";
+	private static final String alphaPattern = "^[A-Za-z_ ]+";
+	private static final String alphaNumPattern = "^[A-Za-z0-9]+";
+	private static final String emailPattern = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+	private static final String contactNoPattern = "[+0-9]+[0-9]+";
+	private static final String datePattern = "(0[1-9]|[1-9]|[12][0-9]|3[01])[-/](0[1-9]|1[012]|[1-9])[-/](19|20)\\d{2}";
+	private static final String timePattern_am_pm = "(1[012]|[1-9]):[0-5][0-9](\\s)?(?i)(am|pm)";
+	private static final String timePattern_24 = "([01]?[0-9]|2[0-3]):[0-5][0-9]";
+	private static final String nicPattern = "^[]";
+	private static final String urlPattern = "^(((ht|f)tp(s?))\\://)?(www.|[a-zA-Z].)[a-zA-Z0-9\\-\\.]+\\.(com|edu|gov|mil|net|org|biz|info|name|museum|us|ca|uk|pk|co|)(\\:[0-9]+)*(/($|[a-zA-Z0-9\\.\\,\\;\\?\\'\\\\\\+&amp;%\\$#\\=~_\\-]+))*$";
 
-    /**
-     * Checks whether given input is a valid number
-     * 
-     * @param string
-     *            input String
-     * @return true/false
-     */
-    public static boolean isNumeric(String string, boolean floating) {
-	try {
-	    if (floating)
-		return string.matches(floatingPointPattern);
-	    return string.matches(numericPattern);
-	} catch (Exception e) {
-	    e.printStackTrace();
-	    return false;
+	/**
+	 * Checks whether given input is a valid number
+	 * 
+	 * @param string
+	 *            input String
+	 * @return true/false
+	 */
+	public static boolean isNumeric(String string, boolean floating) {
+		try {
+			if (floating)
+				return string.matches(floatingPointPattern);
+			return string.matches(numericPattern);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
-    }
 
-    /**
-     * Checks whether given input is a valid word
-     * 
-     * @param string
-     *            input String
-     * @return true/false
-     */
-    public static boolean isWord(String string) {
-	try {
-	    return string.matches(alphaPattern);
-	} catch (Exception e) {
-	    e.printStackTrace();
-	    return false;
+	/**
+	 * Checks whether given input is a valid word
+	 * 
+	 * @param string
+	 *            input String
+	 * @return true/false
+	 */
+	public static boolean isWord(String string) {
+		try {
+			return string.matches(alphaPattern);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
-    }
 
-    /**
-     * Checks whether given input is a valid alphanumeric string
-     * 
-     * @param string
-     *            input String
-     * @return true/false
-     */
-    public static boolean isAlphaNumeric(String string) {
-	try {
-	    return string.matches(alphaNumPattern);
-	} catch (Exception e) {
-	    e.printStackTrace();
-	    return false;
+	/**
+	 * Checks whether given input is a valid alphanumeric string
+	 * 
+	 * @param string
+	 *            input String
+	 * @return true/false
+	 */
+	public static boolean isAlphaNumeric(String string) {
+		try {
+			return string.matches(alphaNumPattern);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
-    }
 
-    /**
-     * Checks whether given input is a valid contact number (e.g. Mobile no,
-     * fax)
-     * 
-     * @param string
-     *            input String
-     * @return true/false
-     */
-    public static boolean isContactNumber(String string) {
-	try {
-	    return string.matches(contactNoPattern);
-	} catch (Exception e) {
-	    e.printStackTrace();
-	    return false;
+	/**
+	 * Checks whether given input is a valid contact number (e.g. Mobile no,
+	 * fax)
+	 * 
+	 * @param string
+	 *            input String
+	 * @return true/false
+	 */
+	public static boolean isContactNumber(String string) {
+		try {
+			return string.matches(contactNoPattern);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
-    }
 
-    /**
-     * Checks whether given input is a valid email address
-     * 
-     * @param string
-     *            input String
-     * @return true/false
-     */
-    public static boolean isEmailAddress(String string) {
-	try {
-	    return string.matches(emailPattern);
-	} catch (Exception e) {
-	    e.printStackTrace();
-	    return false;
+	/**
+	 * Checks whether given input is a valid email address
+	 * 
+	 * @param string
+	 *            input String
+	 * @return true/false
+	 */
+	public static boolean isEmailAddress(String string) {
+		try {
+			return string.matches(emailPattern);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
-    }
 
-    /**
-     * Checks whether given input is a valid date
-     * 
-     * @param string
-     *            input String
-     * @return true/false
-     */
-    public static boolean isValidDate(String string) {
-	try {
-	    return string.matches(datePattern);
-	} catch (Exception e) {
-	    e.printStackTrace();
-	    return false;
+	/**
+	 * Checks whether given input is a valid date
+	 * 
+	 * @param string
+	 *            input String
+	 * @return true/false
+	 */
+	public static boolean isValidDate(String string) {
+		try {
+			return string.matches(datePattern);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
-    }
 
-    /**
-     * Checks whether given input is a valid time
-     * 
-     * @param string
-     *            input String
-     * @return true/false
-     */
-    public static boolean isValidTime(String string, boolean am_pm) {
-	try {
-	    if (am_pm)
-		return string.matches(timePattern_am_pm);
-	    return string.matches(timePattern_24);
-	} catch (Exception e) {
-	    e.printStackTrace();
-	    return false;
+	/**
+	 * Checks whether given input is a valid time
+	 * 
+	 * @param string
+	 *            input String
+	 * @return true/false
+	 */
+	public static boolean isValidTime(String string, boolean am_pm) {
+		try {
+			if (am_pm)
+				return string.matches(timePattern_am_pm);
+			return string.matches(timePattern_24);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
-    }
 
-    /**
-     * Checks whether given input is a valid national ID number
-     * 
-     * @param string
-     *            input String
-     * @return true/false
-     */
-    public static boolean isValidNIC(String string) {
-	try {
-	    return string.matches(nicPattern);
-	} catch (Exception e) {
-	    e.printStackTrace();
-	    return false;
+	/**
+	 * Checks whether given input is a valid national ID number
+	 * 
+	 * @param string
+	 *            input String
+	 * @return true/false
+	 */
+	public static boolean isValidNIC(String string) {
+		try {
+			return string.matches(nicPattern);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
-    }
 
-    /**
-     * Checks whether given input is a valid URL
-     * 
-     * @param string
-     *            input String
-     * @return true/false
-     */
-    public static boolean isValidURL(String string) {
-	try {
-	    return string.matches(urlPattern);
-	} catch (Exception e) {
-	    e.printStackTrace();
-	    return false;
+	/**
+	 * Checks whether given input is a valid URL
+	 * 
+	 * @param string
+	 *            input String
+	 * @return true/false
+	 */
+	public static boolean isValidURL(String string) {
+		try {
+			return string.matches(urlPattern);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
-    }
 }

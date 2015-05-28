@@ -9,5 +9,5 @@ package com.ihsinformatics.xpertsmsweb.shared;
  * 
  */
 public enum AccessType {
-    DELETE, INSERT, PRINT, SELECT, UPDATE
+	DELETE, INSERT, PRINT, SELECT, UPDATE
 }

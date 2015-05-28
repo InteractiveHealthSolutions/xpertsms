@@ -40,7 +40,8 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 import net.sf.json.JSONObject;
-import com.ihsinformatics.xpertsms.model.XpertProperties;
+
+import com.ihsinformatics.xpertsms.XpertProperties;
 import com.ihsinformatics.xpertsms.net.exception.HttpResponseException;
 import com.ihsinformatics.xpertsms.util.SwingUtil;
 
@@ -122,7 +123,7 @@ public class GxaDialog extends JDialog implements ActionListener {
 		serverAddressTextField
 		        .setToolTipText("Must be a valid IP address, like \"127.0.0.1\" or a URL, like \"dev.gxalert.com/api/result\". Please do not write http(s)://");
 		serverAddressTextField.setText("dev.gxalert.com/api/result");
-		serverAddressTextField.setName("smsTarseelAddress");
+		serverAddressTextField.setName("gxaAddress");
 		
 		usePortCheckBox = new JCheckBox();
 		usePortCheckBox.setEnabled(false);

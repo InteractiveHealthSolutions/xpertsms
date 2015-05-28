@@ -19,9 +19,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
 
+import com.ihsinformatics.xpertsms.XpertProperties;
 import com.ihsinformatics.xpertsms.constant.ASTMMessageConstants;
 import com.ihsinformatics.xpertsms.constant.FileConstants;
-import com.ihsinformatics.xpertsms.model.XpertProperties;
 import com.ihsinformatics.xpertsms.model.astm.XpertASTMResultUploadMessage;
 import com.ihsinformatics.xpertsms.net.ResultServer;
 import com.ihsinformatics.xpertsms.net.exception.InvalidASTMMessageFormatException;
@@ -156,7 +156,7 @@ public class ASTMProcessorThread extends Thread {
 			}
 		}
 		if (xpertMessage.getSampleId() != null) {
-			if (ControlPanel.props.getProperty(XpertProperties.CSV_EXPORT).equals("YES")) {
+			if (XpertProperties.props.getProperty(XpertProperties.CSV_EXPORT).equals("YES")) {
 				server.writeToCSV(xpertMessage.toCsv());
 				println("Result for sample " + xpertMessage.getSampleId() + " written to CSV", true);
 			} else {

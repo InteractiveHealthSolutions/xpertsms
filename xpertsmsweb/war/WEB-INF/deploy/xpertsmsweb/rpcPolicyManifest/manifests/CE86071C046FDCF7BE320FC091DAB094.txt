@@ -1,2 +1,0 @@
-serviceClass: com.ihsinformatics.xpertsmsweb.client.ServerService
-path: 44EE11757E63DD9C2B6EA3318C928B29.gwt.rpc

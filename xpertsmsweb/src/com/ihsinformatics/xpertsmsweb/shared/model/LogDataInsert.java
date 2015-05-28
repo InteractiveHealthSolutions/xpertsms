@@ -10,77 +10,77 @@ import java.util.Date;
  */
 public class LogDataInsert implements java.io.Serializable {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-	return this.insertNo + ", " + this.userId + ", " + this.dateInserted
-		+ ", " + this.entity + ", " + this.newValue;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return this.insertNo + ", " + this.userId + ", " + this.dateInserted
+				+ ", " + this.entity + ", " + this.newValue;
+	}
 
-    /**
+	/**
 	 * 
 	 */
-    private static final long serialVersionUID = 5524726497315657503L;
-    private Long insertNo;
-    private String userId;
-    private Date dateInserted;
-    private String entity;
-    private String newValue;
+	private static final long serialVersionUID = 5524726497315657503L;
+	private Long insertNo;
+	private String userId;
+	private Date dateInserted;
+	private String entity;
+	private String newValue;
 
-    public LogDataInsert() {
-	// Not implemented
-    }
+	public LogDataInsert() {
+		// Not implemented
+	}
 
-    public LogDataInsert(String userId, Date dateInserted, String entity,
-	    String newValue) {
-	this.userId = userId;
-	this.dateInserted = dateInserted;
-	this.entity = entity;
-	this.newValue = newValue;
-    }
+	public LogDataInsert(String userId, Date dateInserted, String entity,
+			String newValue) {
+		this.userId = userId;
+		this.dateInserted = dateInserted;
+		this.entity = entity;
+		this.newValue = newValue;
+	}
 
-    public Long getInsertNo() {
-	return this.insertNo;
-    }
+	public Long getInsertNo() {
+		return this.insertNo;
+	}
 
-    public void setInsertNo(Long insertNo) {
-	this.insertNo = insertNo;
-    }
+	public void setInsertNo(Long insertNo) {
+		this.insertNo = insertNo;
+	}
 
-    public String getUserId() {
-	return this.userId;
-    }
+	public String getUserId() {
+		return this.userId;
+	}
 
-    public void setUserId(String userId) {
-	this.userId = userId;
-    }
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 
-    public Date getDateInserted() {
-	return this.dateInserted;
-    }
+	public Date getDateInserted() {
+		return this.dateInserted;
+	}
 
-    public void setDateInserted(Date dateInserted) {
-	this.dateInserted = dateInserted;
-    }
+	public void setDateInserted(Date dateInserted) {
+		this.dateInserted = dateInserted;
+	}
 
-    public String getEntity() {
-	return this.entity;
-    }
+	public String getEntity() {
+		return this.entity;
+	}
 
-    public void setEntity(String entity) {
-	this.entity = entity;
-    }
+	public void setEntity(String entity) {
+		this.entity = entity;
+	}
 
-    public String getNewValue() {
-	return this.newValue;
-    }
+	public String getNewValue() {
+		return this.newValue;
+	}
 
-    public void setNewValue(String newValue) {
-	this.newValue = newValue;
-    }
+	public void setNewValue(String newValue) {
+		this.newValue = newValue;
+	}
 
 }

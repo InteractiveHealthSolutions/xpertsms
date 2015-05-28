@@ -11,13 +11,13 @@ import com.google.gwt.event.dom.client.ClickEvent;
  * 
  */
 public interface IReport {
-    void clearUp();
+	void clearUp();
 
-    boolean validate();
+	boolean validate();
 
-    void viewData(boolean export);
+	void viewData(boolean export);
 
-    void setRights(String menuName);
+	void setRights(String menuName);
 
-    void onClick(ClickEvent event);
+	void onClick(ClickEvent event);
 }

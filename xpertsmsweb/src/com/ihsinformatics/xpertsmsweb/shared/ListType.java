@@ -9,5 +9,5 @@ package com.ihsinformatics.xpertsmsweb.shared;
  *
  */
 public enum ListType {
-    LOCATION_TYPE, FORM_OPTION, MENU_NAME, USER_ROLE, USER_STATUS
+	LOCATION_TYPE, FORM_OPTION, MENU_NAME, USER_ROLE, USER_STATUS
 }

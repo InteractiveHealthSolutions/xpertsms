@@ -43,7 +43,8 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
-import com.ihsinformatics.xpertsms.model.XpertProperties;
+
+import com.ihsinformatics.xpertsms.XpertProperties;
 import com.ihsinformatics.xpertsms.util.SwingUtil;
 
 /**
@@ -454,7 +455,7 @@ public class XpertConfiguration extends JFrame implements ActionListener {
 			properties.put(XpertProperties.OPENMRS_EXPORT, openMrsCheckBox.isSelected() ? "YES" : "NO");
 			properties.put(XpertProperties.WEB_EXPORT, webCheckBox.isSelected() ? "YES" : "NO");
 			properties.put(XpertProperties.SERVER_USER, SwingUtil.get(userTextField));
-			properties.put(XpertProperties.SERVER_PASSWORD, SwingUtil.get(passwordField));
+			properties.put(XpertProperties.SERVER_PASSWORD, String.valueOf(passwordField.getPassword()));
 			properties.put(XpertProperties.MTB_CODE, SwingUtil.get(mtbCodeTextField));
 			properties.put(XpertProperties.RIF_CODE, SwingUtil.get(rifCodeTextField));
 			properties.put(XpertProperties.QC_CODE, SwingUtil.get(qcCodeTextField));

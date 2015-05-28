@@ -8,93 +8,93 @@ package com.ihsinformatics.xpertsmsweb.shared.model;
  */
 public class Users implements java.io.Serializable {
 
-    /**
+	/**
 	 * 
 	 */
-    private static final long serialVersionUID = -3518099402499809093L;
-    private String pid;
-    private String userName;
-    private String role;
-    private String status;
-    private String password;
-    private String secretQuestion;
-    private String secretAnswer;
+	private static final long serialVersionUID = -3518099402499809093L;
+	private String pid;
+	private String userName;
+	private String role;
+	private String status;
+	private String password;
+	private String secretQuestion;
+	private String secretAnswer;
 
-    public Users() {
-	// Not implemented
-    }
+	public Users() {
+		// Not implemented
+	}
 
-    public Users(String pid, String userName, String role, String status,
-	    String password, String secretQuestion, String secretAnswer) {
-	this.pid = pid;
-	this.userName = userName;
-	this.role = role;
-	this.status = status;
-	this.password = password;
-	this.secretQuestion = secretQuestion;
-	this.secretAnswer = secretAnswer;
-    }
+	public Users(String pid, String userName, String role, String status,
+			String password, String secretQuestion, String secretAnswer) {
+		this.pid = pid;
+		this.userName = userName;
+		this.role = role;
+		this.status = status;
+		this.password = password;
+		this.secretQuestion = secretQuestion;
+		this.secretAnswer = secretAnswer;
+	}
 
-    public String getPid() {
-	return this.pid;
-    }
+	public String getPid() {
+		return this.pid;
+	}
 
-    public void setPid(String pid) {
-	this.pid = pid;
-    }
+	public void setPid(String pid) {
+		this.pid = pid;
+	}
 
-    public String getUserName() {
-	return this.userName;
-    }
+	public String getUserName() {
+		return this.userName;
+	}
 
-    public void setUserName(String userName) {
-	this.userName = userName;
-    }
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 
-    public String getRole() {
-	return this.role;
-    }
+	public String getRole() {
+		return this.role;
+	}
 
-    public void setRole(String role) {
-	this.role = role;
-    }
+	public void setRole(String role) {
+		this.role = role;
+	}
 
-    public String getStatus() {
-	return this.status;
-    }
+	public String getStatus() {
+		return this.status;
+	}
 
-    public void setStatus(String status) {
-	this.status = status;
-    }
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
-    public String getPassword() {
-	return this.password;
-    }
+	public String getPassword() {
+		return this.password;
+	}
 
-    public void setPassword(String password) {
-	this.password = password;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public String getSecretQuestion() {
-	return this.secretQuestion;
-    }
+	public String getSecretQuestion() {
+		return this.secretQuestion;
+	}
 
-    public void setSecretQuestion(String secretQuestion) {
-	this.secretQuestion = secretQuestion;
-    }
+	public void setSecretQuestion(String secretQuestion) {
+		this.secretQuestion = secretQuestion;
+	}
 
-    public String getSecretAnswer() {
-	return this.secretAnswer;
-    }
+	public String getSecretAnswer() {
+		return this.secretAnswer;
+	}
 
-    public void setSecretAnswer(String secretAnswer) {
-	this.secretAnswer = secretAnswer;
-    }
+	public void setSecretAnswer(String secretAnswer) {
+		this.secretAnswer = secretAnswer;
+	}
 
-    @Override
-    public String toString() {
-	return pid + ", " + userName + ", " + role + ", " + status + ", "
-		+ secretQuestion;
-    }
+	@Override
+	public String toString() {
+		return pid + ", " + userName + ", " + role + ", " + status + ", "
+				+ secretQuestion;
+	}
 
 }

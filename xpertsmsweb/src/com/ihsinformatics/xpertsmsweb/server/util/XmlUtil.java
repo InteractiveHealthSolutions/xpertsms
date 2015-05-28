@@ -22,93 +22,93 @@ import com.ihsinformatics.xpertsmsweb.server.XmlStrings;
 
 public class XmlUtil {
 
-    public static String docToString(Document doc) {
-	TransformerFactory factory = TransformerFactory.newInstance();
-	Transformer transformer;
-	try {
-	    transformer = factory.newTransformer();
-	} catch (TransformerConfigurationException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	    return "";
+	public static String docToString(Document doc) {
+		TransformerFactory factory = TransformerFactory.newInstance();
+		Transformer transformer;
+		try {
+			transformer = factory.newTransformer();
+		} catch (TransformerConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "";
+		}
+		StringWriter writer = new StringWriter();
+		Result result = new StreamResult(writer);
+		Source source = new DOMSource(doc);
+		try {
+			transformer.transform(source, result);
+		} catch (TransformerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String xml = writer.toString();
+		return xml;
 	}
-	StringWriter writer = new StringWriter();
-	Result result = new StreamResult(writer);
-	Source source = new DOMSource(doc);
-	try {
-	    transformer.transform(source, result);
-	} catch (TransformerException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+
+	public static String createSuccessXml() {
+		String xml = null;
+		Document doc = null;
+
+		try {
+			doc = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+					.newDocument();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "";
+		}
+		Element responseNode = doc.createElement(XmlStrings.RESPONSE);
+		// responseNode.setAttribute(XmlStrings.TYPE, XmlStrings.LOGIN_TYPE);
+
+		Element statusNode = doc.createElement("status");
+		Text statusValue = doc.createTextNode("success");
+		statusNode.appendChild(statusValue);
+
+		responseNode.appendChild(statusNode);
+
+		doc.appendChild(responseNode);
+
+		xml = docToString(doc);
+		return xml;
+
 	}
-	try {
-	    writer.close();
-	} catch (IOException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+
+	public static String createErrorXml(String errMsg) {
+		String xml = null;
+		Document doc = null;
+
+		try {
+			doc = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+					.newDocument();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "";
+		}
+		Element responseNode = doc.createElement(XmlStrings.RESPONSE);
+		// responseNode.setAttribute(XmlStrings.TYPE, XmlStrings.LOGIN_TYPE);
+
+		Element statusNode = doc.createElement("status");
+		Text statusValue = doc.createTextNode("error");
+		statusNode.appendChild(statusValue);
+
+		Element msgNode = doc.createElement("msg");
+		Text msgValue = doc.createTextNode(errMsg);
+		msgNode.appendChild(msgValue);
+
+		responseNode.appendChild(statusNode);
+		responseNode.appendChild(msgNode);
+
+		doc.appendChild(responseNode);
+
+		xml = docToString(doc);
+		return xml;
 	}
-	String xml = writer.toString();
-	return xml;
-    }
-
-    public static String createSuccessXml() {
-	String xml = null;
-	Document doc = null;
-
-	try {
-	    doc = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-		    .newDocument();
-	} catch (ParserConfigurationException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	    return "";
-	}
-	Element responseNode = doc.createElement(XmlStrings.RESPONSE);
-	// responseNode.setAttribute(XmlStrings.TYPE, XmlStrings.LOGIN_TYPE);
-
-	Element statusNode = doc.createElement("status");
-	Text statusValue = doc.createTextNode("success");
-	statusNode.appendChild(statusValue);
-
-	responseNode.appendChild(statusNode);
-
-	doc.appendChild(responseNode);
-
-	xml = docToString(doc);
-	return xml;
-
-    }
-
-    public static String createErrorXml(String errMsg) {
-	String xml = null;
-	Document doc = null;
-
-	try {
-	    doc = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-		    .newDocument();
-	} catch (ParserConfigurationException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	    return "";
-	}
-	Element responseNode = doc.createElement(XmlStrings.RESPONSE);
-	// responseNode.setAttribute(XmlStrings.TYPE, XmlStrings.LOGIN_TYPE);
-
-	Element statusNode = doc.createElement("status");
-	Text statusValue = doc.createTextNode("error");
-	statusNode.appendChild(statusValue);
-
-	Element msgNode = doc.createElement("msg");
-	Text msgValue = doc.createTextNode(errMsg);
-	msgNode.appendChild(msgValue);
-
-	responseNode.appendChild(statusNode);
-	responseNode.appendChild(msgNode);
-
-	doc.appendChild(responseNode);
-
-	xml = docToString(doc);
-	return xml;
-    }
 
 }

@@ -44,7 +44,8 @@ import net.jmatrix.eproperties.EProperties;
 import org.irdresearch.smstarseel.context.TarseelContext;
 import org.irdresearch.smstarseel.context.TarseelServices;
 import org.irdresearch.smstarseel.data.Project;
-import com.ihsinformatics.xpertsms.model.XpertProperties;
+
+import com.ihsinformatics.xpertsms.XpertProperties;
 import com.ihsinformatics.xpertsms.util.RegexUtil;
 import com.ihsinformatics.xpertsms.util.SwingUtil;
 

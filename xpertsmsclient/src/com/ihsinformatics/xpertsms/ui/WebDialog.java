@@ -15,13 +15,14 @@ package com.ihsinformatics.xpertsms.ui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import javax.swing.AbstractListModel;
+
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -30,19 +31,17 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
-import com.ihsinformatics.xpertsms.model.XpertProperties;
-import com.ihsinformatics.xpertsms.util.RegexUtil;
+
+import com.ihsinformatics.xpertsms.XpertProperties;
 import com.ihsinformatics.xpertsms.util.SwingUtil;
-import javax.swing.JRadioButton;
-import javax.swing.JTextArea;
-import java.awt.Font;
 
 /**
  * @author owais.hussain@irdresearch.org
@@ -341,7 +340,7 @@ public class WebDialog extends JDialog implements ActionListener {
 		String successMessage = "";
 		String failureMessage = "";
 		if (validateData()) {
-			if (true && false)
+			if (true && false) // TODO: Of course this needs to be completed
 				JOptionPane.showMessageDialog(new JFrame(), failureMessage, "Error!", JOptionPane.ERROR_MESSAGE);
 			else {
 				int selected = JOptionPane.showConfirmDialog(new JFrame(), successMessage, "It works! Save now?",

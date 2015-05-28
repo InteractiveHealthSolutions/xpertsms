@@ -40,8 +40,9 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import com.ihsinformatics.xpertsms.XpertProperties;
 import com.ihsinformatics.xpertsms.constant.FileConstants;
-import com.ihsinformatics.xpertsms.model.XpertProperties;
 import com.ihsinformatics.xpertsms.util.DocumentUtil;
 import com.ihsinformatics.xpertsms.util.SwingUtil;
 

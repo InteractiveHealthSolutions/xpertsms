@@ -3,118 +3,159 @@
                                    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated Jan 6, 2011 10:24:45 AM by Hibernate Tools 3.4.0.Beta1 -->
 <hibernate-mapping>
- <class catalog="xpertsms"
-  name="com.ihsinformatics.xpertsmsweb.shared.model.GeneXpertResults" table="GeneXpertResults">
-  <id name="testId" type="java.lang.Integer">
-   <column index="1" name="TestID"/>
-   <generator class="identity"/>
-  </id>
-  <property generated="never" lazy="false" name="patientId" type="string">
-   <column index="2" length="20" name="PatientID" not-null="true"/>
-  </property>
-  <property generated="never" lazy="false" name="sputumTestId" type="string">
-   <column index="3" name="SputumTestID" not-null="true"/>
-  </property>
-  <!-- <property generated="never" lazy="false" name="irs" type="java.lang.Integer"> 
-			<column name="IRS"/> </property> -->
-  <property generated="never" lazy="false" name="laboratoryId" type="string">
-   <column index="4" length="20" name="LaboratoryID"/>
-  </property>
-  <property generated="never" lazy="false" name="dateSubmitted" type="timestamp">
-   <column index="5" length="19" name="DateSubmitted"/>
-  </property>
-  <property generated="never" lazy="false" name="dateTested" type="timestamp">
-   <column index="6" length="19" name="DateTested"/>
-  </property>
-  <property generated="never" lazy="false" name="geneXpertResult" type="string">
-   <column index="7" length="50" name="GeneXpertResult"/>
-  </property>
-  <property generated="never" lazy="false" name="isPositive" type="java.lang.Boolean">
-   <column index="8" name="IsPositive"/>
-  </property>
-  <property generated="never" lazy="false" name="mtbBurden" type="string">
-   <column index="9" length="50" name="MTBBurden"/>
-  </property>
-  <property generated="never" lazy="false" name="drugResistance" type="string">
-   <column index="10" length="50" name="DrugResistance"/>
-  </property>
-  <property generated="never" lazy="false" name="errorCode" type="integer">
-   <column index="11" name="ErrorCode"/>
-  </property>
-  <property generated="never" lazy="false" name="remarks" type="string">
-   <column index="12" name="Remarks"/>
-  </property>
-  <property generated="never" lazy="false" name="pcId" type="string">
-   <column index="13" name="PCID"/>
-  </property>
-  <property generated="never" lazy="false" name="instrumentSerial" type="string">
-   <column index="14" name="InstrumentID"/>
-  </property>
-  <property generated="never" lazy="false" name="moduleId" type="string">
-   <column index="15" name="ModuleID"/>
-  </property>
-  <property generated="never" lazy="false" name="cartridgeId" type="string">
-   <column index="16" name="CartridgeID"/>
-  </property>
-  <property generated="never" lazy="false" name="reagentLotId" type="string">
-   <column index="17" name="ReagentLotID"/>
-  </property>
-  <property generated="never" lazy="false" name="operatorId" type="string">
-   <column index="18" name="OperatorID"/>
-  </property>
-  <property generated="never" lazy="false" name="probeResultA" type="string">
-   <column index="19" name="ProbeResultA"/>
-  </property>
-  <property generated="never" lazy="false" name="probeResultB" type="string">
-   <column index="20" name="ProbeResultB"/>
-  </property>
-  <property generated="never" lazy="false" name="probeResultC" type="string">
-   <column index="21" name="ProbeResultC"/>
-  </property>
-  <property generated="never" lazy="false" name="probeResultD" type="string">
-   <column index="22" name="ProbeResultD"/>
-  </property>
-  <property generated="never" lazy="false" name="probeResultE" type="string">
-   <column index="23" name="ProbeResultE"/>
-  </property>
-  <property generated="never" lazy="false" name="probeResultSPC" type="string">
-   <column index="24" name="ProbeResultSPC"/>
-  </property>
-  <property generated="never" lazy="false" name="probeCtA" type="double">
-   <column index="25" name="ProbeCtA"/>
-  </property>
-  <property generated="never" lazy="false" name="probeCtB" type="double">
-   <column index="26" name="ProbeCtB"/>
-  </property>
-  <property generated="never" lazy="false" name="probeCtC" type="double">
-   <column index="27" name="ProbeCtC"/>
-  </property>
-  <property generated="never" lazy="false" name="probeCtD" type="double">
-   <column index="28" name="ProbeCtD"/>
-  </property>
-  <property generated="never" lazy="false" name="probeCtE" type="double">
-   <column index="29" name="ProbeCtE"/>
-  </property>
-  <property generated="never" lazy="false" name="probeCtSPC" type="double">
-   <column index="30" name="ProbeCtSPC"/>
-  </property>
-  <property generated="never" lazy="false" name="probeEndptA" type="double">
-   <column index="31" name="ProbeEndptA"/>
-  </property>
-  <property generated="never" lazy="false" name="probeEndptB" type="double">
-   <column index="32" name="ProbeEndptB"/>
-  </property>
-  <property generated="never" lazy="false" name="probeEndptC" type="double">
-   <column index="33" name="ProbeEndptC"/>
-  </property>
-  <property generated="never" lazy="false" name="probeEndptD" type="double">
-   <column index="34" name="ProbeEndptD"/>
-  </property>
-  <property generated="never" lazy="false" name="probeEndptE" type="double">
-   <column index="35" name="ProbeEndptE"/>
-  </property>
-  <property generated="never" lazy="false" name="probeEndptSPC" type="double">
-   <column index="36" name="ProbeEndptSPC"/>
-  </property>
- </class>
+	<class catalog="xpertsms"
+		name="com.ihsinformatics.xpertsmsweb.shared.model.GeneXpertResults"
+		table="GeneXpertResults">
+		<id name="testId" type="java.lang.Integer">
+			<column index="1" name="TestID" />
+			<generator class="identity" />
+		</id>
+		<property generated="never" lazy="false" name="patientId"
+			type="string">
+			<column index="2" length="20" name="PatientID" not-null="true" />
+		</property>
+		<property generated="never" lazy="false" name="sputumTestId"
+			type="string">
+			<column index="3" name="SputumTestID" not-null="true" />
+		</property>
+		<property generated="never" lazy="false" name="laboratoryId"
+			type="string">
+			<column index="4" length="20" name="LaboratoryID" />
+		</property>
+		<property generated="never" lazy="false" name="collectedBy"
+			type="string">
+			<column index="5" length="20" name="CollectedBy" />
+		</property>
+		<property generated="never" lazy="false" name="dateSubmitted"
+			type="timestamp">
+			<column index="6" length="19" name="DateSubmitted" />
+		</property>
+		<property generated="never" lazy="false" name="dateTested"
+			type="timestamp">
+			<column index="7" length="19" name="DateTested" />
+		</property>
+		<property generated="never" lazy="false" name="geneXpertResult"
+			type="string">
+			<column index="8" length="50" name="GeneXpertResult" />
+		</property>
+		<property generated="never" lazy="false" name="isPositive"
+			type="java.lang.Boolean">
+			<column index="9" name="IsPositive" />
+		</property>
+		<property generated="never" lazy="false" name="mtbBurden"
+			type="string">
+			<column index="10" length="50" name="MTBBurden" />
+		</property>
+		<property generated="never" lazy="false" name="drugResistance"
+			type="string">
+			<column index="11" length="50" name="DrugResistance" />
+		</property>
+		<property generated="never" lazy="false" name="errorCode"
+			type="integer">
+			<column index="12" name="ErrorCode" />
+		</property>
+		<property generated="never" lazy="false" name="remarks" type="string">
+			<column index="13" name="Remarks" />
+		</property>
+		<property generated="never" lazy="false" name="pcId" type="string">
+			<column index="14" name="PCID" />
+		</property>
+		<property generated="never" lazy="false" name="instrumentSerial"
+			type="string">
+			<column index="15" name="InstrumentID" />
+		</property>
+		<property generated="never" lazy="false" name="moduleId"
+			type="string">
+			<column index="16" name="ModuleID" />
+		</property>
+		<property generated="never" lazy="false" name="cartridgeId"
+			type="string">
+			<column index="16" name="CartridgeID" />
+		</property>
+		<property generated="never" lazy="false" name="cartridgeExpiryDate"
+			type="timestamp">
+			<column index="18" length="19" name="CartridgeExpiryDate" />
+		</property>
+		<property generated="never" lazy="false" name="reagentLotId"
+			type="string">
+			<column index="19" name="ReagentLotID" />
+		</property>
+		<property generated="never" lazy="false" name="operatorId"
+			type="string">
+			<column index="20" name="OperatorID" />
+		</property>
+		<property generated="never" lazy="false" name="probeResultA"
+			type="string">
+			<column index="21" name="ProbeResultA" />
+		</property>
+		<property generated="never" lazy="false" name="probeResultB"
+			type="string">
+			<column index="22" name="ProbeResultB" />
+		</property>
+		<property generated="never" lazy="false" name="probeResultC"
+			type="string">
+			<column index="23" name="ProbeResultC" />
+		</property>
+		<property generated="never" lazy="false" name="probeResultD"
+			type="string">
+			<column index="24" name="ProbeResultD" />
+		</property>
+		<property generated="never" lazy="false" name="probeResultE"
+			type="string">
+			<column index="25" name="ProbeResultE" />
+		</property>
+		<property generated="never" lazy="false" name="probeResultSPC"
+			type="string">
+			<column index="26" name="ProbeResultSPC" />
+		</property>
+		<property generated="never" lazy="false" name="probeCtA"
+			type="double">
+			<column index="27" name="ProbeCtA" />
+		</property>
+		<property generated="never" lazy="false" name="probeCtB"
+			type="double">
+			<column index="28" name="ProbeCtB" />
+		</property>
+		<property generated="never" lazy="false" name="probeCtC"
+			type="double">
+			<column index="29" name="ProbeCtC" />
+		</property>
+		<property generated="never" lazy="false" name="probeCtD"
+			type="double">
+			<column index="30" name="ProbeCtD" />
+		</property>
+		<property generated="never" lazy="false" name="probeCtE"
+			type="double">
+			<column index="31" name="ProbeCtE" />
+		</property>
+		<property generated="never" lazy="false" name="probeCtSPC"
+			type="double">
+			<column index="32" name="ProbeCtSPC" />
+		</property>
+		<property generated="never" lazy="false" name="probeEndptA"
+			type="double">
+			<column index="33" name="ProbeEndptA" />
+		</property>
+		<property generated="never" lazy="false" name="probeEndptB"
+			type="double">
+			<column index="34" name="ProbeEndptB" />
+		</property>
+		<property generated="never" lazy="false" name="probeEndptC"
+			type="double">
+			<column index="35" name="ProbeEndptC" />
+		</property>
+		<property generated="never" lazy="false" name="probeEndptD"
+			type="double">
+			<column index="36" name="ProbeEndptD" />
+		</property>
+		<property generated="never" lazy="false" name="probeEndptE"
+			type="double">
+			<column index="37" name="ProbeEndptE" />
+		</property>
+		<property generated="never" lazy="false" name="probeEndptSPC"
+			type="double">
+			<column index="38" name="ProbeEndptSPC" />
+		</property>
+		
+	</class>
 </hibernate-mapping>

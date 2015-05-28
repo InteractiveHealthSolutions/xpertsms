@@ -14,24 +14,24 @@ import com.ihsinformatics.xpertsmsweb.shared.SmsTarseelUtil;
 
 public class SmsTarseel {
 
-    @SuppressWarnings("unchecked")
-    public static boolean Instantiate() throws IOException,
-	    InstanceAlreadyExistsException {
+	@SuppressWarnings("unchecked")
+	public static boolean Instantiate() throws IOException,
+			InstanceAlreadyExistsException {
 
-	System.out.println(">>>>LOADING SYSTEM PROPERTIES...");
-	InputStream f = Thread.currentThread().getContextClassLoader()
-		.getResourceAsStream("smstarseel.properties");
-	// Java Properties donot seem to support substitutions hence EProperties
-	// are used to accomplish the task
+		System.out.println(">>>>LOADING SYSTEM PROPERTIES...");
+		InputStream f = Thread.currentThread().getContextClassLoader()
+				.getResourceAsStream("smstarseel.properties");
+		// Java Properties donot seem to support substitutions hence EProperties
+		// are used to accomplish the task
 
-	EProperties root = new EProperties();
-	root.load(f);
+		EProperties root = new EProperties();
+		root.load(f);
 
-	// Java Properties to send to context and other APIs for configuration
-	Properties prop = new Properties();
-	prop.putAll(SmsTarseelUtil.convertEntrySetToMap(root.entrySet()));
+		// Java Properties to send to context and other APIs for configuration
+		Properties prop = new Properties();
+		prop.putAll(SmsTarseelUtil.convertEntrySetToMap(root.entrySet()));
 
-	TarseelContext.instantiate(prop, "smstarseel.cfg.xml");
-	return true;
-    }
+		TarseelContext.instantiate(prop, "smstarseel.cfg.xml");
+		return true;
+	}
 }

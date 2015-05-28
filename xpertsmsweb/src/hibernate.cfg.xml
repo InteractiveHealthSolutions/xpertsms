@@ -19,7 +19,6 @@
   <mapping resource="com/ihsinformatics/xpertsmsweb/shared/model/Encounter.hbm.xml"/>
   <mapping resource="com/ihsinformatics/xpertsmsweb/shared/model/EncounterResults.hbm.xml"/>
   <mapping resource="com/ihsinformatics/xpertsmsweb/shared/model/GeneXpertResults.hbm.xml"/>
-  <mapping resource="com/ihsinformatics/xpertsmsweb/shared/model/GeneXpertResultsUnlinked.hbm.xml"/>
   <mapping resource="com/ihsinformatics/xpertsmsweb/shared/model/Location.hbm.xml"/>
   <mapping resource="com/ihsinformatics/xpertsmsweb/shared/model/LogDataChange.hbm.xml"/>
   <mapping resource="com/ihsinformatics/xpertsmsweb/shared/model/LogDataDelete.hbm.xml"/>

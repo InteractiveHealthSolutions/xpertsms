@@ -20,23 +20,22 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-//import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 
-//import java.util.concurrent.BlockingQueue;
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
-//import javax.swing.text.SimpleAttributeSet;
-//import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
+import com.ihsinformatics.xpertsms.XpertProperties;
 import com.ihsinformatics.xpertsms.constant.FileConstants;
-import com.ihsinformatics.xpertsms.model.XpertProperties;
 import com.ihsinformatics.xpertsms.model.XpertResultUploadMessage;
 import com.ihsinformatics.xpertsms.parser.astm.ASTMProcessorThread;
-import com.ihsinformatics.xpertsms.ui.ControlPanel;
+//import java.util.Vector;
+//import java.util.concurrent.BlockingQueue;
+//import javax.swing.text.SimpleAttributeSet;
+//import javax.swing.text.StyleConstants;
 
 //import com.ihsinformatics.xpertsms.constants.astm.ASTMNetworkConstants;
 
@@ -127,7 +126,7 @@ public class ResultServer extends Thread {
 		HttpSender hs = new HttpSender(this);
 		hs.start();
 		
-		int port = Integer.parseInt(ControlPanel.props.getProperty(XpertProperties.LOCAL_PORT));
+		int port = Integer.parseInt(XpertProperties.props.getProperty(XpertProperties.LOCAL_PORT));
 		try {
 			socket = new ServerSocket(port);
 		}
@@ -200,14 +199,14 @@ public class ResultServer extends Thread {
 	
 	public boolean loadProperties() throws FileNotFoundException, IOException {
 		
-		ControlPanel.props.load(new FileInputStream(FileConstants.FILE_PATH));
+		XpertProperties.props.load(new FileInputStream(FileConstants.FILE_PATH));
 		//TODO: Owais, refactor this
 		//		String[] mandatory = {XpertProperties.MTB_CODE, XpertProperties.RIF_CODE, XpertProperties.QC_CODE, XpertProperties.SERVER_URL, XpertProperties.SERVER_PORT, XpertProperties.LOCAL_PORT,
 		//		XpertProperties.EXPORT_PROBES};
 		String[] mandatory = { XpertProperties.MTB_CODE, XpertProperties.RIF_CODE, XpertProperties.QC_CODE,
 		        XpertProperties.LOCAL_PORT };
 		for (String s : mandatory) {
-			String property = ControlPanel.props.getProperty(s);
+			String property = XpertProperties.props.getProperty(s);
 			if (property == null || property.length() == 0) {
 				return false;
 			}

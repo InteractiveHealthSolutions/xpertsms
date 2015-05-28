@@ -8,68 +8,68 @@ package com.ihsinformatics.xpertsmsweb.shared.model;
  */
 public class EncounterResultsId implements java.io.Serializable {
 
-    /**
+	/**
 	 * 
 	 */
-    private static final long serialVersionUID = -7756112633819700343L;
-    private int encounterId;
-    private String pid1;
-    private String pid2;
-    private String element;
+	private static final long serialVersionUID = -7756112633819700343L;
+	private int encounterId;
+	private String pid1;
+	private String pid2;
+	private String element;
 
-    public EncounterResultsId() {
-	// Not implemented
-    }
+	public EncounterResultsId() {
+		// Not implemented
+	}
 
-    public EncounterResultsId(int encounterId, String pid1, String pid2,
-	    String element) {
-	this.encounterId = encounterId;
-	this.pid1 = pid1;
-	this.pid2 = pid2;
-	this.element = element;
-    }
+	public EncounterResultsId(int encounterId, String pid1, String pid2,
+			String element) {
+		this.encounterId = encounterId;
+		this.pid1 = pid1;
+		this.pid2 = pid2;
+		this.element = element;
+	}
 
-    public int getEncounterId() {
-	return this.encounterId;
-    }
+	public int getEncounterId() {
+		return this.encounterId;
+	}
 
-    public void setEncounterId(int encounterId) {
-	this.encounterId = encounterId;
-    }
+	public void setEncounterId(int encounterId) {
+		this.encounterId = encounterId;
+	}
 
-    public String getPid1() {
-	return this.pid1;
-    }
+	public String getPid1() {
+		return this.pid1;
+	}
 
-    public void setPid1(String pid1) {
-	this.pid1 = pid1;
-    }
+	public void setPid1(String pid1) {
+		this.pid1 = pid1;
+	}
 
-    public String getPid2() {
-	return this.pid2;
-    }
+	public String getPid2() {
+		return this.pid2;
+	}
 
-    public void setPid2(String pid2) {
-	this.pid2 = pid2;
-    }
+	public void setPid2(String pid2) {
+		this.pid2 = pid2;
+	}
 
-    public String getElement() {
-	return this.element;
-    }
+	public String getElement() {
+		return this.element;
+	}
 
-    public void setElement(String element) {
-	this.element = element;
-    }
+	public void setElement(String element) {
+		this.element = element;
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-	return this.encounterId + ", " + this.pid1 + ", " + this.pid2 + ", "
-		+ this.element;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return this.encounterId + ", " + this.pid1 + ", " + this.pid2 + ", "
+				+ this.element;
+	}
 
 }

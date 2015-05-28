@@ -10,83 +10,83 @@ import java.util.Date;
  */
 public class LogDataDelete implements java.io.Serializable {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-	return this.deleteNo + ", " + this.userId + ", " + this.dateDelete
-		+ ", " + this.entity + ", " + this.record;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return this.deleteNo + ", " + this.userId + ", " + this.dateDelete
+				+ ", " + this.entity + ", " + this.record;
+	}
 
-    /**
+	/**
 	 * 
 	 */
-    private static final long serialVersionUID = -592128594175272092L;
-    private Long deleteNo;
-    private String userId;
-    private Date dateDelete;
-    private String entity;
-    private String record;
+	private static final long serialVersionUID = -592128594175272092L;
+	private Long deleteNo;
+	private String userId;
+	private Date dateDelete;
+	private String entity;
+	private String record;
 
-    public LogDataDelete() {
-	// Not implemented
-    }
+	public LogDataDelete() {
+		// Not implemented
+	}
 
-    public LogDataDelete(String userId, Date dateDelete, String entity) {
-	this.userId = userId;
-	this.dateDelete = dateDelete;
-	this.entity = entity;
-    }
+	public LogDataDelete(String userId, Date dateDelete, String entity) {
+		this.userId = userId;
+		this.dateDelete = dateDelete;
+		this.entity = entity;
+	}
 
-    public LogDataDelete(String userId, Date dateDelete, String entity,
-	    String record) {
-	this.userId = userId;
-	this.dateDelete = dateDelete;
-	this.entity = entity;
-	this.record = record;
-    }
+	public LogDataDelete(String userId, Date dateDelete, String entity,
+			String record) {
+		this.userId = userId;
+		this.dateDelete = dateDelete;
+		this.entity = entity;
+		this.record = record;
+	}
 
-    public Long getDeleteNo() {
-	return this.deleteNo;
-    }
+	public Long getDeleteNo() {
+		return this.deleteNo;
+	}
 
-    public void setDeleteNo(Long deleteNo) {
-	this.deleteNo = deleteNo;
-    }
+	public void setDeleteNo(Long deleteNo) {
+		this.deleteNo = deleteNo;
+	}
 
-    public String getUserId() {
-	return this.userId;
-    }
+	public String getUserId() {
+		return this.userId;
+	}
 
-    public void setUserId(String userId) {
-	this.userId = userId;
-    }
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 
-    public Date getDateDelete() {
-	return this.dateDelete;
-    }
+	public Date getDateDelete() {
+		return this.dateDelete;
+	}
 
-    public void setDateDelete(Date dateDelete) {
-	this.dateDelete = dateDelete;
-    }
+	public void setDateDelete(Date dateDelete) {
+		this.dateDelete = dateDelete;
+	}
 
-    public String getEntity() {
-	return this.entity;
-    }
+	public String getEntity() {
+		return this.entity;
+	}
 
-    public void setEntity(String entity) {
-	this.entity = entity;
-    }
+	public void setEntity(String entity) {
+		this.entity = entity;
+	}
 
-    public String getRecord() {
-	return this.record;
-    }
+	public String getRecord() {
+		return this.record;
+	}
 
-    public void setRecord(String record) {
-	this.record = record;
-    }
+	public void setRecord(String record) {
+		this.record = record;
+	}
 
 }

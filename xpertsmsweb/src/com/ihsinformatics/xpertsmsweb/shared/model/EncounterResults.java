@@ -8,46 +8,46 @@ package com.ihsinformatics.xpertsmsweb.shared.model;
  */
 public class EncounterResults implements java.io.Serializable {
 
-    /**
+	/**
 	 * 
 	 */
-    private static final long serialVersionUID = -4579364661550124764L;
-    private EncounterResultsId id;
-    private String value;
+	private static final long serialVersionUID = -4579364661550124764L;
+	private EncounterResultsId id;
+	private String value;
 
-    public EncounterResults() {
-	// Not implemented
-    }
+	public EncounterResults() {
+		// Not implemented
+	}
 
-    public EncounterResults(EncounterResultsId id, String value) {
-	this.id = id;
-	this.value = value;
-    }
+	public EncounterResults(EncounterResultsId id, String value) {
+		this.id = id;
+		this.value = value;
+	}
 
-    public EncounterResultsId getId() {
-	return this.id;
-    }
+	public EncounterResultsId getId() {
+		return this.id;
+	}
 
-    public void setId(EncounterResultsId id) {
-	this.id = id;
-    }
+	public void setId(EncounterResultsId id) {
+		this.id = id;
+	}
 
-    public String getValue() {
-	return this.value;
-    }
+	public String getValue() {
+		return this.value;
+	}
 
-    public void setValue(String value) {
-	this.value = value;
-    }
+	public void setValue(String value) {
+		this.value = value;
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-	return this.id + ", " + this.value;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return this.id + ", " + this.value;
+	}
 
 }

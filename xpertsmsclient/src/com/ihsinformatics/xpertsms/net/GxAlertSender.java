@@ -25,9 +25,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import net.sf.json.JSONObject;
+
+import com.ihsinformatics.xpertsms.XpertProperties;
 import com.ihsinformatics.xpertsms.constant.MtbResults;
 import com.ihsinformatics.xpertsms.constant.RifResults;
-import com.ihsinformatics.xpertsms.model.XpertProperties;
 import com.ihsinformatics.xpertsms.model.XpertResultUploadMessage;
 import com.ihsinformatics.xpertsms.ui.ControlPanel;
 
@@ -45,11 +46,11 @@ public class GxAlertSender {
 		// String url = null;
 		int responseCode = 0;
 		String response = null;
-		String url = "http://" + ControlPanel.props.getProperty(XpertProperties.GXA_SERVER_ADDRESS);
+		String url = "http://" + XpertProperties.props.getProperty(XpertProperties.GXA_SERVER_ADDRESS);
 		JSONObject messageObj = message.toJson();
 		// Put API Key if missing
 		if (!messageObj.has("apiKey")) {
-			String apiKey = ControlPanel.props.getProperty(XpertProperties.GXA_API_KEY);
+			String apiKey = XpertProperties.props.getProperty(XpertProperties.GXA_API_KEY);
 			messageObj.put("apiKey", apiKey);
 		}
 		// Change result text to codes

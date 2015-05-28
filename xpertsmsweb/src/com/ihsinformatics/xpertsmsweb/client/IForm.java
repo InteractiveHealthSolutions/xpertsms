@@ -11,19 +11,19 @@ import com.google.gwt.event.dom.client.ClickEvent;
  * 
  */
 public interface IForm {
-    void clearUp();
+	void clearUp();
 
-    boolean validate();
+	boolean validate();
 
-    void saveData();
+	void saveData();
 
-    void updateData();
+	void updateData();
 
-    void deleteData();
+	void deleteData();
 
-    void fillData();
+	void fillData();
 
-    void setRights(String menuName);
+	void setRights(String menuName);
 
-    void onClick(ClickEvent event);
+	void onClick(ClickEvent event);
 }

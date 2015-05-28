@@ -9,5 +9,5 @@ package com.ihsinformatics.xpertsmsweb.server;
  * 
  */
 public enum LogType {
-    INSERT, UPDATE, DELETE, ERROR, LOGIN, LOGOUT
+	INSERT, UPDATE, DELETE, ERROR, LOGIN, LOGOUT
 }

@@ -8,56 +8,56 @@ package com.ihsinformatics.xpertsmsweb.shared.model;
  */
 public class EncounterId implements java.io.Serializable {
 
-    /**
+	/**
 	 * 
 	 */
-    private static final long serialVersionUID = 2025006463735394370L;
-    private int encounterId;
-    private String pid1;
-    private String pid2;
+	private static final long serialVersionUID = 2025006463735394370L;
+	private int encounterId;
+	private String pid1;
+	private String pid2;
 
-    public EncounterId() {
-	// Not implemented
-    }
+	public EncounterId() {
+		// Not implemented
+	}
 
-    public EncounterId(int encounterId, String pid1, String pid2) {
-	this.encounterId = encounterId;
-	this.pid1 = pid1;
-	this.pid2 = pid2;
-    }
+	public EncounterId(int encounterId, String pid1, String pid2) {
+		this.encounterId = encounterId;
+		this.pid1 = pid1;
+		this.pid2 = pid2;
+	}
 
-    public int getEncounterId() {
-	return this.encounterId;
-    }
+	public int getEncounterId() {
+		return this.encounterId;
+	}
 
-    public void setEncounterId(int encounterId) {
-	this.encounterId = encounterId;
-    }
+	public void setEncounterId(int encounterId) {
+		this.encounterId = encounterId;
+	}
 
-    public String getPid1() {
-	return this.pid1;
-    }
+	public String getPid1() {
+		return this.pid1;
+	}
 
-    public void setPid1(String pid1) {
-	this.pid1 = pid1;
-    }
+	public void setPid1(String pid1) {
+		this.pid1 = pid1;
+	}
 
-    public String getPid2() {
-	return this.pid2;
-    }
+	public String getPid2() {
+		return this.pid2;
+	}
 
-    public void setPid2(String pid2) {
-	this.pid2 = pid2;
-    }
+	public void setPid2(String pid2) {
+		this.pid2 = pid2;
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-	return this.encounterId + ", " + this.pid1 + ", " + this.pid2;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return this.encounterId + ", " + this.pid1 + ", " + this.pid2;
+	}
 
 }

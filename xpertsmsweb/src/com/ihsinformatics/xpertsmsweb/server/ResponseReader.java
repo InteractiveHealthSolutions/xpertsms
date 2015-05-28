@@ -13,38 +13,38 @@ import com.ihsinformatics.xpertsmsweb.shared.model.GeneXpertResults;
 
 public class ResponseReader extends TimerTask {
 
-    @Override
-    public void run() {
-	TarseelServices tsc = TarseelContext.getServices();
-	String sender = null;
-	String text = null;
-	try {
-	    List<InboundMessage> list = tsc.getSmsService().findInbound(null,
-		    null, InboundStatus.UNREAD, null, null, null,
-		    tsc.getDeviceService().findProjectById(1).getProjectId(),
-		    false);
+	@Override
+	public void run() {
+		TarseelServices tsc = TarseelContext.getServices();
+		String sender = null;
+		String text = null;
+		try {
+			List<InboundMessage> list = tsc.getSmsService().findInbound(null,
+					null, InboundStatus.UNREAD, null, null, null,
+					tsc.getDeviceService().findProjectById(1).getProjectId(),
+					false);
 
-	    System.out.println("Running Job: ResponseReaderJob " + new Date()
-		    + ". Fetched " + list.size() + " UNREAD sms");
+			System.out.println("Running Job: ResponseReaderJob " + new Date()
+					+ ". Fetched " + list.size() + " UNREAD sms");
 
-	    for (InboundMessage ib : list) {
-		sender = ib.getOriginator();
-		text = ib.getText();
+			for (InboundMessage ib : list) {
+				sender = ib.getOriginator();
+				text = ib.getText();
 
-		GeneXpertResults gxp = parseText(text);
-	    }
-	} catch (Exception e) {
-	    e.printStackTrace();
+				GeneXpertResults gxp = parseText(text);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
 
 	}
 
-    }
+	public GeneXpertResults parseText(String text) {
+		GeneXpertResults gxp = new GeneXpertResults();
+		// String[] tokens = text.split("\\^");
+		return gxp;
 
-    public GeneXpertResults parseText(String text) {
-	GeneXpertResults gxp = new GeneXpertResults();
-	// String[] tokens = text.split("\\^");
-	return gxp;
-
-    }
+	}
 
 }

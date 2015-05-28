@@ -49,8 +49,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+
+import com.ihsinformatics.xpertsms.XpertProperties;
 import com.ihsinformatics.xpertsms.constant.GxVariables;
-import com.ihsinformatics.xpertsms.model.XpertProperties;
 import com.ihsinformatics.xpertsms.net.OpenMrsApiAuthRest;
 import com.ihsinformatics.xpertsms.util.RegexUtil;
 import com.ihsinformatics.xpertsms.util.SwingUtil;
@@ -577,7 +578,7 @@ public class OpenMrsDialog extends JDialog implements ActionListener {
 			properties.put(XpertProperties.OPENMRS_DATE_FORMAT, dateFormatComboBox.getSelectedItem().toString());
 			properties.put(XpertProperties.OPENMRS_REST_ADDRESS, SwingUtil.get(addressTextField));
 			properties.put(XpertProperties.OPENMRS_USER, SwingUtil.get(usernameTextField));
-			properties.put(XpertProperties.OPENMRS_PASSWORD, SwingUtil.get(passwordField));
+			properties.put(XpertProperties.OPENMRS_PASSWORD, String.valueOf(passwordField.getPassword()));
 			properties.put(XpertProperties.OPENMRS_ENCOUNTER_TYPE, SwingUtil.get(encounterTypeTextField));
 			properties.put(XpertProperties.OPENMRS_SSL_ENCRYPTION, sslCheckBox.isSelected() ? "NO" : "YES");
 			StringBuilder concepts = new StringBuilder();

@@ -10,83 +10,83 @@ import java.util.Date;
  */
 public class LogDataChange implements java.io.Serializable {
 
-    /**
+	/**
 	 * 
 	 */
-    private static final long serialVersionUID = 8201278413897297008L;
-    private Long changeNo;
-    private String userId;
-    private Date dateChanged;
-    private String entity;
-    private String newValue;
+	private static final long serialVersionUID = 8201278413897297008L;
+	private Long changeNo;
+	private String userId;
+	private Date dateChanged;
+	private String entity;
+	private String newValue;
 
-    public LogDataChange() {
-	// Not implemented
-    }
+	public LogDataChange() {
+		// Not implemented
+	}
 
-    public LogDataChange(String userId, Date dateChanged, String entity) {
-	this.userId = userId;
-	this.dateChanged = dateChanged;
-	this.entity = entity;
-    }
+	public LogDataChange(String userId, Date dateChanged, String entity) {
+		this.userId = userId;
+		this.dateChanged = dateChanged;
+		this.entity = entity;
+	}
 
-    public LogDataChange(String userId, Date dateChanged, String entity,
-	    String newValue) {
-	this.userId = userId;
-	this.dateChanged = dateChanged;
-	this.entity = entity;
-	this.newValue = newValue;
-    }
+	public LogDataChange(String userId, Date dateChanged, String entity,
+			String newValue) {
+		this.userId = userId;
+		this.dateChanged = dateChanged;
+		this.entity = entity;
+		this.newValue = newValue;
+	}
 
-    public Long getChangeNo() {
-	return this.changeNo;
-    }
+	public Long getChangeNo() {
+		return this.changeNo;
+	}
 
-    public void setChangeNo(Long changeNo) {
-	this.changeNo = changeNo;
-    }
+	public void setChangeNo(Long changeNo) {
+		this.changeNo = changeNo;
+	}
 
-    public String getUserId() {
-	return this.userId;
-    }
+	public String getUserId() {
+		return this.userId;
+	}
 
-    public void setUserId(String userId) {
-	this.userId = userId;
-    }
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 
-    public Date getDateChanged() {
-	return this.dateChanged;
-    }
+	public Date getDateChanged() {
+		return this.dateChanged;
+	}
 
-    public void setDateChanged(Date dateChanged) {
-	this.dateChanged = dateChanged;
-    }
+	public void setDateChanged(Date dateChanged) {
+		this.dateChanged = dateChanged;
+	}
 
-    public String getEntity() {
-	return this.entity;
-    }
+	public String getEntity() {
+		return this.entity;
+	}
 
-    public void setEntity(String entity) {
-	this.entity = entity;
-    }
+	public void setEntity(String entity) {
+		this.entity = entity;
+	}
 
-    public String getNewValue() {
-	return this.newValue;
-    }
+	public String getNewValue() {
+		return this.newValue;
+	}
 
-    public void setNewValue(String newValue) {
-	this.newValue = newValue;
-    }
+	public void setNewValue(String newValue) {
+		this.newValue = newValue;
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-	return this.changeNo + ", " + this.userId + ", " + this.dateChanged
-		+ ", " + this.entity + ", " + this.newValue;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return this.changeNo + ", " + this.userId + ", " + this.dateChanged
+				+ ", " + this.entity + ", " + this.newValue;
+	}
 
 }

@@ -26,11 +26,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Properties;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -44,9 +42,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 
+import com.ihsinformatics.xpertsms.XpertProperties;
 import com.ihsinformatics.xpertsms.constant.FileConstants;
 import com.ihsinformatics.xpertsms.constant.SendMethods;
-import com.ihsinformatics.xpertsms.model.XpertProperties;
 import com.ihsinformatics.xpertsms.net.ResultServer;
 
 /**
@@ -150,89 +148,86 @@ public class ControlPanel extends JPanel implements ActionListener {
 	
 	protected JButton settingsButton;
 	
-	public static Properties props;
-	
 	private ResultServer server;
 	
 	private JTextPane monitorPanel;
 	
 	public ControlPanel() {
-		readProperties();
 		setLayout(new BorderLayout());
 		// Create a regular text field.
 		mtbCodeField = new JTextField(DEFAULT_WIDTH);
 		mtbCodeField.setActionCommand(mtbCodeString);
-		mtbCodeField.setText(props.getProperty(XpertProperties.MTB_CODE));
+		mtbCodeField.setText(XpertProperties.props.getProperty(XpertProperties.MTB_CODE));
 		mtbCodeField.addActionListener(this);
 		
 		rifCodeField = new JTextField(DEFAULT_WIDTH);
 		rifCodeField.setActionCommand(rifCodeString);
-		rifCodeField.setText(props.getProperty(XpertProperties.RIF_CODE));
+		rifCodeField.setText(XpertProperties.props.getProperty(XpertProperties.RIF_CODE));
 		rifCodeField.addActionListener(this);
 		
 		qcCodeField = new JTextField(DEFAULT_WIDTH);
 		qcCodeField.setActionCommand(qcCodeString);
-		qcCodeField.setText(props.getProperty(XpertProperties.QC_CODE));
+		qcCodeField.setText(XpertProperties.props.getProperty(XpertProperties.QC_CODE));
 		qcCodeField.addActionListener(this);
 		
 		serverURLField = new JTextField(DEFAULT_WIDTH);
 		serverURLField.setActionCommand(serverURLString);
-		serverURLField.setText(props.getProperty(XpertProperties.SERVER_URL));
+		serverURLField.setText(XpertProperties.props.getProperty(XpertProperties.SERVER_URL));
 		serverURLField.addActionListener(this);
 		
 		serverPortField = new JTextField(DEFAULT_WIDTH);
 		serverPortField.setActionCommand(serverPortString);
-		serverPortField.setText(props.getProperty(XpertProperties.SERVER_PORT));
+		serverPortField.setText(XpertProperties.props.getProperty(XpertProperties.SERVER_PORT));
 		serverPortField.addActionListener(this);
 		
 		webappStringField = new JTextField(DEFAULT_WIDTH);
 		webappStringField.setActionCommand(webappString);
-		webappStringField.setText(props.getProperty(XpertProperties.WEB_APP_STRING));
+		webappStringField.setText(XpertProperties.props.getProperty(XpertProperties.WEB_APP_STRING));
 		webappStringField.addActionListener(this);
 		
 		localPortField = new JTextField(DEFAULT_WIDTH);
 		localPortField.setActionCommand(localPortString);
-		localPortField.setText(props.getProperty(XpertProperties.LOCAL_PORT));
+		localPortField.setText(XpertProperties.props.getProperty(XpertProperties.LOCAL_PORT));
 		localPortField.addActionListener(this);
 		
 		extUsernameField = new JTextField(DEFAULT_WIDTH);
 		extUsernameField.setActionCommand(extUsernameString);
-		extUsernameField.setText(props.getProperty(XpertProperties.SERVER_USER));
+		extUsernameField.setText(XpertProperties.props.getProperty(XpertProperties.SERVER_USER));
 		extUsernameField.addActionListener(this);
 		
 		extPasswordField = new JPasswordField(DEFAULT_WIDTH);
 		extPasswordField.setActionCommand(extPasswordString);
-		extPasswordField.setText(props.getProperty(XpertProperties.SERVER_PASSWORD));
+		extPasswordField.setText(XpertProperties.props.getProperty(XpertProperties.SERVER_PASSWORD));
 		extPasswordField.addActionListener(this);
 		
 		serverSMSNumberField = new JTextField(DEFAULT_WIDTH);
 		serverSMSNumberField.setActionCommand(serverSMSNumberString);
-		serverSMSNumberField.setText(props.getProperty(XpertProperties.SMS_ADMIN_PHONE));
+		serverSMSNumberField.setText(XpertProperties.props.getProperty(XpertProperties.SMS_ADMIN_PHONE));
 		serverSMSNumberField.addActionListener(this);
 		
 		localDatabasePortField = new JTextField(DEFAULT_WIDTH);
 		localDatabasePortField.setActionCommand(localDatabasePortString);
-		localDatabasePortField.setText(props.getProperty("dbport"));
+		localDatabasePortField.setText(XpertProperties.props.getProperty(XpertProperties.DB_PORT));
 		localDatabasePortField.addActionListener(this);
 		
 		localDatabaseNameField = new JTextField(DEFAULT_WIDTH);
 		localDatabaseNameField.setActionCommand(localDatabaseNameString);
-		localDatabaseNameField.setText(props.getProperty("dbname"));
+		localDatabaseNameField.setText(XpertProperties.props.getProperty(XpertProperties.DB_NAME));
 		localDatabaseNameField.addActionListener(this);
 		
 		localDatabaseUserField = new JTextField(DEFAULT_WIDTH);
 		localDatabaseUserField.setActionCommand(localDatabaseUserString);
-		localDatabaseUserField.setText(props.getProperty("dbuser"));
+		localDatabaseUserField.setText(XpertProperties.props.getProperty(XpertProperties.DB_USERNAME));
 		localDatabaseUserField.addActionListener(this);
 		
 		localDatabasePasswordField = new JPasswordField(DEFAULT_WIDTH);
 		localDatabasePasswordField.setActionCommand(localDatabasePasswordString);
-		localDatabasePasswordField.setText(props.getProperty("dbpassword"));
+		localDatabasePasswordField.setText(XpertProperties.props.getProperty(XpertProperties.DB_PASSWORD));
 		localDatabasePasswordField.addActionListener(this);
 		
 		gxAlertsApiKeyField = new JTextField(DEFAULT_WIDTH);
 		gxAlertsApiKeyField.setActionCommand(gxAlertsApiKeyString);
-		gxAlertsApiKeyField.setText(props.getProperty(XpertProperties.GXA_API_KEY));
+		gxAlertsApiKeyField.setText(XpertProperties.props.getProperty(XpertProperties.GXA_API_KEY));
 		gxAlertsApiKeyField.addActionListener(this);
 		
 		String[] methods = { SendMethods.HTTP, SendMethods.HTTPS, SendMethods.SMS, SendMethods.GX_ALERTS,
@@ -240,7 +235,7 @@ public class ControlPanel extends JPanel implements ActionListener {
 		sendMethodComboBox = new JComboBox(methods);
 		sendMethodComboBox.addActionListener(this);
 		
-		String sendMethod = props.getProperty(XpertProperties.DEFAULT_SEND_METHOD);
+		String sendMethod = XpertProperties.props.getProperty(XpertProperties.DEFAULT_SEND_METHOD);
 		if (sendMethod.equalsIgnoreCase(SendMethods.CSV_DUMP))
 			sendMethodComboBox.setSelectedIndex(4);
 		else if (sendMethod.equalsIgnoreCase(SendMethods.GX_ALERTS))
@@ -253,7 +248,7 @@ public class ControlPanel extends JPanel implements ActionListener {
 			sendMethodComboBox.setSelectedIndex(0);
 		exportProbesCheckBox = new JCheckBox(exportProbeString);
 		exportProbesCheckBox.setMnemonic(KeyEvent.VK_C);
-		exportProbesCheckBox.setSelected(props.getProperty(XpertProperties.EXPORT_PROBES).equals("YES"));
+		exportProbesCheckBox.setSelected(XpertProperties.props.getProperty(XpertProperties.EXPORT_PROBES).equals("YES"));
 		
 		// Create some labels for the fields.
 		JLabel mtbCodeFieldLabel = new JLabel(mtbCodeString + ": ");
@@ -517,42 +512,6 @@ public class ControlPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Read properties from properties file
-	 */
-	private void readProperties() {
-		props = new Properties();
-		if (new File(FileConstants.FILE_PATH).exists()) {
-			try {
-				props.load(new FileInputStream(FileConstants.FILE_PATH));
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else {
-			props.setProperty(XpertProperties.MTB_CODE, "MTB_CODE");
-			props.setProperty(XpertProperties.RIF_CODE, "RIF_CODE");
-			props.setProperty(XpertProperties.QC_CODE, "0");
-			props.setProperty(XpertProperties.SERVER_URL, "127.0.0.1");
-			props.setProperty(XpertProperties.SERVER_PORT, "8080");
-			props.setProperty(XpertProperties.WEB_APP_STRING, webappString);
-			props.setProperty(XpertProperties.LOCAL_PORT, "0");
-			props.setProperty(XpertProperties.SERVER_USER, "XpertUser");
-			props.setProperty(XpertProperties.CSV_EXPORT, "YES");
-			props.setProperty(XpertProperties.GXA_EXPORT, "YES");
-			props.setProperty(XpertProperties.OPENMRS_EXPORT, "YES");
-			props.setProperty(XpertProperties.SMS_EXPORT, "YES");
-			props.setProperty(XpertProperties.WEB_EXPORT, "YES");
-			props.setProperty(XpertProperties.DEFAULT_SEND_METHOD, SendMethods.HTTP);
-			props.setProperty("dbport", "3306");
-			props.setProperty("dbname", "xpertsms");
-			props.setProperty("dbuser", "root");
-			props.setProperty(XpertProperties.GXA_API_KEY,
-			    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-			props.setProperty(XpertProperties.EXPORT_PROBES, "NO");
-		}
-	}
-	
-	/**
 	 * Write new/changed properties to properties file
 	 */
 	private void writeProperties() {
@@ -564,74 +523,46 @@ public class ControlPanel extends JPanel implements ActionListener {
 		String webappString = webappStringField.getText();
 		String localPort = localPortField.getText();
 		String serverUser = extUsernameField.getText();
-		String serverPassword = extPasswordField.getPassword().toString();
+		String serverPassword = String.valueOf(extPasswordField.getPassword());
 		boolean probeExport = exportProbesCheckBox.isSelected();
 		String sendMethod = (String) sendMethodComboBox.getSelectedItem();
 		String serverSMSNumber = serverSMSNumberField.getText();
 		String localDBPort = localDatabasePortField.getText();
 		String localDBName = localDatabaseNameField.getText();
 		String localDBUser = localDatabaseUserField.getText();
-		String localDBPassword = localDatabasePasswordField.getPassword().toString();
+		String localDBPassword = String.valueOf(localDatabasePasswordField.getPassword());
 		String gxAlertsApiKey = gxAlertsApiKeyField.getText();
 		
 		if (validateData(mtbCode, rifCode, qcCode, serverURL, serverPort, webappString, localPort, serverSMSNumber,
 		    sendMethod, localDBPort, localDBName, localDBUser, localDBPassword, gxAlertsApiKey)) {
-			props.setProperty(XpertProperties.MTB_CODE, mtbCode);
-			props.setProperty(XpertProperties.RIF_CODE, rifCode);
-			props.setProperty(XpertProperties.QC_CODE, qcCode);
-			props.setProperty(XpertProperties.SERVER_URL, serverURL);
-			props.setProperty(XpertProperties.SERVER_PORT, serverPort);
-			props.setProperty(XpertProperties.WEB_APP_STRING, webappString);
-			props.setProperty(XpertProperties.LOCAL_PORT, localPort);
-			props.setProperty(XpertProperties.SERVER_USER, serverUser);
-			props.setProperty(XpertProperties.SERVER_PASSWORD, serverPassword);
-			props.setProperty(XpertProperties.DEFAULT_SEND_METHOD, sendMethod);
-			props.setProperty(XpertProperties.CSV_EXPORT, sendMethod.equals(SendMethods.CSV_DUMP) ? "YES" : "NO");
-			props.setProperty(XpertProperties.GXA_EXPORT, sendMethod.equals(SendMethods.GX_ALERTS) ? "YES" : "NO");
-			props.setProperty(XpertProperties.OPENMRS_EXPORT, sendMethod.equals(SendMethods.OPENMRS) ? "YES" : "NO");
-			props.setProperty(XpertProperties.SMS_EXPORT, sendMethod.equals(SendMethods.SMS) ? "YES" : "NO");
-			props.setProperty(XpertProperties.WEB_EXPORT,
+			Map<String, String> properties = new HashMap<String, String>();
+			properties.put(XpertProperties.MTB_CODE, mtbCode);
+			properties.put(XpertProperties.RIF_CODE, rifCode);
+			properties.put(XpertProperties.QC_CODE, qcCode);
+			properties.put(XpertProperties.SERVER_URL, serverURL);
+			properties.put(XpertProperties.SERVER_PORT, serverPort);
+			properties.put(XpertProperties.WEB_APP_STRING, webappString);
+			properties.put(XpertProperties.LOCAL_PORT, localPort);
+			properties.put(XpertProperties.SERVER_USER, serverUser);
+			properties.put(XpertProperties.SERVER_PASSWORD, serverPassword);
+			properties.put(XpertProperties.DEFAULT_SEND_METHOD, sendMethod);
+			properties.put(XpertProperties.CSV_EXPORT, sendMethod.equals(SendMethods.CSV_DUMP) ? "YES" : "NO");
+			properties.put(XpertProperties.GXA_EXPORT, sendMethod.equals(SendMethods.GX_ALERTS) ? "YES" : "NO");
+			properties.put(XpertProperties.OPENMRS_EXPORT, sendMethod.equals(SendMethods.OPENMRS) ? "YES" : "NO");
+			properties.put(XpertProperties.SMS_EXPORT, sendMethod.equals(SendMethods.SMS) ? "YES" : "NO");
+			properties.put(XpertProperties.WEB_EXPORT,
 			    sendMethod.equals(SendMethods.HTTP) | sendMethod.equals(SendMethods.HTTPS) ? "YES" : "NO");
-			
-			props.setProperty("dbport", localDBPort);
-			props.setProperty("dbname", localDBName);
-			props.setProperty("dbuser", localDBUser);
-			props.setProperty("dbpassword", localDBPassword);
-			props.setProperty(XpertProperties.GXA_API_KEY, gxAlertsApiKey);
+			properties.put(XpertProperties.DB_PORT, localDBPort);
+			properties.put(XpertProperties.DB_NAME, localDBName);
+			properties.put(XpertProperties.DB_USERNAME, localDBUser);
+			properties.put(XpertProperties.DB_PASSWORD, localDBPassword);
+			properties.put(XpertProperties.GXA_API_KEY, gxAlertsApiKey);
 			if (probeExport)
-				props.setProperty(XpertProperties.EXPORT_PROBES, "YES");
+				properties.put(XpertProperties.EXPORT_PROBES, "YES");
 			else
-				props.setProperty(XpertProperties.EXPORT_PROBES, "NO");
-			props.setProperty(XpertProperties.SMS_ADMIN_PHONE, serverSMSNumber);
-			try {
-				if (!(new File(FileConstants.XPERT_SMS_DIR).exists())) {
-					boolean checkDir = new File(FileConstants.XPERT_SMS_DIR).mkdir();
-					if (!checkDir) {
-						JOptionPane.showMessageDialog(null,
-						    "Could not create properties file. Please check the permissions of your home holder!",
-						    "Error occurred!", JOptionPane.ERROR_MESSAGE);
-						startButton.setEnabled(false);
-						return;
-					}
-				}
-				props.store(new FileOutputStream(FileConstants.FILE_PATH), null);
-				props.load(new FileInputStream(FileConstants.FILE_PATH));
-				JOptionPane.showMessageDialog(null, "Settings updated!", "Success!", JOptionPane.INFORMATION_MESSAGE);
-				startButton.setEnabled(true);
-			}
-			catch (FileNotFoundException fnfe) {
-				fnfe.printStackTrace();
-				JOptionPane.showMessageDialog(null,
-				    "Could not create properties file. Please check the permissions of your home holder!",
-				    "Error occurred!", JOptionPane.ERROR_MESSAGE);
-				startButton.setEnabled(false);
-			}
-			catch (IOException ioe) {
-				ioe.printStackTrace();
-				JOptionPane.showMessageDialog(null, "Could not create properties file!", "Error occurred!",
-				    JOptionPane.ERROR_MESSAGE);
-				startButton.setEnabled(false);
-			}
+				properties.put(XpertProperties.EXPORT_PROBES, "NO");
+			properties.put(XpertProperties.SMS_ADMIN_PHONE, serverSMSNumber);
+			XpertProperties.writeProperties(properties);
 		}
 	}
 	

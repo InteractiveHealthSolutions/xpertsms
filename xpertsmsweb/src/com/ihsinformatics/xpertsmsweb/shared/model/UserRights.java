@@ -8,84 +8,84 @@ package com.ihsinformatics.xpertsmsweb.shared.model;
  */
 public class UserRights implements java.io.Serializable {
 
-    /**
+	/**
 	 * 
 	 */
-    private static final long serialVersionUID = 6761475086504029148L;
-    private UserRightsId id;
-    private boolean searchAccess;
-    private boolean insertAccess;
-    private boolean updateAccess;
-    private boolean deleteAccess;
-    private boolean printAccess;
+	private static final long serialVersionUID = 6761475086504029148L;
+	private UserRightsId id;
+	private boolean searchAccess;
+	private boolean insertAccess;
+	private boolean updateAccess;
+	private boolean deleteAccess;
+	private boolean printAccess;
 
-    public UserRights() {
-	// Not implemented
-    }
+	public UserRights() {
+		// Not implemented
+	}
 
-    public UserRights(UserRightsId id, boolean searchAccess,
-	    boolean insertAccess, boolean updateAccess, boolean deleteAccess,
-	    boolean printAccess) {
-	this.id = id;
-	this.searchAccess = searchAccess;
-	this.insertAccess = insertAccess;
-	this.updateAccess = updateAccess;
-	this.deleteAccess = deleteAccess;
-	this.printAccess = printAccess;
-    }
+	public UserRights(UserRightsId id, boolean searchAccess,
+			boolean insertAccess, boolean updateAccess, boolean deleteAccess,
+			boolean printAccess) {
+		this.id = id;
+		this.searchAccess = searchAccess;
+		this.insertAccess = insertAccess;
+		this.updateAccess = updateAccess;
+		this.deleteAccess = deleteAccess;
+		this.printAccess = printAccess;
+	}
 
-    public UserRightsId getId() {
-	return this.id;
-    }
+	public UserRightsId getId() {
+		return this.id;
+	}
 
-    public void setId(UserRightsId id) {
-	this.id = id;
-    }
+	public void setId(UserRightsId id) {
+		this.id = id;
+	}
 
-    public boolean isSearchAccess() {
-	return this.searchAccess;
-    }
+	public boolean isSearchAccess() {
+		return this.searchAccess;
+	}
 
-    public void setSearchAccess(boolean searchAccess) {
-	this.searchAccess = searchAccess;
-    }
+	public void setSearchAccess(boolean searchAccess) {
+		this.searchAccess = searchAccess;
+	}
 
-    public boolean isInsertAccess() {
-	return this.insertAccess;
-    }
+	public boolean isInsertAccess() {
+		return this.insertAccess;
+	}
 
-    public void setInsertAccess(boolean insertAccess) {
-	this.insertAccess = insertAccess;
-    }
+	public void setInsertAccess(boolean insertAccess) {
+		this.insertAccess = insertAccess;
+	}
 
-    public boolean isUpdateAccess() {
-	return this.updateAccess;
-    }
+	public boolean isUpdateAccess() {
+		return this.updateAccess;
+	}
 
-    public void setUpdateAccess(boolean updateAccess) {
-	this.updateAccess = updateAccess;
-    }
+	public void setUpdateAccess(boolean updateAccess) {
+		this.updateAccess = updateAccess;
+	}
 
-    public boolean isDeleteAccess() {
-	return this.deleteAccess;
-    }
+	public boolean isDeleteAccess() {
+		return this.deleteAccess;
+	}
 
-    public void setDeleteAccess(boolean deleteAccess) {
-	this.deleteAccess = deleteAccess;
-    }
+	public void setDeleteAccess(boolean deleteAccess) {
+		this.deleteAccess = deleteAccess;
+	}
 
-    public boolean isPrintAccess() {
-	return this.printAccess;
-    }
+	public boolean isPrintAccess() {
+		return this.printAccess;
+	}
 
-    public void setPrintAccess(boolean printAccess) {
-	this.printAccess = printAccess;
-    }
+	public void setPrintAccess(boolean printAccess) {
+		this.printAccess = printAccess;
+	}
 
-    @Override
-    public String toString() {
-	return id + ", " + searchAccess + ", " + insertAccess + ", "
-		+ updateAccess + ", " + deleteAccess + ", " + printAccess;
-    }
+	@Override
+	public String toString() {
+		return id + ", " + searchAccess + ", " + insertAccess + ", "
+				+ updateAccess + ", " + deleteAccess + ", " + printAccess;
+	}
 
 }

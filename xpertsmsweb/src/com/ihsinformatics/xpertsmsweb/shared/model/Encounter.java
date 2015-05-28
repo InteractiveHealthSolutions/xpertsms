@@ -10,117 +10,117 @@ import java.util.Date;
  */
 public class Encounter implements java.io.Serializable {
 
-    /**
+	/**
 	 * 
 	 */
-    private static final long serialVersionUID = 4709944064176167388L;
-    private EncounterId id;
-    private String encounterType;
-    private String locationId;
-    private Date dateEncounterStart;
-    private Date dateEncounterEnd;
-    private Date dateEncounterEntered;
-    private String details;
+	private static final long serialVersionUID = 4709944064176167388L;
+	private EncounterId id;
+	private String encounterType;
+	private String locationId;
+	private Date dateEncounterStart;
+	private Date dateEncounterEnd;
+	private Date dateEncounterEntered;
+	private String details;
 
-    public Encounter() {
-	// Not implemented
-    }
+	public Encounter() {
+		// Not implemented
+	}
 
-    public Encounter(EncounterId id, String encounterType,
-	    Date dateEncounterStart, Date dateEncounterEnd,
-	    Date dateEncounterEntered) {
-	this.id = id;
-	this.encounterType = encounterType;
-	this.dateEncounterStart = dateEncounterStart;
-	this.dateEncounterEnd = dateEncounterEnd;
-	this.dateEncounterEntered = dateEncounterEntered;
-    }
+	public Encounter(EncounterId id, String encounterType,
+			Date dateEncounterStart, Date dateEncounterEnd,
+			Date dateEncounterEntered) {
+		this.id = id;
+		this.encounterType = encounterType;
+		this.dateEncounterStart = dateEncounterStart;
+		this.dateEncounterEnd = dateEncounterEnd;
+		this.dateEncounterEntered = dateEncounterEntered;
+	}
 
-    public Encounter(EncounterId id, String encounterType, String locationId,
-	    Date dateEncounterStart, Date dateEncounterEnd,
-	    Date dateEncounterEntered, String details) {
-	this.id = id;
-	this.encounterType = encounterType;
-	this.locationId = locationId;
-	this.dateEncounterStart = dateEncounterStart;
-	this.dateEncounterEnd = dateEncounterEnd;
-	this.dateEncounterEntered = dateEncounterEntered;
-	this.details = details;
-    }
+	public Encounter(EncounterId id, String encounterType, String locationId,
+			Date dateEncounterStart, Date dateEncounterEnd,
+			Date dateEncounterEntered, String details) {
+		this.id = id;
+		this.encounterType = encounterType;
+		this.locationId = locationId;
+		this.dateEncounterStart = dateEncounterStart;
+		this.dateEncounterEnd = dateEncounterEnd;
+		this.dateEncounterEntered = dateEncounterEntered;
+		this.details = details;
+	}
 
-    public EncounterId getId() {
-	return this.id;
-    }
+	public EncounterId getId() {
+		return this.id;
+	}
 
-    public void setId(EncounterId id) {
-	this.id = id;
-    }
+	public void setId(EncounterId id) {
+		this.id = id;
+	}
 
-    public String getEncounterType() {
-	return this.encounterType;
-    }
+	public String getEncounterType() {
+		return this.encounterType;
+	}
 
-    public void setEncounterType(String encounterType) {
-	this.encounterType = encounterType;
-    }
+	public void setEncounterType(String encounterType) {
+		this.encounterType = encounterType;
+	}
 
-    public String getLocationId() {
-	return this.locationId;
-    }
+	public String getLocationId() {
+		return this.locationId;
+	}
 
-    public void setLocationId(String locationId) {
-	this.locationId = locationId;
-    }
+	public void setLocationId(String locationId) {
+		this.locationId = locationId;
+	}
 
-    public Date getDateEncounterStart() {
-	return this.dateEncounterStart;
-    }
+	public Date getDateEncounterStart() {
+		return this.dateEncounterStart;
+	}
 
-    public void setDateEncounterStart(Date dateEncounterStart) {
-	this.dateEncounterStart = dateEncounterStart;
-    }
+	public void setDateEncounterStart(Date dateEncounterStart) {
+		this.dateEncounterStart = dateEncounterStart;
+	}
 
-    public Date getDateEncounterEnd() {
-	return this.dateEncounterEnd;
-    }
+	public Date getDateEncounterEnd() {
+		return this.dateEncounterEnd;
+	}
 
-    public void setDateEncounterEnd(Date dateEncounterEnd) {
-	this.dateEncounterEnd = dateEncounterEnd;
-    }
+	public void setDateEncounterEnd(Date dateEncounterEnd) {
+		this.dateEncounterEnd = dateEncounterEnd;
+	}
 
-    /**
-     * @return the dateEncounterEntered
-     */
-    public Date getDateEncounterEntered() {
-	return this.dateEncounterEntered;
-    }
+	/**
+	 * @return the dateEncounterEntered
+	 */
+	public Date getDateEncounterEntered() {
+		return this.dateEncounterEntered;
+	}
 
-    /**
-     * @param dateEncounterEntered
-     *            the dateEncounterEntered to set
-     */
-    public void setDateEncounterEntered(Date dateEncounterEntered) {
-	this.dateEncounterEntered = dateEncounterEntered;
-    }
+	/**
+	 * @param dateEncounterEntered
+	 *            the dateEncounterEntered to set
+	 */
+	public void setDateEncounterEntered(Date dateEncounterEntered) {
+		this.dateEncounterEntered = dateEncounterEntered;
+	}
 
-    public String getDetails() {
-	return this.details;
-    }
+	public String getDetails() {
+		return this.details;
+	}
 
-    public void setDetails(String details) {
-	this.details = details;
-    }
+	public void setDetails(String details) {
+		this.details = details;
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-	return this.id + ", " + this.encounterType + ", " + this.locationId
-		+ ", " + this.dateEncounterStart + ", " + this.dateEncounterEnd
-		+ ", " + this.dateEncounterEntered + ", " + this.details;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return this.id + ", " + this.encounterType + ", " + this.locationId
+				+ ", " + this.dateEncounterStart + ", " + this.dateEncounterEnd
+				+ ", " + this.dateEncounterEntered + ", " + this.details;
+	}
 
 }

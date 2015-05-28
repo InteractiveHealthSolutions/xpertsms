@@ -49,13 +49,11 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.ihsinformatics.xpertsms.constant.ASTMMessageConstants;
+import com.ihsinformatics.xpertsms.XpertProperties;
 import com.ihsinformatics.xpertsms.constant.FileConstants;
 import com.ihsinformatics.xpertsms.constant.SendMethods;
 import com.ihsinformatics.xpertsms.constant.XML;
-import com.ihsinformatics.xpertsms.model.XpertProperties;
 import com.ihsinformatics.xpertsms.model.XpertResultUploadMessage;
-import com.ihsinformatics.xpertsms.ui.ControlPanel;
 
 /**
  * @author ali.habib@irdresearch.org
@@ -88,9 +86,9 @@ public class HttpSender extends Thread {
 		errorMsg = null;
 		msg = "";
 		// Get required properties
-		username = ControlPanel.props.getProperty(XpertProperties.SERVER_USER);
-		password = ControlPanel.props.getProperty(XpertProperties.SERVER_PASSWORD);
-		exportProbes = ControlPanel.props.getProperty(XpertProperties.EXPORT_PROBES).equals("YES");
+		username = XpertProperties.props.getProperty(XpertProperties.SERVER_USER);
+		password = XpertProperties.props.getProperty(XpertProperties.SERVER_PASSWORD);
+		exportProbes = XpertProperties.props.getProperty(XpertProperties.EXPORT_PROBES).equals("YES");
 	}
 	
 	public void run() {
@@ -122,7 +120,7 @@ public class HttpSender extends Thread {
 		}
 		while (!server.getStopped()) {
 			message = server.getOutgoingMessagesHead();
-			if (ControlPanel.props.getProperty(XpertProperties.SMS_EXPORT).equals("YES")) {
+			if (XpertProperties.props.getProperty(XpertProperties.SMS_EXPORT).equals("YES")) {
 				/*
 				 * XpertASTMResultUploadMessage xpertMess = new
 				 * XpertASTMResultUploadMessage();
@@ -169,22 +167,22 @@ public class HttpSender extends Thread {
 					println(e.getMessage(), true);
 				}
 			}
-			if (ControlPanel.props.getProperty(XpertProperties.WEB_EXPORT).equals("YES")) {
-				if (ControlPanel.props.getProperty(XpertProperties.DEFAULT_SEND_METHOD).equals(SendMethods.HTTP))
+			if (XpertProperties.props.getProperty(XpertProperties.WEB_EXPORT).equals("YES")) {
+				if (XpertProperties.props.getProperty(XpertProperties.DEFAULT_SEND_METHOD).equals(SendMethods.HTTP))
 					response = doSecurePost(message);
 				else
 					response = doPost(message);
 				parseResponse(response, message);
 			}
-			if (ControlPanel.props.getProperty(XpertProperties.OPENMRS_EXPORT).equals("YES")) {
-				String username = ControlPanel.props.getProperty(XpertProperties.OPENMRS_USER);
-				String password = ControlPanel.props.getProperty(XpertProperties.OPENMRS_PASSWORD);
-				String url = ControlPanel.props.getProperty(XpertProperties.OPENMRS_REST_ADDRESS);
+			if (XpertProperties.props.getProperty(XpertProperties.OPENMRS_EXPORT).equals("YES")) {
+				String username = XpertProperties.props.getProperty(XpertProperties.OPENMRS_USER);
+				String password = XpertProperties.props.getProperty(XpertProperties.OPENMRS_PASSWORD);
+				String url = XpertProperties.props.getProperty(XpertProperties.OPENMRS_REST_ADDRESS);
 				OpenMrsApiAuthRest openMrsApiAuthRest = new OpenMrsApiAuthRest(username, password, url);
 				response = openMrsApiAuthRest.postResults(message);
 				parseResponse(response, message);
 			}
-			if (ControlPanel.props.getProperty(XpertProperties.GXA_EXPORT).equals("YES")) {
+			if (XpertProperties.props.getProperty(XpertProperties.GXA_EXPORT).equals("YES")) {
 				GxAlertSender gxAlertSender = new GxAlertSender();
 				response = gxAlertSender.postToGxAlert(message);
 				parseResponse(response, message);
@@ -295,11 +293,11 @@ public class HttpSender extends Thread {
 	public String getURL(boolean secure) {
 		String url = "";
 		// url += "http://" + ASTMNetworkConstants.smsServerAddress + ":" + ASTMNetworkConstants.smsServerPort + ASTMNetworkConstants.webappString;
-		String webappString = ControlPanel.props.getProperty(XpertProperties.WEB_APP_STRING);
+		String webappString = XpertProperties.props.getProperty(XpertProperties.WEB_APP_STRING);
 		if (webappString.charAt(0) != '/')
 			webappString = "/" + webappString;
-		url += "http" + (secure ? "s" : "") + "://" + ControlPanel.props.getProperty(XpertProperties.SERVER_URL) + ":"
-		        + ControlPanel.props.getProperty(XpertProperties.SERVER_PORT) + webappString;
+		url += "http" + (secure ? "s" : "") + "://" + XpertProperties.props.getProperty(XpertProperties.SERVER_URL) + ":"
+		        + XpertProperties.props.getProperty(XpertProperties.SERVER_PORT) + webappString;
 		return url;
 	}
 	
@@ -429,15 +427,16 @@ public class HttpSender extends Thread {
 	}
 	
 	private void queueSMS(XpertResultUploadMessage xpertMessage) throws ClassNotFoundException, SQLException {
-		String dbPortString = ControlPanel.props.getProperty("localdbport");
-		String dbNameString = ControlPanel.props.getProperty("localdbname");
-		String dbUserString = ControlPanel.props.getProperty("localdbuser");
-		String dbPasswordString = ControlPanel.props.getProperty("localdbpass");
-		String dbUrl = "jdbc:mysql://localhost:" + dbPortString + "/" + dbNameString;
+		String dbIpAddress = XpertProperties.props.getProperty(XpertProperties.DB_IP_ADDRESS);
+		String dbPort = XpertProperties.props.getProperty(XpertProperties.DB_PORT);
+		String dbName = XpertProperties.props.getProperty(XpertProperties.DB_NAME);
+		String dbUsername = XpertProperties.props.getProperty(XpertProperties.DB_USERNAME);
+		String dbPassword = XpertProperties.props.getProperty(XpertProperties.DB_PASSWORD);
+		String dbUrl = "jdbc:mysql://" + dbIpAddress + ":" + dbPort + "/" + dbName;
 		String dbClass = "com.mysql.jdbc.Driver";
 		Connection conn = null;
 		Class.forName(dbClass);
-		conn = DriverManager.getConnection(dbUrl, dbUserString, dbPasswordString);
+		conn = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
 		String query = xpertMessage.toSqlQuery();
 		Statement stmt = null;
 		stmt = conn.createStatement();

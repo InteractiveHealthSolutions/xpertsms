@@ -8,5 +8,5 @@ package com.ihsinformatics.xpertsmsweb.shared;
  *
  */
 public enum DataType {
-    BYTE, SHORT, INT, LONG, FLOAT, DOUBLE, CHAR, STRING, BOOLEAN, DATE
+	BYTE, SHORT, INT, LONG, FLOAT, DOUBLE, CHAR, STRING, BOOLEAN, DATE
 }
