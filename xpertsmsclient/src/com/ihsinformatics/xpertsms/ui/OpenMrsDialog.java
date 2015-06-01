@@ -22,6 +22,8 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -38,8 +40,10 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+
 import org.apache.http.Header;
 import org.apache.http.auth.AuthenticationException;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -56,6 +60,10 @@ import com.ihsinformatics.xpertsms.net.OpenMrsApiAuthRest;
 import com.ihsinformatics.xpertsms.util.RegexUtil;
 import com.ihsinformatics.xpertsms.util.SwingUtil;
 
+/**
+ * GUI form to provide settings for OpenMRS using REST-WS to send results to
+ * @author owais.hussain@ihsinformatics.com
+ */
 public class OpenMrsDialog extends JDialog implements ActionListener {
 	
 	private static final long serialVersionUID = -6629569177787110764L;
@@ -88,7 +96,7 @@ public class OpenMrsDialog extends JDialog implements ActionListener {
 	
 	private JTextArea conceptsTextArea;
 	
-	private JComboBox dateFormatComboBox;
+	private JComboBox<?> dateFormatComboBox;
 	
 	private JCheckBox sslCheckBox;
 	
@@ -119,12 +127,12 @@ public class OpenMrsDialog extends JDialog implements ActionListener {
 		
 		topDialogPanel = new javax.swing.JPanel();
 		getContentPane().add(topDialogPanel, BorderLayout.CENTER);
-		dateTimeFormatLabel = new javax.swing.JLabel();
-		dateFormatComboBox = new javax.swing.JComboBox();
+		dateTimeFormatLabel = new JLabel();
+		dateFormatComboBox = new JComboBox<Object>();
 		dateFormatComboBox.setName("dateTimeFormat");
 		
 		dateTimeFormatLabel.setText("Date/Time format:");
-		dateFormatComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "yyyy-MM-dd hh:mm:ss",
+		dateFormatComboBox.setModel(new DefaultComboBoxModel(new String[] { "yyyy-MM-dd hh:mm:ss",
 		        "yyyy-MM-dd'T'HH:mm:ss'Z'", "yyyy-MM-dd", "MM/dd/yyyy hh:mm:ssa", "MM/dd/yyyy", "M/d/yy",
 		        "dd/MM/yyyy hh:mm:ssa", "dd/MM/yyyy", "d/M/yy", "EEE, d MMM yyyy HH:mm:ss", "yyyyMMddhhmmss" }));
 		dateFormatComboBox

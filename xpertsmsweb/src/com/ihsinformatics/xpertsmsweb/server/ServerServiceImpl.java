@@ -43,7 +43,7 @@ import com.ihsinformatics.xpertsmsweb.shared.model.Users;
 /**
  * The server side implementation of the RPC service.
  * 
- * @author owais.hussain@irdresearch.org
+ * @author owais.hussain@ihsinformatics.com
  */
 @SuppressWarnings("serial")
 public class ServerServiceImpl extends RemoteServiceServlet implements

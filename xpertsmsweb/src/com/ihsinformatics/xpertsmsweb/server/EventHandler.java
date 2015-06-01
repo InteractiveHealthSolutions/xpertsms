@@ -96,10 +96,14 @@ public class EventHandler extends HttpServlet {
 			Runnable backupRun = new Runnable() {
 				@Override
 				public void run() {
-					postToBackup(getRequest());
+					String response = postToBackup(getRequest());
+					System.out.println("Response from backup server: " + response);
 				}
 			};
 			backupRun.run();
+		}
+		else {
+			System.out.println("Warning! No backup post URL defiend. Skipping backup...s");
 		}
 		return xmlResponse;
 	}
@@ -454,9 +458,6 @@ public class EventHandler extends HttpServlet {
 		URL url;
 		ssl = new ServerServiceImpl();
 		try {
-			if (!RegexUtil.isValidURL(backupPostUrl)) {
-				return XmlUtil.createErrorXml("Invalid backup post URL...");
-			}
 			url = new URL(backupPostUrl);
 			hc = (HttpURLConnection) url.openConnection();
 			hc.setRequestProperty("Content-Type",

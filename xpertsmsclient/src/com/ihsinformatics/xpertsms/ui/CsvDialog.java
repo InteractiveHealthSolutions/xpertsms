@@ -46,6 +46,10 @@ import com.ihsinformatics.xpertsms.constant.FileConstants;
 import com.ihsinformatics.xpertsms.util.DocumentUtil;
 import com.ihsinformatics.xpertsms.util.SwingUtil;
 
+/**
+ * GUI form to provide settings for CSV to send results to
+ * @author owais.hussain@ihsinformatics.com
+ */
 public class CsvDialog extends JDialog implements ActionListener {
 	
 	private static final long serialVersionUID = -6629569177787110764L;

@@ -95,7 +95,7 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 package com.ihsinformatics.xpertsms.util;
 
 /**
- * @author owais.hussain@irdresearch.org
+ * @author owais.hussain@ihsinformatics.com
  */
 public class RegexUtil {
 	

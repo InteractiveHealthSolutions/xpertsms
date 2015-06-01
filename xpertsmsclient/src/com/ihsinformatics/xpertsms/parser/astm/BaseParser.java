@@ -13,6 +13,11 @@ package com.ihsinformatics.xpertsms.parser.astm;
 
 import com.ihsinformatics.xpertsms.model.astm.XpertASTMResultUploadMessage;
 
+/**
+ * Parent class to be inherited by all classes parsing various blocks of GeneXpert results
+ * 
+ * @author ali.habib@irdresearch.org
+ */
 public abstract class BaseParser {
 	
 	protected XpertASTMResultUploadMessage record;

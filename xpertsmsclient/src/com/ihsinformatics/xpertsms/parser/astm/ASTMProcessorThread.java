@@ -25,9 +25,10 @@ import com.ihsinformatics.xpertsms.constant.FileConstants;
 import com.ihsinformatics.xpertsms.model.astm.XpertASTMResultUploadMessage;
 import com.ihsinformatics.xpertsms.net.ResultServer;
 import com.ihsinformatics.xpertsms.net.exception.InvalidASTMMessageFormatException;
-import com.ihsinformatics.xpertsms.ui.ControlPanel;
 
 /**
+ * Processes single result set of GeneXpert results in ASTM standard
+ * 
  * @author ali.habib@irdresearch.org
  */
 public class ASTMProcessorThread extends Thread {

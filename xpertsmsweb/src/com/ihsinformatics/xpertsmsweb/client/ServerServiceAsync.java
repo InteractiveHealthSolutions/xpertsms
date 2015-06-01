@@ -21,7 +21,7 @@ import com.ihsinformatics.xpertsmsweb.shared.model.Users;
 /**
  * The Async counterpart of <code>GreetingService</code>.
  * 
- * @author owais.hussain@irdresearch.org
+ * @author owais.hussain@ihsinformatics.com
  * 
  */
 public interface ServerServiceAsync {

@@ -10,7 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import com.ihsinformatics.xpertsmsweb.shared.XSMS;
 
 /**
- * @author owais.hussain@irdresearch.org
+ * @author owais.hussain@ihsinformatics.com
  * 
  */
 public final class MDHashUtil {

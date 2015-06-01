@@ -8,14 +8,12 @@ See the GNU General Public License for more details. You should have received a 
 You can also access the license on the internet at the address: http://www.gnu.org/licenses/gpl-3.0.html
 
 Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors. */
-/**
- * Various utility functions for swing controls
- */
-
 package com.ihsinformatics.xpertsms.util;
 
 import java.io.File;
+
 import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -25,15 +23,18 @@ import javax.swing.ListModel;
 import javax.swing.text.JTextComponent;
 
 /**
- * @author owais.hussain@irdresearch.org
+ * Various utility functions for swing controls
+ * 
+ * @author owais.hussain@ihsinformatics.com
  */
 public final class SwingUtil {
 	
 	public static void main(String[] args) {
-		JComboBox dateFormatComboBox = new javax.swing.JComboBox();
-		dateFormatComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "yyyy-MM-dd hh:mm:ss",
-		        "yyyy-MM-dd'T'HH:mm:ss'Z'", "yyyy-MM-dd", "MM/dd/yyyy hh:mm:ssa", "MM/dd/yyyy", "M/d/yy",
-		        "dd/MM/yyyy hh:mm:ssa", "dd/MM/yyyy", "d/M/yy", "EEE, d MMM yyyy HH:mm:ss", "yyyyMMddhhmmss" }));
+		JComboBox<Object> dateFormatComboBox = new JComboBox<Object>();
+		DefaultComboBoxModel<Object> dateFormatComboModel = new DefaultComboBoxModel<Object>(new String[] {
+		        "yyyy-MM-dd hh:mm:ss", "yyyy-MM-dd'T'HH:mm:ss'Z'", "yyyy-MM-dd", "MM/dd/yyyy hh:mm:ssa", "MM/dd/yyyy",
+		        "M/d/yy", "dd/MM/yyyy hh:mm:ssa", "dd/MM/yyyy", "d/M/yy", "EEE, d MMM yyyy HH:mm:ss", "yyyyMMddhhmmss" });
+		dateFormatComboBox.setModel(dateFormatComboModel);
 		System.out.println(getIndex(dateFormatComboBox, "M/d/yy"));
 		System.out.println(getIndex(dateFormatComboBox, "dd/MM/yyyy"));
 		System.out.println(getIndex(dateFormatComboBox, "d/m/Yy"));
@@ -54,21 +55,29 @@ public final class SwingUtil {
 		else if (control instanceof JSpinner)
 			return ((JTextComponent) control).getSelectedText();
 		else if (control instanceof JComboBox)
-			return ((JComboBox) control).getSelectedItem().toString();
+			return ((JComboBox<?>) control).getSelectedItem().toString();
 		else if (control instanceof JList)
-			return ((JList) control).getSelectedValue().toString();
+			return ((JList<?>) control).getSelectedValue().toString();
 		else
 			return control.getName();
 	}
 	
+	/**
+	 * Returns index of an object passed in a container. Returns -1 if the item is not present in
+	 * container
+	 * 
+	 * @param control
+	 * @param value
+	 * @return
+	 */
 	public static int getIndex(JComponent control, Object value) {
 		if (control instanceof JComboBox) {
-			ComboBoxModel model = ((JComboBox) control).getModel();
+			ComboBoxModel<?> model = ((JComboBox<?>) control).getModel();
 			for (int i = 0; i < model.getSize(); i++)
 				if (model.getElementAt(i).equals(value))
 					return i;
 		} else if (control instanceof JList) {
-			ListModel model = ((JList) control).getModel();
+			ListModel<?> model = ((JList<?>) control).getModel();
 			for (int i = 0; i < model.getSize(); i++)
 				if (model.getElementAt(i).equals(value))
 					return i;
@@ -103,12 +112,12 @@ public final class SwingUtil {
 	 * @param separator
 	 * @return
 	 */
-	public static String concatenatedItems(JList list, char separator) {
+	public static String concatenatedItems(JList<Object> list, char separator) {
 		if (list == null)
 			return null;
 		StringBuilder sb = new StringBuilder();
 		int[] indices = list.getSelectedIndices();
-		ListModel model = list.getModel();
+		ListModel<Object> model = list.getModel();
 		for (int i : indices)
 			sb.append(model.getElementAt(i).toString() + separator);
 		return sb.toString();

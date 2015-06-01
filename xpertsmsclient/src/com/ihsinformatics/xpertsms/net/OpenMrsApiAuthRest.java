@@ -32,6 +32,8 @@ import com.ihsinformatics.xpertsms.model.XpertResultUploadMessage;
 import com.ihsinformatics.xpertsms.net.exception.HttpResponseException;
 
 /**
+ * This class provides OpenMRS authentication/get/post via RESTWS
+ * 
  * @author Victor Aravena victor.aravena@ciochile.cl
  */
 
@@ -41,10 +43,10 @@ public class OpenMrsApiAuthRest {
 	
 	String password = null;
 	
-	String UrlBase = null;
+	String urlBase = null;
 	
-	public OpenMrsApiAuthRest(String username, String password, String UrlBase) {
-		this.UrlBase = UrlBase;
+	public OpenMrsApiAuthRest(String username, String password, String urlBase) {
+		this.urlBase = urlBase;
 		this.username = username;
 		this.password = password;
 	}
@@ -53,7 +55,7 @@ public class OpenMrsApiAuthRest {
 		String response = "";
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		try {
-			HttpPost httpPost = new HttpPost(UrlBase + entity);
+			HttpPost httpPost = new HttpPost(urlBase + entity);
 			UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(username, password);
 			BasicScheme scheme = new BasicScheme();
 			Header authorizationHeader = scheme.authenticate(credentials, httpPost);
@@ -100,7 +102,7 @@ public class OpenMrsApiAuthRest {
 	 * @return
 	 */
 	public String get(String query) {
-		String URL = UrlBase + query;
+		String URL = urlBase + query;
 		String response = "";
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		try {
@@ -141,7 +143,7 @@ public class OpenMrsApiAuthRest {
 	public String postResults(XpertResultUploadMessage message) {
 		String URLPath = "/ws/rest/v1/";
 		StringEntity input = null; // TODO: create input object from message
-		String URL = UrlBase + URLPath;
+		String URL = urlBase + URLPath;
 		String response = "";
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 		try {

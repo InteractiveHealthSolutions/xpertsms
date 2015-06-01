@@ -14,6 +14,7 @@ package com.ihsinformatics.xpertsms.net;
 import com.ihsinformatics.xpertsms.XpertProperties;
 
 /**
+ * Error and Info messages for XpertSMS
  * @author ali.habib@irdresearch.org
  */
 public class MessageCodes {

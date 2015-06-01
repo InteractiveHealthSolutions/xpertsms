@@ -8,13 +8,11 @@ See the GNU General Public License for more details. You should have received a 
 You can also access the license on the internet at the address: http://www.gnu.org/licenses/gpl-3.0.html
 
 Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors. */
-/**
- * Constants to represent MTB results
- */
 
 package com.ihsinformatics.xpertsms.constant;
 
 /**
+ * Constants to represent MTB results
  * @author owais.hussain@ihsinformatics.com
  */
 public class MtbResults {

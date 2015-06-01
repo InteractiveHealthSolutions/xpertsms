@@ -50,7 +50,8 @@ import com.ihsinformatics.xpertsms.util.RegexUtil;
 import com.ihsinformatics.xpertsms.util.SwingUtil;
 
 /**
- * @author owais.hussain@irdresearch.org
+ * GUI form to provide settings for SMS Tarseel to send results via SMS
+ * @author owais.hussain@ihsinformatics.com
  */
 public class SmsDialog extends JDialog implements ActionListener {
 	

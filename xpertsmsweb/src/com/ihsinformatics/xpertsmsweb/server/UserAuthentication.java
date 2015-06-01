@@ -9,7 +9,7 @@ import com.ihsinformatics.xpertsmsweb.server.util.MDHashUtil;
 import com.ihsinformatics.xpertsmsweb.shared.model.Users;
 
 /**
- * @author owais.hussain@irdresearch.org
+ * @author owais.hussain@ihsinformatics.com
  * 
  */
 public class UserAuthentication {

@@ -14,6 +14,8 @@ package com.ihsinformatics.xpertsms.parser.astm;
 import com.ihsinformatics.xpertsms.model.astm.XpertASTMResultUploadMessage;
 
 /**
+ * Parser for Terminator block of GeneXpert results in ASTM standard
+ * 
  * @author ali.habib@irdresearch.org
  */
 public class TerminatorRecordParser extends BaseParser {

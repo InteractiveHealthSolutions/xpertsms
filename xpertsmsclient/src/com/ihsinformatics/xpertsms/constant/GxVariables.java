@@ -8,9 +8,6 @@ See the GNU General Public License for more details. You should have received a 
 You can also access the license on the internet at the address: http://www.gnu.org/licenses/gpl-3.0.html
 
 Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors. */
-/**
- * Variable names from Dx software
- */
 
 package com.ihsinformatics.xpertsms.constant;
 
@@ -18,7 +15,8 @@ import java.util.ArrayList;
 import com.ihsinformatics.xpertsms.util.StringUtil;
 
 /**
- * @author owais.hussain@irdresearch.org
+ * Variable names from Dx software
+ * @author owais.hussain@ihsinformatics.com
  */
 public class GxVariables {
 	

@@ -8,9 +8,6 @@ See the GNU General Public License for more details. You should have received a 
 You can also access the license on the internet at the address: http://www.gnu.org/licenses/gpl-3.0.html
 
 Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors. */
-/**
- * This class posts GeneXpert results to GXAlert server via HTTP request 
- */
 
 package com.ihsinformatics.xpertsms.net;
 
@@ -30,10 +27,11 @@ import com.ihsinformatics.xpertsms.XpertProperties;
 import com.ihsinformatics.xpertsms.constant.MtbResults;
 import com.ihsinformatics.xpertsms.constant.RifResults;
 import com.ihsinformatics.xpertsms.model.XpertResultUploadMessage;
-import com.ihsinformatics.xpertsms.ui.ControlPanel;
 
 /**
- * @author owais.hussain@irdresearch.org
+ * This class posts GeneXpert results to GXAlert server via HTTP request
+ * 
+ * @author owais.hussain@ihsinformatics.com
  */
 public class GxAlertSender {
 	

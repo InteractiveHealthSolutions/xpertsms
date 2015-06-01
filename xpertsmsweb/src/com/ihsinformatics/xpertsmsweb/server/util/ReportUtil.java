@@ -30,7 +30,7 @@ import com.ihsinformatics.xpertsmsweb.shared.Parameter;
 import com.ihsinformatics.xpertsmsweb.shared.XSMS;
 
 /**
- * @author owais.hussain@irdresearch.org
+ * @author owais.hussain@ihsinformatics.com
  * 
  */
 public class ReportUtil {

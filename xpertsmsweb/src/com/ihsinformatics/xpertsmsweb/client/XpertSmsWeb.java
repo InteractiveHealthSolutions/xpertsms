@@ -29,7 +29,7 @@ import com.ihsinformatics.xpertsmsweb.shared.XSMS;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  * 
- * @author owais.hussain@irdresearch.org
+ * @author owais.hussain@ihsinformatics.com
  */
 public class XpertSmsWeb implements EntryPoint, ClickHandler {
 	// RPC Service

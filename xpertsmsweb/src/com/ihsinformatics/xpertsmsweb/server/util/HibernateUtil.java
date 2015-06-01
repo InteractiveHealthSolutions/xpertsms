@@ -31,7 +31,7 @@ import com.ihsinformatics.xpertsmsweb.shared.model.LogDataInsert;
 import com.ihsinformatics.xpertsmsweb.shared.model.LogUserLogin;
 
 /**
- * @author owais.hussain@irdresearch.org
+ * @author owais.hussain@ihsinformatics.com
  * 
  */
 public class HibernateUtil implements Serializable {

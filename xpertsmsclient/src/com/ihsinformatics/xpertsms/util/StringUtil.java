@@ -8,16 +8,16 @@ See the GNU General Public License for more details. You should have received a 
 You can also access the license on the internet at the address: http://www.gnu.org/licenses/gpl-3.0.html
 
 Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors. */
-/**
- * This class contains several methods for String manupulation that are not available in built in libraries
- */
 
 package com.ihsinformatics.xpertsms.util;
 
 import java.util.ArrayList;
 
 /**
- * @author owais.hussain@irdresearch.org
+ * This class contains several methods for String manupulation that are not available in built in
+ * libraries
+ * 
+ * @author owais.hussain@ihsinformatics.com
  */
 public class StringUtil {
 	
@@ -27,5 +27,4 @@ public class StringUtil {
 			arrayList.add(s);
 		return arrayList;
 	}
-	
 }

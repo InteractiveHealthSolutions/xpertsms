@@ -56,6 +56,8 @@ import com.ihsinformatics.xpertsms.constant.XML;
 import com.ihsinformatics.xpertsms.model.XpertResultUploadMessage;
 
 /**
+ * Get/Post XpertSMS results via HTTP(s)
+ * 
  * @author ali.habib@irdresearch.org
  */
 @SuppressWarnings("deprecation")

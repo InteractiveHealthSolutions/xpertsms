@@ -7,7 +7,7 @@ package com.ihsinformatics.xpertsmsweb.client;
 import com.google.gwt.event.dom.client.ClickEvent;
 
 /**
- * @author owais.hussain@irdresearch.org
+ * @author owais.hussain@ihsinformatics.com
  * 
  */
 public interface IForm {

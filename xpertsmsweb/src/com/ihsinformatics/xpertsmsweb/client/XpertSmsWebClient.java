@@ -14,7 +14,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.ihsinformatics.xpertsmsweb.shared.XSMS;
 
 /**
- * @author owais.hussain@irdresearch.org
+ * @author owais.hussain@ihsinformatics.com
  * 
  */
 public final class XpertSmsWebClient {

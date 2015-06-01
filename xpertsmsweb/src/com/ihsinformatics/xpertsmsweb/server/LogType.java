@@ -5,7 +5,7 @@
 package com.ihsinformatics.xpertsmsweb.server;
 
 /**
- * @author owais.hussain@irdresearch.org
+ * @author owais.hussain@ihsinformatics.com
  * 
  */
 public enum LogType {

@@ -8,9 +8,7 @@ See the GNU General Public License for more details. You should have received a 
 You can also access the license on the internet at the address: http://www.gnu.org/licenses/gpl-3.0.html
 
 Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors. */
-/**
- * Parser for GeneXpert results
- */
+
 package com.ihsinformatics.xpertsms.parser.astm;
 
 import com.ihsinformatics.xpertsms.XpertProperties;
@@ -19,6 +17,8 @@ import com.ihsinformatics.xpertsms.model.astm.XpertASTMResultUploadMessage;
 import com.ihsinformatics.xpertsms.net.exception.InvalidASTMMessageFormatException;
 
 /**
+ * Parser for Results block of GeneXpert results in ASTM standard
+ * 
  * @author ali.habib@irdresearch.org
  */
 public class ResultRecordParser extends BaseParser {
@@ -61,8 +61,7 @@ public class ResultRecordParser extends BaseParser {
 				setTestEndDate(fields[12]);
 			if (fields[13].length() != 0)
 				setInstrumentData(fields[13]);
-		}
-		else if (XpertProperties.props.getProperty(XpertProperties.EXPORT_PROBES).equals("YES")) {
+		} else if (XpertProperties.props.getProperty(XpertProperties.EXPORT_PROBES).equals("YES")) {
 			setProbeResult(fields[2], fields[3]);
 		}
 	}

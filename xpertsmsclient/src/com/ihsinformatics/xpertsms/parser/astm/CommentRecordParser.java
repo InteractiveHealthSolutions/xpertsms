@@ -15,6 +15,11 @@ import com.ihsinformatics.xpertsms.constant.ASTMMessageConstants;
 import com.ihsinformatics.xpertsms.model.astm.XpertASTMResultUploadMessage;
 import com.ihsinformatics.xpertsms.net.exception.InvalidASTMMessageFormatException;
 
+/**
+ * Parser for Comments block of GeneXpert results in ASTM standard
+ * 
+ * @author ali.habib@irdresearch.org
+ */
 public class CommentRecordParser extends BaseParser {
 	
 	public CommentRecordParser(XpertASTMResultUploadMessage record, String messageString) {
@@ -34,8 +39,7 @@ public class CommentRecordParser extends BaseParser {
 		if (fields[4].charAt(0) == ASTMMessageConstants.COMMENT_TYPE_ERROR) {
 			record.setError(true);
 			setErrorDetails(fields[3]);
-		}
-		else if (fields[4].charAt(0) == ASTMMessageConstants.COMMENT_TYPE_NOTES) {
+		} else if (fields[4].charAt(0) == ASTMMessageConstants.COMMENT_TYPE_NOTES) {
 			setNotes(fields[3]);
 		}
 	}
@@ -53,6 +57,7 @@ public class CommentRecordParser extends BaseParser {
 	
 	/**
 	 * Parses the Notes field and sets to ASTMMessage object
+	 * 
 	 * @param field
 	 * @throws InvalidASTMMessageFormatException
 	 */
@@ -65,25 +70,25 @@ public class CommentRecordParser extends BaseParser {
 		record.setNotes(notesParts[2]);
 	}
 	
-//	public static void main(String[] args) {
-//		XpertASTMResultUploadMessage message = new XpertASTMResultUploadMessage();
-//		String messageString = "C|1|I|Error^5011^Post-run analysis error^Error 5011: Signal loss detected in the amplification curve for analyte [Probe B]. 12.6 decrease in signal with 23.6% decrease at cycle 5.^20111025171012|N";
-//		CommentRecordParser cp = new CommentRecordParser(message, messageString);
-//		try {
-//			cp.parse();
-//		}
-//		catch (InvalidASTMMessageFormatException e) {
-//			e.printStackTrace();
-//		}
-//		System.out.println(message.toString());
-//		messageString = "C|1|I|Notes^^Iducing Error - Test|I";
-//		cp = new CommentRecordParser(message, messageString);
-//		try {
-//			cp.parse();
-//		}
-//		catch (InvalidASTMMessageFormatException e) {
-//			e.printStackTrace();
-//		}
-//		System.out.println(message.toString());
-//	}
+	//	public static void main(String[] args) {
+	//		XpertASTMResultUploadMessage message = new XpertASTMResultUploadMessage();
+	//		String messageString = "C|1|I|Error^5011^Post-run analysis error^Error 5011: Signal loss detected in the amplification curve for analyte [Probe B]. 12.6 decrease in signal with 23.6% decrease at cycle 5.^20111025171012|N";
+	//		CommentRecordParser cp = new CommentRecordParser(message, messageString);
+	//		try {
+	//			cp.parse();
+	//		}
+	//		catch (InvalidASTMMessageFormatException e) {
+	//			e.printStackTrace();
+	//		}
+	//		System.out.println(message.toString());
+	//		messageString = "C|1|I|Notes^^Iducing Error - Test|I";
+	//		cp = new CommentRecordParser(message, messageString);
+	//		try {
+	//			cp.parse();
+	//		}
+	//		catch (InvalidASTMMessageFormatException e) {
+	//			e.printStackTrace();
+	//		}
+	//		System.out.println(message.toString());
+	//	}
 }

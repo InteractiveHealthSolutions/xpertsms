@@ -8,9 +8,6 @@ See the GNU General Public License for more details. You should have received a 
 You can also access the license on the internet at the address: http://www.gnu.org/licenses/gpl-3.0.html
 
 Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors. */
-/**
- * Implementation of XpertResultUploadMessage class based on ASTM standard
- */
 
 package com.ihsinformatics.xpertsms.model.astm;
 
@@ -36,6 +33,7 @@ import org.xml.sax.SAXException;
 import com.ihsinformatics.xpertsms.model.XpertResultUploadMessage;
 
 /**
+ * Implementation of XpertResultUploadMessage class based on ASTM standard
  * @author ali.habib@irdresearch.org
  */
 public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {

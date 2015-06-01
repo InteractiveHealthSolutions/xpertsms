@@ -22,6 +22,11 @@ import java.util.Date;
 import com.ihsinformatics.xpertsms.constant.ASTMNetworkConstants;
 import com.ihsinformatics.xpertsms.constant.FileConstants;
 
+/**
+ * Processes Results from GeneXpert DX
+ * 
+ * @author ali.habib@irdresearch.org
+ */
 public class ResultThread extends Thread {
 	
 	private Socket socket = null;
@@ -54,7 +59,7 @@ public class ResultThread extends Thread {
 		catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 		}
-		println(pw, "Establishing XPertSMS connection", true);
+		println(pw, "Establishing XpertSMS connection", true);
 		try {
 			DataInputStream dis = new DataInputStream(socket.getInputStream());
 			DataOutputStream dos = new DataOutputStream(socket.getOutputStream());

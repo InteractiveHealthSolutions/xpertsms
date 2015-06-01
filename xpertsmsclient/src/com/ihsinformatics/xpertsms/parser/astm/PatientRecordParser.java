@@ -8,9 +8,6 @@ See the GNU General Public License for more details. You should have received a 
 You can also access the license on the internet at the address: http://www.gnu.org/licenses/gpl-3.0.html
 
 Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors. */
-/**
- * Parser class for GeneXpert Patient records
- */
 package com.ihsinformatics.xpertsms.parser.astm;
 
 import com.ihsinformatics.xpertsms.constant.ASTMMessageConstants;
@@ -18,6 +15,7 @@ import com.ihsinformatics.xpertsms.model.astm.XpertASTMResultUploadMessage;
 import com.ihsinformatics.xpertsms.net.exception.InvalidASTMMessageFormatException;
 
 /**
+ * Parser for Patient record block of GeneXpert results in ASTM standard
  * @author ali.habib@irdresearch.org
  */
 public class PatientRecordParser extends BaseParser {

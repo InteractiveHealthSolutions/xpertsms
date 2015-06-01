@@ -22,7 +22,7 @@ import com.ihsinformatics.xpertsmsweb.shared.model.Users;
 /**
  * The client side stub for the RPC service.
  * 
- * @author owais.hussain@irdresearch.org
+ * @author owais.hussain@ihsinformatics.com
  */
 @RemoteServiceRelativePath("greet")
 public interface ServerService extends RemoteService {

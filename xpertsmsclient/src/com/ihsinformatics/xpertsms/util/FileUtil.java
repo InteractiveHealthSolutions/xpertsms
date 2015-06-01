@@ -8,9 +8,6 @@ See the GNU General Public License for more details. You should have received a 
 You can also access the license on the internet at the address: http://www.gnu.org/licenses/gpl-3.0.html
 
 Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors. */
-/**
- * This class is used to read and write files to and from Android OS
- */
 
 package com.ihsinformatics.xpertsms.util;
 
@@ -28,7 +25,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 /**
- * @author owais.hussain@irdresearch.org
+ * This class is used to read and write files to and from Android OS
+ * 
+ * @author owais.hussain@ihsinformatics.com
  */
 public class FileUtil {
 	

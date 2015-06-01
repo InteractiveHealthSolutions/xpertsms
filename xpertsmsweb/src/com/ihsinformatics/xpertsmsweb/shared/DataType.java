@@ -4,7 +4,7 @@
 package com.ihsinformatics.xpertsmsweb.shared;
 
 /**
- * @author owais.hussain@irdresearch.org
+ * @author owais.hussain@ihsinformatics.com
  *
  */
 public enum DataType {

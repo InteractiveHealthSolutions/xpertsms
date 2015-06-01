@@ -14,7 +14,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 
-public class LogViewer extends JPanel implements ActionListener {
+/**
+ * Demon GUI form to view activity of messages between GX DX and XpertSMS
+ * 
+ * @author owais.hussain@ihsinformatics.com
+ */
+public class XpertActivityViewer extends JPanel implements ActionListener {
 	
 	private static final long serialVersionUID = 550000139271750414L;
 	

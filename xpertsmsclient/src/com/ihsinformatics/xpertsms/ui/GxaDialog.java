@@ -45,6 +45,10 @@ import com.ihsinformatics.xpertsms.XpertProperties;
 import com.ihsinformatics.xpertsms.net.exception.HttpResponseException;
 import com.ihsinformatics.xpertsms.util.SwingUtil;
 
+/**
+ * GUI form to provide settings for GXAlert to send results to
+ * @author owais.hussain@ihsinformatics.com
+ */
 public class GxaDialog extends JDialog implements ActionListener {
 	
 	private static final long serialVersionUID = 6667416512565715878L;

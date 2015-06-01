@@ -11,7 +11,6 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 
 package com.ihsinformatics.xpertsms.net;
 
-//import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -32,13 +31,11 @@ import com.ihsinformatics.xpertsms.XpertProperties;
 import com.ihsinformatics.xpertsms.constant.FileConstants;
 import com.ihsinformatics.xpertsms.model.XpertResultUploadMessage;
 import com.ihsinformatics.xpertsms.parser.astm.ASTMProcessorThread;
-//import java.util.Vector;
-//import java.util.concurrent.BlockingQueue;
-//import javax.swing.text.SimpleAttributeSet;
-//import javax.swing.text.StyleConstants;
 
-//import com.ihsinformatics.xpertsms.constants.astm.ASTMNetworkConstants;
-
+/**
+ * GeneXpert results processing daemon that provides the messages service
+ * @author ali.habib@irdresearch.org
+ */
 public class ResultServer extends Thread {
 	
 	// create socket and listen for results from Xpert

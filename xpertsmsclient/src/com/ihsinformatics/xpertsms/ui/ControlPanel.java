@@ -8,9 +8,6 @@ See the GNU General Public License for more details. You should have received a 
 You can also access the license on the internet at the address: http://www.gnu.org/licenses/gpl-3.0.html
 
 Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors. */
-/**
- * GUI Control Panel for XpertSMS configuration
- */
 
 package com.ihsinformatics.xpertsms.ui;
 
@@ -48,6 +45,7 @@ import com.ihsinformatics.xpertsms.constant.SendMethods;
 import com.ihsinformatics.xpertsms.net.ResultServer;
 
 /**
+ * GUI Control Panel for XpertSMS configuration
  * @author ali.habib@irdresearch.org
  */
 public class ControlPanel extends JPanel implements ActionListener {
