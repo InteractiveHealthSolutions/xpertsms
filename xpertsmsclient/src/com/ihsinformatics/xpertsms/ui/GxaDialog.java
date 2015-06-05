@@ -80,6 +80,7 @@ public class GxaDialog extends JDialog implements ActionListener {
 	private JButton tryButton;
 	
 	public GxaDialog() {
+		setAlwaysOnTop(true);
 		initComponents();
 		initEvents();
 		initValues();
@@ -121,7 +122,7 @@ public class GxaDialog extends JDialog implements ActionListener {
 		saveButton.setToolTipText("Creates database tables and save settings to configuration file.");
 		
 		serverAddressLabel = new JLabel();
-		serverAddressLabel.setText("GXAlert Server Address:");
+		serverAddressLabel.setText("* GXAlert Server Address:");
 		
 		serverAddressTextField = new JTextField();
 		serverAddressTextField
@@ -140,7 +141,7 @@ public class GxaDialog extends JDialog implements ActionListener {
 		        .setToolTipText("Port number to connect to the server. If you are not sure what this is, try 8080 or just 80, or ask your Network Admin");
 		
 		apiKeyLabel = new JLabel();
-		apiKeyLabel.setText("GXAlert API Code:");
+		apiKeyLabel.setText("* GXAlert API Code:");
 		
 		apiKeyTextField = new JTextField();
 		apiKeyTextField.setToolTipText("Enter your unique GXAlert API key, provided by the GXAlert server admin");

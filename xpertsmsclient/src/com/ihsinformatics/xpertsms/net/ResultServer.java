@@ -11,11 +11,9 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 
 package com.ihsinformatics.xpertsms.net;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,11 +27,13 @@ import javax.swing.text.StyledDocument;
 
 import com.ihsinformatics.xpertsms.XpertProperties;
 import com.ihsinformatics.xpertsms.constant.FileConstants;
+import com.ihsinformatics.xpertsms.model.ResultsSender;
 import com.ihsinformatics.xpertsms.model.XpertResultUploadMessage;
 import com.ihsinformatics.xpertsms.parser.astm.ASTMProcessorThread;
 
 /**
  * GeneXpert results processing daemon that provides the messages service
+ * 
  * @author ali.habib@irdresearch.org
  */
 public class ResultServer extends Thread {
@@ -48,6 +48,8 @@ public class ResultServer extends Thread {
 	
 	private ArrayBlockingQueue<XpertResultUploadMessage> outgoingMessages;
 	
+	private ResultsSender resultsSender;
+	
 	private int threadCount;
 	
 	private int status;
@@ -60,8 +62,6 @@ public class ResultServer extends Thread {
 	
 	private ServerSocket socket;
 	
-	private PrintWriter csvWriter;
-	
 	private SimpleDateFormat logEntryFormatter = null;
 	
 	private SimpleDateFormat fileNameFormatter = null;;
@@ -72,22 +72,7 @@ public class ResultServer extends Thread {
 		threadCount = 0;
 		this.monitorPane = monitorPane;
 		stopped = false;
-		
 		logEntryFormatter = new SimpleDateFormat(FileConstants.FILE_ENTRY_DATE_FORMAT);
-		fileNameFormatter = new SimpleDateFormat(FileConstants.FILE_NAME_DATE_FORMAT);
-		
-		File csv = new File(FileConstants.XPERT_SMS_DIR + System.getProperty("file.separator")
-		        + fileNameFormatter.format(new Date()) + "_xpertdump.csv");
-		try {
-			csvWriter = new PrintWriter(csv);
-			String header = "\"patientId\",\"sampleId\",\"mtbResult\",\"rifResult\",\"isFinal\",\"isPending\",\"isError\",\"isCorrection\",\"resultStatus\",\"operatorId\",\"testStartDate\",\"testEndDate\",\"pcId\",\"instrumentSerial\",\"moduleId\",\"cartridgeId\",\"reagentLotId\",\"expDate\","
-			        + "\"errorCode\",\"errorNotes\",\"notes\",\"messageId\",\"systemId\",\"softwareVersion\",\"versionNumber\",\"receiverId\",\"processingId\",\"messageDateTime\",\"instrumentSpecimenId\",\"universalTestId\",\"priority\",\"orderDateTime\",\"actionCode\",\"specimenType\",\"reportType\",\"systemDefinedTestName\",\"systemDefinedTestVersion\","
-			        + "\"probeResultA\",\"probeResultB\",\"probeResultC\",\"probeResultD\",\"probeResultE\",\"probeResultSpc\",\"probeCtA\",\"probeCtB\",\"probeCtC\",\"probeCtD\",\"probeCtE\",\"probeCtSpc\",\"probeEndptA\",\"probeEndptB\",\"probeEndptC\",\"probeEndptD\",\"probeEndptE\",\"probeEndptSpc\",\"";
-			writeToCSV(header);
-		}
-		catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-		}
 	}
 	
 	@Override
@@ -116,13 +101,10 @@ public class ResultServer extends Thread {
 			status = -1;
 		}
 		// stopped = true;
-		
 		ASTMProcessorThread apt = new ASTMProcessorThread(this);
 		apt.start();
-		
-		HttpSender hs = new HttpSender(this);
-		hs.start();
-		
+		resultsSender = new  ResultsSender(this);
+		resultsSender.start();
 		int port = Integer.parseInt(XpertProperties.props.getProperty(XpertProperties.LOCAL_PORT));
 		try {
 			socket = new ServerSocket(port);
@@ -197,9 +179,6 @@ public class ResultServer extends Thread {
 	public boolean loadProperties() throws FileNotFoundException, IOException {
 		
 		XpertProperties.props.load(new FileInputStream(FileConstants.FILE_PATH));
-		//TODO: Owais, refactor this
-		//		String[] mandatory = {XpertProperties.MTB_CODE, XpertProperties.RIF_CODE, XpertProperties.QC_CODE, XpertProperties.SERVER_URL, XpertProperties.SERVER_PORT, XpertProperties.LOCAL_PORT,
-		//		XpertProperties.EXPORT_PROBES};
 		String[] mandatory = { XpertProperties.MTB_CODE, XpertProperties.RIF_CODE, XpertProperties.QC_CODE,
 		        XpertProperties.LOCAL_PORT };
 		for (String s : mandatory) {
@@ -353,11 +332,9 @@ public class ResultServer extends Thread {
 	}
 	
 	public synchronized void updateTextPane(final String text) {
-		
 		SwingUtilities.invokeLater(new Runnable() {
 			
 			public void run() {
-				
 				StyledDocument doc = monitorPane.getStyledDocument();
 				try {
 					doc.insertString(doc.getLength(), text, null);
@@ -368,14 +345,6 @@ public class ResultServer extends Thread {
 				monitorPane.setCaretPosition(doc.getLength() - 1);
 			}
 		});
-	}
-	
-	public synchronized void writeToCSV(String text) {
-		System.out.println(text);
-		System.out.println("printing....");
-		csvWriter.println(text);
-		csvWriter.flush();
-		System.out.println("printed");
 	}
 	
 	public String getLogEntryDateString(Date date) {

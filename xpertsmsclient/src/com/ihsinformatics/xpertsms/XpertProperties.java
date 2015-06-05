@@ -25,7 +25,6 @@ import java.util.Set;
 import javax.swing.JOptionPane;
 
 import com.ihsinformatics.xpertsms.constant.FileConstants;
-import com.ihsinformatics.xpertsms.constant.SendMethods;
 
 /**
  * @author owais.hussain@ihsinformatics.com
@@ -35,9 +34,9 @@ public final class XpertProperties {
 	public static Properties props;
 	
 	public static final String VERSION = "version";
-
+	
 	public static final String BUILD = "build";
-
+	
 	public static final String CSV_EXPORT = "csv_export";
 	
 	public static final String SMS_EXPORT = "sms_export";
@@ -75,13 +74,13 @@ public final class XpertProperties {
 	public static final String CSV_DATE_FORMAT = "csv_date_format";
 	
 	public static final String CSV_VARIABLES = "csv_variables";
-
+	
 	public static final String DB_IP_ADDRESS = "db_ip_address";
-
+	
 	public static final String DB_PORT = "db_port";
 	
 	public static final String DB_NAME = "db_name";
-
+	
 	public static final String DB_USERNAME = "db_username";
 	
 	public static final String DB_PASSWORD = "db_password";
@@ -120,13 +119,11 @@ public final class XpertProperties {
 	
 	public static final String WEB_ENCODING = "web_encoding";
 	
-	public static final String WEB_PARAMETERS = "web_parameters";
-	
 	public static final String WEB_APP_STRING = "server_app_string";
 	
-	public static final String SERVER_USER = "xpert_user";
+	public static final String WEB_USERNAME = "xpert_user";
 	
-	public static final String SERVER_PASSWORD = "xpert_password";
+	public static final String WEB_PASSWORD = "xpert_password";
 	
 	public static final String SERVER_URL = "server_url";
 	
@@ -134,7 +131,7 @@ public final class XpertProperties {
 	
 	public static final String EXPORT_PROBES = "export_probes";
 	
-	public static final String DEFAULT_SEND_METHOD = "default_send_method";
+	public static final String WEB_SSL_ENCRYPTION = "default_send_method";
 	
 	/**
 	 * Read properties from properties file
@@ -149,20 +146,16 @@ public final class XpertProperties {
 				e.printStackTrace();
 			}
 		} else {
-			
 			// TODO: Legacy, remove after new LogViewer is ready
-			props.setProperty(WEB_APP_STRING, "/xpertsmsweb/xpertsmsweb.jsp");
 			props.setProperty(SERVER_URL, "127.0.0.1");
 			props.setProperty(SERVER_PORT, "8080");
-			props.setProperty(SERVER_USER, "XpertUser");
-			props.setProperty(WEB_EXPORT, "YES");
 			props.setProperty(EXPORT_PROBES, "NO");
-			props.setProperty(DEFAULT_SEND_METHOD, SendMethods.HTTP);
 			
 			props.setProperty(VERSION, "2.0.0-beta");
 			props.setProperty(BUILD, "1");
 			props.setProperty(CSV_EXPORT, "NO");
 			props.setProperty(SMS_EXPORT, "NO");
+			props.setProperty(WEB_EXPORT, "YES");
 			props.setProperty(GXA_EXPORT, "NO");
 			props.setProperty(OPENMRS_EXPORT, "NO");
 			props.setProperty(WEB_EXPORT, "YES");
@@ -170,8 +163,6 @@ public final class XpertProperties {
 			props.setProperty(RIF_CODE, "RIF_CODE");
 			props.setProperty(QC_CODE, "QC");
 			props.setProperty(LOCAL_PORT, "12221");
-			props.setProperty(SERVER_USER, "admin");
-			props.setProperty(SERVER_PASSWORD, "");
 			props.setProperty(SMS_PROJECT_NAME, "XpertSMS");
 			props.setProperty(SMS_PORT, "");
 			props.setProperty(SMS_ADMIN_PHONE, "");
@@ -199,12 +190,14 @@ public final class XpertProperties {
 			props.setProperty(OPENMRS_ENCOUNTER_TYPE, "GeneXpert_Results");
 			props.setProperty(OPENMRS_CONCEPT_MAP, "");
 			props.setProperty(OPENMRS_SSL_ENCRYPTION, "NO");
-			props.setProperty(WEB_ADDRESS, "127.0.0.1:8080");
-			props.setProperty(WEB_DATA_FORMAT, "Json");
+			props.setProperty(WEB_APP_STRING, "127.0.0.1:8080/xpertsmsweb/xpertsmsweb.jsp");
+			props.setProperty(WEB_SSL_ENCRYPTION, "NO");
+			props.setProperty(WEB_DATA_FORMAT, "Plain text");
 			props.setProperty(WEB_AUTHENTICATION, "As header");
 			props.setProperty(WEB_DATE_FORMAT, "yyyy-MM-dd");
 			props.setProperty(WEB_ENCODING, "");
-			props.setProperty(WEB_PARAMETERS, "");
+			props.setProperty(WEB_USERNAME, "admin");
+			props.setProperty(WEB_PASSWORD, "");
 		}
 	}
 	
@@ -249,6 +242,9 @@ public final class XpertProperties {
 	}
 	
 	public static String getProperty(String key) {
-		return props.getProperty(key);
+		String value = props.getProperty(key);
+		if (value == null)
+			value = "";
+		return value;
 	}
 }

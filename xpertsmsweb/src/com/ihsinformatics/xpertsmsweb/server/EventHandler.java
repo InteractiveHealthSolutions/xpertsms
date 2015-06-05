@@ -20,8 +20,9 @@ import org.irdresearch.smstarseel.context.TarseelContext;
 
 import com.ihsinformatics.xpertsmsweb.server.util.DateTimeUtil;
 import com.ihsinformatics.xpertsmsweb.server.util.XmlUtil;
-import com.ihsinformatics.xpertsmsweb.shared.RegexUtil;
 import com.ihsinformatics.xpertsmsweb.shared.SmsTarseelUtil;
+import com.ihsinformatics.xpertsmsweb.shared.VersionUtil;
+import com.ihsinformatics.xpertsmsweb.shared.XSMS;
 import com.ihsinformatics.xpertsmsweb.shared.model.Encounter;
 import com.ihsinformatics.xpertsmsweb.shared.model.EncounterId;
 import com.ihsinformatics.xpertsmsweb.shared.model.GeneXpertResults;
@@ -36,18 +37,17 @@ public class EventHandler extends HttpServlet {
 	private static final long serialVersionUID = -1089336095687159274L;
 
 	private static final Properties prop = new Properties();
+	private static ServerServiceImpl ssl = new ServerServiceImpl();
+	private static EventHandler service = new EventHandler();
 	private static String backupPostUrl;
 	private HttpServletRequest request;
-	private ServerServiceImpl ssl;
-	private static EventHandler service = new EventHandler();
 
 	@SuppressWarnings("unchecked")
 	public EventHandler() {
-		ssl = new ServerServiceImpl();
 		try {
 			System.out.println(">>>>READING SYSTEM PROPERTIES...");
 			InputStream f = Thread.currentThread().getContextClassLoader()
-					.getResourceAsStream("smstarseel.properties");
+					.getResourceAsStream("xpertsmsweb.properties");
 			// Java Properties do not seem to support substitutions hence
 			// EProperties are used
 			EProperties root = new EProperties();
@@ -85,6 +85,21 @@ public class EventHandler extends HttpServlet {
 	public String handleEvent(HttpServletRequest request) {
 		setRequest(request);
 		String xmlResponse = null;
+		/* Try to match version if present */
+		try {
+			String version = request.getParameter("version");
+			if (version != null) {
+				VersionUtil clientVersion = new VersionUtil();
+				clientVersion.parseVersion(version);
+				if (!clientVersion.isCompatible(XSMS.getVersion())) {
+					System.out.println("Client version " + version
+							+ " is not compatible with version on server "
+							+ XSMS.getVersion().toString());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		String reqType = request.getParameter("type");
 		System.out.println("Request Type: " + reqType);
 		if (reqType.equals(RequestType.REMOTE_ASTM_RESULT)) {
@@ -97,13 +112,14 @@ public class EventHandler extends HttpServlet {
 				@Override
 				public void run() {
 					String response = postToBackup(getRequest());
-					System.out.println("Response from backup server: " + response);
+					System.out.println("Response from backup server: "
+							+ response);
 				}
 			};
 			backupRun.run();
-		}
-		else {
-			System.out.println("Warning! No backup post URL defiend. Skipping backup...s");
+		} else {
+			System.out
+					.println("Warning! No backup post URL defiend. Skipping backup...s");
 		}
 		return xmlResponse;
 	}
@@ -160,7 +176,6 @@ public class EventHandler extends HttpServlet {
 		String probeEndptSPC = request.getParameter("probespcendpt");
 		System.out.println("DATE/TIME: " + resultDateStr);
 
-		ssl = new ServerServiceImpl();
 		GeneXpertResults[] gxp = null;
 		GeneXpertResults gxpNew = null;
 		try {
@@ -456,7 +471,6 @@ public class EventHandler extends HttpServlet {
 		int responseCode = 0;
 		String response = null;
 		URL url;
-		ssl = new ServerServiceImpl();
 		try {
 			url = new URL(backupPostUrl);
 			hc = (HttpURLConnection) url.openConnection();

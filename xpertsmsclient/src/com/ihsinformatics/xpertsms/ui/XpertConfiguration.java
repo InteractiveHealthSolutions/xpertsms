@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -33,7 +34,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
@@ -85,10 +85,6 @@ public class XpertConfiguration extends JFrame implements ActionListener {
 	private JTextField qcCodeTextField;
 	
 	private JTextField localPortTextField;
-	
-	private JTextField userTextField;
-	
-	private JPasswordField passwordField;
 	
 	private JButton importButton;
 	
@@ -188,27 +184,27 @@ public class XpertConfiguration extends JFrame implements ActionListener {
 		middlePanel.setLayout(middlePanelLayout);
 		
 		JPanel geneXpertPanel = new JPanel();
-		geneXpertPanel.setBounds(11, 188, 634, 116);
+		geneXpertPanel.setBounds(11, 188, 634, 80);
 		geneXpertPanel.setBorder(new LineBorder(Color.GRAY, 1, true));
 		
 		JLabel lblMtbCode = new JLabel("MTB Code:");
 		
 		mtbCodeTextField = new JTextField();
-		mtbCodeTextField.setToolTipText("Enter the code in your project represents MTB");
+		mtbCodeTextField.setToolTipText("Enter the code in your GeneXpert DX settings representing MTB (e.g. TBPos)");
 		mtbCodeTextField.setText("TB_POS");
 		mtbCodeTextField.setColumns(10);
 		
 		JLabel lblRifCodel = new JLabel("RIF Code:");
 		
 		rifCodeTextField = new JTextField();
-		rifCodeTextField.setToolTipText("Enter the code in your project represents RIF resistance");
+		rifCodeTextField.setToolTipText("Enter the code in your GeneXpert DX settings representing RIF Resistance (e.g. Rif)");
 		rifCodeTextField.setText("RIF");
 		rifCodeTextField.setColumns(10);
 		
 		JLabel lblQcCode = new JLabel("QC Code:");
 		
 		qcCodeTextField = new JTextField();
-		qcCodeTextField.setToolTipText("Enter Quality control code (if any)");
+		qcCodeTextField.setToolTipText("Enter Quality control code defined in GeneXpert DX (e.g. QC)");
 		qcCodeTextField.setText("QC");
 		qcCodeTextField.setColumns(10);
 		
@@ -218,138 +214,91 @@ public class XpertConfiguration extends JFrame implements ActionListener {
 		localPortTextField.setColumns(10);
 		
 		JLabel lblLocalPort = new JLabel("Local Port:");
-		
-		JLabel lblGenexpertUsername = new JLabel("GeneXpert Username:");
-		
-		userTextField = new JTextField();
-		userTextField.setToolTipText("Username for your GeneXpert machine");
-		userTextField.setText("admin");
-		userTextField.setColumns(10);
-		
-		passwordField = new JPasswordField();
-		
-		JLabel lblPassword = new JLabel("Password:");
 		GroupLayout geneXpertPanelLayout = new GroupLayout(geneXpertPanel);
-		geneXpertPanelLayout.setHorizontalGroup(geneXpertPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(
-		    geneXpertPanelLayout
-		            .createSequentialGroup()
-		            .addContainerGap()
-		            .addGroup(
-		                geneXpertPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(lblMtbCode)
-		                        .addComponent(lblRifCodel).addComponent(lblQcCode))
-		            .addGap(18)
-		            .addGroup(
-		                geneXpertPanelLayout
-		                        .createParallelGroup(Alignment.LEADING)
-		                        .addComponent(qcCodeTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-		                            GroupLayout.PREFERRED_SIZE)
-		                        .addGroup(
-		                            geneXpertPanelLayout
-		                                    .createSequentialGroup()
-		                                    .addGroup(
-		                                        geneXpertPanelLayout.createParallelGroup(Alignment.TRAILING, false)
-		                                                .addComponent(rifCodeTextField, Alignment.LEADING)
-		                                                .addComponent(mtbCodeTextField, Alignment.LEADING))
-		                                    .addGap(14)
-		                                    .addGroup(
-		                                        geneXpertPanelLayout
-		                                                .createParallelGroup(Alignment.LEADING)
-		                                                .addComponent(lblGenexpertUsername)
-		                                                .addGroup(
-		                                                    geneXpertPanelLayout.createSequentialGroup().addGap(1)
-		                                                            .addComponent(lblPassword)).addComponent(lblLocalPort))
-		                                    .addGap(18)
-		                                    .addGroup(
-		                                        geneXpertPanelLayout.createParallelGroup(Alignment.TRAILING, false)
-		                                                .addComponent(localPortTextField, Alignment.LEADING)
-		                                                .addComponent(passwordField, Alignment.LEADING)
-		                                                .addComponent(userTextField, Alignment.LEADING)))).addGap(238)));
-		geneXpertPanelLayout.setVerticalGroup(geneXpertPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(
-		    geneXpertPanelLayout
-		            .createSequentialGroup()
-		            .addContainerGap()
-		            .addGroup(
-		                geneXpertPanelLayout
-		                        .createParallelGroup(Alignment.BASELINE)
-		                        .addComponent(lblMtbCode)
-		                        .addComponent(mtbCodeTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-		                            GroupLayout.PREFERRED_SIZE)
-		                        .addComponent(localPortTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-		                            GroupLayout.PREFERRED_SIZE).addComponent(lblLocalPort))
-		            .addPreferredGap(ComponentPlacement.UNRELATED)
-		            .addGroup(
-		                geneXpertPanelLayout
-		                        .createParallelGroup(Alignment.LEADING)
-		                        .addGroup(
-		                            geneXpertPanelLayout
-		                                    .createSequentialGroup()
-		                                    .addGroup(
-		                                        geneXpertPanelLayout
-		                                                .createParallelGroup(Alignment.BASELINE)
-		                                                .addComponent(userTextField, GroupLayout.PREFERRED_SIZE,
-		                                                    GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-		                                                .addComponent(lblGenexpertUsername))
-		                                    .addPreferredGap(ComponentPlacement.UNRELATED)
-		                                    .addGroup(
-		                                        geneXpertPanelLayout
-		                                                .createParallelGroup(Alignment.BASELINE)
-		                                                .addComponent(passwordField, GroupLayout.PREFERRED_SIZE,
-		                                                    GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-		                                                .addComponent(lblPassword)))
-		                        .addGroup(
-		                            geneXpertPanelLayout
-		                                    .createSequentialGroup()
-		                                    .addGroup(
-		                                        geneXpertPanelLayout
-		                                                .createParallelGroup(Alignment.BASELINE)
-		                                                .addComponent(lblRifCodel)
-		                                                .addComponent(rifCodeTextField, GroupLayout.PREFERRED_SIZE,
-		                                                    GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-		                                    .addPreferredGap(ComponentPlacement.UNRELATED)
-		                                    .addGroup(
-		                                        geneXpertPanelLayout
-		                                                .createParallelGroup(Alignment.BASELINE)
-		                                                .addComponent(lblQcCode)
-		                                                .addComponent(qcCodeTextField, GroupLayout.PREFERRED_SIZE,
-		                                                    GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
-		            .addContainerGap(53, Short.MAX_VALUE)));
+		geneXpertPanelLayout.setHorizontalGroup(
+			geneXpertPanelLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(geneXpertPanelLayout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(geneXpertPanelLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblMtbCode)
+						.addComponent(lblRifCodel))
+					.addGap(18)
+					.addGroup(geneXpertPanelLayout.createParallelGroup(Alignment.TRAILING, false)
+						.addComponent(rifCodeTextField, Alignment.LEADING)
+						.addComponent(mtbCodeTextField, Alignment.LEADING))
+					.addGroup(geneXpertPanelLayout.createParallelGroup(Alignment.LEADING, false)
+						.addGroup(geneXpertPanelLayout.createSequentialGroup()
+							.addGap(14)
+							.addComponent(lblLocalPort)
+							.addGap(81)
+							.addComponent(localPortTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(geneXpertPanelLayout.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(lblQcCode)
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(qcCodeTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+					.addGap(238))
+		);
+		geneXpertPanelLayout.setVerticalGroup(
+			geneXpertPanelLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(geneXpertPanelLayout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(geneXpertPanelLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblMtbCode)
+						.addComponent(mtbCodeTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(localPortTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblLocalPort))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(geneXpertPanelLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblRifCodel)
+						.addComponent(rifCodeTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblQcCode)
+						.addComponent(qcCodeTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(40, Short.MAX_VALUE))
+		);
 		geneXpertPanel.setLayout(geneXpertPanelLayout);
 		getContentPane().setLayout(null);
 		getContentPane().add(topPanel);
 		getContentPane().add(geneXpertPanel);
 		getContentPane().add(middlePanel);
 		importButton = new JButton();
-		importButton.setBounds(10, 347, 119, 23);
+		importButton.setBounds(139, 318, 119, 40);
 		importButton.setFont(new Font("Tahoma", 0, 12)); // NOI18N
 		importButton.setText("Import Settings");
 		getContentPane().add(importButton);
 		startButton = new JButton();
 		startButton.setBackground(Color.GRAY);
-		startButton.setBounds(559, 347, 76, 23);
+		startButton.setBounds(270, 318, 115, 40);
 		
 		startButton.setFont(new Font("Tahoma", 2, 12)); // NOI18N
 		startButton.setText("START");
 		getContentPane().add(startButton);
 		
 		smsConfigButton = new JButton("SMS Config");
-		smsConfigButton.setBounds(10, 308, 119, 28);
+		smsConfigButton.setBounds(10, 275, 119, 28);
 		getContentPane().add(smsConfigButton);
 		
 		csvConfigButton = new JButton("CSV Config");
-		csvConfigButton.setBounds(139, 308, 118, 28);
+		csvConfigButton.setBounds(139, 275, 118, 28);
 		getContentPane().add(csvConfigButton);
 		
 		webConfigButton = new JButton("Web Config");
-		webConfigButton.setBounds(267, 308, 118, 28);
+		webConfigButton.setBounds(267, 275, 118, 28);
 		getContentPane().add(webConfigButton);
 		
 		gxaConfigButton = new JButton("GXA Config");
-		gxaConfigButton.setBounds(395, 308, 118, 28);
+		gxaConfigButton.setBounds(395, 275, 118, 28);
 		getContentPane().add(gxaConfigButton);
 		
 		openMrsConfigButton = new JButton("OMRS Config");
-		openMrsConfigButton.setBounds(527, 308, 118, 28);
+		openMrsConfigButton.setBounds(523, 275, 118, 28);
 		getContentPane().add(openMrsConfigButton);
+		
+		JButton helpButton = new JButton();
+		helpButton.setText("Help!");
+		helpButton.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		helpButton.setBounds(397, 318, 119, 40);
+		getContentPane().add(helpButton);
 		
 		pack();
 	}
@@ -370,8 +319,6 @@ public class XpertConfiguration extends JFrame implements ActionListener {
 		String gxaExport = XpertProperties.getProperty(XpertProperties.GXA_EXPORT);
 		String openMrsExport = XpertProperties.getProperty(XpertProperties.OPENMRS_EXPORT);
 		String webExport = XpertProperties.getProperty(XpertProperties.WEB_EXPORT);
-		String xpertUser = XpertProperties.getProperty(XpertProperties.SERVER_USER);
-		String xpertPassword = XpertProperties.getProperty(XpertProperties.SERVER_PASSWORD);
 		String mtbCode = XpertProperties.getProperty(XpertProperties.MTB_CODE);
 		String rifCode = XpertProperties.getProperty(XpertProperties.RIF_CODE);
 		String qcCode = XpertProperties.getProperty(XpertProperties.QC_CODE);
@@ -381,8 +328,6 @@ public class XpertConfiguration extends JFrame implements ActionListener {
 		gxaCheckBox.setSelected(gxaExport.equals("YES"));
 		openMrsCheckBox.setSelected(openMrsExport.equals("YES"));
 		webCheckBox.setSelected(webExport.equals("YES"));
-		userTextField.setText(xpertUser);
-		passwordField.setText(xpertPassword);
 		mtbCodeTextField.setText(mtbCode);
 		rifCodeTextField.setText(rifCode);
 		qcCodeTextField.setText(qcCode);
@@ -393,7 +338,6 @@ public class XpertConfiguration extends JFrame implements ActionListener {
 		// TODO: Apply validations
 		// Open option must be checked
 		// All fields are mandatory
-		// Password is at least 8 characters
 		return true;
 	}
 	
@@ -412,7 +356,8 @@ public class XpertConfiguration extends JFrame implements ActionListener {
 			SmsDialog smsDialog = new SmsDialog();
 			smsDialog.setVisible(true);
 		} else if (evt.getSource() == webConfigButton) {
-			// TODO: Show Web configuration dialog
+			WebDialog webDialog = new WebDialog();
+			webDialog.setVisible(true);
 		} else if (evt.getSource() == importButton) {
 			File file = SwingUtil.chooseFile("Browse for the file to import", false);
 			if (file != null) {
@@ -452,14 +397,13 @@ public class XpertConfiguration extends JFrame implements ActionListener {
 			properties.put(XpertProperties.GXA_EXPORT, gxaCheckBox.isSelected() ? "YES" : "NO");
 			properties.put(XpertProperties.OPENMRS_EXPORT, openMrsCheckBox.isSelected() ? "YES" : "NO");
 			properties.put(XpertProperties.WEB_EXPORT, webCheckBox.isSelected() ? "YES" : "NO");
-			properties.put(XpertProperties.SERVER_USER, SwingUtil.get(userTextField));
-			properties.put(XpertProperties.SERVER_PASSWORD, String.valueOf(passwordField.getPassword()));
 			properties.put(XpertProperties.MTB_CODE, SwingUtil.get(mtbCodeTextField));
 			properties.put(XpertProperties.RIF_CODE, SwingUtil.get(rifCodeTextField));
 			properties.put(XpertProperties.QC_CODE, SwingUtil.get(qcCodeTextField));
 			properties.put(XpertProperties.LOCAL_PORT, SwingUtil.get(localPortTextField));
 			XpertProperties.writeProperties(properties);
-			// TODO: Launch Control panel
+			XpertActivityViewer xpertActivityViewer = new XpertActivityViewer();
+			xpertActivityViewer.setVisible(true);
 		}
 	}
 }

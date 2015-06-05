@@ -190,12 +190,12 @@ public class ControlPanel extends JPanel implements ActionListener {
 		
 		extUsernameField = new JTextField(DEFAULT_WIDTH);
 		extUsernameField.setActionCommand(extUsernameString);
-		extUsernameField.setText(XpertProperties.props.getProperty(XpertProperties.SERVER_USER));
+		extUsernameField.setText(XpertProperties.props.getProperty(XpertProperties.WEB_USERNAME));
 		extUsernameField.addActionListener(this);
 		
 		extPasswordField = new JPasswordField(DEFAULT_WIDTH);
 		extPasswordField.setActionCommand(extPasswordString);
-		extPasswordField.setText(XpertProperties.props.getProperty(XpertProperties.SERVER_PASSWORD));
+		extPasswordField.setText(XpertProperties.props.getProperty(XpertProperties.WEB_PASSWORD));
 		extPasswordField.addActionListener(this);
 		
 		serverSMSNumberField = new JTextField(DEFAULT_WIDTH);
@@ -233,7 +233,7 @@ public class ControlPanel extends JPanel implements ActionListener {
 		sendMethodComboBox = new JComboBox(methods);
 		sendMethodComboBox.addActionListener(this);
 		
-		String sendMethod = XpertProperties.props.getProperty(XpertProperties.DEFAULT_SEND_METHOD);
+		String sendMethod = XpertProperties.props.getProperty(XpertProperties.WEB_SSL_ENCRYPTION);
 		if (sendMethod.equalsIgnoreCase(SendMethods.CSV_DUMP))
 			sendMethodComboBox.setSelectedIndex(4);
 		else if (sendMethod.equalsIgnoreCase(SendMethods.GX_ALERTS))
@@ -541,9 +541,9 @@ public class ControlPanel extends JPanel implements ActionListener {
 			properties.put(XpertProperties.SERVER_PORT, serverPort);
 			properties.put(XpertProperties.WEB_APP_STRING, webappString);
 			properties.put(XpertProperties.LOCAL_PORT, localPort);
-			properties.put(XpertProperties.SERVER_USER, serverUser);
-			properties.put(XpertProperties.SERVER_PASSWORD, serverPassword);
-			properties.put(XpertProperties.DEFAULT_SEND_METHOD, sendMethod);
+			properties.put(XpertProperties.WEB_USERNAME, serverUser);
+			properties.put(XpertProperties.WEB_PASSWORD, serverPassword);
+			properties.put(XpertProperties.WEB_SSL_ENCRYPTION, sendMethod);
 			properties.put(XpertProperties.CSV_EXPORT, sendMethod.equals(SendMethods.CSV_DUMP) ? "YES" : "NO");
 			properties.put(XpertProperties.GXA_EXPORT, sendMethod.equals(SendMethods.GX_ALERTS) ? "YES" : "NO");
 			properties.put(XpertProperties.OPENMRS_EXPORT, sendMethod.equals(SendMethods.OPENMRS) ? "YES" : "NO");

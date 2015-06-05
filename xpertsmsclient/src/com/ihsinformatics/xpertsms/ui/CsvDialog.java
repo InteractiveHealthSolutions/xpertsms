@@ -97,6 +97,7 @@ public class CsvDialog extends JDialog implements ActionListener {
 	private JScrollPane descriptionScrollPanel;
 	
 	public CsvDialog() {
+		setAlwaysOnTop(true);
 		documentUtil = new DocumentUtil(FileConstants.XPERT_DOCUMENT_FILE);
 		csvFolderPath = FileConstants.XPERT_SMS_DIR;
 		initComponents();

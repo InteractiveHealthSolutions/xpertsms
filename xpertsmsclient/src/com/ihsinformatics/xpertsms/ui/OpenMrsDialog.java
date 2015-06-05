@@ -107,6 +107,7 @@ public class OpenMrsDialog extends JDialog implements ActionListener {
 	private Map<String, String> conceptMap;
 	
 	public OpenMrsDialog() {
+		setAlwaysOnTop(true);
 		initComponents();
 		initEvents();
 		initValues();
@@ -148,7 +149,7 @@ public class OpenMrsDialog extends JDialog implements ActionListener {
 		saveButton.setToolTipText("Creates database tables and save settings to configuration file.");
 		
 		addressLabel = new JLabel();
-		addressLabel.setText("OpenMRS REST-WS Address:");
+		addressLabel.setText("* OpenMRS REST-WS Address:");
 		
 		addressTextField = new JTextField();
 		addressTextField
@@ -157,7 +158,7 @@ public class OpenMrsDialog extends JDialog implements ActionListener {
 		addressTextField.setName("openMrsRestAddress");
 		
 		usernameLabel = new JLabel();
-		usernameLabel.setText("OpenMRS Username:");
+		usernameLabel.setText("* OpenMRS Username:");
 		
 		usernameTextField = new JTextField();
 		usernameTextField.setName("username");
@@ -165,7 +166,7 @@ public class OpenMrsDialog extends JDialog implements ActionListener {
 		usernameTextField.setText("admin");
 		
 		passwordLabel = new JLabel();
-		passwordLabel.setText("Password:");
+		passwordLabel.setText("* Password:");
 		
 		passwordField = new JPasswordField();
 		passwordField.setName("password");
@@ -179,7 +180,7 @@ public class OpenMrsDialog extends JDialog implements ActionListener {
 		encounterTypeTextField.setText("GeneXpert_Results");
 		
 		encounterTypeLabel = new JLabel();
-		encounterTypeLabel.setText("Encounter Type:");
+		encounterTypeLabel.setText("* Encounter Type:");
 		
 		conceptMappingLabel = new JLabel();
 		conceptMappingLabel.setText("Concept Mapping: Please map all the variables to respective OpenMRS concepts");
@@ -191,124 +192,77 @@ public class OpenMrsDialog extends JDialog implements ActionListener {
 		sslCheckBox.setText("Use SSL/TLS Encryption");
 		
 		javax.swing.GroupLayout topDialogPanelLayout = new javax.swing.GroupLayout(topDialogPanel);
-		topDialogPanelLayout.setHorizontalGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(
-		    topDialogPanelLayout
-		            .createSequentialGroup()
-		            .addGroup(
-		                topDialogPanelLayout
-		                        .createParallelGroup(Alignment.LEADING)
-		                        .addGroup(
-		                            topDialogPanelLayout
-		                                    .createSequentialGroup()
-		                                    .addContainerGap()
-		                                    .addGroup(
-		                                        topDialogPanelLayout
-		                                                .createParallelGroup(Alignment.LEADING)
-		                                                .addGroup(
-		                                                    topDialogPanelLayout.createSequentialGroup()
-		                                                            .addComponent(addressLabel)
-		                                                            .addPreferredGap(ComponentPlacement.RELATED))
-		                                                .addComponent(usernameLabel, GroupLayout.PREFERRED_SIZE, 141,
-		                                                    GroupLayout.PREFERRED_SIZE)
-		                                                .addGroup(
-		                                                    topDialogPanelLayout
-		                                                            .createParallelGroup(Alignment.TRAILING, false)
-		                                                            .addComponent(encounterTypeLabel, Alignment.LEADING,
-		                                                                GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-		                                                                Short.MAX_VALUE)
-		                                                            .addComponent(dateTimeFormatLabel, Alignment.LEADING,
-		                                                                GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-		                                                                Short.MAX_VALUE)))
-		                                    .addGap(6)
-		                                    .addGroup(
-		                                        topDialogPanelLayout
-		                                                .createParallelGroup(Alignment.LEADING)
-		                                                .addGroup(
-		                                                    topDialogPanelLayout
-		                                                            .createParallelGroup(Alignment.TRAILING, false)
-		                                                            .addComponent(encounterTypeTextField)
-		                                                            .addComponent(dateFormatComboBox, 0,
-		                                                                GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-		                                                            .addComponent(sslCheckBox, Alignment.LEADING,
-		                                                                GroupLayout.PREFERRED_SIZE, 186,
-		                                                                GroupLayout.PREFERRED_SIZE))
-		                                                .addGroup(
-		                                                    topDialogPanelLayout
-		                                                            .createParallelGroup(Alignment.TRAILING)
-		                                                            .addComponent(addressTextField,
-		                                                                GroupLayout.PREFERRED_SIZE, 281,
-		                                                                GroupLayout.PREFERRED_SIZE)
-		                                                            .addGroup(
-		                                                                topDialogPanelLayout
-		                                                                        .createSequentialGroup()
-		                                                                        .addComponent(usernameTextField,
-		                                                                            GroupLayout.PREFERRED_SIZE, 64,
-		                                                                            GroupLayout.PREFERRED_SIZE)
-		                                                                        .addPreferredGap(
-		                                                                            ComponentPlacement.UNRELATED)
-		                                                                        .addComponent(passwordLabel,
-		                                                                            GroupLayout.PREFERRED_SIZE, 62,
-		                                                                            GroupLayout.PREFERRED_SIZE)
-		                                                                        .addPreferredGap(ComponentPlacement.RELATED)
-		                                                                        .addComponent(passwordField,
-		                                                                            GroupLayout.PREFERRED_SIZE, 139,
-		                                                                            GroupLayout.PREFERRED_SIZE)))))
-		                        .addGroup(
-		                            topDialogPanelLayout.createSequentialGroup().addGap(159).addComponent(tryButton)
-		                                    .addPreferredGap(ComponentPlacement.RELATED).addComponent(saveButton))
-		                        .addGroup(
-		                            topDialogPanelLayout
-		                                    .createSequentialGroup()
-		                                    .addContainerGap()
-		                                    .addComponent(conceptsScrollPane, GroupLayout.PREFERRED_SIZE, 490,
-		                                        GroupLayout.PREFERRED_SIZE))
-		                        .addGroup(
-		                            topDialogPanelLayout
-		                                    .createSequentialGroup()
-		                                    .addContainerGap()
-		                                    .addComponent(conceptMappingLabel, GroupLayout.PREFERRED_SIZE, 384,
-		                                        GroupLayout.PREFERRED_SIZE))).addContainerGap(18, Short.MAX_VALUE)));
-		topDialogPanelLayout.setVerticalGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(
-		    topDialogPanelLayout
-		            .createSequentialGroup()
-		            .addContainerGap()
-		            .addGroup(
-		                topDialogPanelLayout
-		                        .createParallelGroup(Alignment.BASELINE)
-		                        .addComponent(addressLabel)
-		                        .addComponent(addressTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-		                            GroupLayout.PREFERRED_SIZE))
-		            .addPreferredGap(ComponentPlacement.RELATED)
-		            .addGroup(
-		                topDialogPanelLayout
-		                        .createParallelGroup(Alignment.BASELINE)
-		                        .addComponent(usernameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-		                            GroupLayout.PREFERRED_SIZE)
-		                        .addComponent(passwordLabel)
-		                        .addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-		                            GroupLayout.PREFERRED_SIZE).addComponent(usernameLabel))
-		            .addPreferredGap(ComponentPlacement.RELATED)
-		            .addGroup(
-		                topDialogPanelLayout
-		                        .createParallelGroup(Alignment.BASELINE)
-		                        .addComponent(dateFormatComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-		                            GroupLayout.PREFERRED_SIZE).addComponent(dateTimeFormatLabel))
-		            .addPreferredGap(ComponentPlacement.RELATED)
-		            .addGroup(
-		                topDialogPanelLayout
-		                        .createParallelGroup(Alignment.BASELINE)
-		                        .addComponent(encounterTypeTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-		                            GroupLayout.PREFERRED_SIZE).addComponent(encounterTypeLabel))
-		            .addPreferredGap(ComponentPlacement.RELATED)
-		            .addComponent(sslCheckBox)
-		            .addGap(9)
-		            .addComponent(conceptMappingLabel)
-		            .addPreferredGap(ComponentPlacement.RELATED)
-		            .addComponent(conceptsScrollPane, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
-		            .addPreferredGap(ComponentPlacement.RELATED)
-		            .addGroup(
-		                topDialogPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(saveButton)
-		                        .addComponent(tryButton)).addGap(11)));
+		topDialogPanelLayout.setHorizontalGroup(
+			topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(topDialogPanelLayout.createSequentialGroup()
+					.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(topDialogPanelLayout.createSequentialGroup()
+							.addContainerGap()
+							.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(addressLabel)
+								.addComponent(usernameLabel, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE)
+								.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.TRAILING, false)
+									.addComponent(encounterTypeLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(dateTimeFormatLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+							.addGap(6)
+							.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(dateFormatComboBox, Alignment.TRAILING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addGroup(topDialogPanelLayout.createSequentialGroup()
+									.addComponent(usernameTextField, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(passwordLabel, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, 139, GroupLayout.PREFERRED_SIZE))
+								.addComponent(addressTextField, Alignment.TRAILING)
+								.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.TRAILING, false)
+									.addComponent(encounterTypeTextField, Alignment.LEADING)
+									.addComponent(sslCheckBox, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE))))
+						.addGroup(topDialogPanelLayout.createSequentialGroup()
+							.addGap(159)
+							.addComponent(tryButton)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(saveButton))
+						.addGroup(topDialogPanelLayout.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(conceptsScrollPane, GroupLayout.PREFERRED_SIZE, 490, GroupLayout.PREFERRED_SIZE))
+						.addGroup(topDialogPanelLayout.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(conceptMappingLabel, GroupLayout.PREFERRED_SIZE, 384, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(18, Short.MAX_VALUE))
+		);
+		topDialogPanelLayout.setVerticalGroup(
+			topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(topDialogPanelLayout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(addressLabel)
+						.addComponent(addressTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(usernameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(usernameLabel)
+						.addComponent(passwordLabel))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(dateFormatComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(dateTimeFormatLabel))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(encounterTypeTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(encounterTypeLabel))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(sslCheckBox)
+					.addGap(9)
+					.addComponent(conceptMappingLabel)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(conceptsScrollPane, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(saveButton)
+						.addComponent(tryButton))
+					.addGap(11))
+		);
 		
 		conceptsTextArea = new JTextArea();
 		conceptsTextArea.setName("conceptMapping");
@@ -454,7 +408,7 @@ public class OpenMrsDialog extends JDialog implements ActionListener {
 			String prefix = sslCheckBox.isSelected() ? "https://" : "http://";
 			String url = prefix + SwingUtil.get(addressTextField);
 			String username = SwingUtil.get(usernameTextField);
-			String password = SwingUtil.get(passwordField);
+			String password = String.valueOf(passwordField.getPassword());
 			String response = "";
 			DefaultHttpClient httpclient = new DefaultHttpClient();
 			try {
@@ -509,7 +463,7 @@ public class OpenMrsDialog extends JDialog implements ActionListener {
 			String prefix = sslCheckBox.isSelected() ? "https" : "http" + "://";
 			String url = prefix + SwingUtil.get(addressTextField);
 			String username = SwingUtil.get(usernameTextField);
-			String password = SwingUtil.get(passwordField);
+			String password = String.valueOf(passwordField.getPassword());
 			String response = "";
 			try {
 				// Check if the encounter type already exists
@@ -609,8 +563,7 @@ public class OpenMrsDialog extends JDialog implements ActionListener {
 		if (e.getSource() == tryButton) {
 			tryConfiguration();
 		} else if (e.getSource() == saveButton) {
-			
+			saveConfiguration();
 		}
-		
 	}
 }

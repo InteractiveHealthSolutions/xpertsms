@@ -92,6 +92,7 @@ public class SmsDialog extends JDialog implements ActionListener {
 	private JButton tryButton;
 	
 	public SmsDialog() {
+		setAlwaysOnTop(true);
 		initComponents();
 		initEvents();
 		initValues();
@@ -138,11 +139,11 @@ public class SmsDialog extends JDialog implements ActionListener {
 		saveButton.setFont(new java.awt.Font("Tahoma", 2, 12)); // NOI18N
 		saveButton.setText("Save");
 		saveButton.setToolTipText("Creates database tables and save settings to configuration file.");
-		projectNameLabel.setText("Project's Name:");
+		projectNameLabel.setText("* Project's Name:");
 		projectNameTextField.setToolTipText("Project must be configured in the SMS Tarseel web application");
 		projectNameTextField.setText("XSMSKHI");
 		projectNameTextField.setName("projectName");
-		adminPhoneLabel.setText("Admin's Phone No.:");
+		adminPhoneLabel.setText("* Admin's Phone No.:");
 		adminPhoneTextField
 		        .setToolTipText("Here goes fully qualified mobile number of the receiver of results from GeneXpert. Please start from country code.");
 		adminPhoneTextField.setText("+923452345345");
@@ -178,141 +179,75 @@ public class SmsDialog extends JDialog implements ActionListener {
 			}
 		});
 		javax.swing.GroupLayout topDialogPanelLayout = new javax.swing.GroupLayout(topDialogPanel);
-		topDialogPanelLayout
-		        .setHorizontalGroup(topDialogPanelLayout
-		                .createParallelGroup(Alignment.LEADING)
-		                .addGroup(
-		                    topDialogPanelLayout
-		                            .createSequentialGroup()
-		                            .addContainerGap()
-		                            .addGroup(
-		                                topDialogPanelLayout
-		                                        .createParallelGroup(Alignment.LEADING)
-		                                        .addGroup(
-		                                            topDialogPanelLayout
-		                                                    .createSequentialGroup()
-		                                                    .addComponent(projectNameLabel, GroupLayout.PREFERRED_SIZE, 115,
-		                                                        GroupLayout.PREFERRED_SIZE)
-		                                                    .addGap(18)
-		                                                    .addComponent(projectNameTextField, GroupLayout.PREFERRED_SIZE,
-		                                                        242, GroupLayout.PREFERRED_SIZE))
-		                                        .addGroup(
-		                                            topDialogPanelLayout
-		                                                    .createSequentialGroup()
-		                                                    .addGroup(
-		                                                        topDialogPanelLayout
-		                                                                .createParallelGroup(Alignment.TRAILING)
-		                                                                .addGroup(
-		                                                                    topDialogPanelLayout
-		                                                                            .createSequentialGroup()
-		                                                                            .addGroup(
-		                                                                                topDialogPanelLayout
-		                                                                                        .createParallelGroup(
-		                                                                                            Alignment.LEADING)
-		                                                                                        .addGroup(
-		                                                                                            topDialogPanelLayout
-		                                                                                                    .createSequentialGroup()
-		                                                                                                    .addGroup(
-		                                                                                                        topDialogPanelLayout
-		                                                                                                                .createParallelGroup(
-		                                                                                                                    Alignment.LEADING)
-		                                                                                                                .addComponent(
-		                                                                                                                    adminPhoneLabel,
-		                                                                                                                    GroupLayout.PREFERRED_SIZE,
-		                                                                                                                    108,
-		                                                                                                                    GroupLayout.PREFERRED_SIZE)
-		                                                                                                                .addComponent(
-		                                                                                                                    dateTimeFormatLabel,
-		                                                                                                                    GroupLayout.PREFERRED_SIZE,
-		                                                                                                                    102,
-		                                                                                                                    GroupLayout.PREFERRED_SIZE))
-		                                                                                                    .addGap(19))
-		                                                                                        .addComponent(
-		                                                                                            variablesListLabel,
-		                                                                                            GroupLayout.PREFERRED_SIZE,
-		                                                                                            100,
-		                                                                                            GroupLayout.PREFERRED_SIZE))
-		                                                                            .addGap(6))
-		                                                                .addGroup(
-		                                                                    topDialogPanelLayout
-		                                                                            .createSequentialGroup()
-		                                                                            .addComponent(recommendedButton)
-		                                                                            .addPreferredGap(
-		                                                                                ComponentPlacement.RELATED)))
-		                                                    .addGroup(
-		                                                        topDialogPanelLayout
-		                                                                .createParallelGroup(Alignment.LEADING)
-		                                                                .addComponent(verticalScrollPane,
-		                                                                    GroupLayout.PREFERRED_SIZE,
-		                                                                    GroupLayout.DEFAULT_SIZE,
-		                                                                    GroupLayout.PREFERRED_SIZE)
-		                                                                .addGroup(
-		                                                                    topDialogPanelLayout
-		                                                                            .createParallelGroup(Alignment.LEADING,
-		                                                                                false)
-		                                                                            .addComponent(adminPhoneTextField,
-		                                                                                GroupLayout.PREFERRED_SIZE, 103,
-		                                                                                GroupLayout.PREFERRED_SIZE)
-		                                                                            .addGroup(
-		                                                                                topDialogPanelLayout
-		                                                                                        .createSequentialGroup()
-		                                                                                        .addComponent(tryButton)
-		                                                                                        .addPreferredGap(
-		                                                                                            ComponentPlacement.RELATED)
-		                                                                                        .addComponent(saveButton))
-		                                                                            .addComponent(dateTimeFormatComboBox, 0,
-		                                                                                0, Short.MAX_VALUE)))))
-		                            .addContainerGap(28, Short.MAX_VALUE)));
-		topDialogPanelLayout.setVerticalGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(
-		    topDialogPanelLayout
-		            .createSequentialGroup()
-		            .addGroup(
-		                topDialogPanelLayout
-		                        .createParallelGroup(Alignment.LEADING)
-		                        .addGroup(
-		                            topDialogPanelLayout.createSequentialGroup().addGap(12).addComponent(projectNameLabel))
-		                        .addGroup(
-		                            topDialogPanelLayout
-		                                    .createSequentialGroup()
-		                                    .addContainerGap()
-		                                    .addComponent(projectNameTextField, GroupLayout.PREFERRED_SIZE,
-		                                        GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-		            .addPreferredGap(ComponentPlacement.UNRELATED)
-		            .addGroup(
-		                topDialogPanelLayout
-		                        .createParallelGroup(Alignment.LEADING)
-		                        .addGroup(
-		                            topDialogPanelLayout.createSequentialGroup().addGap(6).addComponent(adminPhoneLabel))
-		                        .addComponent(adminPhoneTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-		                            GroupLayout.PREFERRED_SIZE))
-		            .addGroup(
-		                topDialogPanelLayout
-		                        .createParallelGroup(Alignment.LEADING)
-		                        .addGroup(
-		                            topDialogPanelLayout.createSequentialGroup().addGap(17)
-		                                    .addComponent(dateTimeFormatLabel))
-		                        .addGroup(
-		                            topDialogPanelLayout
-		                                    .createSequentialGroup()
-		                                    .addPreferredGap(ComponentPlacement.RELATED)
-		                                    .addComponent(dateTimeFormatComboBox, GroupLayout.PREFERRED_SIZE,
-		                                        GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-		            .addGroup(
-		                topDialogPanelLayout
-		                        .createParallelGroup(Alignment.LEADING)
-		                        .addGroup(
-		                            topDialogPanelLayout.createSequentialGroup().addGap(28).addComponent(variablesListLabel)
-		                                    .addGap(51).addComponent(recommendedButton))
-		                        .addGroup(
-		                            topDialogPanelLayout
-		                                    .createSequentialGroup()
-		                                    .addPreferredGap(ComponentPlacement.RELATED)
-		                                    .addComponent(verticalScrollPane, GroupLayout.PREFERRED_SIZE, 128,
-		                                        GroupLayout.PREFERRED_SIZE)))
-		            .addGap(41)
-		            .addGroup(
-		                topDialogPanelLayout.createParallelGroup(Alignment.LEADING).addComponent(saveButton)
-		                        .addComponent(tryButton)).addGap(34)));
+		topDialogPanelLayout.setHorizontalGroup(
+			topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(topDialogPanelLayout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(topDialogPanelLayout.createSequentialGroup()
+							.addComponent(projectNameLabel, GroupLayout.PREFERRED_SIZE, 115, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(projectNameTextField, GroupLayout.PREFERRED_SIZE, 242, GroupLayout.PREFERRED_SIZE))
+						.addGroup(topDialogPanelLayout.createSequentialGroup()
+							.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.TRAILING)
+								.addGroup(topDialogPanelLayout.createSequentialGroup()
+									.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
+										.addComponent(adminPhoneLabel, GroupLayout.PREFERRED_SIZE, 108, GroupLayout.PREFERRED_SIZE)
+										.addComponent(dateTimeFormatLabel, GroupLayout.PREFERRED_SIZE, 102, GroupLayout.PREFERRED_SIZE)
+										.addComponent(variablesListLabel, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE))
+									.addGap(25))
+								.addGroup(topDialogPanelLayout.createSequentialGroup()
+									.addComponent(recommendedButton)
+									.addPreferredGap(ComponentPlacement.RELATED)))
+							.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(verticalScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING, false)
+									.addComponent(adminPhoneTextField, GroupLayout.PREFERRED_SIZE, 103, GroupLayout.PREFERRED_SIZE)
+									.addGroup(topDialogPanelLayout.createSequentialGroup()
+										.addComponent(tryButton)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(saveButton))
+									.addComponent(dateTimeFormatComboBox, 0, 0, Short.MAX_VALUE)))))
+					.addContainerGap(24, Short.MAX_VALUE))
+		);
+		topDialogPanelLayout.setVerticalGroup(
+			topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(topDialogPanelLayout.createSequentialGroup()
+					.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(topDialogPanelLayout.createSequentialGroup()
+							.addGap(12)
+							.addComponent(projectNameLabel))
+						.addGroup(topDialogPanelLayout.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(projectNameTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(topDialogPanelLayout.createSequentialGroup()
+							.addGap(6)
+							.addComponent(adminPhoneLabel))
+						.addComponent(adminPhoneTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(topDialogPanelLayout.createSequentialGroup()
+							.addGap(17)
+							.addComponent(dateTimeFormatLabel))
+						.addGroup(topDialogPanelLayout.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(dateTimeFormatComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+					.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(topDialogPanelLayout.createSequentialGroup()
+							.addGap(28)
+							.addComponent(variablesListLabel)
+							.addGap(36)
+							.addComponent(recommendedButton))
+						.addGroup(topDialogPanelLayout.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(verticalScrollPane, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)))
+					.addGap(41)
+					.addGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(saveButton)
+						.addComponent(tryButton))
+					.addGap(34))
+		);
 		topDialogPanel.setLayout(topDialogPanelLayout);
 		contentPanel.setLayout(new FlowLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

@@ -20,7 +20,7 @@ public class SmsTarseel {
 
 		System.out.println(">>>>LOADING SYSTEM PROPERTIES...");
 		InputStream f = Thread.currentThread().getContextClassLoader()
-				.getResourceAsStream("smstarseel.properties");
+				.getResourceAsStream("xpertsmsweb.properties");
 		// Java Properties donot seem to support substitutions hence EProperties
 		// are used to accomplish the task
 

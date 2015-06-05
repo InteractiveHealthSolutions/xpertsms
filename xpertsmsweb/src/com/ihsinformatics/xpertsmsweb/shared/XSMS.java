@@ -10,16 +10,16 @@ package com.ihsinformatics.xpertsmsweb.shared;
  */
 public final class XSMS {
 	private static final boolean devMode = false;
-
+	public static final String hashingAlgorithm = "SHA";
+	public static final String packageName = "com.ihsinformatics.xpertsmsweb";
+	public static final String projectTitle = "Xpert SMS";
+	public static final char separatorChar = ',';
+	public static final int sessionLimit = 900000;
 	public static final XSMS xsms = new XSMS();
+	private static VersionUtil version;
 	private static String resourcesPath;
 	private static String currentUser;
 	private static String passCode;
-	public static String hashingAlgorithm;
-	public static String packageName;
-	public static String projectTitle;
-	public static char separatorChar;
-	public static int sessionLimit;
 	public static String[] formOptions = { "YES", "NO", "DONT KNOW", "REJECTED" };
 	public static String[] locationTypes = { "DISTRICT", "HEALTH FACILITY",
 			"LABORATORY" };
@@ -42,11 +42,6 @@ public final class XSMS {
 					+ System.getProperty("file.separator", "/");
 		currentUser = "";
 		passCode = "";
-		hashingAlgorithm = "SHA";
-		packageName = "com.ihsinformatics.xpertsmsweb";
-		projectTitle = "Xpert SMS";
-		separatorChar = ',';
-		sessionLimit = 900000;
 	}
 
 	/**
@@ -63,6 +58,20 @@ public final class XSMS {
 		}
 		concatenated.deleteCharAt(concatenated.length() - 1);
 		return concatenated.toString();
+	}
+
+	/**
+	 * @return the version
+	 */
+	public static VersionUtil getVersion() {
+		return version;
+	}
+
+	/**
+	 * @param version the version to set
+	 */
+	public static void setVersion(VersionUtil version) {
+		XSMS.version = version;
 	}
 
 	/**

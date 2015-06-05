@@ -1,9 +1,14 @@
 package com.ihsinformatics.xpertsmsweb.server;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -21,6 +26,7 @@ import com.ihsinformatics.xpertsmsweb.server.util.MDHashUtil;
 import com.ihsinformatics.xpertsmsweb.server.util.ReportUtil;
 import com.ihsinformatics.xpertsmsweb.shared.ListType;
 import com.ihsinformatics.xpertsmsweb.shared.Parameter;
+import com.ihsinformatics.xpertsmsweb.shared.VersionUtil;
 import com.ihsinformatics.xpertsmsweb.shared.XSMS;
 import com.ihsinformatics.xpertsmsweb.shared.model.Contact;
 import com.ihsinformatics.xpertsmsweb.shared.model.Encounter;
@@ -48,6 +54,37 @@ import com.ihsinformatics.xpertsmsweb.shared.model.Users;
 @SuppressWarnings("serial")
 public class ServerServiceImpl extends RemoteServiceServlet implements
 		ServerService {
+
+	public static final Properties prop = new Properties();
+
+	/**
+	 * 
+	 */
+	public ServerServiceImpl() {
+		try {
+			prop.load(new FileInputStream("xpertsmsweb.properties"));
+			String version = prop.getProperty("version");
+			VersionUtil versionUtil = new VersionUtil();
+			versionUtil.parseVersion(version);
+			XSMS.setVersion(versionUtil);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public String getVersion() {
+		String version = "0.0.0";
+		return version;
+	}
+
 	private String arrangeFilter(String filter) throws Exception {
 		if (filter.trim().equalsIgnoreCase(""))
 			return "";
