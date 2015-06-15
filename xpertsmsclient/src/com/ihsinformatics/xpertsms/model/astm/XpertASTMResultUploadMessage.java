@@ -34,6 +34,7 @@ import com.ihsinformatics.xpertsms.model.XpertResultUploadMessage;
 
 /**
  * Implementation of XpertResultUploadMessage class based on ASTM standard
+ * 
  * @author ali.habib@irdresearch.org
  */
 public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
@@ -1293,38 +1294,60 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 	
 	@Override
 	public String toSMS(boolean exportProbes) {
-		String smsText = "";
-		smsText += replaceNull(patientId) + "^" + replaceNull(sampleId) + "^" + replaceNull(mtbResult) + "^"
-		        + replaceNull(rifResult) + "^" + replaceNull(systemId);
-		smsText += "^" + replaceNull(pcId) + "^" + replaceNull(operatorId) + "^" + replaceNull(instrumentSerial) + "^"
-		        + replaceNull(moduleId) + "^" + replaceNull(cartridgeId) + "^" + replaceNull(reagentLotId) + "^"
-		        + replaceNull(testEndDate);
+		StringBuilder smsText = new StringBuilder();
+		smsText.append(replaceNull(patientId) + "^");
+		smsText.append(replaceNull(sampleId) + "^");
+		smsText.append(replaceNull(mtbResult) + "^");
+		smsText.append(replaceNull(rifResult) + "^");
+		smsText.append(replaceNull(systemId) + "^");
+		smsText.append(replaceNull(pcId) + "^");
+		smsText.append(replaceNull(operatorId) + "^");
+		smsText.append(replaceNull(instrumentSerial) + "^");
+		smsText.append(replaceNull(moduleId) + "^");
+		smsText.append(replaceNull(cartridgeId) + "^");
+		smsText.append(replaceNull(reagentLotId) + "^");
+		smsText.append(replaceNull(testEndDate) + "^");
 		if (isFinal() != null && isFinal())
-			smsText += "^" + "yes";
+			smsText.append("yes" + "^");
 		else
-			smsText += "^" + "no";
+			smsText.append("no" + "^");
 		if (isPending() != null && isPending())
-			smsText += "^" + "yes";
+			smsText.append("yes" + "^");
 		else
-			smsText += "^" + "no";
-		if (isError() != null && isError()) {
-			smsText += "^" + "yes";
-			smsText += "^" + errorCode;
-		} else
-			smsText += "^" + "no";
+			smsText.append("no" + "^");
+		if (isError() != null && isError())
+			smsText.append("yes" + "^" + errorCode + "^" + errorNotes + "^");
+		else
+			smsText.append("no" + "^");
 		if (isCorrection() != null && isCorrection())
-			smsText += "^" + "yes";
+			smsText.append("yes" + "^");
 		else
-			smsText += "^" + "no";
+			smsText.append("no" + "^");
+		smsText.append(notes);
 		if (exportProbes) {
-			smsText += "^" + replaceNull(probeResultA) + "^" + replaceNull(probeResultB) + "^" + replaceNull(probeResultC)
-			        + "^" + replaceNull(probeResultD) + "^" + replaceNull(probeResultE) + "^" + replaceNull(probeResultSpc)
-			        + "^" + replaceNull(probeCtA) + "^" + replaceNull(probeCtB) + "^" + replaceNull(probeCtC) + "^"
-			        + replaceNull(probeCtD) + "^" + replaceNull(probeCtE) + "^" + replaceNull(probeCtSpc) + "^"
-			        + replaceNull(probeEndptA) + "^" + replaceNull(probeEndptB) + "^" + replaceNull(probeEndptC) + "^"
-			        + replaceNull(probeEndptD) + "^" + replaceNull(probeEndptE) + "^" + replaceNull(probeEndptSpc);
+			smsText.append("^");
+			smsText.append(replaceNull(probeResultA) + "^");
+			smsText.append(replaceNull(probeResultB) + "^");
+			smsText.append(replaceNull(probeResultC) + "^");
+			smsText.append(replaceNull(probeResultD) + "^");
+			smsText.append(replaceNull(probeResultE) + "^");
+			smsText.append(replaceNull(probeResultSpc) + "^");
+			
+			smsText.append(replaceNull(probeCtA) + "^");
+			smsText.append(replaceNull(probeCtB) + "^");
+			smsText.append(replaceNull(probeCtC) + "^");
+			smsText.append(replaceNull(probeCtD) + "^");
+			smsText.append(replaceNull(probeCtE) + "^");
+			smsText.append(replaceNull(probeCtSpc) + "^");
+			
+			smsText.append(replaceNull(probeEndptA) + "^");
+			smsText.append(replaceNull(probeEndptB) + "^");
+			smsText.append(replaceNull(probeEndptC) + "^");
+			smsText.append(replaceNull(probeEndptD) + "^");
+			smsText.append(replaceNull(probeEndptE) + "^");
+			smsText.append(replaceNull(probeEndptSpc));
 		}
-		return smsText;
+		return smsText.toString();
 	}
 	
 	@Override

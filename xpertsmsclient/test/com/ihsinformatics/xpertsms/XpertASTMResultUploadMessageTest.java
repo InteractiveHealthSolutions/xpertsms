@@ -1,8 +1,5 @@
 package com.ihsinformatics.xpertsms;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import net.sf.json.JSONObject;
 
 import org.junit.Assert;
@@ -39,7 +36,6 @@ public class XpertASTMResultUploadMessageTest {
 		        .put("probeCCt", 2.2).put("probeDCt", 3.3).put("probeECt", 4.4).put("probeSpcCt", 5.5)
 		        .put("probeAEndpt", 8.8).put("probeBEndpt", 9.9).put("probeCEndpt", 1.2).put("probeDEndpt", 2.3)
 		        .put("probeEEndpt", 3.4).put("probeSpcEndpt", 4.5);
-		
 		sampleMessage.setUniversalTestId("MTB-RIF");
 		sampleMessage.setSystemDefinedTestName("Xpert MTB-RIF Assay");
 		sampleMessage.setSystemDefinedTestVersion("7");
@@ -62,6 +58,7 @@ public class XpertASTMResultUploadMessageTest {
 		sampleMessage.setComputerName("CepheidJRJRFQ1");
 		sampleMessage.setNotes("Just XDR-TB");
 		sampleMessage.setErrorCode("5002");
+		sampleMessage.setError(true);
 		sampleMessage.setErrorNotes("Post-run analysis error");
 		sampleMessage.setMessageId("");
 		sampleMessage.setProbeResultA("POS");
@@ -82,35 +79,41 @@ public class XpertASTMResultUploadMessageTest {
 		sampleMessage.setProbeEndPtD("3.2");
 		sampleMessage.setProbeEndPtE("1.0");
 		sampleMessage.setProbeEndPtSPC("0.0");
-		SimpleDateFormat messageFormat = new SimpleDateFormat("yyyy-MM-dd");
-		sampleMessage.setMessageDateTime(messageFormat.format(new Date()));
+		sampleMessage.setMessageDateTime("2015-05-04");
 	}
 	
 	@Test
-	public void testToPostParams() {
+	public void testToPostParams() throws Exception {
+		setUpBeforeClass();
 		String params = sampleMessage.toPostParams(true, username, password);
-		String should = "type=astmresult&username=" + username + "&password=" + password + "&pid=101130800001-9&sampleid=141016_001&mtb=MTB DETECTED&rif=Rif Resistance NOT DETECTED&notes=Just XDR-TB&enddate=2015-05-23&operatorid=OWAIS&pcid=CEPHEID5G183R1&instserial=708228&moduleid=618255&cartrigeid=204304821&reagentlotid=10713-AX&systemid=Machine API Test&receiverid=null&expdate=2014-06-21&probea=POS&probeb=NO RESULT&probec=NEG&probed=NEG&probee=POS&probespc=0&probeact=1.1&probebct=2.2&probecct=2.3&probedct=1.3&probeect=1.4&probespcct=2.5&probeaendpt=3.6&probebendpt=4.7&probecendpt=4.5&probedendpt=3.2&probeeendpt=1.0&probespcendpt=0.0&";
+		String should = "type=astmresult&username="
+		        + username
+		        + "&password="
+		        + password
+		        + "&pid=101130800001-9&sampleid=141016_001&mtb=MTB DETECTED MEDIUM&rif=Rif Resistance NOT DETECTED&error=yes&errorcode=5002&errornotes=Post-run analysis error&notes=Just XDR-TB&enddate=2015-05-23&operatorid=OWAIS&pcid=CEPHEID5G183R1&instserial=708228&moduleid=618255&cartrigeid=204304821&reagentlotid=10713-AX&systemid=Machine API Test&receiverid=null&expdate=2014-06-21&probea=POS&probeb=NO RESULT&probec=NEG&probed=NEG&probee=POS&probespc=0&probeact=1.1&probebct=2.2&probecct=2.3&probedct=1.3&probeect=1.4&probespcct=2.5&probeaendpt=3.6&probebendpt=4.7&probecendpt=4.5&probedendpt=3.2&probeeendpt=1.0&probespcendpt=0.0&";
 		Assert.assertTrue("Parameters mismatch", params.equalsIgnoreCase(should));
 	}
 	
 	@Test
-	public void testToSMS() {
+	public void testToSMS() throws Exception {
+		setUpBeforeClass();
 		String sms = sampleMessage.toSMS(true);
-		String should = "101130800001-9^141016_001^MTB DETECTED^Rif Resistance NOT DETECTED^Machine API Test^CEPHEID5G183R1^OWAIS^708228^618255^204304821^10713-AX^2015-05-23^no^no^no^no^POS^NO RESULT^NEG^NEG^POS^0^1.1^2.2^2.3^1.3^1.4^2.5^3.6^4.7^4.5^3.2^1.0^0.0";
+		String should = "101130800001-9^141016_001^MTB DETECTED MEDIUM^Rif Resistance NOT DETECTED^Machine API Test^CEPHEID5G183R1^OWAIS^708228^618255^204304821^10713-AX^2015-05-23^no^no^yes^5002^Post-run analysis error^no^Just XDR-TB^POS^NO RESULT^NEG^NEG^POS^0^1.1^2.2^2.3^1.3^1.4^2.5^3.6^4.7^4.5^3.2^1.0^0.0";
 		Assert.assertTrue("Parameters mismatch", sms.equalsIgnoreCase(should));
 	}
 	
 	@Test
-	public void testToCsv() {
+	public void testToCsv() throws Exception {
+		setUpBeforeClass();
 		String csv = sampleMessage.toCsv();
-		String should = "\"101130800001-9\",\"141016_001\",\"MTB DETECTED\",\"Rif Resistance NOT DETECTED\",\"\",\"\",\"\",\"\",\"\",\"OWAIS\",\"2015-05-22\",\"2015-05-23\",\"CEPHEID5G183R1\",\"708228\",\"618255\",\"204304821\",\"10713-AX\",\"2014-06-21\","
-		        + "\"5002\",\"Post-run analysis error\",\"Just XDR-TB\",\"\",\"Machine API Test\",\"4.4a\",\"\",\"\",\"\",\"2015-05-04\",\"\",\"MTB-RIF\",\"\",\"\",\"\",\"\",\"\",\"Xpert MTB-RIF Assay\",\"7\","
-		        + "\"POS\",\"NO RESULT\",\"NEG\",\"NEG\",\"POS\",\"0\",\"1.1\",\"2.2\",\"2.3\",\"1.3\",\"1.4\",\"2.5\",\"3.6\",\"4.7\",\"4.5\",\"3.2\",\"1.0\",\"0.0\"";
+		csv = csv.replace("\"", "");
+		String should = "101130800001-9,141016_001,MTB DETECTED MEDIUM,Rif Resistance NOT DETECTED,,,true,,,OWAIS,2015-05-22,2015-05-23,CEPHEID5G183R1,708228,618255,204304821,10713-AX,2014-06-21,5002,Post-run analysis error,Just XDR-TB,,Machine API Test,4.4a,,,,2015-05-04,,MTB-RIF,,,,,,Xpert MTB-RIF Assay,7,POS,NO RESULT,NEG,NEG,POS,0,1.1,2.2,2.3,1.3,1.4,2.5,3.6,4.7,4.5,3.2,1.0,0.0";
 		Assert.assertTrue("Parameters mismatch", csv.equalsIgnoreCase(should));
 	}
 	
 	@Test
-	public void testToSqlQuery() {
+	public void testToSqlQuery() throws Exception {
+		setUpBeforeClass();
 		String sql = sampleMessage.toSqlQuery();
 		String should = "insert into genexpertresults (PatientID,SputumTestID,LaboratoryID,DateTested,DrugResistance,GeneXpertResult,MTBBurden,ErrorCode,Remarks,InstrumentID,ModuleID,CartridgeID,ReagentLotID,PcID,OperatorID,CartridgeExpiryDate,ProbeResultA,ProbeResultB,ProbeResultC,ProbeResultD,ProbeResultE,ProbeResultSPC,ProbeCtA,ProbeCtB,ProbeCtC,ProbeCtD,ProbeCtE,ProbeCtSPC,ProbeEndptA,ProbeEndptB,ProbeEndptC,ProbeEndptD,ProbeEndptE,ProbeEndptSPC) VALUES "
 		        + "('101130800001-9','141016_001','GeneXpert PC','2015-05-23','Rif Resistance NOT DETECTED','MTB DETECTED','MEDIUM','5002','Post-run analysis error. Just XDR-TB','708228','618255','204304821','10713-AX','CEPHEID5G183R1','OWAIS','2014-06-21',"
@@ -119,7 +122,7 @@ public class XpertASTMResultUploadMessageTest {
 	}
 	
 	@Test
-	public void testToJson() {
+	public void testToJson() throws Exception {
+		setUpBeforeClass();
 	}
-	
 }
