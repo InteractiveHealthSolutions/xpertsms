@@ -4,12 +4,12 @@
 
 package com.ihsinformatics.xpertsmsweb.shared;
 
+
 /*
  * @author owais.hussain@ihsinformatics.com
  * 
  */
 public final class XSMS {
-	private static final boolean devMode = false;
 	public static final String hashingAlgorithm = "SHA";
 	public static final String packageName = "com.ihsinformatics.xpertsmsweb";
 	public static final String projectTitle = "Xpert SMS";
@@ -17,7 +17,6 @@ public final class XSMS {
 	public static final int sessionLimit = 900000;
 	public static final XSMS xsms = new XSMS();
 	private static VersionUtil version;
-	private static String resourcesPath;
 	private static String currentUser;
 	private static String passCode;
 	public static String[] formOptions = { "YES", "NO", "DONT KNOW", "REJECTED" };
@@ -29,17 +28,6 @@ public final class XSMS {
 	public static String[] userStatuses = { "ACTIVE", "SUSPENDED" };
 
 	private XSMS() {
-		if (System.getProperty("os.name", "windows").toLowerCase()
-				.startsWith("windows")) {
-			if (devMode)
-				resourcesPath = "c:\\Users\\Owais\\git\\xpertsms\\xpertsmsweb\\war"
-						+ System.getProperty("file.separator", "\\");
-			else
-				resourcesPath = "c:\\apache-tomcat-6.0\\webapps\\xpertsmsweb"
-						+ System.getProperty("file.separator", "\\");
-		} else
-			resourcesPath = "/var/lib/tomcat6/webapps/xpertsmsweb"
-					+ System.getProperty("file.separator", "/");
 		currentUser = "";
 		passCode = "";
 	}
@@ -68,7 +56,8 @@ public final class XSMS {
 	}
 
 	/**
-	 * @param version the version to set
+	 * @param version
+	 *            the version to set
 	 */
 	public static void setVersion(VersionUtil version) {
 		XSMS.version = version;
@@ -147,27 +136,5 @@ public final class XSMS {
 	 */
 	public static void setPassCode(String passCode) {
 		XSMS.passCode = passCode;
-	}
-
-	/**
-	 * @return the reportPath
-	 */
-	public static String getReportPath() {
-		return getResourcesPath() + "rpt"
-				+ System.getProperty("file.separator", "/");
-	}
-
-	/**
-	 * @return the staticFilePath
-	 */
-	public static String getStaticFilePath() {
-		return getResourcesPath() + "StaticData.xml";
-	}
-
-	/**
-	 * @return the resourcesPath
-	 */
-	public static String getResourcesPath() {
-		return resourcesPath;
 	}
 }

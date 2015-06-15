@@ -27,19 +27,28 @@ import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 
 import com.ihsinformatics.xpertsmsweb.shared.Parameter;
-import com.ihsinformatics.xpertsmsweb.shared.XSMS;
 
 /**
  * @author owais.hussain@ihsinformatics.com
  * 
  */
 public class ReportUtil {
+	private static String resourcesPath;
+	private static String reportsPath;
 	public static final char separatorChar = File.separatorChar;
 	public static final String[] allowedExtensions = { "jrxml", "doc", "docx",
 			"xls", "xlsx", "rar", "zip" };
 
+	/**
+	 * 
+	 */
+	public ReportUtil(String resourcesPath) {
+		ReportUtil.resourcesPath = resourcesPath;
+		ReportUtil.reportsPath = resourcesPath + "rpt" + separatorChar;
+	}
+
 	@SuppressWarnings("deprecation")
-	public static String generateCSVfromQuery(String query, char separator) {
+	public String generateCSVfromQuery(String query, char separator) {
 		try {
 			Connection con = HibernateUtil.util.getSession().connection();
 			con.setCatalog("xpertsms");
@@ -58,8 +67,8 @@ public class ReportUtil {
 				if (record.length() > 0)
 					list.add(record.substring(0, record.length() - 1));
 			}
-			String dest = XSMS.getResourcesPath()
-					+ String.valueOf(new Date().getTime()) + ".csv";
+			String dest = resourcesPath + String.valueOf(new Date().getTime())
+					+ ".csv";
 			StringBuilder text = new StringBuilder();
 			for (int i = 0; i < list.size(); i++)
 				text.append(list.get(i) + "\r\n");
@@ -83,7 +92,7 @@ public class ReportUtil {
 	}
 
 	@SuppressWarnings({ "deprecation" })
-	public static String generateReportFromQuery(String fileName, String query,
+	public String generateReportFromQuery(String fileName, String query,
 			Parameter[] params, boolean export) {
 		try {
 			Connection con = HibernateUtil.util.getSession().connection();
@@ -99,14 +108,12 @@ public class ReportUtil {
 				 */
 				map.put(params[i].getName(), toObject(params[i]));
 			}
-			JasperReport jasperReport = JasperCompileManager.compileReport(XSMS
-					.getReportPath()
-					+ fileName
-					+ (fileName.endsWith(".jrxml") ? "" : ".jrxml"));
+			JasperReport jasperReport = JasperCompileManager
+					.compileReport(reportsPath + fileName
+							+ (fileName.endsWith(".jrxml") ? "" : ".jrxml"));
 			JasperPrint print = JasperFillManager.fillReport(jasperReport, map,
 					resultSource);
-			String dest = XSMS.getResourcesPath()
-					+ String.valueOf(new Date().getTime())
+			String dest = resourcesPath + String.valueOf(new Date().getTime())
 					+ (export == true ? ".csv" : ".pdf");
 			// Delete file if existing
 			try {
@@ -134,7 +141,7 @@ public class ReportUtil {
 	}
 
 	@SuppressWarnings("deprecation")
-	public static String generateReport(String fileName, Parameter[] params,
+	public String generateReport(String fileName, Parameter[] params,
 			boolean export) {
 		try {
 			Connection con = HibernateUtil.util.getSession().connection();
@@ -146,14 +153,12 @@ public class ReportUtil {
 				 */
 				map.put(params[i].getName(), toObject(params[i]));
 			}
-			JasperReport jasperReport = JasperCompileManager.compileReport(XSMS
-					.getReportPath()
-					+ fileName
-					+ (fileName.endsWith(".jrxml") ? "" : ".jrxml"));
+			JasperReport jasperReport = JasperCompileManager
+					.compileReport(reportsPath + fileName
+							+ (fileName.endsWith(".jrxml") ? "" : ".jrxml"));
 			JasperPrint print = JasperFillManager.fillReport(jasperReport, map,
 					con);
-			String dest = XSMS.getResourcesPath()
-					+ String.valueOf(new Date().getTime())
+			String dest = resourcesPath + String.valueOf(new Date().getTime())
 					+ (export == true ? ".csv" : ".pdf");
 			// Delete file if existing
 			try {
@@ -185,9 +190,9 @@ public class ReportUtil {
 	 * 
 	 * @return String[][]
 	 */
-	public static String[][] getReportList() {
+	public String[][] getReportList() {
 		String[][] reports;
-		File dir = new File(XSMS.getReportPath());
+		File dir = new File(reportsPath);
 		FilenameFilter filter = new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
@@ -210,7 +215,7 @@ public class ReportUtil {
 		return reports;
 	}
 
-	public static Object toObject(Parameter param) {
+	public Object toObject(Parameter param) {
 		try {
 			String value = param.getValue();
 			switch (param.getType()) {

@@ -3,8 +3,9 @@ package com.ihsinformatics.xpertsmsweb.server;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.ParseException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -26,7 +27,6 @@ import com.ihsinformatics.xpertsmsweb.server.util.MDHashUtil;
 import com.ihsinformatics.xpertsmsweb.server.util.ReportUtil;
 import com.ihsinformatics.xpertsmsweb.shared.ListType;
 import com.ihsinformatics.xpertsmsweb.shared.Parameter;
-import com.ihsinformatics.xpertsmsweb.shared.VersionUtil;
 import com.ihsinformatics.xpertsmsweb.shared.XSMS;
 import com.ihsinformatics.xpertsmsweb.shared.model.Contact;
 import com.ihsinformatics.xpertsmsweb.shared.model.Encounter;
@@ -42,10 +42,6 @@ import com.ihsinformatics.xpertsmsweb.shared.model.Person;
 import com.ihsinformatics.xpertsmsweb.shared.model.UserRights;
 import com.ihsinformatics.xpertsmsweb.shared.model.Users;
 
-/*import com.ihsinformatics.xpertsmsweb.mobileevent.DateTimeUtil;
- import com.ihsinformatics.xpertsmsweb.mobileevent.ModelUtil;
- import com.ihsinformatics.xpertsmsweb.mobileevent.XmlUtil;*/
-
 /**
  * The server side implementation of the RPC service.
  * 
@@ -54,35 +50,46 @@ import com.ihsinformatics.xpertsmsweb.shared.model.Users;
 @SuppressWarnings("serial")
 public class ServerServiceImpl extends RemoteServiceServlet implements
 		ServerService {
-
 	public static final Properties prop = new Properties();
+	public static String resourcesPath;
 
 	/**
 	 * 
 	 */
 	public ServerServiceImpl() {
-		try {
-			prop.load(new FileInputStream("xpertsmsweb.properties"));
-			String version = prop.getProperty("version");
-			VersionUtil versionUtil = new VersionUtil();
-			versionUtil.parseVersion(version);
-			XSMS.setVersion(versionUtil);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
 	}
 
-	public String getVersion() {
-		String version = "0.0.0";
-		return version;
+	public String getResourcesPath() {
+//		return "c:\\apache-tomcat-6.0\\webapps\\xpertsmsweb\\";
+		if (resourcesPath == null) {
+			// Try to read tomcat home directory from properties file
+			try {
+				String sep = System.getProperty("file.separator");
+				String home = System.getProperty("user.home");
+				String defaultDir = "/var/lib/tomcat6/webapps/xpertsmsweb";
+				if (System.getProperty("os.name", "windows").toLowerCase()
+						.contains("windows"))
+					defaultDir = "c:\\apache-tomcat-6.0\\webapps\\xpertsmsweb";
+				Properties prop = new Properties();
+				File propFile = new File(home + sep + "xpertsms"
+						+ sep + "xpertsmsweb.properties");
+				// If file is not found, create one
+				if (!propFile.exists()) {
+					prop.setProperty("app.dir", defaultDir);
+					prop.setProperty("version", "0.0.0");
+					prop.setProperty("backup.post.url", "");
+					prop.store(new FileOutputStream(propFile), "Writing new properties file");
+				}
+				InputStream file = new FileInputStream(propFile);
+				prop.load(file);
+				resourcesPath = prop.getProperty("app.dir", defaultDir) + sep;
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return resourcesPath;
 	}
 
 	private String arrangeFilter(String filter) throws Exception {
@@ -196,7 +203,8 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 	 */
 
 	public String generateCSVfromQuery(String query) throws Exception {
-		return ReportUtil.generateCSVfromQuery(query, ',');
+		return new ReportUtil(getResourcesPath()).generateCSVfromQuery(query,
+				',');
 	}
 
 	/**
@@ -210,7 +218,8 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 
 	public String generateReport(String fileName, Parameter[] params,
 			boolean export) throws Exception {
-		return ReportUtil.generateReport(fileName, params, export);
+		return new ReportUtil(getResourcesPath()).generateReport(fileName,
+				params, export);
 	}
 
 	/**
@@ -225,8 +234,8 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 
 	public String generateReportFromQuery(String reportName, String query,
 			Parameter[] params, Boolean export) throws Exception {
-		return ReportUtil.generateReportFromQuery(reportName, query, params,
-				export);
+		return new ReportUtil(getResourcesPath()).generateReportFromQuery(
+				reportName, query, params, export);
 	}
 
 	public String[] getColumnData(String tableName, String columnName,
@@ -252,7 +261,7 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 	}
 
 	public String[][] getReportsList() throws Exception {
-		return ReportUtil.getReportList();
+		return new ReportUtil(getResourcesPath()).getReportList();
 	}
 
 	public String[] getRowRecord(String tableName, String[] columnNames,
@@ -791,7 +800,7 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 			DocumentBuilderFactory buildFactory = DocumentBuilderFactory
 					.newInstance();
 			DocumentBuilder documentBuilder = buildFactory.newDocumentBuilder();
-			File file = new File(XSMS.getStaticFilePath());
+			File file = new File(getResourcesPath());
 			Document doc = documentBuilder.parse(file);
 			Element docElement = doc.getDocumentElement();
 			for (ListType type : ListType.values()) {

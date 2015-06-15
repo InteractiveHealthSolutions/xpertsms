@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
 
+import javax.management.InstanceAlreadyExistsException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
@@ -47,7 +48,7 @@ public class EventHandler extends HttpServlet {
 		try {
 			System.out.println(">>>>READING SYSTEM PROPERTIES...");
 			InputStream f = Thread.currentThread().getContextClassLoader()
-					.getResourceAsStream("xpertsmsweb.properties");
+					.getResourceAsStream("smstarseel.properties");
 			// Java Properties do not seem to support substitutions hence
 			// EProperties are used
 			EProperties root = new EProperties();
@@ -65,6 +66,8 @@ public class EventHandler extends HttpServlet {
 			else if (backupPostUrl.equals(""))
 				System.out
 						.println("Warning! Backup post URL property not found.");
+		} catch (InstanceAlreadyExistsException e) {
+			// Trying to instantiate again. Janay do...
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

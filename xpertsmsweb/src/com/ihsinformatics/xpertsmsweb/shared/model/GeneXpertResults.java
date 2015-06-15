@@ -119,19 +119,6 @@ public class GeneXpertResults implements java.io.Serializable {
 		this.patientId = patientId;
 	}
 
-	/*
-	 * public GeneXpertResults(String sputumTestId, String patientId, String
-	 * laboratoryId, String collectedBy, Date dateSubmitted, Date dateTested,
-	 * String geneXpertResult, Boolean isPositive, String mtbBurden, String
-	 * drugResistance, Integer errorCode, String remarks) { this.sputumTestId =
-	 * sputumTestId; this.patientId = patientId; //this.irs = irs;
-	 * this.laboratoryId = laboratoryId; this.collectedBy = collectedBy;
-	 * this.dateSubmitted = dateSubmitted; this.dateTested = dateTested;
-	 * this.geneXpertResult = geneXpertResult; this.isPositive = isPositive;
-	 * this.mtbBurden = mtbBurden; this.drugResistance = drugResistance;
-	 * this.errorCode = errorCode; this.remarks = remarks; }
-	 */
-
 	public String getSputumTestId() {
 		return this.sputumTestId;
 	}
@@ -147,12 +134,6 @@ public class GeneXpertResults implements java.io.Serializable {
 	public void setPatientId(String patientId) {
 		this.patientId = patientId;
 	}
-
-	/*
-	 * public Integer getIrs() { return this.irs; }
-	 * 
-	 * public void setIrs(Integer irs) { this.irs = irs; }
-	 */
 
 	public String getLaboratoryId() {
 		return this.laboratoryId;
