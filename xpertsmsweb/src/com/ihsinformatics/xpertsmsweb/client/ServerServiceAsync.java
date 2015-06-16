@@ -272,5 +272,4 @@ public interface ServerServiceAsync {
 
 	void findFacility(String facilityId, String districtId,
 			AsyncCallback<Location> asyncCallback);
-
 }

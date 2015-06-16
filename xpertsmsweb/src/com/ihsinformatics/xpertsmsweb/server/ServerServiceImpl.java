@@ -83,6 +83,7 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 				InputStream file = new FileInputStream(propFile);
 				prop.load(file);
 				resourcesPath = prop.getProperty("app.dir", defaultDir) + sep;
+				System.out.println("CURRENT RESOURCE PATH: " + resourcesPath);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
