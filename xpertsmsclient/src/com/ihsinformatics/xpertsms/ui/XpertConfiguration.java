@@ -116,6 +116,8 @@ public class XpertConfiguration extends JFrame implements ActionListener {
 	}
 	
 	public XpertConfiguration() {
+		setAutoRequestFocus(false);
+		setType(Type.UTILITY);
 		XpertProperties.readProperties();
 		setPreferredSize(new Dimension(670, 420));
 		setSize(new Dimension(654, 420));
@@ -404,6 +406,7 @@ public class XpertConfiguration extends JFrame implements ActionListener {
 			XpertProperties.writeProperties(properties);
 			XpertActivityViewer xpertActivityViewer = new XpertActivityViewer();
 			xpertActivityViewer.setVisible(true);
+			this.dispose();
 		}
 	}
 }

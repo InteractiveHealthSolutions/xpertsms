@@ -10,12 +10,12 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 package com.ihsinformatics.xpertsms.model;
 
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringBufferInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -34,7 +34,6 @@ import org.xml.sax.SAXException;
 
 import com.ihsinformatics.xpertsms.XpertProperties;
 import com.ihsinformatics.xpertsms.constant.FileConstants;
-import com.ihsinformatics.xpertsms.constant.SendMethods;
 import com.ihsinformatics.xpertsms.constant.XML;
 import com.ihsinformatics.xpertsms.net.GxAlertSender;
 import com.ihsinformatics.xpertsms.net.HttpSender;
@@ -59,11 +58,11 @@ public class ResultsSender extends Thread {
 	
 	private int retries;
 	
-	private String errorMessage;
-	
 	private String message;
 	
 	private File successLog;
+	
+	private boolean detailedLog;
 	
 	/* Export methods */
 	private String username;
@@ -87,7 +86,6 @@ public class ResultsSender extends Thread {
      */
 	public ResultsSender(ResultServer server) {
 		this.server = server;
-		errorMessage = null;
 		message = "";
 		// Get required properties
 		username = XpertProperties.props.getProperty(XpertProperties.WEB_USERNAME);
@@ -104,25 +102,63 @@ public class ResultsSender extends Thread {
 		}
 		if (exportCsv) {
 			File csvFile = new File(FileConstants.XPERT_SMS_DIR + System.getProperty("file.separator")
-		        + DateTimeUtil.getSQLDate(new Date()) + "_xpertdump.csv");
+			        + DateTimeUtil.getSQLDate(new Date()) + "_xpertdump.csv");
 			try {
-	            csvWriter = new PrintWriter(csvFile);
-            }
-            catch (FileNotFoundException e) {
-	            e.printStackTrace();
-            }
+				csvWriter = new PrintWriter(csvFile);
+			}
+			catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
-	public void print(String text, boolean toGUI) {
-		printWriter.print(server.getLogEntryDateString(new Date()) + ": " + text);
-		printWriter.flush();
-		if (toGUI)
-			server.updateTextPane(server.getLogEntryDateString(new Date()) + ": " + text);
+	public boolean isDetailedLog() {
+		return detailedLog;
 	}
 	
+	public void setDetailedLog(boolean detailedLog) {
+		this.detailedLog = detailedLog;
+	}
+	
+	/**
+	 * Prints to text pane and appends a new line feed. If detailed logging is enabled, time stamp
+	 * is prepend for each message
+	 * 
+	 * @param text
+	 * @param toGUI
+	 */
 	public void println(String text, boolean toGUI) {
-		print(text + "\n", toGUI);
+		printWriter.print(server.getLogEntryDateString(new Date()) + ": " + text + "\n");
+		printWriter.flush();
+		if (toGUI) {
+			String prefix = detailedLog ? server.getLogEntryDateString(new Date()) + ": " : "";
+			server.updateTextPane(prefix + text + "\n");
+		}
+	}
+	
+	/**
+	 * Overloaded method. Converts text into HTML according to message type
+	 * 
+	 * @param text
+	 * @param toGUI
+	 */
+	public void println(String text, boolean toGUI, MessageType messageType) {
+		switch (messageType) {
+			case ERROR:
+			case EXCEPTION:
+				// Set text to red
+				break;
+			case WARNING:
+				// Set text to orange
+				break;
+			case INFO:
+				// Set text to blue
+				break;
+			case SUCCESS:
+				// Set text to green
+				break;
+		}
+		println(text, toGUI);
 	}
 	
 	public void run() {
@@ -163,11 +199,13 @@ public class ResultsSender extends Thread {
 				}
 				catch (ClassNotFoundException e) {
 					e.printStackTrace();
-					println(e.getMessage(), true);
+					if (detailedLog)
+						println(e.getMessage(), true, MessageType.EXCEPTION);
 				}
 				catch (SQLException e) {
 					e.printStackTrace();
-					println(e.getMessage(), true);
+					if (detailedLog)
+						println(e.getMessage(), true, MessageType.EXCEPTION);
 				}
 			}
 			if (exportWeb) {
@@ -195,7 +233,7 @@ public class ResultsSender extends Thread {
 			}
 		}
 		if (server.getStopped()) {
-			println("Stopping Transmitting Thread!", true);
+			println("Stopping Transmitting Thread!", true, MessageType.INFO);
 		}
 		printWriter.flush();
 		printWriter.close();
@@ -232,7 +270,7 @@ public class ResultsSender extends Thread {
 		boolean retry = true;
 		boolean retryExceeded = false;
 		retries = 3;
-		errorMessage = null;
+		String errorMessage = null;
 		message = "";
 		
 		if (xpertMessage.getRetries() >= retries)
@@ -240,37 +278,32 @@ public class ResultsSender extends Thread {
 		
 		if (response == null) {
 			if (retry && retryExceeded) {
-				// TODO log error
 				println(
 				    "Retries exceeded for Sample ID " + xpertMessage.getSampleId() + " for Patient: "
-				            + xpertMessage.getPatientId() + ": " + "! Please enter manually!\nError Message: "
-				            + errorMessage, true);
+				            + xpertMessage.getPatientId() + ": " + "! Please enter manually!", true, MessageType.ERROR);
 				// remove from queue and set retry count to zero
 				// server.removeOutgoingMessage(0);
-			}
-			
-			else if (retry) {
+			} else if (retry) {
 				println("Retrying Sample ID " + xpertMessage.getSampleId() + " for Patient: " + xpertMessage.getPatientId()
-				        + "! Attempts = " + (xpertMessage.getRetries() + 1), true);
+				        + "! Attempts = " + (xpertMessage.getRetries() + 1), true, MessageType.WARNING);
 				xpertMessage.setRetries(xpertMessage.getRetries() + 1);
 				server.putOutGoingMessage(xpertMessage);
 			} else {
-				// log error
 				println("Could not send result for Sample ID " + xpertMessage.getSampleId() + " for Patient: "
-				        + xpertMessage.getPatientId() + "! Please enter manually!\nError Message: " + errorMessage, true);
+				        + xpertMessage.getPatientId() + "! Please enter manually!", true, MessageType.ERROR);
 				// remove from queue
 				// server.removeOutgoingMessage(0);
 			}
 			return;
 		}
 		
-		// ///determine success
+		// Determine success
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		try {
 			// Using factory get an instance of document builder
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			// parse using builder to get DOM representation of the XML file
-			Document dom = db.parse(new InputSource(new StringBufferInputStream(response)));
+			Document dom = db.parse(new InputSource(new ByteArrayInputStream(response.getBytes()))); // Changed deprecated StringBufferredInputStream to ByteArrayInputStream
 			Element domElement = dom.getDocumentElement();
 			NodeList nl = domElement.getChildNodes();
 			Element statusNode = (Element) nl.item(0);
@@ -285,58 +318,59 @@ public class ResultsSender extends Thread {
 				message = nl.item(1).getFirstChild().getNodeValue();
 			}
 		}
-		catch (ParserConfigurationException pce) {
-			pce.printStackTrace();
-			// TODO log error
-			println(
-			    "Error submitting Sample ID " + xpertMessage.getSampleId() + " for Patient: " + xpertMessage.getPatientId()
-			            + "! Please enter manually!", true);
-			println(
-			    "Exception submitting Sample ID " + xpertMessage.getSampleId() + " for Patient: "
-			            + xpertMessage.getPatientId() + ": " + pce.getMessage(), false);
+		catch (ParserConfigurationException e) {
+			e.printStackTrace();
+			String message = "Error in submitting Sample ID " + xpertMessage.getSampleId() + " for Patient: "
+			        + xpertMessage.getPatientId() + "! Please enter manually!";
+			if (detailedLog)
+				message = "Parse exception in submitting Sample ID " + xpertMessage.getSampleId() + " for Patient: "
+				        + xpertMessage.getPatientId() + ": " + e.getMessage();
+			println(message, true, MessageType.EXCEPTION);
 		}
-		catch (SAXException se) {
-			println(
-			    "Error submitting Sample ID " + xpertMessage.getSampleId() + " for Patient: " + xpertMessage.getPatientId()
-			            + "! Please enter manually!", true);
-			println(
-			    "Exception submitting Sample ID " + xpertMessage.getSampleId() + " for Patient: "
-			            + xpertMessage.getPatientId() + ": " + se.getMessage(), false);
+		catch (SAXException e) {
+			String message = "Error in submitting Sample ID " + xpertMessage.getSampleId() + " for Patient: "
+			        + xpertMessage.getPatientId() + "! Please enter manually!";
+			if (detailedLog)
+				message = "Exception in submitting Sample ID " + xpertMessage.getSampleId() + " for Patient: "
+				        + xpertMessage.getPatientId() + ": " + e.getMessage();
+			println(message, true, MessageType.EXCEPTION);
 		}
-		catch (IOException ioe) {
-			println("Error submitting Sample ID " + xpertMessage.getSampleId() + "! Please enter manually!", true);
-			println(
-			    "Exception submitting Sample ID " + xpertMessage.getSampleId() + " for Patient: "
-			            + xpertMessage.getPatientId() + ": " + ioe.getMessage(), false);
+		catch (IOException e) {
+			String message = "Error in submitting Sample ID " + xpertMessage.getSampleId() + " for Patient: "
+			        + xpertMessage.getPatientId() + "! Please enter manually!";
+			if (detailedLog)
+				message = "Exception in submitting Sample ID " + xpertMessage.getSampleId() + " for Patient: "
+				        + xpertMessage.getPatientId() + ": " + e.getMessage();
+			println(message, true, MessageType.EXCEPTION);
 		}
 		if (success) {
 			// log success
 			if (message.length() == 0) {
 				println(
 				    "Result for Sample ID " + xpertMessage.getSampleId() + " for Patient: " + xpertMessage.getPatientId()
-				            + " transmitted sucessfully", true);
+				            + " transmitted sucessfully", true, MessageType.SUCCESS);
 				successWriter.println(xpertMessage.getPatientId() + ":" + xpertMessage.getSampleId() + " for Patient: "
 				        + xpertMessage.getPatientId() + ":" + server.getLogEntryDateString(new Date()));
 				successWriter.flush();
 			} else
 				println(
 				    "Result for Sample ID " + xpertMessage.getSampleId() + " for Patient: " + xpertMessage.getPatientId()
-				            + " not saved - " + message, true);
+				            + " not saved. " + message, true, MessageType.ERROR);
 		} else {
 			if (retry && retryExceeded) {
-				// TODO log error
 				println(
 				    "Retries exceeded for Sample ID " + xpertMessage.getSampleId() + " for Patient: "
-				            + xpertMessage.getPatientId() + "! Please enter manually!\nError Message: " + errorMessage, true);
+				            + xpertMessage.getPatientId() + "! Please enter manually!\nError Message: " + errorMessage,
+				    true, MessageType.ERROR);
 			} else if (retry) {
 				println("Retrying Sample ID " + xpertMessage.getSampleId() + " for Patient: " + xpertMessage.getPatientId()
-				        + "! Attempts = " + (xpertMessage.getRetries() + 1), true);
+				        + "! Attempts = " + (xpertMessage.getRetries() + 1), true, MessageType.ERROR);
 				xpertMessage.setRetries(xpertMessage.getRetries() + 1);
 				server.putOutGoingMessage(xpertMessage);
 			} else {
-				// log error
 				println("Could not send result for Sample ID " + xpertMessage.getSampleId() + " for Patient: "
-				        + xpertMessage.getPatientId() + "! Please enter manually!\nError Message: " + errorMessage, true);
+				        + xpertMessage.getPatientId() + "! Please enter manually!\nError Message: " + errorMessage, true,
+				    MessageType.ERROR);
 			}
 		}
 	}

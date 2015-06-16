@@ -60,19 +60,22 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 	}
 
 	public String getResourcesPath() {
-//		return "c:\\apache-tomcat-6.0\\webapps\\xpertsmsweb\\";
 		if (resourcesPath == null) {
-			// Try to read tomcat home directory from properties file
 			try {
+				// First, check the tomcat installation directory
+				String defaultDir = "/var/lib/tomcat6/webapps/xpertsmsweb";
 				String sep = System.getProperty("file.separator");
 				String home = System.getProperty("user.home");
-				String defaultDir = "/var/lib/tomcat6/webapps/xpertsmsweb";
-				if (System.getProperty("os.name", "windows").toLowerCase()
-						.contains("windows"))
-					defaultDir = "c:\\apache-tomcat-6.0\\webapps\\xpertsmsweb";
+				File propFile = new File("xpertsmsweb.properties");
+				if (!propFile.exists()) {
+					// Try to read tomcat home directory from properties file
+					if (System.getProperty("os.name", "windows").toLowerCase()
+							.contains("windows"))
+						defaultDir = "c:\\apache-tomcat-6.0\\webapps\\xpertsmsweb";
+					propFile = new File(home + sep + "xpertsms"
+							+ sep + "xpertsmsweb.properties");
+				}
 				Properties prop = new Properties();
-				File propFile = new File(home + sep + "xpertsms"
-						+ sep + "xpertsmsweb.properties");
 				// If file is not found, create one
 				if (!propFile.exists()) {
 					prop.setProperty("app.dir", defaultDir);

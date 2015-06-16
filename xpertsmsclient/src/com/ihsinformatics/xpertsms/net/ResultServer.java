@@ -64,15 +64,19 @@ public class ResultServer extends Thread {
 	
 	private SimpleDateFormat logEntryFormatter = null;
 	
-	private SimpleDateFormat fileNameFormatter = null;;
+	private SimpleDateFormat fileNameFormatter = null;
 	
-	public ResultServer(JTextPane monitorPane) {
+	private boolean detailedLog;
+	
+	public ResultServer(JTextPane monitorPane, boolean detailedLog) {
 		messages = new ArrayBlockingQueue<String>(15);
 		outgoingMessages = new ArrayBlockingQueue<XpertResultUploadMessage>(15);
+		logEntryFormatter = new SimpleDateFormat(FileConstants.FILE_ENTRY_DATE_FORMAT);
+		fileNameFormatter = new SimpleDateFormat(FileConstants.FILE_NAME_DATE_FORMAT);
 		threadCount = 0;
 		this.monitorPane = monitorPane;
+		this.setDetailedLog(detailedLog);
 		stopped = false;
-		logEntryFormatter = new SimpleDateFormat(FileConstants.FILE_ENTRY_DATE_FORMAT);
 	}
 	
 	@Override
@@ -103,7 +107,7 @@ public class ResultServer extends Thread {
 		// stopped = true;
 		ASTMProcessorThread apt = new ASTMProcessorThread(this);
 		apt.start();
-		resultsSender = new  ResultsSender(this);
+		resultsSender = new ResultsSender(this);
 		resultsSender.start();
 		int port = Integer.parseInt(XpertProperties.props.getProperty(XpertProperties.LOCAL_PORT));
 		try {
@@ -111,15 +115,13 @@ public class ResultServer extends Thread {
 		}
 		catch (IOException ioe) {
 			ioe.printStackTrace();
-			System.out.println("could not listen on port " + port);
+			System.out.println("Could not listen on port " + port);
 			errorCode = MessageCodes.PORT_INACCESSIBLE;
 			status = -1;
 		}
-		System.out.println("listening on port " + port);
+		System.out.println("Listening on port: " + port + "...");
 		
 		// Test HTTP using Sample data (moved to TestClass)
-		// for(XpertASTMResultUploadMessage message : sampleMessages)
-		// 		putOutGoingMessage (message);
 		/*String message1 = "H|@^\\|URM-tTjX+pTA-01||GeneXpert PC^GeneXpert^4.3|||||IRD_XPERT|| P|1394-97|20121020053034\n"
 			+ "P|1|||1621005001\nO|1|051012274||^^^G4v5|R|20121006153947|||||||||ORH||||||||||F\nR|1|^G4v5^^TBPos^Xpert MTB-RIF Assay G4^5^MTB^|MTB DETECTED VERY LOW^|||||F||Karachi X-ray|20121006153947|20121006172116|Cepheid3WDBYQ1^707851^615337^101256275^04405^20130106\n"
 			+ "R|2|^G4v5^^TBPos^^^Probe D^|POS^|||\nR|3|^G4v5^^TBPos^^^Probe D^Ct|^32.4|||\nR|4|^G4v5^^TBPos^^^Probe D^EndPt|^102.0|||\nR|5|^G4v5^^TBPos^^^Probe C^|POS^|||\nR|6|^G4v5^^TBPos^^^Probe C^Ct|^31.2|||\n"
@@ -148,7 +150,6 @@ public class ResultServer extends Thread {
 				rt.start();
 				updateTextPane(getLogEntryDateString(new Date()) + "Connected to GeneXpert\n");
 			}
-			
 			if (stopped) {
 				updateTextPane(getLogEntryDateString(new Date()) + "Stop message received\n");
 			}
@@ -177,7 +178,6 @@ public class ResultServer extends Thread {
 	}
 	
 	public boolean loadProperties() throws FileNotFoundException, IOException {
-		
 		XpertProperties.props.load(new FileInputStream(FileConstants.FILE_PATH));
 		String[] mandatory = { XpertProperties.MTB_CODE, XpertProperties.RIF_CODE, XpertProperties.QC_CODE,
 		        XpertProperties.LOCAL_PORT };
@@ -219,11 +219,6 @@ public class ResultServer extends Thread {
 	public void removeMessage(int index) {
 		messages.remove(index);
 	}
-	
-	/*
-	 * public void addMessageAtIndex(String message, int index) {
-	 * messages.add(index, message); }
-	 */
 	
 	public int getMessageListSize() {
 		return messages.size();
@@ -331,6 +326,22 @@ public class ResultServer extends Thread {
 		this.socket = socket;
 	}
 	
+	public boolean isDetailedLog() {
+		return detailedLog;
+	}
+	
+	public void setDetailedLog(boolean detailedLog) {
+		this.detailedLog = detailedLog;
+	}
+	
+	public String getLogEntryDateString(Date date) {
+		return logEntryFormatter.format(date);
+	}
+	
+	public String getFileNameDateString(Date date) {
+		return fileNameFormatter.format(date);
+	}
+	
 	public synchronized void updateTextPane(final String text) {
 		SwingUtilities.invokeLater(new Runnable() {
 			
@@ -345,13 +356,5 @@ public class ResultServer extends Thread {
 				monitorPane.setCaretPosition(doc.getLength() - 1);
 			}
 		});
-	}
-	
-	public String getLogEntryDateString(Date date) {
-		return logEntryFormatter.format(date);
-	}
-	
-	public String getFileNameDateString(Date date) {
-		return fileNameFormatter.format(date);
 	}
 }

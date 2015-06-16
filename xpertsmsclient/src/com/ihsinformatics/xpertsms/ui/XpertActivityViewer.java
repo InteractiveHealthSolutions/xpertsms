@@ -13,6 +13,7 @@ package com.ihsinformatics.xpertsms.ui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -23,17 +24,13 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import com.ihsinformatics.xpertsms.XpertProperties;
-import com.ihsinformatics.xpertsms.constant.FileConstants;
 import com.ihsinformatics.xpertsms.net.ResultServer;
-import com.ihsinformatics.xpertsms.util.DocumentUtil;
-import javax.swing.JTextPane;
-import javax.swing.DropMode;
 
 /**
  * Demon GUI form to view activity of messages between GX DX and XpertSMS
@@ -49,11 +46,11 @@ public class XpertActivityViewer extends JDialog implements ActionListener {
 	private JPanel bottomDialogPanel;
 	
 	private JPanel topDialogPanel;
-
+	
 	private JTextPane logTextPane;
-
-	private JCheckBox chckbxShowDetailedLog;
-		
+	
+	private JCheckBox showDetailedLogCheckBox;
+	
 	private JButton exitButton;
 	
 	private JToggleButton startStopButton;
@@ -67,7 +64,7 @@ public class XpertActivityViewer extends JDialog implements ActionListener {
 	private boolean exportWeb;
 	
 	private boolean exportGxa;
-
+	
 	private boolean exportOpenMrs;
 	
 	public XpertActivityViewer() {
@@ -88,42 +85,34 @@ public class XpertActivityViewer extends JDialog implements ActionListener {
 		setBounds(100, 100, 480, 340);
 		getContentPane().setLayout(new BorderLayout());
 		
-		topDialogPanel = new javax.swing.JPanel();
+		topDialogPanel = new JPanel();
 		getContentPane().add(topDialogPanel, BorderLayout.CENTER);
 		
 		logTextPane = new JTextPane();
 		
 		GroupLayout topDialogPanelLayout = new GroupLayout(topDialogPanel);
-		topDialogPanelLayout.setHorizontalGroup(
-			topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(topDialogPanelLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(logTextPane, GroupLayout.DEFAULT_SIZE, 492, Short.MAX_VALUE)
-					.addContainerGap())
-		);
-		topDialogPanelLayout.setVerticalGroup(
-			topDialogPanelLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(topDialogPanelLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(logTextPane, GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
-					.addContainerGap())
-		);
+		topDialogPanelLayout.setHorizontalGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(
+		    topDialogPanelLayout.createSequentialGroup().addContainerGap()
+		            .addComponent(logTextPane, GroupLayout.DEFAULT_SIZE, 492, Short.MAX_VALUE).addContainerGap()));
+		topDialogPanelLayout.setVerticalGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(
+		    topDialogPanelLayout.createSequentialGroup().addContainerGap()
+		            .addComponent(logTextPane, GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE).addContainerGap()));
 		topDialogPanel.setLayout(topDialogPanelLayout);
 		
 		bottomDialogPanel = new JPanel();
 		getContentPane().add(bottomDialogPanel, BorderLayout.SOUTH);
 		
-		chckbxShowDetailedLog = new JCheckBox("Show detailed log");
-		bottomDialogPanel.add(chckbxShowDetailedLog);
+		showDetailedLogCheckBox = new JCheckBox("Show detailed log");
+		bottomDialogPanel.add(showDetailedLogCheckBox);
 		
-		startStopButton = new JToggleButton("Pause/Resume");
+		startStopButton = new JToggleButton("Start");
 		bottomDialogPanel.add(startStopButton);
-		exitButton = new javax.swing.JButton();
+		exitButton = new JButton();
 		exitButton.setHorizontalAlignment(SwingConstants.RIGHT);
 		bottomDialogPanel.add(exitButton);
 		
-		exitButton.setFont(new java.awt.Font("Tahoma", 2, 12)); // NOI18N
-		exitButton.setText("Stop");
+		exitButton.setFont(new Font("Tahoma", 2, 12)); // NOI18N
+		exitButton.setText("Exit");
 		exitButton.setToolTipText("Creates database tables and save settings to configuration file.");
 		contentPanel.setLayout(new FlowLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -136,6 +125,7 @@ public class XpertActivityViewer extends JDialog implements ActionListener {
 	 * Add event handlers/listeners to controls
 	 */
 	public void initEvents() {
+		startStopButton.addActionListener(this);
 		exitButton.addActionListener(this);
 	}
 	
@@ -148,12 +138,26 @@ public class XpertActivityViewer extends JDialog implements ActionListener {
 		exportSms = XpertProperties.getProperty(XpertProperties.SMS_EXPORT).equals("YES");
 		exportGxa = XpertProperties.getProperty(XpertProperties.GXA_EXPORT).equals("YES");
 		exportOpenMrs = XpertProperties.getProperty(XpertProperties.OPENMRS_EXPORT).equals("YES");
-		
-		
+		StringBuilder text = new StringBuilder();
+		text.append("Data export services:\n");
+		if (exportCsv)
+			text.append("- CSV exports to " + XpertProperties.getProperty(XpertProperties.CSV_FOLDER_PATH) + "\n");
+		if (exportWeb)
+			text.append("- Web exports to " + XpertProperties.getProperty(XpertProperties.WEB_APP_STRING)
+			        + " (data encryption = " + XpertProperties.getProperty(XpertProperties.WEB_SSL_ENCRYPTION) + ")\n");
+		if (exportSms)
+			text.append("- SMS exports to " + XpertProperties.getProperty(XpertProperties.SMS_ADMIN_PHONE) + "\n");
+		if (exportGxa)
+			text.append("- GXAlert exports to " + XpertProperties.getProperty(XpertProperties.GXA_SERVER_ADDRESS)
+			        + " (data encryption = " + XpertProperties.getProperty(XpertProperties.GXA_SSL_ENCRYPTION) + ")\n");
+		if (exportOpenMrs)
+			text.append("- OpenMRS exports to " + XpertProperties.getProperty(XpertProperties.OPENMRS_REST_ADDRESS)
+			        + " (data encryption = " + XpertProperties.getProperty(XpertProperties.OPENMRS_SSL_ENCRYPTION) + ")\n");
+		logTextPane.setText(text.toString());
 	}
 	
 	public void startServer() {
-		server = new ResultServer(logTextPane);
+		server = new ResultServer(logTextPane, showDetailedLogCheckBox.isSelected());
 		server.start();
 	}
 	
@@ -174,14 +178,16 @@ public class XpertActivityViewer extends JDialog implements ActionListener {
 		if (e.getSource() == startStopButton) {
 			// Toggle down is stop
 			if (startStopButton.isSelected()) {
-				startStopButton.setText("Resume");
-				stopServer();
-			} else {
-				startStopButton.setText("Pause");
-				exitButton.setEnabled(true);
+				startStopButton.setText("Start");
 				startServer();
+			} else {
+				startStopButton.setText("Stop");
+				exitButton.setEnabled(true);
+				stopServer();
 			}
 		} else if (e.getSource() == exitButton) {
+			XpertConfiguration xpertConfiguration = new XpertConfiguration();
+			xpertConfiguration.setVisible(true);
 			dispose();
 		}
 	}

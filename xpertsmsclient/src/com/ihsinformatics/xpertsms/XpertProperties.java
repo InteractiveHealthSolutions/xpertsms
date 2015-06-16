@@ -109,8 +109,6 @@ public final class XpertProperties {
 	
 	public static final String OPENMRS_SSL_ENCRYPTION = "openmrs_ssl_encryption";
 	
-	public static final String WEB_ADDRESS = "web_address";
-	
 	public static final String WEB_DATA_FORMAT = "web_data_format";
 	
 	public static final String WEB_AUTHENTICATION = "web_authentication";
@@ -132,7 +130,7 @@ public final class XpertProperties {
 	public static final String EXPORT_PROBES = "export_probes";
 	
 	public static final String WEB_SSL_ENCRYPTION = "default_send_method";
-	
+
 	/**
 	 * Read properties from properties file
 	 */

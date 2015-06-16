@@ -708,7 +708,7 @@ public class ControlPanel extends JPanel implements ActionListener {
 	
 	// //////////////////SERVER CONTROL/////////////////////
 	public void startServer() {
-		server = new ResultServer(monitorPanel);
+		server = new ResultServer(monitorPanel, true);
 		server.start();
 	}
 	

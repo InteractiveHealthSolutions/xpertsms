@@ -136,6 +136,12 @@ public class EventHandler extends HttpServlet {
 		 */
 		String patientId = request.getParameter("pid");
 		String sampleId = request.getParameter("sampleid");
+		if (patientId == null || patientId.equalsIgnoreCase("null"))
+		return XmlUtil
+				.createErrorXml("Cannot save without Patient ID");
+		if (sampleId == null || sampleId.equalsIgnoreCase("null"))
+		return XmlUtil
+				.createErrorXml("Cannot save without Sample ID");
 		String mtb = request.getParameter("mtb");
 		String systemId = request.getParameter("systemid");
 		String rif = request.getParameter("rif");

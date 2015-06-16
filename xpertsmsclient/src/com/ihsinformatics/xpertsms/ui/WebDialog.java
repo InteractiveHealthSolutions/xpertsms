@@ -335,7 +335,7 @@ public class WebDialog extends JDialog implements ActionListener {
 	 * Set default values for controls from properties file
 	 */
 	public void initValues() {
-		String webAddress = XpertProperties.getProperty(XpertProperties.WEB_ADDRESS);
+		String webAddress = XpertProperties.getProperty(XpertProperties.WEB_APP_STRING);
 		String useSsl = XpertProperties.getProperty(XpertProperties.WEB_SSL_ENCRYPTION);
 		String dataFormat = XpertProperties.getProperty(XpertProperties.WEB_DATA_FORMAT);
 		String authentication = XpertProperties.getProperty(XpertProperties.WEB_AUTHENTICATION);
@@ -401,7 +401,7 @@ public class WebDialog extends JDialog implements ActionListener {
 	 * Test the current configuration
 	 */
 	public void tryConfiguration() {
-		String successMessage = "Connection to XpertSMS Web was successful. Save now?";
+		String successMessage = "Connection to XpertSMS Web was successful. Don't worry, I didn't save anything on the server. Save settings now?";
 		String failureMessage = "Unable to process request to XpertSMS Web. This could be because of wrong address URI, unsupported data format or invalid username/password.";
 		if (validateData()) {
 			String prefix = sslCheckBox.isSelected() ? "https://" : "http://";
@@ -437,7 +437,7 @@ public class WebDialog extends JDialog implements ActionListener {
 						httpConnection.disconnect();
 					}
 				}
-				int selected = JOptionPane.showConfirmDialog(new JFrame(), successMessage, "It works! Don't worry, I didn't save anything on the server. Save settings now?",
+				int selected = JOptionPane.showConfirmDialog(new JFrame(), successMessage, "It works!",
 				    JOptionPane.YES_NO_OPTION);
 				if (selected == JOptionPane.YES_OPTION) {
 					saveConfiguration();
