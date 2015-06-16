@@ -6,7 +6,7 @@
  <class catalog="xpertsms"
   name="com.ihsinformatics.xpertsmsweb.shared.model.Patient" table="Patient">
   <id name="patientId" type="string">
-   <column length="12" name="PatientID"/>
+   <column length="20" name="PatientID"/>
    <generator class="assigned"/>
   </id>
   <property generated="never" lazy="false" name="screenerId" type="string">

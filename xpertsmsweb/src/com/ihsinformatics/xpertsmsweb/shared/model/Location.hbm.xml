@@ -9,7 +9,7 @@
             <generator class="assigned" />
         </id>
         <property name="locationName" type="java.lang.String">
-            <column name="LOCATIONNAME" />
+            <column name="locationName" />
         </property>
         <property name="locationType" type="java.lang.String">
             <column name="LocationType" />
