@@ -17,27 +17,33 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.Date;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.StyledDocument;
 
 import com.ihsinformatics.xpertsms.XpertProperties;
 import com.ihsinformatics.xpertsms.net.ResultServer;
+import com.ihsinformatics.xpertsms.util.DateTimeUtil;
 
 /**
  * Demon GUI form to view activity of messages between GX DX and XpertSMS
  * 
  * @author owais.hussain@ihsinformatics.com
  */
-public class XpertActivityViewer extends JDialog implements ActionListener {
+public class XpertActivityViewer extends JFrame implements ActionListener {
 	
 	private static final long serialVersionUID = 550000139271750414L;
 	
@@ -47,9 +53,9 @@ public class XpertActivityViewer extends JDialog implements ActionListener {
 	
 	private JPanel topDialogPanel;
 	
-	private JTextPane logTextPane;
+	private static JTextPane logTextPane;
 	
-	private JCheckBox showDetailedLogCheckBox;
+	private static JCheckBox detailedLogCheckBox;
 	
 	private JButton exitButton;
 	
@@ -89,6 +95,7 @@ public class XpertActivityViewer extends JDialog implements ActionListener {
 		getContentPane().add(topDialogPanel, BorderLayout.CENTER);
 		
 		logTextPane = new JTextPane();
+		logTextPane.setContentType("text/html");
 		
 		GroupLayout topDialogPanelLayout = new GroupLayout(topDialogPanel);
 		topDialogPanelLayout.setHorizontalGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(
@@ -102,8 +109,9 @@ public class XpertActivityViewer extends JDialog implements ActionListener {
 		bottomDialogPanel = new JPanel();
 		getContentPane().add(bottomDialogPanel, BorderLayout.SOUTH);
 		
-		showDetailedLogCheckBox = new JCheckBox("Show detailed log");
-		bottomDialogPanel.add(showDetailedLogCheckBox);
+		detailedLogCheckBox = new JCheckBox("Show detailed log");
+		detailedLogCheckBox.setSelected(true);
+		bottomDialogPanel.add(detailedLogCheckBox);
 		
 		startStopButton = new JToggleButton("Start");
 		bottomDialogPanel.add(startStopButton);
@@ -125,6 +133,7 @@ public class XpertActivityViewer extends JDialog implements ActionListener {
 	 * Add event handlers/listeners to controls
 	 */
 	public void initEvents() {
+		detailedLogCheckBox.addActionListener(this);
 		startStopButton.addActionListener(this);
 		exitButton.addActionListener(this);
 	}
@@ -139,25 +148,25 @@ public class XpertActivityViewer extends JDialog implements ActionListener {
 		exportGxa = XpertProperties.getProperty(XpertProperties.GXA_EXPORT).equals("YES");
 		exportOpenMrs = XpertProperties.getProperty(XpertProperties.OPENMRS_EXPORT).equals("YES");
 		StringBuilder text = new StringBuilder();
-		text.append("Data export services:\n");
+		updateTextPane("Data export services:");
 		if (exportCsv)
-			text.append("- CSV exports to " + XpertProperties.getProperty(XpertProperties.CSV_FOLDER_PATH) + "\n");
+			updateTextPane("- CSV exports to " + XpertProperties.getProperty(XpertProperties.CSV_FOLDER_PATH) + "");
 		if (exportWeb)
-			text.append("- Web exports to " + XpertProperties.getProperty(XpertProperties.WEB_APP_STRING)
-			        + " (data encryption = " + XpertProperties.getProperty(XpertProperties.WEB_SSL_ENCRYPTION) + ")\n");
+			updateTextPane("- Web exports to " + XpertProperties.getProperty(XpertProperties.WEB_APP_STRING)
+			        + " (data encryption = " + XpertProperties.getProperty(XpertProperties.WEB_SSL_ENCRYPTION) + ")");
 		if (exportSms)
-			text.append("- SMS exports to " + XpertProperties.getProperty(XpertProperties.SMS_ADMIN_PHONE) + "\n");
+			updateTextPane("- SMS exports to " + XpertProperties.getProperty(XpertProperties.SMS_ADMIN_PHONE) + "");
 		if (exportGxa)
-			text.append("- GXAlert exports to " + XpertProperties.getProperty(XpertProperties.GXA_SERVER_ADDRESS)
-			        + " (data encryption = " + XpertProperties.getProperty(XpertProperties.GXA_SSL_ENCRYPTION) + ")\n");
+			updateTextPane("- GXAlert exports to " + XpertProperties.getProperty(XpertProperties.GXA_SERVER_ADDRESS)
+			        + " (data encryption = " + XpertProperties.getProperty(XpertProperties.GXA_SSL_ENCRYPTION) + ")");
 		if (exportOpenMrs)
-			text.append("- OpenMRS exports to " + XpertProperties.getProperty(XpertProperties.OPENMRS_REST_ADDRESS)
-			        + " (data encryption = " + XpertProperties.getProperty(XpertProperties.OPENMRS_SSL_ENCRYPTION) + ")\n");
+			updateTextPane("- OpenMRS exports to " + XpertProperties.getProperty(XpertProperties.OPENMRS_REST_ADDRESS)
+			        + " (data encryption = " + XpertProperties.getProperty(XpertProperties.OPENMRS_SSL_ENCRYPTION) + ")");
 		logTextPane.setText(text.toString());
 	}
 	
 	public void startServer() {
-		server = new ResultServer(logTextPane, showDetailedLogCheckBox.isSelected());
+		server = new ResultServer(logTextPane, detailedLogCheckBox.isSelected());
 		server.start();
 	}
 	
@@ -189,6 +198,26 @@ public class XpertActivityViewer extends JDialog implements ActionListener {
 			XpertConfiguration xpertConfiguration = new XpertConfiguration();
 			xpertConfiguration.setVisible(true);
 			dispose();
+		} else if (e.getSource() == detailedLogCheckBox) {
+			if (server != null)
+				server.setDetailedLog(detailedLogCheckBox.isSelected());
 		}
+	}
+	
+	public static synchronized void updateTextPane(final String text) {
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			public void run() {
+				String prefix = detailedLogCheckBox.isSelected() ? DateTimeUtil.getSQLDateTime(new Date()) + ": " : "";
+				StyledDocument doc = logTextPane.getStyledDocument();
+				try {
+					doc.insertString(doc.getLength(), prefix + text + "\n", null);
+				}
+				catch (BadLocationException e) {
+					throw new RuntimeException(e);
+				}
+				logTextPane.setCaretPosition(doc.getLength() - 1);
+			}
+		});
 	}
 }

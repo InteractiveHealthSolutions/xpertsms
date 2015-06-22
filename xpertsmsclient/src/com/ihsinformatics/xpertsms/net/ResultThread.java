@@ -13,14 +13,13 @@ package com.ihsinformatics.xpertsms.net;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Date;
+
 import com.ihsinformatics.xpertsms.constant.ASTMNetworkConstants;
 import com.ihsinformatics.xpertsms.constant.FileConstants;
+import com.ihsinformatics.xpertsms.model.MessageType;
+import com.ihsinformatics.xpertsms.util.PrintWriterUtil;
 
 /**
  * Processes Results from GeneXpert DX
@@ -34,43 +33,40 @@ public class ResultThread extends Thread {
 	int threadCount;
 	
 	// private XpertASTMResultUploadMessage xpertMessage;
-	private PrintWriter pw;
+	private PrintWriterUtil printWriter;
 	
 	private int frameCounter;
 	
 	private ResultServer server;
 	
-	public ResultThread(Socket socket, int threadCount, ResultServer server) {
+	public ResultThread(Socket socket, int threadCount, ResultServer server, boolean detailedLog) {
 		super("resultthread");
 		this.threadCount = threadCount;
 		this.socket = socket;
-		pw = null;
+		printWriter = null;
 		frameCounter = 0;
 		this.server = server;
-		// = new XpertASTMResultUploadMessage();
-		// messages = new ArrayList<String>();
 	}
 	
 	public void run() {
 		try {
-			pw = new PrintWriter(new File(FileConstants.XPERT_SMS_DIR + System.getProperty("file.separator") + "log_t"
-			        + threadCount + ".txt"));
+			printWriter = new PrintWriterUtil(server, FileConstants.XPERT_SMS_DIR
+			        + System.getProperty("file.separator") + "log_t" + threadCount + ".txt");
 		}
-		catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-		}
-		println(pw, "Establishing XpertSMS connection", true);
+        catch (IOException e) {
+	        e.printStackTrace();
+        }
+		printWriter.println("Establishing XpertSMS connection", true, MessageType.INFO);
 		try {
 			DataInputStream dis = new DataInputStream(socket.getInputStream());
 			DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-			println(pw, "Established XpertSMS connection", true);
+			printWriter.println("Establishing XpertSMS connection", true, MessageType.INFO);
 			boolean etxRecvd = false;
 			byte b;
 			byte[] textByte = new byte[1];
 			String text = "";
 			String message = "";
-			// TODO CHECK THIS
-			println(pw, "reading", true);
+			printWriter.println("Reading...", true, MessageType.INFO);
 			b = dis.readByte();
 			System.out.print(b);
 			// Establishment phase ends
@@ -118,7 +114,7 @@ public class ResultThread extends Thread {
 					// println(pw,"EOT Received.");
 					// println(pw,"message\n" + message);
 					server.putMessage(message);
-					println(pw, "Result Received", true);
+					printWriter.println("Result Received", true, MessageType.INFO);
 					message = "";
 				}
 				
@@ -127,15 +123,15 @@ public class ResultThread extends Thread {
 				}
 			}
 			if (server.getStopped()) {
-				println(pw, "Stop Message Received!", true);
+				printWriter.println("Stop Message Received!", true, MessageType.INFO);
 			}
 			if (socket != null)
 				socket.close();
 			
 			message = null;
-			println(pw, "Clean up completed", true);
-			pw.flush();
-			pw.close();
+			printWriter.println("Clean up completed", true, MessageType.INFO);
+			printWriter.flush();
+			printWriter.close();
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -146,16 +142,5 @@ public class ResultThread extends Thread {
 		frameCounter = frameCounter + 1;
 		if (frameCounter == 8)
 			frameCounter = 0;
-	}
-	
-	public void print(PrintWriter pw, String text, boolean toGUI) {
-		pw.print(server.getLogEntryDateString(new Date()) + ": " + text);
-		pw.flush();
-		if (toGUI)
-			server.updateTextPane(server.getLogEntryDateString(new Date()) + ": " + text);
-	}
-	
-	public void println(PrintWriter pw, String text, boolean toGUI) {
-		print(pw, text + "\n", toGUI);
 	}
 }

@@ -116,8 +116,6 @@ public class XpertConfiguration extends JFrame implements ActionListener {
 	}
 	
 	public XpertConfiguration() {
-		setAutoRequestFocus(false);
-		setType(Type.UTILITY);
 		XpertProperties.readProperties();
 		setPreferredSize(new Dimension(670, 420));
 		setSize(new Dimension(654, 420));
@@ -338,7 +336,7 @@ public class XpertConfiguration extends JFrame implements ActionListener {
 	
 	public boolean validateData() {
 		// TODO: Apply validations
-		// Open option must be checked
+		// One option must be checked
 		// All fields are mandatory
 		return true;
 	}

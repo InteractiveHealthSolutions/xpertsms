@@ -9,11 +9,8 @@ You can also access the license on the internet at the address: http://www.gnu.o
 Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors. */
 package com.ihsinformatics.xpertsms.model;
 
-import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -40,6 +37,7 @@ import com.ihsinformatics.xpertsms.net.HttpSender;
 import com.ihsinformatics.xpertsms.net.OpenMrsApiAuthRest;
 import com.ihsinformatics.xpertsms.net.ResultServer;
 import com.ihsinformatics.xpertsms.util.DateTimeUtil;
+import com.ihsinformatics.xpertsms.util.PrintWriterUtil;
 
 /**
  * @author owais.hussain@ihsinformatics.com
@@ -50,9 +48,9 @@ public class ResultsSender extends Thread {
 	
 	private HttpSender httpSender;
 	
-	private PrintWriter printWriter;
+	private PrintWriterUtil printWriter;
 	
-	private PrintWriter successWriter;
+	private PrintWriterUtil successWriter;
 	
 	private PrintWriter csvWriter;
 	
@@ -101,12 +99,11 @@ public class ResultsSender extends Thread {
 			httpSender = new HttpSender();
 		}
 		if (exportCsv) {
-			File csvFile = new File(FileConstants.XPERT_SMS_DIR + System.getProperty("file.separator")
-			        + DateTimeUtil.getSQLDate(new Date()) + "_xpertdump.csv");
 			try {
-				csvWriter = new PrintWriter(csvFile);
+				csvWriter = new PrintWriter(FileConstants.XPERT_SMS_DIR + System.getProperty("file.separator")
+				        + DateTimeUtil.getSQLDate(new Date()) + "_xpertdump.csv");
 			}
-			catch (FileNotFoundException e) {
+			catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
@@ -120,73 +117,25 @@ public class ResultsSender extends Thread {
 		this.detailedLog = detailedLog;
 	}
 	
-	/**
-	 * Prints to text pane and appends a new line feed. If detailed logging is enabled, time stamp
-	 * is prepend for each message
-	 * 
-	 * @param text
-	 * @param toGUI
-	 */
-	public void println(String text, boolean toGUI) {
-		printWriter.print(server.getLogEntryDateString(new Date()) + ": " + text + "\n");
-		printWriter.flush();
-		if (toGUI) {
-			String prefix = detailedLog ? server.getLogEntryDateString(new Date()) + ": " : "";
-			server.updateTextPane(prefix + text + "\n");
-		}
-	}
-	
-	/**
-	 * Overloaded method. Converts text into HTML according to message type
-	 * 
-	 * @param text
-	 * @param toGUI
-	 */
-	public void println(String text, boolean toGUI, MessageType messageType) {
-		switch (messageType) {
-			case ERROR:
-			case EXCEPTION:
-				// Set text to red
-				break;
-			case WARNING:
-				// Set text to orange
-				break;
-			case INFO:
-				// Set text to blue
-				break;
-			case SUCCESS:
-				// Set text to green
-				break;
-		}
-		println(text, toGUI);
-	}
-	
 	public void run() {
 		XpertResultUploadMessage message = null;
 		String response = "";
 		try {
-			printWriter = new PrintWriter(new BufferedWriter(new FileWriter(new File(FileConstants.XPERT_SMS_DIR
-			        + System.getProperty("file.separator") + server.getFileNameDateString(new Date())
-			        + "_xpertSMS_send_log.txt"), true)));
+			printWriter = new PrintWriterUtil(server, FileConstants.XPERT_SMS_DIR + System.getProperty("file.separator")
+			        + server.getFileNameDateString(new Date()) + "_xpertSMS_send_log.txt");
 		}
-		catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-		}
-		catch (IOException e1) {
-			e1.printStackTrace();
+		catch (IOException e) {
+			e.printStackTrace();
 		}
 		try {
 			successLog = new File(FileConstants.XPERT_SMS_DIR + System.getProperty("file.separator") + "successLog.txt");
 			if (!successLog.exists()) {
 				successLog.createNewFile();
 			}
-			successWriter = new PrintWriter(new BufferedWriter(new FileWriter(successLog, true)));
+			successWriter = new PrintWriterUtil(server, successLog.getPath());
 		}
-		catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-		}
-		catch (IOException e1) {
-			e1.printStackTrace();
+		catch (IOException e) {
+			e.printStackTrace();
 		}
 		while (!server.getStopped()) {
 			message = server.getOutgoingMessagesHead();
@@ -200,19 +149,19 @@ public class ResultsSender extends Thread {
 				catch (ClassNotFoundException e) {
 					e.printStackTrace();
 					if (detailedLog)
-						println(e.getMessage(), true, MessageType.EXCEPTION);
+						printWriter.println(e.getMessage(), true, MessageType.EXCEPTION);
 				}
 				catch (SQLException e) {
 					e.printStackTrace();
 					if (detailedLog)
-						println(e.getMessage(), true, MessageType.EXCEPTION);
+						printWriter.println(e.getMessage(), true, MessageType.EXCEPTION);
 				}
 			}
 			if (exportWeb) {
 				if (XpertProperties.props.getProperty(XpertProperties.WEB_SSL_ENCRYPTION).equals("YES"))
-					response = httpSender.doPost(message, username, password, exportProbes);
-				else
 					response = httpSender.doSecurePost(message, username, password, exportProbes);
+				else
+					response = httpSender.doPost(message, username, password, exportProbes);
 				parseResponse(response, message);
 			}
 			if (exportOpenMrs) {
@@ -233,7 +182,7 @@ public class ResultsSender extends Thread {
 			}
 		}
 		if (server.getStopped()) {
-			println("Stopping Transmitting Thread!", true, MessageType.INFO);
+			printWriter.println("Stopping Transmitting Thread!", true, MessageType.INFO);
 		}
 		printWriter.flush();
 		printWriter.close();
@@ -259,10 +208,10 @@ public class ResultsSender extends Thread {
 	
 	public synchronized void writeToCsv(String text) {
 		System.out.println(text);
-		System.out.println("Writing to CSV file ....");
+		System.out.println("Writing to CSV file...");
 		csvWriter.println(text);
 		csvWriter.flush();
-		System.out.println("printed");
+		System.out.println("Printed to CSV");
 	}
 	
 	public void parseResponse(String response, XpertResultUploadMessage xpertMessage) {
@@ -278,18 +227,18 @@ public class ResultsSender extends Thread {
 		
 		if (response == null) {
 			if (retry && retryExceeded) {
-				println(
-				    "Retries exceeded for Sample ID " + xpertMessage.getSampleId() + " for Patient: "
-				            + xpertMessage.getPatientId() + ": " + "! Please enter manually!", true, MessageType.ERROR);
+				printWriter.println("Retries exceeded for Sample ID " + xpertMessage.getSampleId() + " for Patient: "
+				        + xpertMessage.getPatientId() + ": " + "! Please enter manually!", true, MessageType.ERROR);
 				// remove from queue and set retry count to zero
 				// server.removeOutgoingMessage(0);
 			} else if (retry) {
-				println("Retrying Sample ID " + xpertMessage.getSampleId() + " for Patient: " + xpertMessage.getPatientId()
-				        + "! Attempts = " + (xpertMessage.getRetries() + 1), true, MessageType.WARNING);
+				printWriter.println(
+				    "Retrying Sample ID " + xpertMessage.getSampleId() + " for Patient: " + xpertMessage.getPatientId()
+				            + "! Attempts = " + (xpertMessage.getRetries() + 1), true, MessageType.WARNING);
 				xpertMessage.setRetries(xpertMessage.getRetries() + 1);
 				server.putOutGoingMessage(xpertMessage);
 			} else {
-				println("Could not send result for Sample ID " + xpertMessage.getSampleId() + " for Patient: "
+				printWriter.println("Could not send result for Sample ID " + xpertMessage.getSampleId() + " for Patient: "
 				        + xpertMessage.getPatientId() + "! Please enter manually!", true, MessageType.ERROR);
 				// remove from queue
 				// server.removeOutgoingMessage(0);
@@ -325,7 +274,7 @@ public class ResultsSender extends Thread {
 			if (detailedLog)
 				message = "Parse exception in submitting Sample ID " + xpertMessage.getSampleId() + " for Patient: "
 				        + xpertMessage.getPatientId() + ": " + e.getMessage();
-			println(message, true, MessageType.EXCEPTION);
+			printWriter.println(message, true, MessageType.EXCEPTION);
 		}
 		catch (SAXException e) {
 			String message = "Error in submitting Sample ID " + xpertMessage.getSampleId() + " for Patient: "
@@ -333,7 +282,7 @@ public class ResultsSender extends Thread {
 			if (detailedLog)
 				message = "Exception in submitting Sample ID " + xpertMessage.getSampleId() + " for Patient: "
 				        + xpertMessage.getPatientId() + ": " + e.getMessage();
-			println(message, true, MessageType.EXCEPTION);
+			printWriter.println(message, true, MessageType.EXCEPTION);
 		}
 		catch (IOException e) {
 			String message = "Error in submitting Sample ID " + xpertMessage.getSampleId() + " for Patient: "
@@ -341,34 +290,34 @@ public class ResultsSender extends Thread {
 			if (detailedLog)
 				message = "Exception in submitting Sample ID " + xpertMessage.getSampleId() + " for Patient: "
 				        + xpertMessage.getPatientId() + ": " + e.getMessage();
-			println(message, true, MessageType.EXCEPTION);
+			printWriter.println(message, true, MessageType.EXCEPTION);
 		}
 		if (success) {
 			// log success
 			if (message.length() == 0) {
-				println(
+				printWriter.println(
 				    "Result for Sample ID " + xpertMessage.getSampleId() + " for Patient: " + xpertMessage.getPatientId()
 				            + " transmitted sucessfully", true, MessageType.SUCCESS);
 				successWriter.println(xpertMessage.getPatientId() + ":" + xpertMessage.getSampleId() + " for Patient: "
 				        + xpertMessage.getPatientId() + ":" + server.getLogEntryDateString(new Date()));
 				successWriter.flush();
 			} else
-				println(
+				printWriter.println(
 				    "Result for Sample ID " + xpertMessage.getSampleId() + " for Patient: " + xpertMessage.getPatientId()
 				            + " not saved. " + message, true, MessageType.ERROR);
 		} else {
 			if (retry && retryExceeded) {
-				println(
-				    "Retries exceeded for Sample ID " + xpertMessage.getSampleId() + " for Patient: "
-				            + xpertMessage.getPatientId() + "! Please enter manually!\nError Message: " + errorMessage,
-				    true, MessageType.ERROR);
+				printWriter.println("Retries exceeded for Sample ID " + xpertMessage.getSampleId() + " for Patient: "
+				        + xpertMessage.getPatientId() + "! Please enter manually!\nError Message: " + errorMessage, true,
+				    MessageType.ERROR);
 			} else if (retry) {
-				println("Retrying Sample ID " + xpertMessage.getSampleId() + " for Patient: " + xpertMessage.getPatientId()
-				        + "! Attempts = " + (xpertMessage.getRetries() + 1), true, MessageType.ERROR);
+				printWriter.println(
+				    "Retrying Sample ID " + xpertMessage.getSampleId() + " for Patient: " + xpertMessage.getPatientId()
+				            + "! Attempts = " + (xpertMessage.getRetries() + 1), true, MessageType.ERROR);
 				xpertMessage.setRetries(xpertMessage.getRetries() + 1);
 				server.putOutGoingMessage(xpertMessage);
 			} else {
-				println("Could not send result for Sample ID " + xpertMessage.getSampleId() + " for Patient: "
+				printWriter.println("Could not send result for Sample ID " + xpertMessage.getSampleId() + " for Patient: "
 				        + xpertMessage.getPatientId() + "! Please enter manually!\nError Message: " + errorMessage, true,
 				    MessageType.ERROR);
 			}

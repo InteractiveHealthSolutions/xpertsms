@@ -16,14 +16,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
-import java.util.Date;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -34,6 +32,7 @@ import javax.net.ssl.X509TrustManager;
 
 import com.ihsinformatics.xpertsms.XpertProperties;
 import com.ihsinformatics.xpertsms.model.XpertResultUploadMessage;
+import com.ihsinformatics.xpertsms.util.PrintWriterUtil;
 
 /**
  * Get/Post XpertSMS results via HTTP(s)
@@ -42,9 +41,7 @@ import com.ihsinformatics.xpertsms.model.XpertResultUploadMessage;
  */
 public class HttpSender {
 	
-	private ResultServer server;
-	
-	private PrintWriter pw;
+	private PrintWriterUtil printWriter;
 	
 	File successLog;
 	
@@ -63,7 +60,7 @@ public class HttpSender {
 		}
 		catch (MalformedURLException e1) {
 			e1.printStackTrace();
-			println("Error submitting Sample ID " + message.getSampleId() + ": " + e1.getMessage(), false);
+			printWriter.println("Error submitting Sample ID " + message.getSampleId() + ": " + e1.getMessage(), false);
 			return null;
 		}
 		
@@ -80,11 +77,11 @@ public class HttpSender {
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-				println("Error submitting Sample ID " + message.getSampleId() + ": " + e.getMessage(), false);
+				printWriter.println("Error submitting Sample ID " + message.getSampleId() + ": " + e.getMessage(), false);
 				return null;
 			}
 			if (responseCode != HttpURLConnection.HTTP_OK) {
-				println("Response Code " + responseCode + " for Sample ID " + message.getSampleId() + ": Could not submit",
+				printWriter.println("Response Code " + responseCode + " for Sample ID " + message.getSampleId() + ": Could not submit",
 				    false);
 			}
 			
@@ -97,17 +94,17 @@ public class HttpSender {
 		}
 		catch (ClassCastException e) {
 			// throw new IllegalArgumentException("Not an HTTP URL");
-			println("Error submitting Sample ID " + message.getSampleId() + ": " + e.getMessage(), false);
+			printWriter.println("Error submitting Sample ID " + message.getSampleId() + ": " + e.getMessage(), false);
 			return null;
 		}
 		catch (IOException e) {
 			e.printStackTrace();
-			println("Error submitting Sample ID " + message.getSampleId() + ": " + e.getMessage(), false);
+			printWriter.println("Error submitting Sample ID " + message.getSampleId() + ": " + e.getMessage(), false);
 			return null;
 		}
 		catch (SecurityException e) {
 			e.printStackTrace();
-			println("Error submitting Sample ID " + message.getSampleId() + ": " + e.getMessage(), false);
+			printWriter.println("Error submitting Sample ID " + message.getSampleId() + ": " + e.getMessage(), false);
 			return null;
 		}
 		catch (Exception e) {
@@ -143,22 +140,8 @@ public class HttpSender {
 		String url = "";
 		// url += "http://" + ASTMNetworkConstants.smsServerAddress + ":" + ASTMNetworkConstants.smsServerPort + ASTMNetworkConstants.webappString;
 		String webappString = XpertProperties.props.getProperty(XpertProperties.WEB_APP_STRING);
-		if (webappString.charAt(0) != '/')
-			webappString = "/" + webappString;
-		url += "http" + (secure ? "s" : "") + "://" + XpertProperties.props.getProperty(XpertProperties.SERVER_URL) + ":"
-		        + XpertProperties.props.getProperty(XpertProperties.SERVER_PORT) + webappString;
+		url += "http" + (secure ? "s" : "") + "://" + webappString;
 		return url;
-	}
-	
-	public void print(String text, boolean toGUI) {
-		pw.print(server.getLogEntryDateString(new Date()) + ": " + text);
-		pw.flush();
-		if (toGUI)
-			server.updateTextPane(server.getLogEntryDateString(new Date()) + ": " + text);
-	}
-	
-	public void println(String text, boolean toGUI) {
-		print(text + "\n", toGUI);
 	}
 	
 	public String doSecurePost(XpertResultUploadMessage message, String username, String password, boolean exportProbes) {
@@ -210,7 +193,7 @@ public class HttpSender {
 		}
 		catch (MalformedURLException e1) {
 			e1.printStackTrace();
-			println("Exception submitting Sample ID " + message.getSampleId() + " for Patient: " + message.getPatientId()
+			printWriter.println("Exception submitting Sample ID " + message.getSampleId() + " for Patient: " + message.getPatientId()
 			        + ": " + e1.getMessage(), false);
 			return null;
 		}
@@ -231,13 +214,13 @@ public class HttpSender {
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-				println(
+				printWriter.println(
 				    "Exception submitting Sample ID " + message.getSampleId() + " for Patient: " + message.getPatientId()
 				            + ": " + e.getMessage(), false);
 				return null;
 			}
 			if (responseCode != HttpsURLConnection.HTTP_OK) {
-				println("Response Code " + responseCode + " for Sample ID " + message.getSampleId() + " for Patient: "
+				printWriter.println("Response Code " + responseCode + " for Sample ID " + message.getSampleId() + " for Patient: "
 				        + message.getPatientId() + ": Could not submit", false);
 			}
 			System.out.println("Parsing response");
@@ -250,19 +233,19 @@ public class HttpSender {
 			System.out.println("Response Complete:\n" + response);
 		}
 		catch (ClassCastException e) {
-			println("Exception submitting Sample ID " + message.getSampleId() + " for Patient: " + message.getPatientId()
+			printWriter.println("Exception submitting Sample ID " + message.getSampleId() + " for Patient: " + message.getPatientId()
 			        + ": " + e.getMessage(), false);
 			return null;
 		}
 		catch (IOException e) {
 			e.printStackTrace();
-			println("Exception submitting Sample ID " + message.getSampleId() + " for Patient: " + message.getPatientId()
+			printWriter.println("Exception submitting Sample ID " + message.getSampleId() + " for Patient: " + message.getPatientId()
 			        + ": " + e.getMessage(), false);
 			return null;
 		}
 		catch (SecurityException e) {
 			e.printStackTrace();
-			println("Exception submitting Sample ID " + message.getSampleId() + " for Patient: " + message.getPatientId()
+			printWriter.println("Exception submitting Sample ID " + message.getSampleId() + " for Patient: " + message.getPatientId()
 			        + ": " + e.getMessage(), false);
 			return null;
 		}

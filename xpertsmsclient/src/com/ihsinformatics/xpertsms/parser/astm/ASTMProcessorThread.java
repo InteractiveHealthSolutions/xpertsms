@@ -11,21 +11,16 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 
 package com.ihsinformatics.xpertsms.parser.astm;
 
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Date;
 
-import com.ihsinformatics.xpertsms.XpertProperties;
 import com.ihsinformatics.xpertsms.constant.ASTMMessageConstants;
 import com.ihsinformatics.xpertsms.constant.FileConstants;
-import com.ihsinformatics.xpertsms.model.ResultsSender;
 import com.ihsinformatics.xpertsms.model.astm.XpertASTMResultUploadMessage;
 import com.ihsinformatics.xpertsms.net.ResultServer;
 import com.ihsinformatics.xpertsms.net.exception.InvalidASTMMessageFormatException;
+import com.ihsinformatics.xpertsms.util.PrintWriterUtil;
 
 /**
  * Processes single result set of GeneXpert results in ASTM standard
@@ -36,19 +31,18 @@ public class ASTMProcessorThread extends Thread {
 	
 	private ResultServer server;
 	
-	private PrintWriter pw;
+	private PrintWriterUtil printWriter;
 	
-	public ASTMProcessorThread(ResultServer server) {
+	public ASTMProcessorThread(ResultServer server, boolean detailedLog) {
 		this.server = server;
 	}
 	
 	public void run() {
-		
 		try {
-			pw = new PrintWriter(new BufferedWriter(new FileWriter(new File(FileConstants.XPERT_SMS_DIR
+			printWriter = new PrintWriterUtil(server, FileConstants.XPERT_SMS_DIR
 			        + System.getProperty("file.separator") + server.getFileNameDateString(new Date())
-			        + "_XpertSMS_proc_log.txt"), true)));
-			println("Processing Thread Started", true);
+			        + "_XpertSMS_proc_log.txt");
+			printWriter.println("Processing Thread Started", true);
 		}
 		catch (FileNotFoundException e1) {
 			e1.printStackTrace();
@@ -64,29 +58,23 @@ public class ASTMProcessorThread extends Thread {
 			}
 		}
 		if (server.getStopped()) {
-			println("Stopping Processing Thread", true);
+			printWriter.println("Stopping Processing Thread", true);
 		}
-		pw.flush();
-		pw.close();
-		
+		printWriter.flush();
+		printWriter.close();
 	}
 	
 	public void doTriage() {
 		String message = server.getHead();
 		server.removeMessage(0);
-		
 		String lines[] = message.split("[\r\n]+");
-		
 		XpertASTMResultUploadMessage xpertMessage = new XpertASTMResultUploadMessage();
 		String line = "";
 		for (int i = 0; i < lines.length; i++) {
 			line = lines[i];
-			
 			if (line.trim().equals(""))
 				continue;
-			
 			char recordType = line.charAt(0);
-			
 			switch (recordType) {
 				case ASTMMessageConstants.HEADER_RECORD:
 					HeaderParser hp = new HeaderParser(xpertMessage, line);
@@ -94,14 +82,12 @@ public class ASTMProcessorThread extends Thread {
 						hp.parse();
 					}
 					catch (InvalidASTMMessageFormatException e) {
-						
 						e.printStackTrace();
 					}
 					catch (Exception e) {
 						e.printStackTrace();
 					}
 					break;
-				
 				case ASTMMessageConstants.ORDER_RECORD:
 					OrderRecordParser op = new OrderRecordParser(xpertMessage, line);
 					try {
@@ -111,7 +97,6 @@ public class ASTMProcessorThread extends Thread {
 						e.printStackTrace();
 					}
 					break;
-				
 				case ASTMMessageConstants.PATIENT_RECORD:
 					PatientRecordParser pp = new PatientRecordParser(xpertMessage, line);
 					try {
@@ -121,7 +106,6 @@ public class ASTMProcessorThread extends Thread {
 						e.printStackTrace();
 					}
 					break;
-				
 				case ASTMMessageConstants.RESULT_RECORD:
 					ResultRecordParser rp = new ResultRecordParser(xpertMessage, line);
 					try {
@@ -131,7 +115,6 @@ public class ASTMProcessorThread extends Thread {
 						e.printStackTrace();
 					}
 					break;
-				
 				case ASTMMessageConstants.TERMINATOR_RECORD:
 					TerminatorRecordParser tp = new TerminatorRecordParser(xpertMessage, line);
 					try {
@@ -141,7 +124,6 @@ public class ASTMProcessorThread extends Thread {
 						e.printStackTrace();
 					}
 					break;
-				
 				case ASTMMessageConstants.COMMENT_RECORD:
 					CommentRecordParser cp = new CommentRecordParser(xpertMessage, line);
 					try {
@@ -151,31 +133,14 @@ public class ASTMProcessorThread extends Thread {
 						e.printStackTrace();
 					}
 					break;
-				
 				default:
-					println("***NEW***:|" + line + "|", true);
+					printWriter.println("***NEW***:|" + line + "|", true);
 			}
 		}
 		if (xpertMessage.getSampleId() != null) {
 			/* CSV is being written by ResultsSender */
-			if (!XpertProperties.props.getProperty(XpertProperties.CSV_EXPORT).equals("YES")) {
-				server.putOutGoingMessage(xpertMessage);
-				println("Result for sample " + xpertMessage.getSampleId() + " queued for transmission", true);
-			}
+			server.putOutGoingMessage(xpertMessage);
+			printWriter.println("Result for sample " + xpertMessage.getSampleId() + " queued for transmission", true);
 		}
-		
-	}
-	
-	public void print(String text, boolean toGUI) {
-		
-		pw.print(server.getLogEntryDateString(new Date()) + ": " + text);
-		pw.flush();
-		if (toGUI)
-			server.updateTextPane(server.getLogEntryDateString(new Date()) + ": " + text);
-	}
-	
-	public void println(String text, boolean toGUI) {
-		
-		print(text + "\n", toGUI);
 	}
 }
