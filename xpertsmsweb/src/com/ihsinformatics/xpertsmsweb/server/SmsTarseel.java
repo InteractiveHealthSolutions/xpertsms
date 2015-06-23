@@ -20,7 +20,7 @@ public class SmsTarseel {
 
 		System.out.println(">>>>LOADING SYSTEM PROPERTIES...");
 		InputStream f = Thread.currentThread().getContextClassLoader()
-				.getResourceAsStream("xpertsmsweb.properties");
+				.getResourceAsStream("smstarseel.properties");
 		// Java Properties donot seem to support substitutions hence EProperties
 		// are used to accomplish the task
 
@@ -31,7 +31,7 @@ public class SmsTarseel {
 		Properties prop = new Properties();
 		prop.putAll(SmsTarseelUtil.convertEntrySetToMap(root.entrySet()));
 
-		TarseelContext.instantiate(prop, "smstarseel.cfg.xml");
+		TarseelContext.instantiate(prop, null);
 		return true;
 	}
 }

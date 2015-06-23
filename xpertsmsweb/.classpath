@@ -59,8 +59,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/slf4j-api-1.6.4.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/slf4j-jdk14-1.6.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/slf4j-log4j12-1.6.1.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/smstarseel-hib3.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/smstarseelglobals.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/spring-beans-3.2.0.RELEASE.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/spring-context-3.2.0.RELEASE.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/spring-core-3.2.0.RELEASE.jar"/>
@@ -72,5 +70,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/xalan.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-dev.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-user.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/smstarseel.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
