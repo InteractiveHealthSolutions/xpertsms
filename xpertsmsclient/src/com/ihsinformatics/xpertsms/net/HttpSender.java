@@ -31,6 +31,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import com.ihsinformatics.xpertsms.XpertProperties;
+import com.ihsinformatics.xpertsms.model.MessageType;
 import com.ihsinformatics.xpertsms.model.XpertResultUploadMessage;
 import com.ihsinformatics.xpertsms.util.PrintWriterUtil;
 
@@ -60,7 +61,8 @@ public class HttpSender {
 		}
 		catch (MalformedURLException e1) {
 			e1.printStackTrace();
-			printWriter.println("Error submitting Sample ID " + message.getSampleId() + ": " + e1.getMessage(), false);
+			printWriter.println("Error submitting Sample ID " + message.getSampleId() + ": " + e1.getMessage(), false,
+			    MessageType.ERROR);
 			return null;
 		}
 		
@@ -77,12 +79,13 @@ public class HttpSender {
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-				printWriter.println("Error submitting Sample ID " + message.getSampleId() + ": " + e.getMessage(), false);
+				printWriter.println("Error submitting Sample ID " + message.getSampleId() + ": " + e.getMessage(), false,
+				    MessageType.ERROR);
 				return null;
 			}
 			if (responseCode != HttpURLConnection.HTTP_OK) {
-				printWriter.println("Response Code " + responseCode + " for Sample ID " + message.getSampleId() + ": Could not submit",
-				    false);
+				printWriter.println("Response Code " + responseCode + " for Sample ID " + message.getSampleId()
+				        + ": Could not submit", false, MessageType.ERROR);
 			}
 			
 			BufferedReader br = new BufferedReader(new InputStreamReader(httpConnection.getInputStream()));
@@ -94,17 +97,20 @@ public class HttpSender {
 		}
 		catch (ClassCastException e) {
 			// throw new IllegalArgumentException("Not an HTTP URL");
-			printWriter.println("Error submitting Sample ID " + message.getSampleId() + ": " + e.getMessage(), false);
+			printWriter.println("Error submitting Sample ID " + message.getSampleId() + ": " + e.getMessage(), false,
+			    MessageType.ERROR);
 			return null;
 		}
 		catch (IOException e) {
 			e.printStackTrace();
-			printWriter.println("Error submitting Sample ID " + message.getSampleId() + ": " + e.getMessage(), false);
+			printWriter.println("Error submitting Sample ID " + message.getSampleId() + ": " + e.getMessage(), false,
+			    MessageType.ERROR);
 			return null;
 		}
 		catch (SecurityException e) {
 			e.printStackTrace();
-			printWriter.println("Error submitting Sample ID " + message.getSampleId() + ": " + e.getMessage(), false);
+			printWriter.println("Error submitting Sample ID " + message.getSampleId() + ": " + e.getMessage(), false,
+			    MessageType.ERROR);
 			return null;
 		}
 		catch (Exception e) {
@@ -193,8 +199,9 @@ public class HttpSender {
 		}
 		catch (MalformedURLException e1) {
 			e1.printStackTrace();
-			printWriter.println("Exception submitting Sample ID " + message.getSampleId() + " for Patient: " + message.getPatientId()
-			        + ": " + e1.getMessage(), false);
+			printWriter.println(
+			    "Exception submitting Sample ID " + message.getSampleId() + " for Patient: " + message.getPatientId() + ": "
+			            + e1.getMessage(), false, MessageType.ERROR);
 			return null;
 		}
 		System.out.println("URL:" + url);
@@ -216,12 +223,12 @@ public class HttpSender {
 				e.printStackTrace();
 				printWriter.println(
 				    "Exception submitting Sample ID " + message.getSampleId() + " for Patient: " + message.getPatientId()
-				            + ": " + e.getMessage(), false);
+				            + ": " + e.getMessage(), false, MessageType.ERROR);
 				return null;
 			}
 			if (responseCode != HttpsURLConnection.HTTP_OK) {
-				printWriter.println("Response Code " + responseCode + " for Sample ID " + message.getSampleId() + " for Patient: "
-				        + message.getPatientId() + ": Could not submit", false);
+				printWriter.println("Response Code " + responseCode + " for Sample ID " + message.getSampleId()
+				        + " for Patient: " + message.getPatientId() + ": Could not submit", false, MessageType.ERROR);
 			}
 			System.out.println("Parsing response");
 			BufferedReader br = new BufferedReader(new InputStreamReader(hc.getInputStream()));
@@ -233,20 +240,23 @@ public class HttpSender {
 			System.out.println("Response Complete:\n" + response);
 		}
 		catch (ClassCastException e) {
-			printWriter.println("Exception submitting Sample ID " + message.getSampleId() + " for Patient: " + message.getPatientId()
-			        + ": " + e.getMessage(), false);
+			printWriter.println(
+			    "Exception submitting Sample ID " + message.getSampleId() + " for Patient: " + message.getPatientId() + ": "
+			            + e.getMessage(), false, MessageType.ERROR);
 			return null;
 		}
 		catch (IOException e) {
 			e.printStackTrace();
-			printWriter.println("Exception submitting Sample ID " + message.getSampleId() + " for Patient: " + message.getPatientId()
-			        + ": " + e.getMessage(), false);
+			printWriter.println(
+			    "Exception submitting Sample ID " + message.getSampleId() + " for Patient: " + message.getPatientId() + ": "
+			            + e.getMessage(), false, MessageType.ERROR);
 			return null;
 		}
 		catch (SecurityException e) {
 			e.printStackTrace();
-			printWriter.println("Exception submitting Sample ID " + message.getSampleId() + " for Patient: " + message.getPatientId()
-			        + ": " + e.getMessage(), false);
+			printWriter.println(
+			    "Exception submitting Sample ID " + message.getSampleId() + " for Patient: " + message.getPatientId() + ": "
+			            + e.getMessage(), false, MessageType.ERROR);
 			return null;
 		}
 		catch (Exception e) {

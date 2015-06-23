@@ -24,6 +24,7 @@ import javax.swing.JTextPane;
 
 import com.ihsinformatics.xpertsms.XpertProperties;
 import com.ihsinformatics.xpertsms.constant.FileConstants;
+import com.ihsinformatics.xpertsms.model.MessageType;
 import com.ihsinformatics.xpertsms.model.ResultsSender;
 import com.ihsinformatics.xpertsms.model.XpertResultUploadMessage;
 import com.ihsinformatics.xpertsms.parser.astm.ASTMProcessorThread;
@@ -123,13 +124,13 @@ public class ResultServer extends Thread {
 		try {
 			while (!stopped) {
 				threadCount++;
-				XpertActivityViewer.updateTextPane("Waiting for GeneXpert");
+				XpertActivityViewer.updateTextPane("Waiting for GeneXpert...", MessageType.INFO);
 				ResultThread rt = new ResultThread(socket.accept(), threadCount, this, detailedLog);
 				rt.start();
-				XpertActivityViewer.updateTextPane("Connected to GeneXpert");
+				XpertActivityViewer.updateTextPane("Connected to GeneXpert", MessageType.INFO);
 			}
 			if (stopped) {
-				XpertActivityViewer.updateTextPane("Stop message received");
+				XpertActivityViewer.updateTextPane("Stop message received", MessageType.INFO);
 			}
 			if (!socket.isClosed())
 				socket.close();

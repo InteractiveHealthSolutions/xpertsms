@@ -36,41 +36,18 @@ public class PrintWriterUtil extends PrintWriter {
 	
 	/**
 	 * Prints to text pane and appends a new line feed. If detailed logging is enabled, time stamp
-	 * is prepend for each message
+	 * is prepend for each message. Styles the message in HTML according to messageType
 	 * 
 	 * @param text
 	 * @param toGUI
-	 */
-	public void println(String text, boolean toGUI) {
-		print(server.getLogEntryDateString(new Date()) + ": " + text + "\n");
-		flush();
-		if (toGUI) {
-			XpertActivityViewer.updateTextPane(text);
-		}
-	}
-	
-	/**
-	 * Overloaded method. Converts text into HTML according to message type
-	 * 
-	 * @param text
-	 * @param toGUI
+	 * @param messageType
 	 */
 	public void println(String text, boolean toGUI, MessageType messageType) {
-		switch (messageType) {
-			case ERROR:
-			case EXCEPTION:
-//				text = "<html><b style=\"color:red\">" + text + "</b></html>";
-				break;
-			case WARNING:
-//				text = "<html><b style=\"color:orange\">" + text + "</b></html>";
-				break;
-			case INFO:
-//				text = "<html><b style=\"color:blue\">" + text + "</b></html>";
-				break;
-			case SUCCESS:
-//				text = "<html><b style=\"color:green\">" + text + "</b></html>";
-				break;
+		if (toGUI) {
+			XpertActivityViewer.updateTextPane(text, messageType);
 		}
-		println(text, toGUI);
+		text = messageType.toString() + ":" + text;
+		print(server.getLogEntryDateString(new Date()) + ": " + text + "\n");
+		flush();
 	}
 }

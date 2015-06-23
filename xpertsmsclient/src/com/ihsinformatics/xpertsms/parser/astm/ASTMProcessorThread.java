@@ -17,6 +17,7 @@ import java.util.Date;
 
 import com.ihsinformatics.xpertsms.constant.ASTMMessageConstants;
 import com.ihsinformatics.xpertsms.constant.FileConstants;
+import com.ihsinformatics.xpertsms.model.MessageType;
 import com.ihsinformatics.xpertsms.model.astm.XpertASTMResultUploadMessage;
 import com.ihsinformatics.xpertsms.net.ResultServer;
 import com.ihsinformatics.xpertsms.net.exception.InvalidASTMMessageFormatException;
@@ -39,10 +40,9 @@ public class ASTMProcessorThread extends Thread {
 	
 	public void run() {
 		try {
-			printWriter = new PrintWriterUtil(server, FileConstants.XPERT_SMS_DIR
-			        + System.getProperty("file.separator") + server.getFileNameDateString(new Date())
-			        + "_XpertSMS_proc_log.txt");
-			printWriter.println("Processing Thread Started", true);
+			printWriter = new PrintWriterUtil(server, FileConstants.XPERT_SMS_DIR + System.getProperty("file.separator")
+			        + server.getFileNameDateString(new Date()) + "_XpertSMS_proc_log.txt");
+			printWriter.println("Processing Thread Started", true, MessageType.INFO);
 		}
 		catch (FileNotFoundException e1) {
 			e1.printStackTrace();
@@ -58,7 +58,7 @@ public class ASTMProcessorThread extends Thread {
 			}
 		}
 		if (server.getStopped()) {
-			printWriter.println("Stopping Processing Thread", true);
+			printWriter.println("Stopping Processing Thread", true, MessageType.INFO);
 		}
 		printWriter.flush();
 		printWriter.close();
@@ -134,13 +134,14 @@ public class ASTMProcessorThread extends Thread {
 					}
 					break;
 				default:
-					printWriter.println("***NEW***:|" + line + "|", true);
+					printWriter.println("***NEW***:|" + line + "|", true, MessageType.INFO);
 			}
 		}
 		if (xpertMessage.getSampleId() != null) {
 			/* CSV is being written by ResultsSender */
 			server.putOutGoingMessage(xpertMessage);
-			printWriter.println("Result for sample " + xpertMessage.getSampleId() + " queued for transmission", true);
+			printWriter.println("Result for sample " + xpertMessage.getSampleId() + " queued for transmission", true,
+			    MessageType.INFO);
 		}
 	}
 }

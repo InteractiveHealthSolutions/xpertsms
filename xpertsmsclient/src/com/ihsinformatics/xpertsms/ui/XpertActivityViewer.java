@@ -11,6 +11,7 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 package com.ihsinformatics.xpertsms.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -32,11 +33,15 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 import com.ihsinformatics.xpertsms.XpertProperties;
+import com.ihsinformatics.xpertsms.model.MessageType;
 import com.ihsinformatics.xpertsms.net.ResultServer;
 import com.ihsinformatics.xpertsms.util.DateTimeUtil;
+import javax.swing.JScrollPane;
 
 /**
  * Demon GUI form to view activity of messages between GX DX and XpertSMS
@@ -52,6 +57,8 @@ public class XpertActivityViewer extends JFrame implements ActionListener {
 	private JPanel bottomDialogPanel;
 	
 	private JPanel topDialogPanel;
+	
+	private static JScrollPane logScrollPane;
 	
 	private static JTextPane logTextPane;
 	
@@ -94,17 +101,20 @@ public class XpertActivityViewer extends JFrame implements ActionListener {
 		topDialogPanel = new JPanel();
 		getContentPane().add(topDialogPanel, BorderLayout.CENTER);
 		
+		GroupLayout topDialogPanelLayout = new GroupLayout(topDialogPanel);
+		topDialogPanelLayout.setHorizontalGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING).addGap(0, 512,
+		    Short.MAX_VALUE));
+		topDialogPanelLayout.setVerticalGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING).addGap(0, 271,
+		    Short.MAX_VALUE));
+		topDialogPanel.setLayout(topDialogPanelLayout);
+		
 		logTextPane = new JTextPane();
+		getContentPane().add(logTextPane, BorderLayout.WEST);
 		logTextPane.setContentType("text/html");
 		
-		GroupLayout topDialogPanelLayout = new GroupLayout(topDialogPanel);
-		topDialogPanelLayout.setHorizontalGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(
-		    topDialogPanelLayout.createSequentialGroup().addContainerGap()
-		            .addComponent(logTextPane, GroupLayout.DEFAULT_SIZE, 492, Short.MAX_VALUE).addContainerGap()));
-		topDialogPanelLayout.setVerticalGroup(topDialogPanelLayout.createParallelGroup(Alignment.LEADING).addGroup(
-		    topDialogPanelLayout.createSequentialGroup().addContainerGap()
-		            .addComponent(logTextPane, GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE).addContainerGap()));
-		topDialogPanel.setLayout(topDialogPanelLayout);
+		logScrollPane = new JScrollPane(logTextPane);
+		logScrollPane.setAutoscrolls(true);
+		getContentPane().add(logScrollPane, BorderLayout.CENTER);
 		
 		bottomDialogPanel = new JPanel();
 		getContentPane().add(bottomDialogPanel, BorderLayout.SOUTH);
@@ -148,20 +158,25 @@ public class XpertActivityViewer extends JFrame implements ActionListener {
 		exportGxa = XpertProperties.getProperty(XpertProperties.GXA_EXPORT).equals("YES");
 		exportOpenMrs = XpertProperties.getProperty(XpertProperties.OPENMRS_EXPORT).equals("YES");
 		StringBuilder text = new StringBuilder();
-		updateTextPane("Data export services:");
+		updateTextPane("Data export services:", MessageType.INFO);
 		if (exportCsv)
-			updateTextPane("- CSV exports to " + XpertProperties.getProperty(XpertProperties.CSV_FOLDER_PATH) + "");
+			updateTextPane("- CSV exports to " + XpertProperties.getProperty(XpertProperties.CSV_FOLDER_PATH),
+			    MessageType.INFO);
 		if (exportWeb)
 			updateTextPane("- Web exports to " + XpertProperties.getProperty(XpertProperties.WEB_APP_STRING)
-			        + " (data encryption = " + XpertProperties.getProperty(XpertProperties.WEB_SSL_ENCRYPTION) + ")");
+			        + " (data encryption = " + XpertProperties.getProperty(XpertProperties.WEB_SSL_ENCRYPTION) + ")",
+			    MessageType.INFO);
 		if (exportSms)
-			updateTextPane("- SMS exports to " + XpertProperties.getProperty(XpertProperties.SMS_ADMIN_PHONE) + "");
+			updateTextPane("- SMS exports to " + XpertProperties.getProperty(XpertProperties.SMS_ADMIN_PHONE),
+			    MessageType.INFO);
 		if (exportGxa)
 			updateTextPane("- GXAlert exports to " + XpertProperties.getProperty(XpertProperties.GXA_SERVER_ADDRESS)
-			        + " (data encryption = " + XpertProperties.getProperty(XpertProperties.GXA_SSL_ENCRYPTION) + ")");
+			        + " (data encryption = " + XpertProperties.getProperty(XpertProperties.GXA_SSL_ENCRYPTION) + ")",
+			    MessageType.INFO);
 		if (exportOpenMrs)
 			updateTextPane("- OpenMRS exports to " + XpertProperties.getProperty(XpertProperties.OPENMRS_REST_ADDRESS)
-			        + " (data encryption = " + XpertProperties.getProperty(XpertProperties.OPENMRS_SSL_ENCRYPTION) + ")");
+			        + " (data encryption = " + XpertProperties.getProperty(XpertProperties.OPENMRS_SSL_ENCRYPTION) + ")",
+			    MessageType.INFO);
 		logTextPane.setText(text.toString());
 	}
 	
@@ -204,19 +219,39 @@ public class XpertActivityViewer extends JFrame implements ActionListener {
 		}
 	}
 	
-	public static synchronized void updateTextPane(final String text) {
+	public static synchronized void updateTextPane(final String text, final MessageType messageType) {
 		SwingUtilities.invokeLater(new Runnable() {
 			
 			public void run() {
 				String prefix = detailedLogCheckBox.isSelected() ? DateTimeUtil.getSQLDateTime(new Date()) + ": " : "";
-				StyledDocument doc = logTextPane.getStyledDocument();
+				String allText = prefix + text + "\n";
+				StyledDocument styledDoc = logTextPane.getStyledDocument();
+				SimpleAttributeSet attrs = new SimpleAttributeSet();
+				StyleConstants.setFontSize(attrs, 14);
 				try {
-					doc.insertString(doc.getLength(), prefix + text + "\n", null);
+					switch (messageType) {
+						case ERROR:
+						case EXCEPTION:
+							StyleConstants.setForeground(attrs, Color.RED);
+							StyleConstants.setBold(attrs, true);
+							break;
+						case WARNING:
+							StyleConstants.setForeground(attrs, Color.ORANGE);
+							StyleConstants.setBold(attrs, true);
+							break;
+						case INFO:
+							StyleConstants.setForeground(attrs, Color.BLUE.darker());
+							break;
+						case SUCCESS:
+							StyleConstants.setForeground(attrs, Color.GREEN.darker());
+							break;
+					}
+					styledDoc.insertString(styledDoc.getLength(), allText, attrs);
 				}
 				catch (BadLocationException e) {
 					throw new RuntimeException(e);
 				}
-				logTextPane.setCaretPosition(doc.getLength() - 1);
+				logTextPane.setCaretPosition(styledDoc.getLength() - 1);
 			}
 		});
 	}
