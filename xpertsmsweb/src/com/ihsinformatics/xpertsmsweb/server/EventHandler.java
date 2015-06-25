@@ -1,7 +1,6 @@
 package com.ihsinformatics.xpertsmsweb.server;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -11,17 +10,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
 
-import javax.management.InstanceAlreadyExistsException;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
-import net.jmatrix.eproperties.EProperties;
-
-import org.irdresearch.smstarseel.context.TarseelContext;
-
 import com.ihsinformatics.xpertsmsweb.server.util.DateTimeUtil;
 import com.ihsinformatics.xpertsmsweb.server.util.XmlUtil;
-import com.ihsinformatics.xpertsmsweb.shared.SmsTarseelUtil;
 import com.ihsinformatics.xpertsmsweb.shared.VersionUtil;
 import com.ihsinformatics.xpertsmsweb.shared.XSMS;
 import com.ihsinformatics.xpertsmsweb.shared.model.Encounter;
@@ -43,22 +37,28 @@ public class EventHandler extends HttpServlet {
 	private static String backupPostUrl;
 	private HttpServletRequest request;
 
-	@SuppressWarnings("unchecked")
 	public EventHandler() {
+	}
+	
+	/**
+	 * @see javax.servlet.GenericServlet#init()
+	 */
+	@Override
+	public void init() throws ServletException {
 		try {
-			System.out.println(">>>>READING SYSTEM PROPERTIES...");
-			InputStream f = Thread.currentThread().getContextClassLoader()
-					.getResourceAsStream("smstarseel.properties");
-			// Java Properties do not seem to support substitutions hence
-			// EProperties are used
-			EProperties root = new EProperties();
-			root.load(f);
-			// Java Properties to send to context and other APIs
-			prop.putAll(SmsTarseelUtil.convertEntrySetToMap(root.entrySet()));
-			TarseelContext.instantiate(prop, "smstarseel.cfg.xml");
-			System.out.println("......PROPERTIES LOADED SUCCESSFULLY......");
-			System.out
-					.println(">>>>>LOCATING PROPERTY FOR BACKUP POST URL......");
+			if (SmsTarseel.instantiate()) {
+				System.out.println("SmsTarseel service started.");
+			} else {
+				System.out.println("ERROR! Unable to instantiate SmsTarseel.");
+			}
+			if (SmsProcesserService.instantiate()) {
+				System.out.println("Sms Processer service started.");
+			} else {
+				System.out
+						.println("ERROR! Unable to instantiate SMS Processor.");
+			}
+
+			System.out.println("Locating Backup post URL property......");
 			backupPostUrl = prop.getProperty("backup.post.url");
 			if (backupPostUrl == null)
 				System.out
@@ -66,8 +66,6 @@ public class EventHandler extends HttpServlet {
 			else if (backupPostUrl.equals(""))
 				System.out
 						.println("Warning! Backup post URL property not found.");
-		} catch (InstanceAlreadyExistsException e) {
-			// Trying to instantiate again. Janay do...
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -137,11 +135,9 @@ public class EventHandler extends HttpServlet {
 		String patientId = request.getParameter("pid");
 		String sampleId = request.getParameter("sampleid");
 		if (patientId == null || patientId.equalsIgnoreCase("null"))
-		return XmlUtil
-				.createErrorXml("Cannot save without Patient ID");
+			return XmlUtil.createErrorXml("Cannot save without Patient ID");
 		if (sampleId == null || sampleId.equalsIgnoreCase("null"))
-		return XmlUtil
-				.createErrorXml("Cannot save without Sample ID");
+			return XmlUtil.createErrorXml("Cannot save without Sample ID");
 		String mtb = request.getParameter("mtb");
 		String systemId = request.getParameter("systemid");
 		String rif = request.getParameter("rif");

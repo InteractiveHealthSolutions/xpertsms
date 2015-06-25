@@ -23,6 +23,7 @@
 	<servlet>
 		<servlet-name>xpertSmsService</servlet-name>
 		<servlet-class>com.ihsinformatics.xpertsmsweb.server.EventHandler</servlet-class>
+		<load-on-startup>0</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>

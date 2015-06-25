@@ -84,6 +84,8 @@ public class ResponseReader extends TimerTask {
 	public void parseText(String text) {
 		boolean update = false;
 		String[] fields = text.split("\\^");
+		if (fields.length < 5)
+			return;
 		String sampleId = null;
 		String mtb = null;
 		String rif = null;
