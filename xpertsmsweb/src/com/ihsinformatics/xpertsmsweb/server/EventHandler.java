@@ -39,7 +39,7 @@ public class EventHandler extends HttpServlet {
 
 	public EventHandler() {
 	}
-	
+
 	/**
 	 * @see javax.servlet.GenericServlet#init()
 	 */
@@ -57,8 +57,9 @@ public class EventHandler extends HttpServlet {
 				System.out
 						.println("ERROR! Unable to instantiate SMS Processor.");
 			}
-
 			System.out.println("Locating Backup post URL property......");
+			prop.load(Thread.currentThread().getContextClassLoader()
+					.getResourceAsStream("xpertsmsweb.properties"));
 			backupPostUrl = prop.getProperty("backup.post.url");
 			if (backupPostUrl == null)
 				System.out
@@ -83,7 +84,7 @@ public class EventHandler extends HttpServlet {
 		return request;
 	}
 
-	public String handleEvent(HttpServletRequest request) {
+	public String handleEvent(final HttpServletRequest request) {
 		setRequest(request);
 		String xmlResponse = null;
 		/* Try to match version if present */
@@ -112,7 +113,9 @@ public class EventHandler extends HttpServlet {
 			Runnable backupRun = new Runnable() {
 				@Override
 				public void run() {
-					String response = postToBackup(getRequest());
+					System.out.println("Posting request to backup server:"
+							+ request.getParameter("type"));
+					String response = postToBackup(request);
 					System.out.println("Response from backup server: "
 							+ response);
 				}
@@ -504,7 +507,7 @@ public class EventHandler extends HttpServlet {
 				String operatorId = request.getParameter("operatorid");
 				String pcId = request.getParameter("pcid");
 				Encounter encounter = new Encounter(new EncounterId(0,
-						patientId, backupPostUrl), "SYNC_RESULT", systemId,
+						patientId, operatorId), "SYNC_RESULT", systemId,
 						new Date(), new Date(), new Date(), "");
 				ArrayList<String> encounterResults = new ArrayList<String>();
 				encounterResults.add("POST_URL" + "=" + backupPostUrl);
