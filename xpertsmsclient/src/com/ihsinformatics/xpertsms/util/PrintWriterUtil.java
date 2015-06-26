@@ -11,6 +11,7 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 
 package com.ihsinformatics.xpertsms.util;
 
+import java.awt.Color;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -18,9 +19,15 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
 
+import javax.swing.JTextPane;
+import javax.swing.SwingUtilities;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
+
 import com.ihsinformatics.xpertsms.model.MessageType;
 import com.ihsinformatics.xpertsms.net.ResultServer;
-import com.ihsinformatics.xpertsms.ui.XpertActivityViewer;
 
 /**
  * @author owais.hussain@ihsinformatics.com
@@ -44,10 +51,48 @@ public class PrintWriterUtil extends PrintWriter {
 	 */
 	public void println(String text, boolean toGUI, MessageType messageType) {
 		if (toGUI) {
-			XpertActivityViewer.updateTextPane(text, messageType);
+			updateTextPane(server.getMonitorPane(), text, messageType, server.isDetailedLog());
 		}
 		text = messageType.toString() + ":" + text;
 		print(server.getLogEntryDateString(new Date()) + ": " + text + "\n");
 		flush();
+	}
+	
+	public synchronized static void updateTextPane(final JTextPane textPane, final String text,
+	                                               final MessageType messageType, final boolean detailedLog) {
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			public void run() {
+				String prefix = detailedLog ? DateTimeUtil.getSQLDateTime(new Date()) + ": " : "";
+				String allText = prefix + text + "\n";
+				StyledDocument styledDoc = textPane.getStyledDocument();
+				SimpleAttributeSet attrs = new SimpleAttributeSet();
+				StyleConstants.setFontSize(attrs, 14);
+				try {
+					switch (messageType) {
+						case ERROR:
+						case EXCEPTION:
+							StyleConstants.setForeground(attrs, Color.RED);
+							StyleConstants.setBold(attrs, true);
+							break;
+						case WARNING:
+							StyleConstants.setForeground(attrs, Color.ORANGE);
+							StyleConstants.setBold(attrs, true);
+							break;
+						case INFO:
+							StyleConstants.setForeground(attrs, Color.BLUE.darker());
+							break;
+						case SUCCESS:
+							StyleConstants.setForeground(attrs, Color.GREEN.darker());
+							break;
+					}
+					styledDoc.insertString(styledDoc.getLength(), allText, attrs);
+				}
+				catch (BadLocationException e) {
+					throw new RuntimeException(e);
+				}
+				textPane.setCaretPosition(styledDoc.getLength() - 1);
+			}
+		});
 	}
 }

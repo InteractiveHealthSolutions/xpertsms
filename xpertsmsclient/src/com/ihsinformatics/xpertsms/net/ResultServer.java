@@ -28,7 +28,7 @@ import com.ihsinformatics.xpertsms.model.MessageType;
 import com.ihsinformatics.xpertsms.model.ResultsSender;
 import com.ihsinformatics.xpertsms.model.XpertResultUploadMessage;
 import com.ihsinformatics.xpertsms.parser.astm.ASTMProcessorThread;
-import com.ihsinformatics.xpertsms.ui.XpertActivityViewer;
+import com.ihsinformatics.xpertsms.util.PrintWriterUtil;
 
 /**
  * GeneXpert results processing daemon that provides the messages service
@@ -124,13 +124,13 @@ public class ResultServer extends Thread {
 		try {
 			while (!stopped) {
 				threadCount++;
-				XpertActivityViewer.updateTextPane("Waiting for GeneXpert...", MessageType.INFO);
+				PrintWriterUtil.updateTextPane(monitorPane, "Waiting for GeneXpert...", MessageType.INFO, detailedLog);
 				ResultThread rt = new ResultThread(socket.accept(), threadCount, this, detailedLog);
 				rt.start();
-				XpertActivityViewer.updateTextPane("Connected to GeneXpert", MessageType.INFO);
+				PrintWriterUtil.updateTextPane(monitorPane, "Connected to GeneXpert", MessageType.INFO, detailedLog);
 			}
 			if (stopped) {
-				XpertActivityViewer.updateTextPane("Stop message received", MessageType.INFO);
+				PrintWriterUtil.updateTextPane(monitorPane, "Stop message received", MessageType.INFO, detailedLog);
 			}
 			if (!socket.isClosed())
 				socket.close();

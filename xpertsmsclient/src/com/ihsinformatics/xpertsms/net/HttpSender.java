@@ -146,7 +146,7 @@ public class HttpSender {
 		String url = "";
 		// url += "http://" + ASTMNetworkConstants.smsServerAddress + ":" + ASTMNetworkConstants.smsServerPort + ASTMNetworkConstants.webappString;
 		String webappString = XpertProperties.props.getProperty(XpertProperties.WEB_APP_STRING);
-		url += "http" + (secure ? "s" : "") + "://" + webappString;
+		url += "http" + (secure ? "s" : "") + ":/" + (webappString.startsWith("/") ? "" : "/") + webappString;
 		return url;
 	}
 	
