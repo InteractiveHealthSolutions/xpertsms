@@ -71,5 +71,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-dev.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-user.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/smstarseel.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/easymock-3.3.1.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
