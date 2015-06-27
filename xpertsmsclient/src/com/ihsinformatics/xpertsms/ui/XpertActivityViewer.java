@@ -35,6 +35,7 @@ import com.ihsinformatics.xpertsms.XpertProperties;
 import com.ihsinformatics.xpertsms.model.MessageType;
 import com.ihsinformatics.xpertsms.net.ResultServer;
 import com.ihsinformatics.xpertsms.util.PrintWriterUtil;
+import com.ihsinformatics.xpertsms.util.SmsTarseel;
 
 /**
  * Demon GUI form to view activity of messages between GX DX and XpertSMS
@@ -163,6 +164,7 @@ public class XpertActivityViewer extends JFrame implements ActionListener {
 			            + XpertProperties.getProperty(XpertProperties.WEB_SSL_ENCRYPTION) + ")", MessageType.INFO,
 			    detailedLogCheckBox.isSelected());
 		if (exportSms)
+			SmsTarseel.instantiate();
 			PrintWriterUtil.updateTextPane(logTextPane,
 			    "- SMS exports to " + XpertProperties.getProperty(XpertProperties.SMS_ADMIN_PHONE), MessageType.INFO,
 			    detailedLogCheckBox.isSelected());

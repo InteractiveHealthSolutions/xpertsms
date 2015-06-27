@@ -47,6 +47,7 @@ import org.irdresearch.smstarseel.data.Project;
 
 import com.ihsinformatics.xpertsms.XpertProperties;
 import com.ihsinformatics.xpertsms.util.RegexUtil;
+import com.ihsinformatics.xpertsms.util.SmsTarseel;
 import com.ihsinformatics.xpertsms.util.SwingUtil;
 
 /**
@@ -335,12 +336,7 @@ public class SmsDialog extends JDialog implements ActionListener {
 		String failureMessage2 = "Connection with SMS Tarseel seems okay, but the project specified was not found. Can you please confirm if you have written the same name as in SMS Tarseel web app?";
 		if (validateData()) {
 			try {
-				InputStream f = Thread.currentThread().getContextClassLoader().getResourceAsStream(TARSEEL_PROP);
-				EProperties root = new EProperties();
-				root.load(f);
-				Properties prop = new Properties();
-				prop.putAll(SmsDialog.convertEntrySetToMap(root.entrySet()));
-				TarseelContext.instantiate(prop, TARSEEL_CFG);
+				SmsTarseel.instantiate();
 				tarseelService = TarseelContext.getServices();
 				List<Project> projects = tarseelService.getDeviceService().findProject(SwingUtil.get(projectNameTextField));
 				if (projects.size() == 0)

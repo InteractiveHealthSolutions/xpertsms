@@ -46,6 +46,7 @@ import com.ihsinformatics.xpertsms.net.ResultServer;
 
 /**
  * GUI Control Panel for XpertSMS configuration
+ * 
  * @author ali.habib@irdresearch.org
  */
 public class ControlPanel extends JPanel implements ActionListener {
@@ -465,7 +466,7 @@ public class ControlPanel extends JPanel implements ActionListener {
 		leftPane.setBackground(BG_COLOUR);
 		monitorPanel = new JTextPane();
 		monitorPanel.setEditable(false);
-		monitorPanel.setPreferredSize(new Dimension(300, 300));
+		monitorPanel.setPreferredSize(new Dimension(500, 300));
 		c.gridx = 1;
 		c.gridy = 0;
 		// c.fill = GridBagConstraints.BOTH;
@@ -519,6 +520,7 @@ public class ControlPanel extends JPanel implements ActionListener {
 		String serverURL = serverURLField.getText();
 		String serverPort = serverPortField.getText();
 		String webappString = webappStringField.getText();
+		webappString = serverURL + ":" + serverPort + (webappString.startsWith("/") ? "" : "/") + webappString;
 		String localPort = localPortField.getText();
 		String serverUser = extUsernameField.getText();
 		String serverPassword = String.valueOf(extPasswordField.getPassword());

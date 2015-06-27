@@ -12,6 +12,11 @@
 	<classpathentry kind="lib" path="lib/antlr-2.7.7.jar"/>
 	<classpathentry kind="lib" path="lib/c3p0-0.9.1.jar"/>
 	<classpathentry kind="lib" path="lib/jsemver.jar"/>
+	<classpathentry kind="lib" path="lib/smstarseel.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-c3p0-3.6.0.Final.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-core-3.6.5.Final-mod.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-tools-3.2.3.GA.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-commons-annotations-3.2.0.Final.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.6.jar"/>
 	<classpathentry kind="lib" path="lib/fluent-hc-4.2.1.jar"/>
@@ -27,7 +32,6 @@
 	<classpathentry kind="lib" path="lib/dom4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/eproperties-1.1.5.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-annotations-3.4.0.GA.jar"/>
-	<classpathentry kind="lib" path="lib/hibernate-commons-annotations-3.3.0.ga.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-jpa-2.0-api-1.0.1.Final.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate3.jar"/>
 	<classpathentry kind="lib" path="lib/javassist-3.15.0-GA.jar"/>
@@ -38,6 +42,5 @@
 	<classpathentry kind="lib" path="lib/slf4j-api-1.6.0.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-jdk14-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.6.0.jar"/>
-	<classpathentry kind="lib" path="lib/smstarseel-hib3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -18,11 +18,17 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.irdresearch.smstarseel.context.TarseelContext;
+import org.irdresearch.smstarseel.data.OutboundMessage.PeriodType;
+import org.irdresearch.smstarseel.data.OutboundMessage.Priority;
+import org.irdresearch.smstarseel.data.Project;
+import org.irdresearch.smstarseel.service.SMSService;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -196,14 +202,24 @@ public class ResultsSender extends Thread {
 		String dbPassword = XpertProperties.props.getProperty(XpertProperties.DB_PASSWORD);
 		String dbUrl = "jdbc:mysql://" + dbIpAddress + ":" + dbPort + "/" + dbName;
 		String dbClass = "com.mysql.jdbc.Driver";
-		Connection conn = null;
-		Class.forName(dbClass);
-		conn = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
-		String query = xpertMessage.toSqlQuery();
-		Statement stmt = null;
-		stmt = conn.createStatement();
-		stmt.executeUpdate(query);
-		conn.close();
+//		Connection conn = null;
+//		Class.forName(dbClass);
+//		conn = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
+//		String query = xpertMessage.toSqlQuery();
+//		Statement stmt = null;
+//		stmt = conn.createStatement();
+//		stmt.executeUpdate(query);
+//		conn.close();
+		
+		/* Save in SmsTarseel */
+		String recipient = XpertProperties.getProperty(XpertProperties.SMS_ADMIN_PHONE);
+		String projectname = XpertProperties.getProperty(XpertProperties.SMS_PROJECT_NAME);
+		String text = xpertMessage.toSMS(false);
+		Date duedate = new Date();
+		SMSService smsService = TarseelContext.getServices().getSmsService();
+		List<Project> projects = TarseelContext.getServices().getDeviceService().findProject(projectname);
+		smsService.createNewOutboundSms(recipient, text, duedate, Priority.HIGH, 1, PeriodType.WEEK, projects.get(0)
+		        .getProjectId(), "Sent from XpertSMS");
 	}
 	
 	public synchronized void writeToCsv(String text) {
