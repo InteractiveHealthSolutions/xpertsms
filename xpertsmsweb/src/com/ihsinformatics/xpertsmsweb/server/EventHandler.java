@@ -494,8 +494,8 @@ public class EventHandler extends HttpServlet {
 					queryString.append(parameter + "=" + value + "&");
 				}
 				String requestStr = queryString.toString();
-				System.out.println(">>> DEBUG >>> request string: "
-						+ requestStr);
+//				System.out.println(">>> DEBUG >>> request string: "
+//						+ requestStr);
 				os.write(requestStr.getBytes());
 				os.flush();
 				responseCode = hc.getResponseCode();

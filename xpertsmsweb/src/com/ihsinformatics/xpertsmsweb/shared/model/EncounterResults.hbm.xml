@@ -9,10 +9,10 @@
                 <column name="EncounterID" />
             </key-property>
             <key-property name="pid1" type="string">
-                <column name="PID1" length="20" />
+                <column name="PID1" length="50" />
             </key-property>
             <key-property name="pid2" type="string">
-                <column name="PID2" length="20" />
+                <column name="PID2" length="50" />
             </key-property>
             <key-property name="element" type="string">
                 <column name="Element" length="50" />
