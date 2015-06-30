@@ -6,17 +6,17 @@
  <class catalog="xpertsms"
   name="com.ihsinformatics.xpertsmsweb.shared.model.Patient" table="Patient">
   <id name="patientId" type="string">
-   <column length="20" name="PatientID"/>
+   <column length="50" name="PatientID"/>
    <generator class="assigned"/>
   </id>
   <property generated="never" lazy="false" name="screenerId" type="string">
-   <column length="20" name="ScreenerID"/>
+   <column length="50" name="ScreenerID"/>
   </property>
   <property generated="never" lazy="false" name="providerId" type="string">
-   <column length="20" name="ProviderID"/>
+   <column length="50" name="ProviderID"/>
   </property>
   <property generated="never" lazy="false" name="externalMrno" type="string">
-   <column length="20" name="ExternalMRNo">
+   <column length="50" name="ExternalMRNo">
     <comment>Case/File/Patient No. used outside treatment center (District level etc.)</comment>
    </column>
   </property>

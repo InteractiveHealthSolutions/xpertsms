@@ -12,19 +12,19 @@
 		</id>
 		<property generated="never" lazy="false" name="patientId"
 			type="string">
-			<column index="2" length="20" name="PatientID" not-null="true" />
+			<column index="2" length="50" name="PatientID" not-null="true" />
 		</property>
 		<property generated="never" lazy="false" name="sputumTestId"
 			type="string">
-			<column index="3" name="SputumTestID" not-null="true" />
+			<column index="3" length="50" name="SputumTestID" not-null="true" />
 		</property>
 		<property generated="never" lazy="false" name="laboratoryId"
 			type="string">
-			<column index="4" length="20" name="LaboratoryID" />
+			<column index="4" length="50" name="LaboratoryID" />
 		</property>
 		<property generated="never" lazy="false" name="collectedBy"
 			type="string">
-			<column index="5" length="20" name="CollectedBy" />
+			<column index="5" length="50" name="CollectedBy" />
 		</property>
 		<property generated="never" lazy="false" name="dateSubmitted"
 			type="timestamp">

@@ -66,7 +66,7 @@ public class LocationComposite extends Composite implements IForm,
 	private Label lblAddress_1 = new Label("Address2:");
 	private Label lblFacilityId = new Label("ID:");
 	private Label lblFacilityName = new Label("Name:");
-	private Label lblDistrict = new Label("District:");
+	private Label lblDistrict = new Label("City/District:");
 
 	private TextBox locationIdTextBox = new TextBox();
 	private TextBox locationNameTextBox = new TextBox();
@@ -90,7 +90,7 @@ public class LocationComposite extends Composite implements IForm,
 				HasHorizontalAlignment.ALIGN_CENTER);
 		flexTable.setWidget(1, 0, leftFlexTable);
 		districtNamesListBox
-				.setTitle("This list box contains Ditricts names. Clicking anyone fills details in right panel and associated facilities below.");
+				.setTitle("This list box contains city/district names. Clicking anyone fills details in right panel and associated facilities below.");
 		leftFlexTable.setWidget(1, 0, districtNamesListBox);
 		districtNamesListBox.setVisibleItemCount(5);
 		flexTable.setWidget(1, 1, rightFlexTable);
