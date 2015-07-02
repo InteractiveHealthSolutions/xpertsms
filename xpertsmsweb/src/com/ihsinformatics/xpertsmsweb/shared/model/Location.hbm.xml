@@ -3,73 +3,99 @@
                                    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated Nov 25, 2014 12:30:47 PM by Hibernate Tools 3.4.0.Beta1 -->
 <hibernate-mapping>
- <class name="com.ihsinformatics.xpertsmsweb.shared.model.Location" table="Location">
-  <id name="locationId" type="java.lang.String">
-   <column length="50" name="LocationID"/>
-   <generator class="assigned"/>
-  </id>
-  <property generated="never" lazy="false" name="locationName" type="java.lang.String">
-   <column name="locationName"/>
-  </property>
-  <property generated="never" lazy="false" name="locationType" type="java.lang.String">
-   <column name="LocationType"/>
-  </property>
-  <property generated="never" lazy="false" name="addressHouse" type="java.lang.String">
-   <column name="AddressHouse"/>
-  </property>
-  <property generated="never" lazy="false" name="addressStreet" type="java.lang.String">
-   <column name="AddressStreet"/>
-  </property>
-  <property generated="never" lazy="false" name="addressSector" type="java.lang.String">
-   <column name="AddressSector"/>
-  </property>
-  <property generated="never" lazy="false" name="addressColony" type="java.lang.String">
-   <column name="AddressColony"/>
-  </property>
-  <property generated="never" lazy="false" name="addressTown" type="java.lang.String">
-   <column name="AddressTown"/>
-  </property>
-  <property generated="never" lazy="false" name="cityId" type="java.lang.String">
-   <column length="50" name="CityID"/>
-  </property>
-  <property generated="never" lazy="false" name="countryId" type="java.lang.String">
-   <column length="50" name="CountryID"/>
-  </property>
-  <property generated="never" lazy="false" name="addressLocationLat" type="java.lang.Float">
-   <column name="AddressLocationLAt"/>
-  </property>
-  <property generated="never" lazy="false" name="addressLocationLon" type="java.lang.Float">
-   <column name="AddressLocationLon"/>
-  </property>
-  <property generated="never" lazy="false" name="phone" type="java.lang.String">
-   <column name="Phone"/>
-  </property>
-  <property generated="never" lazy="false" name="mobile" type="java.lang.String">
-   <column name="Mobile"/>
-  </property>
-  <property generated="never" lazy="false" name="fax" type="java.lang.String">
-   <column name="Fax"/>
-  </property>
-  <property generated="never" lazy="false" name="email" type="java.lang.String">
-   <column name="Email"/>
-  </property>
-  <property generated="never" lazy="false" name="secondaryPhone" type="java.lang.String">
-   <column name="SecondaryPhone"/>
-  </property>
-  <property generated="never" lazy="false" name="secondaryMobile" type="java.lang.String">
-   <column name="SecondaryMobile"/>
-  </property>
-  <property generated="never" lazy="false" name="secondaryFax" type="java.lang.String">
-   <column name="SecondaryFax"/>
-  </property>
-  <property generated="never" lazy="false" name="secondaryEmail" type="java.lang.String">
-   <column name="SecondaryEmail"/>
-  </property>
-  <property generated="never" lazy="false" name="detail" type="java.lang.String">
-   <column name="Detail"/>
-  </property>
-  <property generated="never" lazy="false" name="addressLandMark" type="java.lang.String">
-   <column name="AddressLandmark"/>
-  </property>
- </class>
+	<class name="com.ihsinformatics.xpertsmsweb.shared.model.Location"
+		table="Location">
+		<id name="locationId" type="java.lang.String">
+			<column length="50" name="LocationID" />
+			<generator class="assigned" />
+		</id>
+		<property generated="never" lazy="false" name="locationName"
+			type="java.lang.String">
+			<column length="50" name="locationName" />
+		</property>
+		<property generated="never" lazy="false" name="locationType"
+			type="java.lang.String">
+			<column length="20" name="LocationType" />
+		</property>
+		<property generated="never" lazy="false" name="addressHouse"
+			type="java.lang.String">
+			<column length="50" name="AddressHouse" />
+		</property>
+		<property generated="never" lazy="false" name="addressStreet"
+			type="java.lang.String">
+			<column length="50" name="AddressStreet" />
+		</property>
+		<property generated="never" lazy="false" name="addressSector"
+			type="java.lang.String">
+			<column length="50" name="AddressSector" />
+		</property>
+		<property generated="never" lazy="false" name="addressColony"
+			type="java.lang.String">
+			<column length="50" name="AddressColony" />
+		</property>
+		<property generated="never" lazy="false" name="addressTown"
+			type="java.lang.String">
+			<column length="50" name="AddressTown" />
+		</property>
+		<property generated="never" lazy="false" name="cityId"
+			type="java.lang.String">
+			<column length="50" name="CityID" />
+		</property>
+		<property generated="never" lazy="false" name="countryId"
+			type="java.lang.String">
+			<column length="50" name="CountryID" />
+		</property>
+		<property generated="never" lazy="false" name="addressLocationLat"
+			type="java.lang.Float">
+			<column name="AddressLocationLAt" />
+		</property>
+		<property generated="never" lazy="false" name="addressLocationLon"
+			type="java.lang.Float">
+			<column name="AddressLocationLon" />
+		</property>
+		<property generated="never" lazy="false" name="phone"
+			type="java.lang.String">
+			<column length="20" name="Phone" />
+		</property>
+		<property generated="never" lazy="false" name="mobile"
+			type="java.lang.String">
+			<column length="50" name="Mobile" />
+		</property>
+		<property generated="never" lazy="false" name="fax"
+			type="java.lang.String">
+			<column length="20" name="Fax" />
+		</property>
+		<property generated="never" lazy="false" name="email"
+			type="java.lang.String">
+			<column length="255" name="Email" />
+		</property>
+		<property generated="never" lazy="false" name="secondaryPhone"
+			type="java.lang.String">
+			<column length="20" name="SecondaryPhone" />
+		</property>
+		<property generated="never" lazy="false" name="secondaryMobile"
+			type="java.lang.String">
+			<column length="20" name="SecondaryMobile" />
+		</property>
+		<property generated="never" lazy="false" name="secondaryFax"
+			type="java.lang.String">
+			<column length="20" name="SecondaryFax" />
+		</property>
+		<property generated="never" lazy="false" name="secondaryEmail"
+			type="java.lang.String">
+			<column length="255" name="SecondaryEmail" />
+		</property>
+		<property generated="never" lazy="false" name="detail"
+			type="java.lang.String">
+			<column length="255" name="Detail" />
+		</property>
+		<property generated="never" lazy="false" name="addressLandMark"
+			type="java.lang.String">
+			<column length="50" name="AddressLandmark" />
+		</property>
+		<property generated="never" lazy="false" name="parentLocation"
+			type="java.lang.String">
+			<column length="50" name="ParentLocation" />
+		</property>
+	</class>
 </hibernate-mapping>

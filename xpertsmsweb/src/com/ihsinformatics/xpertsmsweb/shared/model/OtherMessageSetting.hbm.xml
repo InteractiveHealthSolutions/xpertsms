@@ -1,24 +1,38 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+                                   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated Sep 15, 2014 5:46:19 PM by Hibernate Tools 3.4.0.Beta1 -->
 <hibernate-mapping>
-    <class name="com.ihsinformatics.xpertsmsweb.shared.model.OtherMessageSetting" table="othermessagesetting">
-        <id name="id" type="java.lang.String" access="field">
-            <column name="ID" />
-            <generator class="identity" />
-        </id>
-        <property name="name" type="java.lang.String" access="field">
-            <column name="Name" />
-        </property>
-        <property name="districtId" type="java.lang.String" access="field">
-            <column name="DistrictID" />
-        </property>
-        <property name="healthFacilityId" type="java.lang.String" access="field">
-            <column name="HealthFacilityID" />
-        </property>
-        <property name="cellNumber" type="java.lang.String" access="field">
-            <column name="CellNumber" />
-        </property>
-    </class>
+	<class catalog="xpertsms"
+		name="com.ihsinformatics.xpertsmsweb.shared.model.OtherMessageSetting"
+		table="OtherMessageSetting">
+		<id access="field" name="id" type="java.lang.String">
+			<column name="ID" />
+			<generator class="identity" />
+		</id>
+		<property access="field" generated="never" lazy="false" name="name"
+			type="java.lang.String">
+			<column name="Name" />
+		</property>
+		<property access="field" generated="never" lazy="false" name="districtId"
+			type="java.lang.String">
+			<column length="50" name="DistrictID" />
+		</property>
+		<property access="field" generated="never" lazy="false"
+			name="healthFacilityId" type="java.lang.String">
+			<column length="50" name="HealthFacilityID" />
+		</property>
+		<property access="field" generated="never" lazy="false" name="cellNumber"
+			type="java.lang.String">
+			<column length="20" name="CellNumber" />
+		</property>
+		<property access="field" generated="never" lazy="false"
+			name="secondaryCellNumber" type="java.lang.String">
+			<column length="20" name="SecondaryCellNumber" />
+		</property>
+		<property access="field" generated="never" lazy="false"
+			name="tertiaryCellNumber" type="java.lang.String">
+			<column length="20" name="TertiaryCellNumber" />
+		</property>
+	</class>
 </hibernate-mapping>

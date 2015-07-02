@@ -48,8 +48,9 @@ import com.ihsinformatics.xpertsmsweb.shared.model.Users;
  * @author owais.hussain@ihsinformatics.com
  */
 @SuppressWarnings("serial")
-public class ServerServiceImpl extends RemoteServiceServlet implements
-		ServerService {
+public class ServerServiceImpl extends RemoteServiceServlet
+		implements
+			ServerService {
 	public static final Properties prop = new Properties();
 	public static String resourcesPath;
 
@@ -72,8 +73,8 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 					if (System.getProperty("os.name", "windows").toLowerCase()
 							.contains("windows"))
 						defaultDir = "c:\\apache-tomcat-6.0\\webapps\\xpertsmsweb";
-					propFile = new File(home + sep + "xpertsms"
-							+ sep + "xpertsmsweb.properties");
+					propFile = new File(home + sep + "xpertsms" + sep
+							+ "xpertsmsweb.properties");
 				}
 				Properties prop = new Properties();
 				// If file is not found, create one
@@ -81,7 +82,8 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 					prop.setProperty("app.dir", defaultDir);
 					prop.setProperty("version", "0.0.0");
 					prop.setProperty("backup.post.url", "");
-					prop.store(new FileOutputStream(propFile), "Writing new properties file");
+					prop.store(new FileOutputStream(propFile),
+							"Writing new properties file");
 				}
 				InputStream file = new FileInputStream(propFile);
 				prop.load(file);
@@ -311,22 +313,22 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 	public Boolean[] getUserRgihts(String userName, String menuName)
 			throws Exception {
 		if (userName.equalsIgnoreCase("ADMIN")) {
-			Boolean[] rights = { true, true, true, true, true };
+			Boolean[] rights = {true, true, true, true, true};
 			return rights;
 		}
 		String role = HibernateUtil.util.selectObject(
 				"select Role from Users where UserName='" + userName + "'")
 				.toString();
 		if (role.equalsIgnoreCase("ADMIN")) {
-			Boolean[] rights = { true, true, true, true, true };
+			Boolean[] rights = {true, true, true, true, true};
 			return rights;
 		}
 		UserRights userRights = (UserRights) HibernateUtil.util
 				.findObject("from UserRights where Role='" + role
 						+ "' and MenuName='" + menuName + "'");
-		Boolean[] rights = { userRights.isSearchAccess(),
+		Boolean[] rights = {userRights.isSearchAccess(),
 				userRights.isInsertAccess(), userRights.isUpdateAccess(),
-				userRights.isDeleteAccess(), userRights.isPrintAccess() };
+				userRights.isDeleteAccess(), userRights.isPrintAccess()};
 		return rights;
 	}
 
@@ -749,17 +751,6 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 
 	public Boolean updateUserRights(UserRights userRights) throws Exception {
 		return HibernateUtil.util.update(userRights);
-	}
-
-	public Boolean updateGeneXpertResultsAuto(
-			GeneXpertResults geneXpertResults, Boolean isTBPositive,
-			String operatorId, String pcId, String instrumentSerial,
-			String moduleId, String cartridgeId, String reagentLotId)
-			throws Exception {
-		Boolean result = HibernateUtil.util.update(geneXpertResults);
-
-		SMSUtil.util.sendAlertsOnAutoGXPResults(geneXpertResults);
-		return result;
 	}
 
 	public Location[] findLocationsByType(String locationType) {

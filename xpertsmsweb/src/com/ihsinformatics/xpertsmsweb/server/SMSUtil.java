@@ -11,9 +11,10 @@ import org.irdresearch.smstarseel.data.OutboundMessage.PeriodType;
 import org.irdresearch.smstarseel.data.OutboundMessage.Priority;
 
 import com.ihsinformatics.xpertsmsweb.server.util.HibernateUtil;
+import com.ihsinformatics.xpertsmsweb.shared.model.Contact;
 import com.ihsinformatics.xpertsmsweb.shared.model.GeneXpertResults;
+import com.ihsinformatics.xpertsmsweb.shared.model.Location;
 import com.ihsinformatics.xpertsmsweb.shared.model.MessageSettings;
-import com.ihsinformatics.xpertsmsweb.shared.model.OtherMessageSetting;
 
 /**
  * @author owais.hussain@ihsinformatics.com
@@ -21,148 +22,142 @@ import com.ihsinformatics.xpertsmsweb.shared.model.OtherMessageSetting;
  */
 public class SMSUtil {
 	public static final String status = "PENDING";
+	private TarseelServices context;
 	public static SMSUtil util = new SMSUtil();
-
-	private String getMobileNumber(String PID) {
-		if (PID.equals(""))
-			return "";
-		return HibernateUtil.util.selectObject(
-				"select Mobile from Contact where PID='" + PID + "'")
-				.toString();
-	}
+	public static ServerServiceImpl service = new ServerServiceImpl();
+	
+	public static final boolean sendPatientID = true;
+	public static final boolean sendSampleID = true;
+	public static final boolean sendMTBResult = true;
+	public static final boolean sendRifResult = true;
+	public static final boolean sendCartridgeID = false;
+	public static final boolean sendOperatorID = false;
+	public static final boolean sendModuleID = false;
+	public static final boolean sendLocationID = true;
 
 	public void sendAlertsOnAutoGXPResults(GeneXpertResults results) {
 		System.out.println("SENDING");
-		String targetNumber = "";
-		String messageTextPatient = null;
-		String messageTextOther = null;
-		String messageTextGP = null;
-		String messageTextProgram = null;
-		String gpNumber = null;
-		String patientNumber = null;
-		String programNumber = null;
-		String otherNumber = null;
-		MessageSettings ms = null;
-		String othersMessageSettingText = null;
-
+		MessageSettings messageSettings = null;
+		context = TarseelContext.getServices();
 		try {
-			ms = (MessageSettings) HibernateUtil.util
-					.findObject("from MessageSettings");
-		}
-
-		catch (Exception e) {
-			System.out.println("no settings");
+			messageSettings = (MessageSettings) HibernateUtil.util.findObject("from  MessageSettings");
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		// if (results.getIsPositive())
-		{
-
-			String messageHeader = "*Automated GeneXpert Result Message - "
-					+ results.getSputumTestId() + "*\n";
-			// Send alert to GP
-			String gpId = null;
-
-			try {
-				patientNumber = getMobileNumber(results.getPatientId());
-			} catch (Exception e) {
-				patientNumber = null;
+		// Only when results are positive
+		if (results.getIsPositive()) {
+			String messageHeader = "*Automated Message*\n";
+			// Send message to Patient if enabled
+			if (messageSettings.getSendToPatient()) {
+				sendAlertsToPatient(results);
 			}
-			if (patientNumber != null && ms.getSendToPatient()) {
-
-				messageTextPatient = messageHeader
-						+ "Your result is ready. Please pick up from the lab at your earliest convenience";
+			// Set message content
+			StringBuilder text = new StringBuilder();
+			text.append(messageHeader);
+			if (sendPatientID) {
+				text.append("PatientID:" + results.getPatientId() + "\n");
 			}
-
-			try {
-				gpId = HibernateUtil.util.selectObject(
-						"select ProviderID from Patient where PatientID='"
-								+ results.getPatientId() + "'").toString();
-				System.out.println("GPID:" + gpId);
-			} catch (Exception e) {
-				gpId = null;
+			if (sendSampleID) {
+				text.append("SampleID:" + results.getSputumTestId() + "\n");
 			}
-			if (gpId != null && ms.getSendToProvider()) {
-				gpNumber = getMobileNumber(gpId);
-				System.out.println("gpnumber:" + gpNumber);
-				messageTextGP = messageHeader
-						+ "Result: "
-						+ results.getGeneXpertResult()
-						+ "\nMTB Burden: "
-						+ ((results.getMtbBurden() == null) ? "" : results
-								.getMtbBurden())
-						+ "\nRif Resistance: "
-						+ ((results.getDrugResistance() == null) ? "" : results
-								.getDrugResistance());
+			text.append("Result:" + results.getGeneXpertResult() + "\n");
+			if (sendMTBResult) {
+				text.append("MTB Burden:" + ((results.getMtbBurden() == null) ? "" : results.getMtbBurden()) + "\n");
 			}
-
-			programNumber = ms.getProgramNumber();
-
-			if (programNumber != null && ms.getSendToProgram()) {
-				// TODO Expand
-				messageTextProgram = messageHeader
-						+ "Result: "
-						+ results.getGeneXpertResult()
-						+ "\nMTB Burden: "
-						+ ((results.getMtbBurden() == null) ? "" : results
-								.getMtbBurden())
-						+ "\nRif Resistance: "
-						+ ((results.getDrugResistance() == null) ? "" : results
-								.getDrugResistance());
-				messageTextProgram += "\nOperator: " + results.getOperatorId();
-
+			if (sendRifResult) {
+				text.append("Rif Resistance:" + ((results.getDrugResistance() == null) ? "" : results.getDrugResistance()) + "\n");
 			}
-
-			otherNumber = ms.getOtherNumber();
-
-			if (otherNumber != null && ms.getSendToOther()) {
-				// TODO Expand
-				messageTextOther = messageHeader
-						+ "Result: "
-						+ results.getGeneXpertResult()
-						+ "\nMTB Burden: "
-						+ ((results.getMtbBurden() == null) ? "" : results
-								.getMtbBurden())
-						+ "\nRif Resistance: "
-						+ ((results.getDrugResistance() == null) ? "" : results
-								.getDrugResistance());
-				messageTextOther += "\nOperator: " + results.getOperatorId();
+			if (sendOperatorID) {
+				text.append("OperatorID:" + results.getOperatorId() + "\n");
 			}
-
-			TarseelServices services = TarseelContext.getServices();
-
-			if (messageTextPatient != null)
-				services.getSmsService().createNewOutboundSms(patientNumber,
-						messageTextPatient, new Date(), Priority.HIGHEST, 24,
-						PeriodType.HOUR, 1, null);
-			if (messageTextGP != null)
-				services.getSmsService().createNewOutboundSms(gpNumber,
-						messageTextGP, new Date(), Priority.HIGHEST, 24,
-						PeriodType.HOUR, 1, null);
-			if (messageTextProgram != null)
-				services.getSmsService().createNewOutboundSms(programNumber,
-						messageTextProgram, new Date(), Priority.HIGHEST, 24,
-						PeriodType.HOUR, 1, null);
-			if (messageTextOther != null)
-				services.getSmsService().createNewOutboundSms(otherNumber,
-						messageTextOther, new Date(), Priority.HIGHEST, 24,
-						PeriodType.HOUR, 1, null);
-			services.commitTransaction();
-			services.closeSession();
-
+			if (sendCartridgeID) {
+				text.append("CartridgeID:" + results.getCartridgeId() + "\n");
+			}
+			if (sendModuleID) {
+				text.append("ModuleID:" + results.getModuleId() + "\n");
+			}
+			if (sendLocationID) {
+				text.append("LocationID:" + results.getModuleId() + "\n");
+			}
+			// Send message to Provider (GeneXpert test location, fetch from
+			// HostId in results) if enabled
+			if (messageSettings.getSendToProvider()) {
+				sendAlertsToProvider(results, text.toString());
+			}
+			// Send message to program along with referred location
+			if (messageSettings.getSendToProgram()) {
+				sendAlertToProgram(results, messageSettings.getProgramNumber(), text.toString());
+			}
+			// Send message to other number
+			if (messageSettings.getSendToOther()) {
+				String otherNumber = messageSettings.getOtherNumber();
+				context.getSmsService().createNewOutboundSms(otherNumber, text.toString(), new Date(), Priority.HIGH, 24, PeriodType.DAY, 1, null);
+			}
+			context.commitTransaction();
+			context.closeSession();
 		}
 
 	}
 
-	public OtherMessageSetting[] findOtherMessageRecipientByLocationId(
-			String districtId, String healthFacilityId) {
-		Object[] list = HibernateUtil.util
-				.findObjects("from OtherMessageSetting where districtId = '"
-						+ districtId + "' AND healthFacilityId = '"
-						+ healthFacilityId + "'");
-		OtherMessageSetting[] locations = new OtherMessageSetting[list.length];
-		for (int i = 0; i < list.length; i++)
-			locations[i] = (OtherMessageSetting) list[i];
-		return locations;
+	public void sendAlertsToPatient(GeneXpertResults results) {
+		try {
+			StringBuilder text = new StringBuilder();
+			Contact contact = service.findContact(results.getPatientId());
+			String mobile = contact.getMobile();
+			if (mobile == null)
+				throw new Exception("Patient's mobile number not found.");
+			text.append("Your test results are ready. Please pick up from the laboratory at your earliest convenience" + "\n");
+			context.getSmsService().createNewOutboundSms(mobile, text.toString(), new Date(), Priority.HIGH, 24, PeriodType.DAY, 1, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
+	public void sendAlertsToProvider(GeneXpertResults results, String text) {
+		try {
+			try {
+				String laboratoryId = results.getLaboratoryId();
+				Location location = service.findLocation(laboratoryId);
+				String phone = location.getPhone();
+				context.getSmsService().createNewOutboundSms(phone, text, new Date(), Priority.HIGH, 24, PeriodType.DAY, 1, null);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void sendAlertToProgram(GeneXpertResults results, String programNumber, String text) {
+		try {
+			context.getSmsService().createNewOutboundSms(programNumber, text.toString(), new Date(), Priority.HIGH, 24, PeriodType.DAY, 1, null);
+			// Also send to the referred location (try to fetch from
+			// remarks in results)
+			String remarks = results.getRemarks().toUpperCase();
+			if (!remarks.equals("")) {
+				// Try to find respective location
+				Location location = service.findLocation(remarks);
+				if (location != null) {
+					String phone = location.getPhone();
+					if (phone != null) {
+						context.getSmsService().createNewOutboundSms(phone, text.toString(), new Date(), Priority.HIGH, 24, PeriodType.DAY, 1, null);
+					}
+					String mobile = location.getMobile();
+					if (mobile != null) {
+						if (mobile.contains(",")) {
+							String[] mobiles = mobile.split(",");
+							for (String m : mobiles) {
+								context.getSmsService().createNewOutboundSms(m, text.toString(), new Date(), Priority.HIGH, 24, PeriodType.DAY, 1, null);
+							}
+						} else {
+							context.getSmsService().createNewOutboundSms(mobile, text.toString(), new Date(), Priority.HIGH, 24, PeriodType.DAY, 1, null);
+						}
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

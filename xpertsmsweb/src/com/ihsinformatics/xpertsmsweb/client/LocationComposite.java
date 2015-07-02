@@ -30,6 +30,7 @@ import com.ihsinformatics.xpertsmsweb.shared.ErrorType;
 import com.ihsinformatics.xpertsmsweb.shared.InfoType;
 import com.ihsinformatics.xpertsmsweb.shared.model.Location;
 
+@Deprecated
 public class LocationComposite extends Composite implements IForm,
 		ClickHandler, ChangeHandler {
 	private static ServerServiceAsync service = GWT.create(ServerService.class);

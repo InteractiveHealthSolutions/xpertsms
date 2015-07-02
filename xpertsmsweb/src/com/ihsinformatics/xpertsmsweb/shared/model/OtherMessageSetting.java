@@ -18,6 +18,8 @@ public class OtherMessageSetting implements java.io.Serializable {
 	private String districtId;
 	private String healthFacilityId;
 	private String cellNumber;
+	private String secondaryCellNumber;
+	private String tertiaryCellNumber;
 
 	public OtherMessageSetting() {
 		// Not implemented
@@ -28,12 +30,15 @@ public class OtherMessageSetting implements java.io.Serializable {
 	}
 
 	public OtherMessageSetting(String id, String name, String districtId,
-			String healthFacilityId, String cellNumber) {
+			String healthFacilityId, String cellNumber,
+			String secondaryCellNumber, String tertiaryCellNumber) {
 		this.id = id;
 		this.name = name;
 		this.districtId = districtId;
 		this.healthFacilityId = healthFacilityId;
 		this.cellNumber = cellNumber;
+		this.setSecondaryCellNumber(secondaryCellNumber);
+		this.setTertiaryCellNumber(tertiaryCellNumber);
 	}
 
 	public String getId() {
@@ -76,10 +81,30 @@ public class OtherMessageSetting implements java.io.Serializable {
 		this.cellNumber = cellNumber;
 	}
 
+	public String getSecondaryCellNumber() {
+		return secondaryCellNumber;
+	}
+
+	public void setSecondaryCellNumber(String secondaryCellNumber) {
+		this.secondaryCellNumber = secondaryCellNumber;
+	}
+
+	public String getTertiaryCellNumber() {
+		return tertiaryCellNumber;
+	}
+
+	public void setTertiaryCellNumber(String tertiaryCellNumber) {
+		this.tertiaryCellNumber = tertiaryCellNumber;
+	}
+
+	/*
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return id + ", " + name + ", " + districtId + ", " + healthFacilityId
-				+ ", " + cellNumber;
+				+ ", " + cellNumber + ", " + secondaryCellNumber + ", "
+				+ tertiaryCellNumber;
 	}
 
 }

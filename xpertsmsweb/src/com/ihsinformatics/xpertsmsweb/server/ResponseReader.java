@@ -101,6 +101,7 @@ public class ResponseReader extends TimerTask {
 
 		String operatorId = null;
 		String pcId = null;
+		String hostId = null;
 		String instrumentSerial = null;
 		String moduleId = null;
 		String cartridgeId = null;
@@ -136,6 +137,7 @@ public class ResponseReader extends TimerTask {
 		rif = fields[j++];
 		systemId = fields[j++];
 		pcId = fields[j++];
+		hostId = fields[j++];
 		operatorId = fields[j++];
 		instrumentSerial = fields[j++];
 		moduleId = fields[j++];
@@ -193,7 +195,7 @@ public class ResponseReader extends TimerTask {
 			GeneXpertResults gxpU = eh.createGeneXpertResults(patientId,
 					sampleId, mtb, rif, resultDateObj, instrumentSerial,
 					moduleId, cartridgeId, reagentLotId, parseDate(expDate),
-					operatorId, pcId, probeResultA, probeResultB, probeResultC,
+					operatorId, pcId, hostId, probeResultA, probeResultB, probeResultC,
 					probeResultD, probeResultE, probeResultSPC, probeCtA,
 					probeCtB, probeCtC, probeCtD, probeCtE, probeCtSPC,
 					probeEndptA, probeEndptB, probeEndptC, probeEndptD,
@@ -277,6 +279,7 @@ public class ResponseReader extends TimerTask {
 			gxpNew.setCartridgeId(cartridgeId);
 			gxpNew.setLaboratoryId(systemId);
 			gxpNew.setPcId(pcId);
+			gxpNew.setHostId(hostId);
 			gxpNew.setOperatorId(operatorId);
 			if (errorCode != null) {
 				gxpNew.setErrorCode(Integer.parseInt(errorCode));
@@ -347,8 +350,8 @@ public class ResponseReader extends TimerTask {
 	public static void main(String args[]) {
 		ResponseReader reader = new ResponseReader();
 		// Results with probes
-		reader.parseText("101130800001-9^141016_001^MTB DETECTED MEDIUM^Rif Resistance NOT DETECTED^Machine API Test^CEPHEID5G183R1^OWAIS^708228^618255^204304821^10713-AX^2015-05-23^no^no^yes^5002^Post-run analysis error^no^Just XDR-TB^POS^NO RESULT^NEG^NEG^POS^0^1.1^2.2^2.3^1.3^1.4^2.5^3.6^4.7^4.5^3.2^1.0^0.0");
+		reader.parseText("101130800001-9^141016_001^MTB DETECTED MEDIUM^Rif Resistance NOT DETECTED^Machine API Test^CEPHEID5G183R1^IHS^OWAIS^708228^618255^204304821^10713-AX^2015-05-23^no^no^yes^5002^Post-run analysis error^no^Just XDR-TB^POS^NO RESULT^NEG^NEG^POS^0^1.1^2.2^2.3^1.3^1.4^2.5^3.6^4.7^4.5^3.2^1.0^0.0");
 		// Results without probes
-		reader.parseText("101130800001-9^141016_001^MTB DETECTED MEDIUM^Rif Resistance NOT DETECTED^Machine API Test^CEPHEID5G183R1^OWAIS^708228^618255^204304821^10713-AX^2015-05-23^no^no^yes^5002^Post-run analysis error^no^No PROBlems");
+		reader.parseText("101130800001-9^141016_001^MTB DETECTED MEDIUM^Rif Resistance NOT DETECTED^Machine API Test^CEPHEID5G183R1^IHS^OWAIS^708228^618255^204304821^10713-AX^2015-05-23^no^no^yes^5002^Post-run analysis error^no^No PROBlems");
 	}
 }

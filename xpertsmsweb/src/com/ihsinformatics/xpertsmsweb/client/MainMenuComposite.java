@@ -87,7 +87,7 @@ public class MainMenuComposite extends Composite {
 			public void execute() {
 				clear();
 				Cookies.setCookie("CurrentMenu", "SETUP");
-				mainVerticalPanel.add(new LocationComposite().asWidget());
+				mainVerticalPanel.add(new LocationsComposite().asWidget());
 			}
 		});
 

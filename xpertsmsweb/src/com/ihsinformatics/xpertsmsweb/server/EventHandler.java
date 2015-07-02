@@ -155,6 +155,7 @@ public class EventHandler extends HttpServlet {
 
 		String operatorId = request.getParameter("operatorid");
 		String pcId = request.getParameter("pcid");
+		String hostId = request.getParameter("receiverid");
 		String instrumentSerial = request.getParameter("instserial");
 		String moduleId = request.getParameter("moduleid");
 		String cartridgeId = request.getParameter("cartrigeid");
@@ -194,7 +195,7 @@ public class EventHandler extends HttpServlet {
 				gxpU = createGeneXpertResults(patientId, sampleId, mtb, rif,
 						parseDate(resultDateStr), instrumentSerial, moduleId,
 						cartridgeId, reagentLotId, parseDate(expDateStr),
-						operatorId, pcId, probeResultA, probeResultB,
+						operatorId, pcId, hostId, probeResultA, probeResultB,
 						probeResultC, probeResultD, probeResultE,
 						probeResultSPC, probeCtA, probeCtB, probeCtC, probeCtD,
 						probeCtE, probeCtSPC, probeEndptA, probeEndptB,
@@ -281,6 +282,7 @@ public class EventHandler extends HttpServlet {
 			gxpNew.setCartridgeExpiryDate(parseDate(expDateStr));
 			gxpNew.setCartridgeId(cartridgeId);
 			gxpNew.setPcId(pcId);
+			gxpNew.setHostId(hostId);
 			gxpNew.setOperatorId(operatorId);
 			String remarks = "";
 			if (errorCode != null) {
@@ -355,7 +357,7 @@ public class EventHandler extends HttpServlet {
 	public GeneXpertResults createGeneXpertResults(String patientId,
 			String sampleId, String mtb, String rif, Date resultDate,
 			String instrumentSerial, String moduleId, String cartridgeId,
-			String reagentLotId, Date expDate, String operatorId, String pcId,
+			String reagentLotId, Date expDate, String operatorId, String pcId, String hostId,
 			String probeResultA, String probeResultB, String probeResultC,
 			String probeResultD, String probeResultE, String probeResultSPC,
 			String probeCtA, String probeCtB, String probeCtC, String probeCtD,
@@ -422,6 +424,7 @@ public class EventHandler extends HttpServlet {
 		gxp.setCartridgeExpiryDate(expDate);
 		gxp.setCartridgeId(cartridgeId);
 		gxp.setPcId(pcId);
+		gxp.setHostId(hostId);
 		gxp.setOperatorId(operatorId);
 		String remarks = "";
 		if (errorCode != null) {
@@ -513,6 +516,7 @@ public class EventHandler extends HttpServlet {
 				String sampleId = request.getParameter("sampleid");
 				String operatorId = request.getParameter("operatorid");
 				String pcId = request.getParameter("pcid");
+				String hostId = request.getParameter("hostid");
 				Encounter encounter = new Encounter(new EncounterId(0,
 						patientId, operatorId), "SYNC_RESULT", systemId,
 						new Date(), new Date(), new Date(), "");
@@ -523,6 +527,7 @@ public class EventHandler extends HttpServlet {
 				encounterResults.add("SYSTEM_ID" + "=" + systemId);
 				encounterResults.add("OPERATOR_ID" + "=" + operatorId);
 				encounterResults.add("PC_ID" + "=" + pcId);
+				encounterResults.add("HOST_ID" + "=" + hostId);
 				encounterResults.add("RESP_CODE" + "=" + responseCode);
 				if (responseCode == HttpURLConnection.HTTP_OK)
 					encounterResults.add("RESPONSE" + "=" + "SUCCESS");

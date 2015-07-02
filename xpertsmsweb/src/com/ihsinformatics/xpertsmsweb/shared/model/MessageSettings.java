@@ -205,30 +205,4 @@ public class MessageSettings implements java.io.Serializable {
 		this.otherNumber = otherNumber;
 	}
 
-	/**
-	 * @return the tbrServerAddress
-	 */
-	/*
-	 * public String getTbrServerAddress() { return tbrServerAddress; }
-	 *//**
-	 * @param tbrServerAddress
-	 *            the tbrServerAddress to set
-	 */
-	/*
-	 * public void setTbrServerAddress(String tbrServerAddress) {
-	 * this.tbrServerAddress = tbrServerAddress; }
-	 *//**
-	 * @return the tbrServerPort
-	 */
-	/*
-	 * public String getTbrServerPort() { return tbrServerPort; }
-	 *//**
-	 * @param tbrServerPort
-	 *            the tbrServerPort to set
-	 */
-	/*
-	 * public void setTbrServerPort(String tbrServerPort) { this.tbrServerPort =
-	 * tbrServerPort; }
-	 */
-
 }

@@ -58,6 +58,23 @@ public class MessageSettingsComposite extends Composite implements IForm,
 	private FlexTable leftRecipientFlexTable = new FlexTable();
 	private FlexTable rightRecipientFlexTable = new FlexTable();
 
+	private Label lblMessageSettings = new Label("Message Settings");
+	private Label lblSendToPatient = new Label("Send Message to Patient");
+	// private Label lblTextForPatient = new Label("Patient SMS Text:");
+	private Label lblSendToProvider = new Label("Send Message to Location");
+	// private Label lblTextForProvider = new Label("Provider SMS Text:");
+	private Label lblSendToProgram = new Label("Send Message to Referred Location");
+	// private Label lblTextForProgram = new Label("Program SMS Text:");
+	private Label lblProgramNumber = new Label("Program Cell Number:");
+	private Label lblSendToOther = new Label("Send Message to Other Number");
+	// private Label lblTextForOther = new Label("Other SMS Text:");
+	private Label lblOtherNumber = new Label("Other Cell Number:");
+	private Label lblCellNumber = new Label("Cell Number:");
+
+	private Label districtLabel = new Label("District:");
+	private Label healthFacilityLabel = new Label("Health Facility:");
+	private Label recipientName = new Label("Recipient Name:");
+
 	private CheckBox sendToPatientCheckBox = new CheckBox(/* "Send Message to Patient" */);
 	// private TextArea patientTextTextArea = new TextArea();
 	private CheckBox sendToProviderCheckBox = new CheckBox(/* "Send Message to Provider" */);
@@ -75,23 +92,6 @@ public class MessageSettingsComposite extends Composite implements IForm,
 	private Button saveButton = new Button("Save");
 	private Button deleteButton = new Button("Delete");
 	private Button closeButton = new Button("Close");
-
-	private Label lblMessageSettings = new Label("Message Settings");
-	private Label lblSendToPatient = new Label("Send Message to Patient");
-	// private Label lblTextForPatient = new Label("Patient SMS Text:");
-	private Label lblSendToProvider = new Label("Send Message to Provider");
-	// private Label lblTextForProvider = new Label("Provider SMS Text:");
-	private Label lblSendToProgram = new Label("Send Message to Program");
-	// private Label lblTextForProgram = new Label("Program SMS Text:");
-	private Label lblProgramNumber = new Label("Program Cell Number:");
-	private Label lblSendToOther = new Label("Send Message to Other Number");
-	// private Label lblTextForOther = new Label("Other SMS Text:");
-	private Label lblOtherNumber = new Label("Other Cell Number:");
-	private Label lblCellNumber = new Label("Cell Number:");
-
-	private Label districtLabel = new Label("District:");
-	private Label healthFacilityLabel = new Label("Health Facility:");
-	private Label recipientName = new Label("Recipient Name:");
 
 	private ListBox alertRecipientListBox = new ListBox();
 
@@ -136,7 +136,6 @@ public class MessageSettingsComposite extends Composite implements IForm,
 		rightFlexTable.setWidget(4, 1, lblSendToOther);
 		rightFlexTable.setWidget(5, 0, lblOtherNumber);
 		rightFlexTable.setWidget(5, 1, otherNumberTextBox);
-
 		rightFlexTable.setWidget(9, 0, advanceMessageSettingAnchor);
 
 		rightFlexTable.setWidget(10, 0, leftRecipientFlexTable);
@@ -226,18 +225,14 @@ public class MessageSettingsComposite extends Composite implements IForm,
 	public void setCurrent() {
 		current.setSendToPatient(sendToPatientCheckBox.getValue());
 		// current.setPatientText(XpertSmsWebClient.get(patientTextTextArea));
-
 		current.setSendToProvider(sendToProviderCheckBox.getValue());
 		// current.setProviderText(XpertSmsWebClient.get(providerTextTextArea));
-
 		current.setSendToProgram(sendToProgramCheckBox.getValue());
 		// current.setProgramText(XpertSmsWebClient.get(programTextTextArea));
 		current.setProgramNumber(XpertSmsWebClient.get(programNumberTextBox));
-
 		current.setSendToOther(sendToOtherCheckBox.getValue());
 		// current.setOtherText(XpertSmsWebClient.get(otherTextTextArea));
 		current.setOtherNumber(XpertSmsWebClient.get(otherNumberTextBox));
-
 	}
 
 	@Override

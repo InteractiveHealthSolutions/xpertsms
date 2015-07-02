@@ -54,7 +54,7 @@ public class EventHandlerTest extends TestCase {
 	 * .
 	 */
 	public final void testHandleEvent() {
-		String queryString = "type=astmresult&username=admin&password=jingle94&pid=1621008001&sampleid=091012091&mtb=null&rif=ERROR&final=yes&error=yes&errorcode=5007&errornotes=Error 5007: [SPC] probe check failed  Probe check value of 219 0 for reading number 2 was below the minimum of 226 0: Error 5007: [SPC] probe check failed  Probe check value of 219 0 for reading number 2 was below the minimum of 226 0&enddate=20121009054907&operatorid=Karachi X-ray&pcid=owais-ird&instserial=707851&moduleid=615337&cartrigeid=101256226&reagentlotid=04405&systemid=GeneXpert PC&receiverid=IRD Xpert&expdate=20130107&probea=NO RESULT&probeb=NO RESULT&probec=NO RESULT&probed=NO RESULT&probee=NO RESULT&probespc=NO RESULT&probeact=0&probebct=0&probecct=0&probedct=0&probeect=0&probespcct=0&probeaendpt=0&probebendpt=0&probecendpt=0&probedendpt=0&probeeendpt=0&probespcendpt=0";
+		String queryString = "type=astmresult&username=admin&password=jingle94&pid=1621008001&sampleid=091012091&mtb=null&rif=ERROR&final=yes&error=yes&errorcode=5007&errornotes=Error 5007: [SPC] probe check failed  Probe check value of 219 0 for reading number 2 was below the minimum of 226 0: Error 5007: [SPC] probe check failed  Probe check value of 219 0 for reading number 2 was below the minimum of 226 0&enddate=20121009054907&operatorid=Karachi X-ray&pcid=owais-ird&receiverid=IHS&instserial=707851&moduleid=615337&cartrigeid=101256226&reagentlotid=04405&systemid=GeneXpert PC&receiverid=IRD Xpert&expdate=20130107&probea=NO RESULT&probeb=NO RESULT&probec=NO RESULT&probed=NO RESULT&probee=NO RESULT&probespc=NO RESULT&probeact=0&probebct=0&probecct=0&probedct=0&probeect=0&probespcct=0&probeaendpt=0&probebendpt=0&probecendpt=0&probedendpt=0&probeeendpt=0&probespcendpt=0";
 		HttpURLConnection httpConnection = null;
 		OutputStream outputStream = null;
 		// String url = null;
@@ -72,7 +72,43 @@ public class EventHandlerTest extends TestCase {
 			responseCode = httpConnection.getResponseCode();
 			outputStream.close();
 			httpConnection.disconnect();
-			assertEquals("", responseCode, HttpURLConnection.HTTP_OK);
+			assertEquals("Event not handled", responseCode, HttpURLConnection.HTTP_OK);
+			BufferedReader br = new BufferedReader(new InputStreamReader(httpConnection.getInputStream()));
+			String line = "";
+			while ((line = br.readLine()) != null) {
+				System.out.println(line);
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Test method for
+	 * {@link com.ihsinformatics.xpertsmsweb.server.EventHandler#handleEvent(javax.servlet.http.HttpServletRequest)}
+	 * .
+	 */
+	public final void testPositiveResult() {
+		String queryString = "type=astmresult&username=admin&password=jingle94&pid=101130800001-9&sampleid=141016_001&mtb=MTB DETECTED MEDIUM&rif=Rif Resistance NOT DETECTED&error=yes&errorcode=5002&errornotes=Post-run analysis error&notes=Just XDR-TB&enddate=2015-05-23&operatorid=OWAIS&pcid=CEPHEID5G183R1&receiverid=IHS&instserial=708228&moduleid=618255&cartrigeid=204304821&reagentlotid=10713-AX&systemid=Machine API Test&expdate=2014-06-21&probea=POS&probeb=NO RESULT&probec=NEG&probed=NEG&probee=POS&probespc=0&probeact=1.1&probebct=2.2&probecct=2.3&probedct=1.3&probeect=1.4&probespcct=2.5&probeaendpt=3.6&probebendpt=4.7&probecendpt=4.5&probedendpt=3.2&probeeendpt=1.0&probespcendpt=0.0";
+		HttpURLConnection httpConnection = null;
+		OutputStream outputStream = null;
+		// String url = null;
+		int responseCode = 0;
+		URL url;
+		try {
+			url = new URL("http://127.0.0.1:8888/xpertsmsweb.jsp");
+			httpConnection = (HttpURLConnection) url.openConnection();
+			httpConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			httpConnection.setRequestProperty("Content-Language", "en-US");
+			httpConnection.setDoOutput(true);
+			outputStream = httpConnection.getOutputStream();
+			outputStream.write(queryString.getBytes());
+			outputStream.flush();
+			responseCode = httpConnection.getResponseCode();
+			outputStream.close();
+			httpConnection.disconnect();
+			assertEquals("Positive Results not saving", responseCode, HttpURLConnection.HTTP_OK);
 			BufferedReader br = new BufferedReader(new InputStreamReader(httpConnection.getInputStream()));
 			String line = "";
 			while ((line = br.readLine()) != null) {
