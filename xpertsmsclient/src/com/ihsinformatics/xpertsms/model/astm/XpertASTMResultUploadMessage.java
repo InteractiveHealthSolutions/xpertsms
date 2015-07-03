@@ -692,6 +692,7 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 		csv.append("\"" + replaceNull(testStartDate) + "\",");
 		csv.append("\"" + replaceNull(testEndDate) + "\",");
 		csv.append("\"" + replaceNull(pcId) + "\",");
+		csv.append("\"" + replaceNull(receiverId) + "\",");
 		csv.append("\"" + replaceNull(instrumentSerial) + "\",");
 		csv.append("\"" + replaceNull(moduleId) + "\",");
 		csv.append("\"" + replaceNull(cartridgeId) + "\",");
@@ -704,7 +705,6 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 		csv.append("\"" + replaceNull(systemId) + "\",");
 		csv.append("\"" + replaceNull(softwareVersion) + "\",");
 		csv.append("\"" + replaceNull(versionNumber) + "\",");
-		csv.append("\"" + replaceNull(receiverId) + "\",");
 		csv.append("\"" + replaceNull(processingId) + "\",");
 		csv.append("\"" + replaceNull(messageDateTime) + "\",");
 		csv.append("\"" + replaceNull(instrumentSpecimenId) + "\",");
@@ -1184,7 +1184,7 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 			}
 		}
 		
-		query.append("insert into genexpertresults (PatientID,SputumTestID,LaboratoryID,DateTested,DrugResistance,GeneXpertResult,MTBBurden,ErrorCode,Remarks,InstrumentID,ModuleID,CartridgeID,ReagentLotID,PcID,OperatorID,CartridgeExpiryDate,ProbeResultA,ProbeResultB,ProbeResultC,ProbeResultD,ProbeResultE,ProbeResultSPC,ProbeCtA,ProbeCtB,ProbeCtC,ProbeCtD,ProbeCtE,ProbeCtSPC,ProbeEndptA,ProbeEndptB,ProbeEndptC,ProbeEndptD,ProbeEndptE,ProbeEndptSPC)");
+		query.append("insert into genexpertresults (PatientID,SputumTestID,LaboratoryID,DateTested,DrugResistance,GeneXpertResult,MTBBurden,ErrorCode,Remarks,InstrumentID,ModuleID,CartridgeID,ReagentLotID,PcID,HostID,OperatorID,CartridgeExpiryDate,ProbeResultA,ProbeResultB,ProbeResultC,ProbeResultD,ProbeResultE,ProbeResultSPC,ProbeCtA,ProbeCtB,ProbeCtC,ProbeCtD,ProbeCtE,ProbeCtSPC,ProbeEndptA,ProbeEndptB,ProbeEndptC,ProbeEndptD,ProbeEndptE,ProbeEndptSPC)");
 		query.append(" VALUES ");
 		query.append("('" + getPatientId() + "',");
 		query.append("'" + getSampleId() + "',");
@@ -1200,6 +1200,7 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 		query.append("'" + getCartridgeId() + "',");
 		query.append("'" + getReagentLotId() + "',");
 		query.append("'" + getPcId() + "',");
+		query.append("'" + getReceiverId() + "',");
 		query.append("'" + getOperatorId() + "',");
 		query.append("'" + getExpDate() + "',");
 		query.append("'" + getProbeResultA() + "',");
@@ -1261,12 +1262,12 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 		postParams += "&enddate=" + testEndDate;
 		postParams += "&operatorid=" + operatorId;// e.g Karachi Xray
 		postParams += "&pcid=" + pcId;
+		postParams += "&receiverid=" + receiverId;
 		postParams += "&instserial=" + instrumentSerial;
 		postParams += "&moduleid=" + moduleId;
 		postParams += "&cartrigeid=" + cartridgeId;
 		postParams += "&reagentlotid=" + reagentLotId;
 		postParams += "&systemid=" + systemId;
-		postParams += "&receiverid=" + receiverId;
 		postParams += "&expdate=" + expDate;
 		
 		if (exportProbes) {
@@ -1301,6 +1302,7 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 		smsText.append(replaceNull(rifResult) + "^");
 		smsText.append(replaceNull(systemId) + "^");
 		smsText.append(replaceNull(pcId) + "^");
+		smsText.append(replaceNull(receiverId) + "^");
 		smsText.append(replaceNull(operatorId) + "^");
 		smsText.append(replaceNull(instrumentSerial) + "^");
 		smsText.append(replaceNull(moduleId) + "^");
@@ -1372,7 +1374,7 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 		jsonObj.put("resultRif", rifResult);
 		jsonObj.put("resultText", mtbResult + "|" + rifResult);
 		jsonObj.put("deviceSerial", pcId);
-		jsonObj.put("hostId", systemId);
+		jsonObj.put("hostId", receiverId);
 		jsonObj.put("systemName", computerName);
 		jsonObj.put("computerName", computerName);
 		jsonObj.put("errorCode", errorCode);
@@ -1435,7 +1437,7 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 		return "XpertASTMResultUploadMessage [FIELD_DELIMITER=" + FIELD_DELIMITER + ", REPEAT_DELIMITER=" + REPEAT_DELIMITER
 		        + ", COMPONENT_DELIMITER=" + COMPONENT_DELIMITER + ", ESCAPE_DELIMITER=" + ESCAPE_DELIMITER + ", messageId="
 		        + messageId + ", systemId=" + systemId + ", instrumentSpecimenID=" + instrumentSpecimenID
-		        + ", softwareVersion=" + softwareVersion + ", receiverId=" + receiverId + ", processingId=" + processingId
+		        + ", softwareVersion=" + softwareVersion + ", hostId=" + receiverId + ", processingId=" + processingId
 		        + ", versionNumber=" + versionNumber + ", messageDateTime=" + messageDateTime + ", instrumentSpecimenId="
 		        + instrumentSpecimenId + ", universalTestId=" + universalTestId + ", priority=" + priority
 		        + ", orderDateTime=" + orderDateTime + ", actionCode=" + actionCode + ", specimenType=" + specimenType

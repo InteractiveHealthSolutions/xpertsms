@@ -53,6 +53,7 @@ public class XpertASTMResultUploadMessageTest {
 		sampleMessage.setMtbResult("MTB DETECTED MEDIUM");
 		sampleMessage.setRifResult("Rif Resistance NOT DETECTED");
 		sampleMessage.setPcId("CEPHEID5G183R1");
+		sampleMessage.setReceiverId("IHS");
 		sampleMessage.setSystemId("Machine API Test");
 		sampleMessage.setSystemName("GeneXpert PC");
 		sampleMessage.setComputerName("CepheidJRJRFQ1");
@@ -90,7 +91,7 @@ public class XpertASTMResultUploadMessageTest {
 		        + username
 		        + "&password="
 		        + password
-		        + "&pid=101130800001-9&sampleid=141016_001&mtb=MTB DETECTED MEDIUM&rif=Rif Resistance NOT DETECTED&error=yes&errorcode=5002&errornotes=Post-run analysis error&notes=Just XDR-TB&enddate=2015-05-23&operatorid=OWAIS&pcid=CEPHEID5G183R1&instserial=708228&moduleid=618255&cartrigeid=204304821&reagentlotid=10713-AX&systemid=Machine API Test&receiverid=null&expdate=2014-06-21&probea=POS&probeb=NO RESULT&probec=NEG&probed=NEG&probee=POS&probespc=0&probeact=1.1&probebct=2.2&probecct=2.3&probedct=1.3&probeect=1.4&probespcct=2.5&probeaendpt=3.6&probebendpt=4.7&probecendpt=4.5&probedendpt=3.2&probeeendpt=1.0&probespcendpt=0.0&";
+		        + "&pid=101130800001-9&sampleid=141016_001&mtb=MTB DETECTED MEDIUM&rif=Rif Resistance NOT DETECTED&error=yes&errorcode=5002&errornotes=Post-run analysis error&notes=Just XDR-TB&enddate=2015-05-23&operatorid=OWAIS&pcid=CEPHEID5G183R1&receiverid=IHS&instserial=708228&moduleid=618255&cartrigeid=204304821&reagentlotid=10713-AX&systemid=Machine API Test&expdate=2014-06-21&probea=POS&probeb=NO RESULT&probec=NEG&probed=NEG&probee=POS&probespc=0&probeact=1.1&probebct=2.2&probecct=2.3&probedct=1.3&probeect=1.4&probespcct=2.5&probeaendpt=3.6&probebendpt=4.7&probecendpt=4.5&probedendpt=3.2&probeeendpt=1.0&probespcendpt=0.0&";
 		Assert.assertTrue("Parameters mismatch", params.equalsIgnoreCase(should));
 	}
 	
@@ -98,7 +99,7 @@ public class XpertASTMResultUploadMessageTest {
 	public void testToSMS() throws Exception {
 		setUpBeforeClass();
 		String sms = sampleMessage.toSMS(true);
-		String should = "101130800001-9^141016_001^MTB DETECTED MEDIUM^Rif Resistance NOT DETECTED^Machine API Test^CEPHEID5G183R1^OWAIS^708228^618255^204304821^10713-AX^2015-05-23^no^no^yes^5002^Post-run analysis error^no^Just XDR-TB^POS^NO RESULT^NEG^NEG^POS^0^1.1^2.2^2.3^1.3^1.4^2.5^3.6^4.7^4.5^3.2^1.0^0.0";
+		String should = "101130800001-9^141016_001^MTB DETECTED MEDIUM^Rif Resistance NOT DETECTED^Machine API Test^CEPHEID5G183R1^IHS^OWAIS^708228^618255^204304821^10713-AX^2015-05-23^no^no^yes^5002^Post-run analysis error^no^Just XDR-TB^POS^NO RESULT^NEG^NEG^POS^0^1.1^2.2^2.3^1.3^1.4^2.5^3.6^4.7^4.5^3.2^1.0^0.0";
 		Assert.assertTrue("Parameters mismatch", sms.equalsIgnoreCase(should));
 	}
 	
@@ -107,7 +108,7 @@ public class XpertASTMResultUploadMessageTest {
 		setUpBeforeClass();
 		String csv = sampleMessage.toCsv();
 		csv = csv.replace("\"", "");
-		String should = "101130800001-9,141016_001,MTB DETECTED MEDIUM,Rif Resistance NOT DETECTED,,,true,,,OWAIS,2015-05-22,2015-05-23,CEPHEID5G183R1,708228,618255,204304821,10713-AX,2014-06-21,5002,Post-run analysis error,Just XDR-TB,,Machine API Test,4.4a,,,,2015-05-04,,MTB-RIF,,,,,,Xpert MTB-RIF Assay,7,POS,NO RESULT,NEG,NEG,POS,0,1.1,2.2,2.3,1.3,1.4,2.5,3.6,4.7,4.5,3.2,1.0,0.0";
+		String should = "101130800001-9,141016_001,MTB DETECTED MEDIUM,Rif Resistance NOT DETECTED,,,true,,,OWAIS,2015-05-22,2015-05-23,CEPHEID5G183R1,IHS,708228,618255,204304821,10713-AX,2014-06-21,5002,Post-run analysis error,Just XDR-TB,,Machine API Test,4.4a,,,2015-05-04,,MTB-RIF,,,,,,Xpert MTB-RIF Assay,7,POS,NO RESULT,NEG,NEG,POS,0,1.1,2.2,2.3,1.3,1.4,2.5,3.6,4.7,4.5,3.2,1.0,0.0";
 		Assert.assertTrue("Parameters mismatch", csv.equalsIgnoreCase(should));
 	}
 	
@@ -115,8 +116,8 @@ public class XpertASTMResultUploadMessageTest {
 	public void testToSqlQuery() throws Exception {
 		setUpBeforeClass();
 		String sql = sampleMessage.toSqlQuery();
-		String should = "insert into genexpertresults (PatientID,SputumTestID,LaboratoryID,DateTested,DrugResistance,GeneXpertResult,MTBBurden,ErrorCode,Remarks,InstrumentID,ModuleID,CartridgeID,ReagentLotID,PcID,OperatorID,CartridgeExpiryDate,ProbeResultA,ProbeResultB,ProbeResultC,ProbeResultD,ProbeResultE,ProbeResultSPC,ProbeCtA,ProbeCtB,ProbeCtC,ProbeCtD,ProbeCtE,ProbeCtSPC,ProbeEndptA,ProbeEndptB,ProbeEndptC,ProbeEndptD,ProbeEndptE,ProbeEndptSPC) VALUES "
-		        + "('101130800001-9','141016_001','GeneXpert PC','2015-05-23','Rif Resistance NOT DETECTED','MTB DETECTED','MEDIUM','5002','Post-run analysis error. Just XDR-TB','708228','618255','204304821','10713-AX','CEPHEID5G183R1','OWAIS','2014-06-21',"
+		String should = "insert into genexpertresults (PatientID,SputumTestID,LaboratoryID,DateTested,DrugResistance,GeneXpertResult,MTBBurden,ErrorCode,Remarks,InstrumentID,ModuleID,CartridgeID,ReagentLotID,PcID,HostID,OperatorID,CartridgeExpiryDate,ProbeResultA,ProbeResultB,ProbeResultC,ProbeResultD,ProbeResultE,ProbeResultSPC,ProbeCtA,ProbeCtB,ProbeCtC,ProbeCtD,ProbeCtE,ProbeCtSPC,ProbeEndptA,ProbeEndptB,ProbeEndptC,ProbeEndptD,ProbeEndptE,ProbeEndptSPC) VALUES "
+		        + "('101130800001-9','141016_001','GeneXpert PC','2015-05-23','Rif Resistance NOT DETECTED','MTB DETECTED','MEDIUM','5002','Post-run analysis error. Just XDR-TB','708228','618255','204304821','10713-AX','CEPHEID5G183R1','IHS','OWAIS','2014-06-21',"
 		        + "'POS','NO RESULT','NEG','NEG','POS','0','1.1','2.2','2.3','1.3','1.4','2.5','3.6','4.7','4.5','3.2','1.0','0.0')";
 		Assert.assertTrue("Parameters mismatch", sql.equalsIgnoreCase(should));
 	}

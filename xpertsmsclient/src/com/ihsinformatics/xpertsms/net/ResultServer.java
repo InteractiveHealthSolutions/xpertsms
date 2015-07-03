@@ -111,6 +111,7 @@ public class ResultServer extends Thread {
 		int port = Integer.parseInt(XpertProperties.props.getProperty(XpertProperties.LOCAL_PORT));
 		try {
 			socket = new ServerSocket(port);
+			System.out.println("Listening on port: " + port + "...");
 		}
 		catch (IOException ioe) {
 			ioe.printStackTrace();
@@ -118,9 +119,6 @@ public class ResultServer extends Thread {
 			errorCode = MessageCodes.PORT_INACCESSIBLE;
 			status = -1;
 		}
-		System.out.println("Listening on port: " + port + "...");
-		
-		// Test HTTP using Sample data (moved to TestClass)
 		try {
 			while (!stopped) {
 				threadCount++;

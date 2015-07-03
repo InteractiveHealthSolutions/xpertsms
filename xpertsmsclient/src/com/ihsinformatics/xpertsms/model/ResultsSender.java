@@ -13,10 +13,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Date;
 import java.util.List;
 
@@ -195,13 +192,13 @@ public class ResultsSender extends Thread {
 	}
 	
 	public synchronized void queueSms(XpertResultUploadMessage xpertMessage) throws ClassNotFoundException, SQLException {
-		String dbIpAddress = XpertProperties.props.getProperty(XpertProperties.DB_IP_ADDRESS);
-		String dbPort = XpertProperties.props.getProperty(XpertProperties.DB_PORT);
-		String dbName = XpertProperties.props.getProperty(XpertProperties.DB_NAME);
-		String dbUsername = XpertProperties.props.getProperty(XpertProperties.DB_USERNAME);
-		String dbPassword = XpertProperties.props.getProperty(XpertProperties.DB_PASSWORD);
-		String dbUrl = "jdbc:mysql://" + dbIpAddress + ":" + dbPort + "/" + dbName;
-		String dbClass = "com.mysql.jdbc.Driver";
+//		String dbIpAddress = XpertProperties.props.getProperty(XpertProperties.DB_IP_ADDRESS);
+//		String dbPort = XpertProperties.props.getProperty(XpertProperties.DB_PORT);
+//		String dbName = XpertProperties.props.getProperty(XpertProperties.DB_NAME);
+//		String dbUsername = XpertProperties.props.getProperty(XpertProperties.DB_USERNAME);
+//		String dbPassword = XpertProperties.props.getProperty(XpertProperties.DB_PASSWORD);
+//		String dbUrl = "jdbc:mysql://" + dbIpAddress + ":" + dbPort + "/" + dbName;
+//		String dbClass = "com.mysql.jdbc.Driver";
 //		Connection conn = null;
 //		Class.forName(dbClass);
 //		conn = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);

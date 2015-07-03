@@ -8,6 +8,7 @@ import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Properties;
 
 import javax.servlet.ServletException;
@@ -103,24 +104,20 @@ public class EventHandler extends HttpServlet {
 			e.printStackTrace();
 		}
 		String reqType = request.getParameter("type");
-		System.out.println("Request Type: " + reqType);
-		if (reqType.equals(RequestType.REMOTE_ASTM_RESULT)) {
-			xmlResponse = doRemoteASTMResult();
+		if (reqType == null) {
+			xmlResponse = XmlUtil.createErrorXml("ERROR: Request type is null");
+		} else {
+			if (reqType.equals(RequestType.REMOTE_ASTM_RESULT)) {
+				xmlResponse = doRemoteASTMResult();
+			}
 		}
 		// If the response was successful, make another request to backup URL if
 		// available
 		if (backupPostUrl != null) {
-			Runnable backupRun = new Runnable() {
-				@Override
-				public void run() {
-					System.out.println("Posting request to backup server:"
-							+ request.getParameter("type"));
-					String response = postToBackup(request);
-					System.out.println("Response from backup server: "
-							+ response);
-				}
-			};
-			backupRun.run();
+			System.out.println("Posting request to backup server:"
+					+ request.getParameter("type"));
+			String response = postToBackup(request);
+			System.out.println("Response from backup server: " + response);
 		} else {
 			System.out
 					.println("Warning! No backup post URL defiend. Skipping backup...s");
@@ -474,6 +471,7 @@ public class EventHandler extends HttpServlet {
 	}
 
 	public String postToBackup(HttpServletRequest request) {
+		setRequest(request);
 		HttpURLConnection hc = null;
 		OutputStream os = null;
 		int responseCode = 0;
@@ -488,7 +486,16 @@ public class EventHandler extends HttpServlet {
 			hc.setDoOutput(true);
 			try {
 				os = hc.getOutputStream();
-				String requestStr = request.toString();
+				Enumeration<String> names = request.getParameterNames();
+				StringBuilder queryString = new StringBuilder();
+				while (names.hasMoreElements()) {
+					String parameter = names.nextElement();
+					String value = request.getParameter(parameter);
+					queryString.append(parameter + "=" + value + "&");
+				}
+				String requestStr = queryString.toString();
+				System.out.println(">>> DEBUG >>> request string: "
+						+ requestStr);
 				os.write(requestStr.getBytes());
 				os.flush();
 				responseCode = hc.getResponseCode();

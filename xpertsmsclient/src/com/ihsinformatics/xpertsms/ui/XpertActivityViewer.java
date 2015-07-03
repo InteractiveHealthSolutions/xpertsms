@@ -154,26 +154,30 @@ public class XpertActivityViewer extends JFrame implements ActionListener {
 		StringBuilder text = new StringBuilder();
 		PrintWriterUtil.updateTextPane(logTextPane, "Data export services:", MessageType.INFO,
 		    detailedLogCheckBox.isSelected());
-		if (exportCsv)
+		if (exportCsv) {
 			PrintWriterUtil.updateTextPane(logTextPane,
 			    "- CSV exports to " + XpertProperties.getProperty(XpertProperties.CSV_FOLDER_PATH), MessageType.INFO,
 			    detailedLogCheckBox.isSelected());
-		if (exportWeb)
+		}
+		if (exportWeb) {
 			PrintWriterUtil.updateTextPane(logTextPane,
 			    "- Web exports to " + XpertProperties.getProperty(XpertProperties.WEB_APP_STRING) + " (data encryption = "
 			            + XpertProperties.getProperty(XpertProperties.WEB_SSL_ENCRYPTION) + ")", MessageType.INFO,
 			    detailedLogCheckBox.isSelected());
-		if (exportSms)
+		}
+		if (exportSms) {
 			SmsTarseel.instantiate();
 			PrintWriterUtil.updateTextPane(logTextPane,
 			    "- SMS exports to " + XpertProperties.getProperty(XpertProperties.SMS_ADMIN_PHONE), MessageType.INFO,
 			    detailedLogCheckBox.isSelected());
-		if (exportGxa)
+		}
+		if (exportGxa) {
 			PrintWriterUtil.updateTextPane(logTextPane,
 			    "- GXAlert exports to " + XpertProperties.getProperty(XpertProperties.GXA_SERVER_ADDRESS)
 			            + " (data encryption = " + XpertProperties.getProperty(XpertProperties.GXA_SSL_ENCRYPTION) + ")",
 			    MessageType.INFO, detailedLogCheckBox.isSelected());
-		if (exportOpenMrs)
+		}
+		if (exportOpenMrs) {
 			PrintWriterUtil
 			        .updateTextPane(
 			            logTextPane,
@@ -181,6 +185,7 @@ public class XpertActivityViewer extends JFrame implements ActionListener {
 			                    + " (data encryption = "
 			                    + XpertProperties.getProperty(XpertProperties.OPENMRS_SSL_ENCRYPTION) + ")",
 			            MessageType.INFO, detailedLogCheckBox.isSelected());
+		}
 		logTextPane.setText(text.toString());
 	}
 	
