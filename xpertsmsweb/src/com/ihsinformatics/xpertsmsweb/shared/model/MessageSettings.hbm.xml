@@ -3,40 +3,97 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated Dec 21, 2010 3:45:59 PM by Hibernate Tools 3.4.0.Beta1 -->
 <hibernate-mapping>
-    <class name="com.ihsinformatics.xpertsmsweb.shared.model.MessageSettings" table="MessageSettings" catalog="xpertsms">
-        <id name="settingsId" type="java.lang.Integer">
-   			<column name="SettingsID"/>
-  		 	<generator class="identity"/>
-  		</id>
-        <property generated="never" lazy="false" name="patientText" type="string">
-            <column name="PatientText" length="256" />
-        </property>
-        <property generated="never" lazy="false" name="providerText" type="string">
-            <column name="ProviderText" length="256" />
-        </property>
-        <property generated="never" lazy="false" name="programText" type="string">
-            <column name="ProgramText" length="256" />
-        </property>
-        <property generated="never" lazy="false" name="otherText" type="string">
-            <column name="OtherText" length="256" />
-        </property>
-        <property generated="never" lazy="false" name="sendToPatient" type="java.lang.Boolean">
-            <column name="SendToPatient" />
-        </property>
-        <property generated="never" lazy="false" name="sendToProvider" type="java.lang.Boolean">
-            <column name="SendToProvider" />
-        </property>
-        <property generated="never" lazy="false" name="sendToProgram" type="java.lang.Boolean">
-            <column name="SendToProgram" />
-        </property>
-        <property generated="never" lazy="false" name="sendToOther" type="java.lang.Boolean">
-            <column name="SendToOther" />
-        </property>
-         <property generated="never" lazy="false" name="programNumber" type="string">
-            <column name="ProgramNumber" length="15" />
-        </property>
-         <property generated="never" lazy="false" name="otherNumber" type="string">
-            <column name="OtherNumber" length="15" />
-        </property>
-    </class>
+	<class name="com.ihsinformatics.xpertsmsweb.shared.model.MessageSettings"
+		table="MessageSettings" catalog="xpertsms">
+		<id name="settingsId" type="java.lang.Integer">
+			<column name="SettingsID" />
+			<generator class="identity" />
+		</id>
+		<property generated="never" lazy="false" name="sendToPatient"
+			type="java.lang.Boolean">
+			<column name="SendToPatient" />
+		</property>
+		<property generated="never" lazy="false" name="sendToCenter"
+			type="java.lang.Boolean">
+			<column name="SendToProvider" />
+		</property>
+		<property generated="never" lazy="false" name="sendToReferenceLocation"
+			type="java.lang.Boolean">
+			<column name="SendToProgram" />
+		</property>
+		<property generated="never" lazy="false" name="sendToManager"
+			type="java.lang.Boolean">
+			<column name="SendToManager" />
+		</property>
+		<property generated="never" lazy="false" name="attachPatientId"
+			type="java.lang.Boolean">
+			<column name="AttachPatientId" />
+		</property>
+		<property generated="never" lazy="false" name="attachSampleId"
+			type="java.lang.Boolean">
+			<column name="AttachSampleId" />
+		</property>
+		<property generated="never" lazy="false" name="attachMtb"
+			type="java.lang.Boolean">
+			<column name="AttachMtb" />
+		</property>
+		<property generated="never" lazy="false" name="attachRif"
+			type="java.lang.Boolean">
+			<column name="AttachRif" />
+		</property>
+		<property generated="never" lazy="false" name="attachOperatorId"
+			type="java.lang.Boolean">
+			<column name="AttachOperatorId" />
+		</property>
+		<property generated="never" lazy="false" name="attachLocationId"
+			type="java.lang.Boolean">
+			<column name="AttachLocationId" />
+		</property>
+		<property generated="never" lazy="false" name="attachModuleId"
+			type="java.lang.Boolean">
+			<column name="AttachModuleId" />
+		</property>
+		<property generated="never" lazy="false" name="attachCartridgeId"
+			type="java.lang.Boolean">
+			<column name="AttachCartridgeId" />
+		</property>
+		<property generated="never" lazy="false" name="attachTestDate"
+			type="java.lang.Boolean">
+			<column name="AttachTestDate" />
+		</property>
+
+		<property generated="never" lazy="false" name="alertOnAll"
+			type="java.lang.Boolean">
+			<column name="AlertOnAll" />
+		</property>
+		<property generated="never" lazy="false" name="alertOnAllMtb"
+			type="java.lang.Boolean">
+			<column name="AlertOnAllMtb" />
+		</property>
+		<property generated="never" lazy="false" name="alertOnMtbHigh"
+			type="java.lang.Boolean">
+			<column name="AlertOnMtbHigh" />
+		</property>
+		<property generated="never" lazy="false" name="alertOnMtbMedium"
+			type="java.lang.Boolean">
+			<column name="AlertOnMtbMedium" />
+		</property>
+		<property generated="never" lazy="false" name="alertOnRif"
+			type="java.lang.Boolean">
+			<column name="AlertOnRif" />
+		</property>
+		<property generated="never" lazy="false" name="alertOnError"
+			type="java.lang.Boolean">
+			<column name="AlertOnError" />
+		</property>
+
+		<property generated="never" lazy="false" name="programNumber"
+			type="string">
+			<column name="ProgramNumber" length="15" />
+		</property>
+		<property generated="never" lazy="false" name="managerNumber"
+			type="string">
+			<column name="ManagerNumber" length="15" />
+		</property>
+	</class>
 </hibernate-mapping>

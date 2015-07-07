@@ -13,7 +13,6 @@ import com.ihsinformatics.xpertsmsweb.shared.model.EncounterResultsId;
 import com.ihsinformatics.xpertsmsweb.shared.model.GeneXpertResults;
 import com.ihsinformatics.xpertsmsweb.shared.model.Location;
 import com.ihsinformatics.xpertsmsweb.shared.model.MessageSettings;
-import com.ihsinformatics.xpertsmsweb.shared.model.OtherMessageSetting;
 import com.ihsinformatics.xpertsmsweb.shared.model.Patient;
 import com.ihsinformatics.xpertsmsweb.shared.model.Person;
 import com.ihsinformatics.xpertsmsweb.shared.model.UserRights;
@@ -203,20 +202,4 @@ public interface ServerService extends RemoteService {
 	void recordLogin(String userName) throws Exception;
 
 	void recordLogout(String userName) throws Exception;
-
-	OtherMessageSetting[] findOtherMessageRecipient();
-
-	OtherMessageSetting findOtherMessageRecipientById(String id);
-
-	Boolean saveOtherMessageSetting(OtherMessageSetting setting);
-
-	boolean updateOtherMessageSetting(OtherMessageSetting setting);
-
-	Boolean deleteOtherMessageSetting(OtherMessageSetting setting);
-
-	Location[] findFacilitiesByDistrictId(String districtValue);
-
-	Location findDistrict(String districtValue);
-
-	Location findFacility(String facilityId, String districtId);
 }

@@ -36,7 +36,6 @@ import com.ihsinformatics.xpertsmsweb.shared.model.EncounterResultsId;
 import com.ihsinformatics.xpertsmsweb.shared.model.GeneXpertResults;
 import com.ihsinformatics.xpertsmsweb.shared.model.Location;
 import com.ihsinformatics.xpertsmsweb.shared.model.MessageSettings;
-import com.ihsinformatics.xpertsmsweb.shared.model.OtherMessageSetting;
 import com.ihsinformatics.xpertsmsweb.shared.model.Patient;
 import com.ihsinformatics.xpertsmsweb.shared.model.Person;
 import com.ihsinformatics.xpertsmsweb.shared.model.UserRights;
@@ -421,10 +420,6 @@ public class ServerServiceImpl extends RemoteServiceServlet
 		return HibernateUtil.util.delete(location);
 	}
 
-	public Boolean deleteOtherMessageSetting(OtherMessageSetting setting) {
-		return HibernateUtil.util.delete(setting);
-	}
-
 	public Boolean deletePatient(Patient patient) throws Exception {
 		return HibernateUtil.util.delete(patient);
 	}
@@ -629,13 +624,14 @@ public class ServerServiceImpl extends RemoteServiceServlet
 		return HibernateUtil.util.save(location);
 	}
 
-	public Boolean saveOtherMessageSetting(OtherMessageSetting setting) {
-		return HibernateUtil.util.save(setting);
-	}
-
 	public Boolean saveMessageSettings(MessageSettings messageSettings)
 			throws Exception {
-		return HibernateUtil.util.save(messageSettings);
+		// If a setting exists, update it. Create othewise
+		MessageSettings settings = findMessageSettings();
+		if (settings == null)
+			return HibernateUtil.util.save(messageSettings);
+		else
+			return HibernateUtil.util.update(messageSettings);
 	}
 
 	public Boolean saveNewPatient(Patient patient, Person person,
@@ -687,10 +683,6 @@ public class ServerServiceImpl extends RemoteServiceServlet
 
 	public Boolean updateEncounter(Encounter encounter) throws Exception {
 		return HibernateUtil.util.update(encounter);
-	}
-
-	public boolean updateOtherMessageSetting(OtherMessageSetting setting) {
-		return HibernateUtil.util.update(setting);
 	}
 
 	public Boolean updateEncounterResults(EncounterResults encounterResults)
@@ -771,20 +763,6 @@ public class ServerServiceImpl extends RemoteServiceServlet
 		for (int i = 0; i < list.length; i++)
 			locations[i] = (Location) list[i];
 		return locations;
-	}
-
-	public OtherMessageSetting[] findOtherMessageRecipient() {
-		Object[] list = HibernateUtil.util
-				.findObjects("from OtherMessageSetting");
-		OtherMessageSetting[] locations = new OtherMessageSetting[list.length];
-		for (int i = 0; i < list.length; i++)
-			locations[i] = (OtherMessageSetting) list[i];
-		return locations;
-	}
-
-	public OtherMessageSetting findOtherMessageRecipientById(String id) {
-		return (OtherMessageSetting) HibernateUtil.util
-				.findObject("from OtherMessageSetting where id = '" + id + "'");
 	}
 
 	@Override

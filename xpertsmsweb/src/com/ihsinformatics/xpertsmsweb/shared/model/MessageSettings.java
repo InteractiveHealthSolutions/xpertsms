@@ -17,192 +17,256 @@ public class MessageSettings implements java.io.Serializable {
 	 */
 
 	private Integer settingsId;
-	private String patientText;
-	private String providerText;
-	private String programText;
-	private String otherText;
-	private Boolean sendToPatient;
-	private Boolean sendToProvider;
-	private Boolean sendToProgram;
-	private Boolean sendToOther;
-	private String programNumber;
-	private String otherNumber;
 
-	/*
-	 * private String tbrServerAddress; private String tbrServerPort;
-	 */
+	private Boolean sendToPatient;
+	private Boolean sendToCenter;
+	private Boolean sendToReferenceLocation;
+	private Boolean sendToManager;
+
+	private Boolean attachPatientId;
+	private Boolean attachSampleId;
+	private Boolean attachMtb;
+	private Boolean attachRif;
+	private Boolean attachOperatorId;
+	private Boolean attachLocationId;
+	private Boolean attachModuleId;
+	private Boolean attachCartridgeId;
+	private Boolean attachTestDate;
+
+	private Boolean alertOnAll;
+	private Boolean alertOnAllMtb;
+	private Boolean alertOnMtbHigh;
+	private Boolean alertOnMtbMedium;
+	private Boolean alertOnRif;
+	private Boolean alertOnError;
+
+	private String programNumber;
+	private String managerNumber;
 
 	public MessageSettings() {
-		// Not implemented
-		patientText = null;
-		providerText = null;
-		programText = null;
-		otherText = null;
 	}
 
-	/**
-	 * @return the settingsId
-	 */
+	public MessageSettings(Integer settingsId, Boolean sendToPatient,
+			Boolean sendToCenter, Boolean sendToReferenceLocation,
+			Boolean sendToManager, Boolean attachPatientId,
+			Boolean attachSampleId, Boolean attachMtb, Boolean attachRif,
+			Boolean attachOperatorId, Boolean attachLocationId,
+			Boolean attachModuleId, Boolean attachCartridgeId,
+			Boolean attachTestDate, Boolean alertOnAll, Boolean alertOnAllMtb,
+			Boolean alertOnMtbHigh, Boolean alertOnMtbMedium,
+			Boolean alertOnRif, Boolean alertOnError, String programNumber,
+			String managerNumber) {
+		super();
+		this.settingsId = settingsId;
+		this.sendToPatient = sendToPatient;
+		this.sendToCenter = sendToCenter;
+		this.sendToReferenceLocation = sendToReferenceLocation;
+		this.sendToManager = sendToManager;
+		this.attachPatientId = attachPatientId;
+		this.attachSampleId = attachSampleId;
+		this.attachMtb = attachMtb;
+		this.attachRif = attachRif;
+		this.attachOperatorId = attachOperatorId;
+		this.attachLocationId = attachLocationId;
+		this.attachModuleId = attachModuleId;
+		this.attachCartridgeId = attachCartridgeId;
+		this.attachTestDate = attachTestDate;
+		this.alertOnAll = alertOnAll;
+		this.alertOnAllMtb = alertOnAllMtb;
+		this.alertOnMtbHigh = alertOnMtbHigh;
+		this.alertOnMtbMedium = alertOnMtbMedium;
+		this.alertOnRif = alertOnRif;
+		this.alertOnError = alertOnError;
+		this.programNumber = programNumber;
+		this.managerNumber = managerNumber;
+	}
+
 	public Integer getSettingsId() {
 		return settingsId;
 	}
 
-	/**
-	 * @param settingsId
-	 *            the settingsId to set
-	 */
 	public void setSettingsId(Integer settingsId) {
 		this.settingsId = settingsId;
 	}
 
-	/**
-	 * @return the patientText
-	 */
-	public String getPatientText() {
-		return patientText;
-	}
-
-	/**
-	 * @param patientText
-	 *            the patientText to set
-	 */
-	public void setPatientText(String patientText) {
-		this.patientText = patientText;
-	}
-
-	/**
-	 * @return the providerText
-	 */
-	public String getProviderText() {
-		return providerText;
-	}
-
-	/**
-	 * @param providerText
-	 *            the providerText to set
-	 */
-	public void setProviderText(String providerText) {
-		this.providerText = providerText;
-	}
-
-	/**
-	 * @return the programText
-	 */
-	public String getProgramText() {
-		return programText;
-	}
-
-	/**
-	 * @param programText
-	 *            the programText to set
-	 */
-	public void setProgramText(String programText) {
-		this.programText = programText;
-	}
-
-	/**
-	 * @return the otherText
-	 */
-	public String getOtherText() {
-		return otherText;
-	}
-
-	/**
-	 * @param otherText
-	 *            the otherText to set
-	 */
-	public void setOtherText(String otherText) {
-		this.otherText = otherText;
-	}
-
-	/**
-	 * @return the sendToPatient
-	 */
 	public Boolean getSendToPatient() {
 		return sendToPatient;
 	}
 
-	/**
-	 * @param sendToPatient
-	 *            the sendToPatient to set
-	 */
 	public void setSendToPatient(Boolean sendToPatient) {
 		this.sendToPatient = sendToPatient;
 	}
 
-	/**
-	 * @return the sendToProvider
-	 */
-	public Boolean getSendToProvider() {
-		return sendToProvider;
+	public Boolean getSendToCenter() {
+		return sendToCenter;
 	}
 
-	/**
-	 * @param sendToProvider
-	 *            the sendToProvider to set
-	 */
-	public void setSendToProvider(Boolean sendToProvider) {
-		this.sendToProvider = sendToProvider;
+	public void setSendToCenter(Boolean sendToCenter) {
+		this.sendToCenter = sendToCenter;
 	}
 
-	/**
-	 * @return the sendToProgram
-	 */
-	public Boolean getSendToProgram() {
-		return sendToProgram;
+	public Boolean getSendToReferenceLocation() {
+		return sendToReferenceLocation;
 	}
 
-	/**
-	 * @param sendToProgram
-	 *            the sendToProgram to set
-	 */
-	public void setSendToProgram(Boolean sendToProgram) {
-		this.sendToProgram = sendToProgram;
+	public void setSendToReferenceLocation(Boolean sendToReferenceLocation) {
+		this.sendToReferenceLocation = sendToReferenceLocation;
 	}
 
-	/**
-	 * @return the sendToOther
-	 */
-	public Boolean getSendToOther() {
-		return sendToOther;
+	public Boolean getSendToManager() {
+		return sendToManager;
 	}
 
-	/**
-	 * @param sendToOther
-	 *            the sendToOther to set
-	 */
-	public void setSendToOther(Boolean sendToOther) {
-		this.sendToOther = sendToOther;
+	public void setSendToManager(Boolean sendToManager) {
+		this.sendToManager = sendToManager;
 	}
 
-	/**
-	 * @return the programNumber
-	 */
+	public Boolean getAttachPatientId() {
+		return attachPatientId;
+	}
+
+	public void setAttachPatientId(Boolean attachPatientId) {
+		this.attachPatientId = attachPatientId;
+	}
+
+	public Boolean getAttachSampleId() {
+		return attachSampleId;
+	}
+
+	public void setAttachSampleId(Boolean attachSampleId) {
+		this.attachSampleId = attachSampleId;
+	}
+
+	public Boolean getAttachMtb() {
+		return attachMtb;
+	}
+
+	public void setAttachMtb(Boolean attachMtb) {
+		this.attachMtb = attachMtb;
+	}
+
+	public Boolean getAttachRif() {
+		return attachRif;
+	}
+
+	public void setAttachRif(Boolean attachRif) {
+		this.attachRif = attachRif;
+	}
+
+	public Boolean getAttachOperatorId() {
+		return attachOperatorId;
+	}
+
+	public void setAttachOperatorId(Boolean attachOperatorId) {
+		this.attachOperatorId = attachOperatorId;
+	}
+
+	public Boolean getAttachLocationId() {
+		return attachLocationId;
+	}
+
+	public void setAttachLocationId(Boolean attachLocationId) {
+		this.attachLocationId = attachLocationId;
+	}
+
+	public Boolean getAttachModuleId() {
+		return attachModuleId;
+	}
+
+	public void setAttachModuleId(Boolean attachModuleId) {
+		this.attachModuleId = attachModuleId;
+	}
+
+	public Boolean getAttachCartridgeId() {
+		return attachCartridgeId;
+	}
+
+	public void setAttachCartridgeId(Boolean attachCartridgeId) {
+		this.attachCartridgeId = attachCartridgeId;
+	}
+
+	public Boolean getAttachTestDate() {
+		return attachTestDate;
+	}
+
+	public void setAttachTestDate(Boolean attachTestDate) {
+		this.attachTestDate = attachTestDate;
+	}
+
+	public Boolean getAlertOnAll() {
+		return alertOnAll;
+	}
+
+	public void setAlertOnAll(Boolean alertOnAll) {
+		this.alertOnAll = alertOnAll;
+	}
+
+	public Boolean getAlertOnAllMtb() {
+		return alertOnAllMtb;
+	}
+
+	public void setAlertOnAllMtb(Boolean alertOnAllMtb) {
+		this.alertOnAllMtb = alertOnAllMtb;
+	}
+
+	public Boolean getAlertOnMtbHigh() {
+		return alertOnMtbHigh;
+	}
+
+	public void setAlertOnMtbHigh(Boolean alertOnMtbHigh) {
+		this.alertOnMtbHigh = alertOnMtbHigh;
+	}
+
+	public Boolean getAlertOnMtbMedium() {
+		return alertOnMtbMedium;
+	}
+
+	public void setAlertOnMtbMedium(Boolean alertOnMtbMedium) {
+		this.alertOnMtbMedium = alertOnMtbMedium;
+	}
+
+	public Boolean getAlertOnRif() {
+		return alertOnRif;
+	}
+
+	public void setAlertOnRif(Boolean alertOnRif) {
+		this.alertOnRif = alertOnRif;
+	}
+
+	public Boolean getAlertOnError() {
+		return alertOnError;
+	}
+
+	public void setAlertOnError(Boolean alertOnError) {
+		this.alertOnError = alertOnError;
+	}
+
 	public String getProgramNumber() {
 		return programNumber;
 	}
 
-	/**
-	 * @param programNumber
-	 *            the programNumber to set
-	 */
 	public void setProgramNumber(String programNumber) {
 		this.programNumber = programNumber;
 	}
 
-	/**
-	 * @return the otherNumber
-	 */
-	public String getOtherNumber() {
-		return otherNumber;
+	public String getManagerNumber() {
+		return managerNumber;
 	}
 
-	/**
-	 * @param otherNumber
-	 *            the otherNumber to set
-	 */
-	public void setOtherNumber(String otherNumber) {
-		this.otherNumber = otherNumber;
+	public void setManagerNumber(String managerNumber) {
+		this.managerNumber = managerNumber;
 	}
 
+	@Override
+	public String toString() {
+		return settingsId + ", " + sendToPatient + ", " + sendToCenter + ", "
+				+ sendToReferenceLocation + ", " + sendToManager + ", "
+				+ attachPatientId + ", " + attachSampleId + ", " + attachMtb
+				+ ", " + attachRif + ", " + attachOperatorId + ", "
+				+ attachLocationId + ", " + attachModuleId + ", "
+				+ attachCartridgeId + ", " + attachTestDate + ", " + alertOnAll
+				+ ", " + alertOnAllMtb + ", " + alertOnMtbHigh + ", "
+				+ alertOnMtbMedium + ", " + alertOnRif + ", " + alertOnError
+				+ ", " + programNumber + ", " + managerNumber;
+	}
 }
