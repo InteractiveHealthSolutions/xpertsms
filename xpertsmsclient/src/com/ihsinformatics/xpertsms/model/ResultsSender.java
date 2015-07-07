@@ -13,7 +13,10 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +25,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.irdresearch.smstarseel.context.TarseelContext;
+import org.irdresearch.smstarseel.context.TarseelServices;
 import org.irdresearch.smstarseel.data.OutboundMessage.PeriodType;
 import org.irdresearch.smstarseel.data.OutboundMessage.Priority;
 import org.irdresearch.smstarseel.data.Project;
@@ -180,8 +184,6 @@ public class ResultsSender extends Thread {
 				response = gxAlertSender.postToGxAlert(message);
 				parseResponse(response, message);
 			} else {
-				response = httpSender.doPost(message, username, password, exportProbes);
-				parseResponse(response, message);
 			}
 		}
 		if (server.getStopped()) {
@@ -192,31 +194,37 @@ public class ResultsSender extends Thread {
 	}
 	
 	public synchronized void queueSms(XpertResultUploadMessage xpertMessage) throws ClassNotFoundException, SQLException {
-//		String dbIpAddress = XpertProperties.props.getProperty(XpertProperties.DB_IP_ADDRESS);
-//		String dbPort = XpertProperties.props.getProperty(XpertProperties.DB_PORT);
-//		String dbName = XpertProperties.props.getProperty(XpertProperties.DB_NAME);
-//		String dbUsername = XpertProperties.props.getProperty(XpertProperties.DB_USERNAME);
-//		String dbPassword = XpertProperties.props.getProperty(XpertProperties.DB_PASSWORD);
-//		String dbUrl = "jdbc:mysql://" + dbIpAddress + ":" + dbPort + "/" + dbName;
-//		String dbClass = "com.mysql.jdbc.Driver";
-//		Connection conn = null;
-//		Class.forName(dbClass);
-//		conn = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
-//		String query = xpertMessage.toSqlQuery();
-//		Statement stmt = null;
-//		stmt = conn.createStatement();
-//		stmt.executeUpdate(query);
-//		conn.close();
-		
 		/* Save in SmsTarseel */
 		String recipient = XpertProperties.getProperty(XpertProperties.SMS_ADMIN_PHONE);
-		String projectname = XpertProperties.getProperty(XpertProperties.SMS_PROJECT_NAME);
+		//		String projectname = XpertProperties.getProperty(XpertProperties.SMS_PROJECT_NAME);
 		String text = xpertMessage.toSMS(false);
-		Date duedate = new Date();
-		SMSService smsService = TarseelContext.getServices().getSmsService();
-		List<Project> projects = TarseelContext.getServices().getDeviceService().findProject(projectname);
-		smsService.createNewOutboundSms(recipient, text, duedate, Priority.HIGH, 1, PeriodType.WEEK, projects.get(0)
-		        .getProjectId(), "Sent from XpertSMS");
+		//		Date duedate = new Date();
+		//		TarseelServices services = TarseelContext.getServices();
+		//		SMSService smsService = services.getSmsService();
+		//		List<Project> projects = TarseelContext.getServices().getDeviceService().findProject(projectname);
+		//		smsService.createNewOutboundSms(recipient, text, duedate, Priority.HIGH, 1, PeriodType.WEEK, projects.get(0)
+		//		        .getProjectId(), "Sent from XpertSMS");
+		//		services.commitTransaction();
+		//		services.closeSession();
+		
+		// TODO: Remove this ugly method after SMSTarseel is fixed
+		String dbIpAddress = XpertProperties.props.getProperty(XpertProperties.DB_IP_ADDRESS);
+		String dbPort = XpertProperties.props.getProperty(XpertProperties.DB_PORT);
+		String dbName = XpertProperties.props.getProperty(XpertProperties.DB_NAME);
+		String dbUsername = XpertProperties.props.getProperty(XpertProperties.DB_USERNAME);
+		String dbPassword = XpertProperties.props.getProperty(XpertProperties.DB_PASSWORD);
+		String dbUrl = "jdbc:mysql://" + dbIpAddress + ":" + dbPort + "/" + dbName;
+		String dbClass = "com.mysql.jdbc.Driver";
+		Connection conn = null;
+		Class.forName(dbClass);
+		conn = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
+		String query = "insert into smstarseel.outboundmessage (outboundId,createdDate,description,dueDate,periodType,priority,projectId,recipient,referenceNumber,status,text,type,validityPeriod) ";
+		query += "values (0, now(), 'Sent from XpertSMS', curdate(), 'HOUR', 0, 1, '" + recipient
+		        + "', unix_timestamp(), 'PENDING', '" + text + "', 'SMS', 24)";
+		Statement stmt = null;
+		stmt = conn.createStatement();
+		stmt.executeUpdate(query);
+		conn.close();
 	}
 	
 	public synchronized void writeToCsv(String text) {

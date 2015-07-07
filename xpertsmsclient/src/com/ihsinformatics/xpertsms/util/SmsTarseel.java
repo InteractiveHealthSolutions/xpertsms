@@ -3,8 +3,8 @@
  */
 package com.ihsinformatics.xpertsms.util;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -17,6 +17,8 @@ import net.jmatrix.eproperties.EProperties;
 
 import org.irdresearch.smstarseel.context.TarseelContext;
 
+import com.ihsinformatics.xpertsms.constant.FileConstants;
+
 /**
  * @author Owais
  */
@@ -24,8 +26,9 @@ public class SmsTarseel {
 	
 	public static boolean instantiate() {
 		try {
+			String propFilePath = FileConstants.XPERT_SMS_DIR + System.getProperty("file.separator") + "smstarseel.properties";;
 			System.out.println("SMSTARSEEL: Loading properties...");
-			InputStream f = Thread.currentThread().getContextClassLoader().getResourceAsStream("smstarseel.properties");
+			File f = new File(propFilePath);
 			// Java Properties donot seem to support substitutions hence
 			// EProperties
 			// are used to accomplish the task

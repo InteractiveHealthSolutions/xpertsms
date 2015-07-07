@@ -3,7 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="res"/>
 	<classpathentry kind="src" path="test"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry exported="true" kind="lib" path="lib/json-lib-0.9.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/mysql-connector-java-5.1.13.jar"/>
 	<classpathentry kind="lib" path="lib/ezmorph-1.0.6.jar"/>
@@ -12,12 +13,10 @@
 	<classpathentry kind="lib" path="lib/antlr-2.7.7.jar"/>
 	<classpathentry kind="lib" path="lib/c3p0-0.9.1.jar"/>
 	<classpathentry kind="lib" path="lib/jsemver.jar"/>
-	<classpathentry kind="lib" path="lib/smstarseel.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-c3p0-3.6.0.Final.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-core-3.6.5.Final-mod.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-tools-3.2.3.GA.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-commons-annotations-3.2.0.Final.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.6.jar"/>
 	<classpathentry kind="lib" path="lib/fluent-hc-4.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/httpclient-4.2.1.jar"/>
@@ -42,5 +41,6 @@
 	<classpathentry kind="lib" path="lib/slf4j-api-1.6.0.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-jdk14-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.6.0.jar"/>
+	<classpathentry kind="lib" path="lib/smstarseel.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

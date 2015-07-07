@@ -17,13 +17,12 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.Set;
+
 import javax.swing.AbstractListModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -40,7 +39,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
-import net.jmatrix.eproperties.EProperties;
+
 import org.irdresearch.smstarseel.context.TarseelContext;
 import org.irdresearch.smstarseel.context.TarseelServices;
 import org.irdresearch.smstarseel.data.Project;
@@ -350,6 +349,7 @@ public class SmsDialog extends JDialog implements ActionListener {
 				}
 			}
 			catch (Exception e) {
+				e.printStackTrace();
 				JOptionPane.showMessageDialog(new JFrame(), failureMessage, "Error!", JOptionPane.ERROR_MESSAGE);
 			}
 		}

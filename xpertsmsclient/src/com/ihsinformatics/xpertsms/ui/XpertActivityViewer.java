@@ -166,7 +166,7 @@ public class XpertActivityViewer extends JFrame implements ActionListener {
 			    detailedLogCheckBox.isSelected());
 		}
 		if (exportSms) {
-			SmsTarseel.instantiate();
+//			SmsTarseel.instantiate();
 			PrintWriterUtil.updateTextPane(logTextPane,
 			    "- SMS exports to " + XpertProperties.getProperty(XpertProperties.SMS_ADMIN_PHONE), MessageType.INFO,
 			    detailedLogCheckBox.isSelected());
@@ -211,10 +211,8 @@ public class XpertActivityViewer extends JFrame implements ActionListener {
 		if (e.getSource() == startStopButton) {
 			// Toggle down is stop
 			if (startStopButton.isSelected()) {
-				startStopButton.setText("Start");
 				startServer();
 			} else {
-				startStopButton.setText("Stop");
 				exitButton.setEnabled(true);
 				stopServer();
 			}
