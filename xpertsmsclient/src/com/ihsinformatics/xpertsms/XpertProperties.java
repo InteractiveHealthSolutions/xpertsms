@@ -188,7 +188,7 @@ public final class XpertProperties {
 			props.setProperty(OPENMRS_ENCOUNTER_TYPE, "GeneXpert_Results");
 			props.setProperty(OPENMRS_CONCEPT_MAP, "");
 			props.setProperty(OPENMRS_SSL_ENCRYPTION, "NO");
-			props.setProperty(WEB_APP_STRING, "127.0.0.1:8080/xpertsmsweb/xpertsmsweb.jsp");
+			props.setProperty(WEB_APP_STRING, "127.0.0.1:8080/xpertsmsweb/xpertsmsweb.jsp"); //127.0.0.1:8080
 			props.setProperty(WEB_SSL_ENCRYPTION, "NO");
 			props.setProperty(WEB_DATA_FORMAT, "Plain text");
 			props.setProperty(WEB_AUTHENTICATION, "As header");

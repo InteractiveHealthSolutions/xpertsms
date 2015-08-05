@@ -17,6 +17,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -213,17 +215,167 @@ public class ResultsSender extends Thread {
 		String dbName = XpertProperties.props.getProperty(XpertProperties.DB_NAME);
 		String dbUsername = XpertProperties.props.getProperty(XpertProperties.DB_USERNAME);
 		String dbPassword = XpertProperties.props.getProperty(XpertProperties.DB_PASSWORD);
+		String variables = XpertProperties.props.getProperty(XpertProperties.SMS_VARIABLES);
 		String dbUrl = "jdbc:mysql://" + dbIpAddress + ":" + dbPort + "/" + dbName;
 		String dbClass = "com.mysql.jdbc.Driver";
 		Connection conn = null;
 		Class.forName(dbClass);
 		conn = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
-		String query = "insert into smstarseel.outboundmessage (outboundId,createdDate,description,dueDate,periodType,priority,projectId,recipient,referenceNumber,status,text,type,validityPeriod) ";
-		query += "values (0, now(), 'Sent from XpertSMS', curdate(), 'HOUR', 0, 1, '" + recipient
-		        + "', unix_timestamp(), 'PENDING', '" + text + "', 'SMS', 24)";
-		Statement stmt = null;
-		stmt = conn.createStatement();
-		stmt.executeUpdate(query);
+		
+		// finding the chunk size to break sms text into multiple parts
+		// with length of 140 because header has to be added which has length
+		// of nearly 20 characters
+		int textChunk = 0;
+		
+		float chunkSize = (float) Math.ceil(text.length() / 140f);
+		System.out.println(chunkSize);
+		
+		textChunk = (int) chunkSize;
+		
+		/*System.out.println(text.length());
+		System.out.println(text.length() % 140);
+		System.out.println(textChunk);*/
+		String[] temp = new String[textChunk];
+		int start = 0;
+		int end = 140;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		String date = sdf.format(new Date());
+		
+		for(int i = 0; i < textChunk; i++){
+			temp[i] = text.substring(start,end);
+			if(i < textChunk - 1){
+				end = text.length();
+			}else {
+				end += 140;
+			}
+			start += 140;
+			StringBuilder addedHeaderText = new StringBuilder(temp[i]);
+			addedHeaderText.insert(0, date + "^" + (i + 1) + "/" + textChunk + "^");
+			System.out.println(addedHeaderText);
+			
+			int j = 19;
+			if(variables.contains("assayHostTestCode;"))
+				addedHeaderText.insert(++j, "A");
+			if(variables.contains("assay;"))
+				addedHeaderText.insert(++j, "B");
+			if(variables.contains("assayVersion;"))
+				addedHeaderText.insert(++j, "C");
+			if(variables.contains("sampleId"))
+				addedHeaderText.insert(++j, "D");
+			if(variables.contains("patientId"))
+				addedHeaderText.insert(++j, "E");
+			if(variables.contains("user;"))
+				addedHeaderText.insert(++j, "F");
+			if(variables.contains("testStartedOn;"))
+				addedHeaderText.insert(++j, "G");
+			if(variables.contains("testEndedOn;"))
+				addedHeaderText.insert(++j, "H");
+			if(variables.contains("messageSentOn;"))
+				addedHeaderText.insert(++j, "I");
+			if(variables.contains("reagentLotId;"))
+				addedHeaderText.insert(++j, "J");
+			if(variables.contains("cartridgeExpirationDate;"))
+				addedHeaderText.insert(++j, "K");
+			if(variables.contains("cartridgeSerial;"))
+				addedHeaderText.insert(++j, "L");
+			if(variables.contains("moduleSerial;"))
+				addedHeaderText.insert(++j, "M");
+			if(variables.contains("instrumentSerial;"))
+				addedHeaderText.insert(++j, "N");
+			if(variables.contains("softwareVersion;"))
+				addedHeaderText.insert(++j, "O");
+			if(variables.contains("resultMtb"))
+				addedHeaderText.insert(++j, "P");
+			if(variables.contains("resultRif;"))
+				addedHeaderText.insert(++j, "Q");
+			if(variables.contains("resultText;"))
+				addedHeaderText.insert(++j, "R");
+			if(variables.contains("deviceSerial;"))
+				addedHeaderText.insert(++j, "S");
+			if(variables.contains("hostId"))
+				addedHeaderText.insert(++j, "T");
+			if(variables.contains("systemName"))
+				addedHeaderText.insert(++j, "U");
+			if(variables.contains("computerName"))
+				addedHeaderText.insert(++j, "V");
+			if(variables.contains("notes;"))
+				addedHeaderText.insert(++j, "W");
+			if(variables.contains("errorCode"))
+				addedHeaderText.insert(++j, "X");
+			if(variables.contains("errorNotes;"))
+				addedHeaderText.insert(++j, "Y");
+			if(variables.contains("externalTestId;"))
+				addedHeaderText.insert(++j, "Z");
+			if(variables.contains("probeA;"))
+				addedHeaderText.insert(++j, "a");
+			if(variables.contains("probeB;"))
+				addedHeaderText.insert(++j, "b");
+			if(variables.contains("probeC;"))
+				addedHeaderText.insert(++j, "c");
+			if(variables.contains("probeD;"))
+				addedHeaderText.insert(++j, "d");
+			if(variables.contains("probeE;"))
+				addedHeaderText.insert(++j, "e");
+			if(variables.contains("probeSpc"))
+				addedHeaderText.insert(++j, "f");
+			if(variables.contains("qc1;"))
+				addedHeaderText.insert(++j, "g");
+			if(variables.contains("qc2;"))
+				addedHeaderText.insert(++j, "h");
+			if(variables.contains("probeACt;"))
+				addedHeaderText.insert(++j, "i");
+			if(variables.contains("probeBCt"))
+				addedHeaderText.insert(++j, "j");
+			if(variables.contains("probeCCt;"))
+				addedHeaderText.insert(++j, "k");
+			if(variables.contains("probeDCt;"))
+				addedHeaderText.insert(++j, "l");
+			if(variables.contains("probeECt;"))
+				addedHeaderText.insert(++j, "m");
+			if(variables.contains("probeSpcCt"))
+				addedHeaderText.insert(++j, "n");
+			if(variables.contains("qc1Ct;"))
+				addedHeaderText.insert(++j, "o");
+			if(variables.contains("qc2Ct;"))
+				addedHeaderText.insert(++j, "p");
+			if(variables.contains("probeAEndpt;"))
+				addedHeaderText.insert(++j, "q");
+			if(variables.contains("probeBEndpt"))
+				addedHeaderText.insert(++j, "r");
+			if(variables.contains("probeCEndpt;"))
+				addedHeaderText.insert(++j, "s");
+			if(variables.contains("probeDEndpt;"))
+				addedHeaderText.insert(++j, "t");
+			if(variables.contains("probeEEndpt;"))
+				addedHeaderText.insert(++j, "u");
+			if(variables.contains("probeSpcEndpt"))
+				addedHeaderText.insert(++j, "v");
+			if(variables.contains("qc1Endpt;"))
+				addedHeaderText.insert(++j, "w");
+			if(variables.contains("qc2Endpt;"))
+				addedHeaderText.insert(++j, "x");
+			if(variables.contains("validatedLab;"))
+				addedHeaderText.insert(++j, "y");
+			if(variables.contains("validatedLocal"))
+				addedHeaderText.insert(++j, "z");
+			
+			
+			
+			
+			String query = "insert into smstarseel.outboundmessage (outboundId,createdDate,description,dueDate,periodType,priority,projectId,recipient,referenceNumber,status,text,type,validityPeriod) ";
+			query += "values (0, now(), 'Sent from XpertSMS', curdate(), 'HOUR', 0, 1, '" + recipient
+			        + "', unix_timestamp(), 'PENDING', '" + addedHeaderText + "', 'SMS', 24)";
+			try{
+				Thread.sleep(2000);
+			} catch ( Exception e ) {
+				
+			}
+			Statement stmt = null;
+			stmt = conn.createStatement();
+			stmt.executeUpdate(query);
+		}		
+		
+		
 		conn.close();
 	}
 	
