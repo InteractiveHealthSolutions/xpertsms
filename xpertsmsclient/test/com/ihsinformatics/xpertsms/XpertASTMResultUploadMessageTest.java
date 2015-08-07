@@ -58,7 +58,7 @@ public class XpertASTMResultUploadMessageTest {
 		sampleMessage.setSystemName("GeneXpert PC");
 		sampleMessage.setComputerName("CepheidJRJRFQ1");
 		sampleMessage.setNotes("Just XDR-TB");
-		sampleMessage.setErrorCode("5002");
+		sampleMessage.setErrorCode("6002");
 		sampleMessage.setError(true);
 		sampleMessage.setErrorNotes("Post-run analysis error");
 		sampleMessage.setMessageId("");

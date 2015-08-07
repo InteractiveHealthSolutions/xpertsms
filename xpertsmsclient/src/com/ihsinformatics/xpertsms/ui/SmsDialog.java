@@ -273,6 +273,7 @@ public class SmsDialog extends JDialog implements ActionListener {
 		String adminPhone = XpertProperties.getProperty(XpertProperties.SMS_ADMIN_PHONE);
 		String dateTimeFormat = XpertProperties.getProperty(XpertProperties.SMS_DATE_FORMAT);
 		String variables = XpertProperties.getProperty(XpertProperties.SMS_VARIABLES);
+		
 		if (!"".equals(projectName)) {
 			projectNameTextField.setText(projectName);
 		}
@@ -282,6 +283,10 @@ public class SmsDialog extends JDialog implements ActionListener {
 		if (!"".equals(dateTimeFormat)) {
 			dateTimeFormatComboBox.setSelectedItem(dateTimeFormat);
 		}
+		/*if(!variables.contains("sampleId") || !variables.contains("patientId") || !variables.contains("user;") || !variables.contains("testEndedOn;") || variables.contains("resultText;") || !variables.contains("errorCode;")){
+			
+		}*/
+		
 		if (!"".equals(variables)) {
 			// Parse the list of variables
 			String[] split = variables.split(";");
@@ -313,7 +318,7 @@ public class SmsDialog extends JDialog implements ActionListener {
 			valid = false;
 		}
 		if (variablesList.getSelectedIndices().length == 0) {
-			error.append("At least one variable must be selected from the list.\n");
+			error.append("Select atleast one variable to display.\n");
 			valid = false;
 		}
 		if (!RegexUtil.isContactNumber(SwingUtil.get(adminPhoneTextField))) {
@@ -361,7 +366,26 @@ public class SmsDialog extends JDialog implements ActionListener {
 			properties.put(XpertProperties.SMS_PROJECT_NAME, SwingUtil.get(projectNameTextField));
 			properties.put(XpertProperties.SMS_ADMIN_PHONE, SwingUtil.get(adminPhoneTextField));
 			properties.put(XpertProperties.SMS_DATE_FORMAT, SwingUtil.get(dateTimeFormatComboBox));
-			properties.put(XpertProperties.SMS_VARIABLES, SwingUtil.concatenatedItems(variablesList, ';'));
+			String concatVariables = SwingUtil.concatenatedItems(variablesList, ';');
+			if(!concatVariables.contains("sampleId")){
+				concatVariables += "sampleId;";
+			}
+			if(!concatVariables.contains("patientId")){
+				concatVariables += "patientId;";
+			}
+			if(!concatVariables.contains("user")){
+				concatVariables += "user;";
+			}
+			if(!concatVariables.contains("testEndedOn")){
+				concatVariables += "testEndedOn;";
+			}
+			if(!concatVariables.contains("resultText")){
+				concatVariables += "resultText;";
+			}
+			if(!concatVariables.contains("errorCode")){
+				concatVariables += "errorCode;";
+			}
+			properties.put(XpertProperties.SMS_VARIABLES, concatVariables);
 			boolean saved = XpertProperties.writeProperties(properties);
 			return saved;
 		}

@@ -30,6 +30,7 @@ import org.w3c.dom.Text;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.ihsinformatics.xpertsms.XpertProperties;
 import com.ihsinformatics.xpertsms.model.XpertResultUploadMessage;
 
 /**
@@ -1235,17 +1236,20 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 	@Override
 	public String toPostParams(boolean exportProbes, String username, String password) {
 		String postParams = "";
+		String variables = XpertProperties.getProperty(XpertProperties.SMS_VARIABLES);
 		postParams += "type=astmresult";
 		if (username != null)
 			postParams += "&username=" + username;
 		if (password != null)
 			postParams += "&password=" + password;
-		if (patientId != null)
+		if (variables.contains("patientId") && patientId != null)
 			postParams += "&pid=" + patientId;
-		if (sampleId != null)
+		if (variables.contains("sampleId") && sampleId != null)
 			postParams += "&sampleid=" + sampleId.replaceAll("\\(", "").replaceAll("\\)", "");
-		postParams += "&mtb=" + mtbResult;
-		postParams += "&rif=" + rifResult;
+		if (variables.contains("resultMtb") && mtbResult != null)
+			postParams += "&mtb=" + mtbResult;
+		if (variables.contains("resultRif") && rifResult != null)
+			postParams += "&rif=" + rifResult;
 		if (isFinal() != null && isFinal())
 			postParams += "&final=yes";
 		if (isPending() != null && isPending())
@@ -1255,180 +1259,336 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 			postParams += "&errorcode=" + errorCode;
 			postParams += "&errornotes=" + errorNotes.replaceAll("([&+!@#$%^&*()\\/<>\"\'=,.])", " ");
 		}
-		if (notes != null)
+		if (variables.contains("notes;") && notes != null)
 			postParams += "&notes=" + notes.replaceAll("([&+!@#$%^&*()\\/<>\"\'=,.])", " ");
 		if (isCorrection() != null && isCorrection())
 			postParams += "&correction=yes";
-		postParams += "&enddate=" + testEndDate;
-		postParams += "&operatorid=" + operatorId;// e.g Karachi Xray
-		postParams += "&pcid=" + pcId;
-		postParams += "&receiverid=" + receiverId;
-		postParams += "&instserial=" + instrumentSerial;
-		postParams += "&moduleid=" + moduleId;
-		postParams += "&cartrigeid=" + cartridgeId;
-		postParams += "&reagentlotid=" + reagentLotId;
-		postParams += "&systemid=" + systemId;
-		postParams += "&expdate=" + expDate;
-		
-		if (exportProbes) {
+		if (variables.contains("testEndedOn") && testEndDate != null)
+			postParams += "&enddate=" + testEndDate;
+		if (variables.contains("user") && operatorId != null)
+			postParams += "&operatorid=" + operatorId;// e.g Karachi Xray
+		if (variables.contains("deviceSerial;") && pcId != null)
+			postParams += "&pcid=" + pcId;
+		if (variables.contains("hostId") && receiverId != null)
+			postParams += "&receiverid=" + receiverId;
+		if (variables.contains("instrumentSerial") && instrumentSerial != null)
+			postParams += "&instserial=" + instrumentSerial;
+		if (variables.contains("moduleSerial") && moduleId != null)
+			postParams += "&moduleid=" + moduleId;
+		if (variables.contains("cartridgeSerial") && cartridgeId != null)
+			postParams += "&cartrigeid=" + cartridgeId;
+		if (variables.contains("reagentLotId") && reagentLotId != null)
+			postParams += "&reagentlotid=" + reagentLotId;
+		if (variables.contains("systemId") && systemId != null)
+			postParams += "&systemid=" + systemId;
+		if (variables.contains("cartridgeExpirationDate") && expDate != null)
+			postParams += "&expdate=" + expDate;		
+		if(variables.contains("probeA;"))
 			postParams += "&probea=" + probeResultA;
+		if(variables.contains("probeB;"))
 			postParams += "&probeb=" + probeResultB;
+		if(variables.contains("probeC;"))
 			postParams += "&probec=" + probeResultC;
+		if(variables.contains("probeD;"))
 			postParams += "&probed=" + probeResultD;
+		if(variables.contains("probeE;"))
 			postParams += "&probee=" + probeResultE;
+		if(variables.contains("probeSpc"))
 			postParams += "&probespc=" + probeResultSpc;
+		if(variables.contains("probeSpc"))
 			postParams += "&probeact=" + probeCtA;
+		if(variables.contains("probeSpc"))
 			postParams += "&probebct=" + probeCtB;
+		if(variables.contains("probeSpc"))
 			postParams += "&probecct=" + probeCtC;
+		if(variables.contains("probeSpc"))
 			postParams += "&probedct=" + probeCtD;
+		if(variables.contains("probeSpc"))
 			postParams += "&probeect=" + probeCtE;
+		if(variables.contains("probeSpc"))
 			postParams += "&probespcct=" + probeCtSpc;
+		if(variables.contains("probeSpc"))
 			postParams += "&probeaendpt=" + probeEndptA;
+		if(variables.contains("probeSpc"))
 			postParams += "&probebendpt=" + probeEndptB;
+		if(variables.contains("probeSpc"))
 			postParams += "&probecendpt=" + probeEndptC;
+		if(variables.contains("probeSpc"))
 			postParams += "&probedendpt=" + probeEndptD;
+		if(variables.contains("probeSpc"))
 			postParams += "&probeeendpt=" + probeEndptE;
+		if(variables.contains("probeSpc"))
 			postParams += "&probespcendpt=" + probeEndptSpc;
-		}
+
 		return postParams + "&";
 	}
 	
+	// modified method to that adds only the variables selected
+	// previously all were added regardless of the selection
 	@Override
-	public String toSMS(boolean exportProbes) {
+	public String toSMS(boolean exportProbes){
 		StringBuilder smsText = new StringBuilder();
-		smsText.append(replaceNull(patientId) + "^");
-		smsText.append(replaceNull(sampleId) + "^");
-		smsText.append(replaceNull(mtbResult) + "^");
-		smsText.append(replaceNull(rifResult) + "^");
-		smsText.append(replaceNull(systemId) + "^");
-		smsText.append(replaceNull(pcId) + "^");
-		smsText.append(replaceNull(receiverId) + "^");
-		smsText.append(replaceNull(operatorId) + "^");
-		smsText.append(replaceNull(instrumentSerial) + "^");
-		smsText.append(replaceNull(moduleId) + "^");
-		smsText.append(replaceNull(cartridgeId) + "^");
-		smsText.append(replaceNull(reagentLotId) + "^");
-		smsText.append(replaceNull(testEndDate) + "^");
-		if (isFinal() != null && isFinal())
-			smsText.append("yes" + "^");
-		else
-			smsText.append("no" + "^");
-		if (isPending() != null && isPending())
-			smsText.append("yes" + "^");
-		else
-			smsText.append("no" + "^");
-		if (isError() != null && isError())
-			smsText.append("yes" + "^" + errorCode + "^" + errorNotes + "^");
-		else
-			smsText.append("no" + "^");
-		if (isCorrection() != null && isCorrection())
-			smsText.append("yes" + "^");
-		else
-			smsText.append("no" + "^");
-		smsText.append(notes);
-		if (exportProbes) {
-			smsText.append("^");
+		String variables = XpertProperties.getProperty(XpertProperties.SMS_VARIABLES);
+		if(variables.contains("assayHostTestCode;"))
+			smsText.append(replaceNull(universalTestId) + "^");
+		if(variables.contains("assay;"))
+			smsText.append(replaceNull(systemDefinedTestName) + "^");
+		if(variables.contains("assayVersion;"))
+			smsText.append(replaceNull(systemDefinedTestVersion) + "^");
+		if(variables.contains("sampleId"))
+			smsText.append(replaceNull(sampleId) + "^");
+		if(variables.contains("patientId"))
+			smsText.append(replaceNull(patientId) + "^");
+		if(variables.contains("user;"))
+			smsText.append(replaceNull(operatorId) + "^");
+		if(variables.contains("testStartedOn;"))
+			smsText.append(replaceNull(testStartDate) + "^");
+		if(variables.contains("testEndedOn;"))
+			smsText.append(replaceNull(testEndDate) + "^");
+		if(variables.contains("messageSentOn;"))
+			smsText.append(replaceNull(messageDateTime) + "^");
+		if(variables.contains("reagentLotId;"))
+			smsText.append(replaceNull(reagentLotId) + "^");
+		if(variables.contains("cartridgeExpirationDate;"))
+			smsText.append(replaceNull(expDate) + "^");
+		if(variables.contains("cartridgeSerial;"))
+			smsText.append(replaceNull(cartridgeId) + "^");
+		if(variables.contains("moduleSerial;"))
+			smsText.append(replaceNull(moduleId) + "^");
+		if(variables.contains("instrumentSerial;"))
+			smsText.append(replaceNull(instrumentSerial) + "^");
+		if(variables.contains("softwareVersion;"))
+			smsText.append(replaceNull(softwareVersion) + "^");
+		if(variables.contains("resultMtb"))
+			smsText.append(replaceNull(mtbResult) + "^");
+		if(variables.contains("resultRif;"))
+			smsText.append(replaceNull(rifResult) + "^");
+		if(variables.contains("resultText;"))
+			smsText.append(replaceNull(mtbResult + "|" + rifResult) + "^");
+		if(variables.contains("deviceSerial;"))
+			smsText.append(replaceNull(pcId) + "^");
+		if(variables.contains("hostId"))
+			smsText.append(replaceNull(receiverId) + "^");
+		if(variables.contains("systemName"))
+			smsText.append(replaceNull(computerName) + "^");
+		if(variables.contains("computerName"))
+			smsText.append(replaceNull(computerName) + "^");
+		if(variables.contains("notes;"))
+			smsText.append(replaceNull(notes) + "^");
+		if(variables.contains("errorCode"))
+			smsText.append(replaceNull(errorCode) + "^");
+		if(variables.contains("errorNotes;"))
+			smsText.append(replaceNull(errorNotes) + "^");
+		if(variables.contains("externalTestId;"))
+			smsText.append(replaceNull(sampleId) + "^");
+		if(variables.contains("probeA;"))
 			smsText.append(replaceNull(probeResultA) + "^");
+		if(variables.contains("probeB;"))
 			smsText.append(replaceNull(probeResultB) + "^");
+		if(variables.contains("probeC;"))
 			smsText.append(replaceNull(probeResultC) + "^");
+		if(variables.contains("probeD;"))
 			smsText.append(replaceNull(probeResultD) + "^");
+		if(variables.contains("probeE;"))
 			smsText.append(replaceNull(probeResultE) + "^");
+		if(variables.contains("probeSpc"))
 			smsText.append(replaceNull(probeResultSpc) + "^");
-			
+		if(variables.contains("qc1;"))
+			smsText.append(replaceNull(qc1) + "^");
+		if(variables.contains("qc2;"))
+			smsText.append(replaceNull(qc2) + "^");
+		if(variables.contains("probeACt;"))
 			smsText.append(replaceNull(probeCtA) + "^");
+		if(variables.contains("probeBCt"))
 			smsText.append(replaceNull(probeCtB) + "^");
+		if(variables.contains("probeCCt;"))
 			smsText.append(replaceNull(probeCtC) + "^");
+		if(variables.contains("probeDCt;"))
 			smsText.append(replaceNull(probeCtD) + "^");
+		if(variables.contains("probeECt;"))
 			smsText.append(replaceNull(probeCtE) + "^");
+		if(variables.contains("probeSpcCt"))
 			smsText.append(replaceNull(probeCtSpc) + "^");
-			
+		if(variables.contains("qc1Ct;"))
+			smsText.append(replaceNull(qc1Ct) + "^");
+		if(variables.contains("qc2Ct;"))
+			smsText.append(replaceNull(qc2Ct) + "^");
+		if(variables.contains("probeAEndpt;"))
 			smsText.append(replaceNull(probeEndptA) + "^");
+		if(variables.contains("probeBEndpt"))
 			smsText.append(replaceNull(probeEndptB) + "^");
+		if(variables.contains("probeCEndpt;"))
 			smsText.append(replaceNull(probeEndptC) + "^");
+		if(variables.contains("probeDEndpt;"))
 			smsText.append(replaceNull(probeEndptD) + "^");
+		if(variables.contains("probeEEndpt;"))
 			smsText.append(replaceNull(probeEndptE) + "^");
-			smsText.append(replaceNull(probeEndptSpc));
-		}
+		if(variables.contains("probeSpcEndpt"))
+			smsText.append(replaceNull(probeEndptSpc) + "^");
+		if(variables.contains("qc1Endpt;"))
+			smsText.append(replaceNull(qc1Endpt) + "^");
+		if(variables.contains("qc2Endpt;"))
+			smsText.append(replaceNull(qc2Endpt) + "^");
+		
+		smsText.replace(smsText.length() - 1, smsText.length(), "");
 		return smsText.toString();
 	}
 	
+	
+	
+	//updated the method to include only the variables selected
 	@Override
 	public JSONObject toJson() {
 		JSONObject jsonObj = new JSONObject();
-		jsonObj.put("assayHostTestCode", universalTestId);
-		jsonObj.put("assay", systemDefinedTestName);
-		jsonObj.put("assayVersion", systemDefinedTestVersion);
-		jsonObj.put("sampleId", sampleId);
-		jsonObj.put("patientId", patientId);
-		jsonObj.put("user", operatorId);
-		jsonObj.put("testStartedOn", testStartDate);
-		jsonObj.put("testEndedOn", testEndDate);
-		jsonObj.put("messageSentOn", messageDateTime);
-		jsonObj.put("reagentLotId", reagentLotId);
-		jsonObj.put("cartridgeExpirationDate", expDate);
-		jsonObj.put("cartridgeSerial", cartridgeId);
-		jsonObj.put("moduleSerial", moduleId);
-		jsonObj.put("instrumentSerial", instrumentSerial);
-		jsonObj.put("softwareVersion", softwareVersion);
-		jsonObj.put("resultMtb", mtbResult);
-		jsonObj.put("resultRif", rifResult);
-		jsonObj.put("resultText", mtbResult + "|" + rifResult);
-		jsonObj.put("deviceSerial", pcId);
-		jsonObj.put("hostId", receiverId);
-		jsonObj.put("systemName", computerName);
-		jsonObj.put("computerName", computerName);
-		jsonObj.put("errorCode", errorCode);
-		jsonObj.put("errorNotes", errorNotes);
-		jsonObj.put("externalTestId", sampleId);
-		jsonObj.put("notes", notes);
-		if (!"".equals(probeResultA) && probeResultA != null)
-			jsonObj.put("probeA", probeResultA);
-		if (!"".equals(probeResultB) && probeResultB != null)
-			jsonObj.put("probeB", probeResultB);
-		if (!"".equals(probeResultC) && probeResultC != null)
-			jsonObj.put("probeC", probeResultC);
-		if (!"".equals(probeResultD) && probeResultD != null)
-			jsonObj.put("probeD", probeResultD);
-		if (!"".equals(probeResultE) && probeResultE != null)
-			jsonObj.put("probeE", probeResultE);
-		if (!"".equals(probeResultSpc) && probeResultSpc != null)
-			jsonObj.put("probeSpc", probeResultSpc);
-		if (!"".equals(probeCtA) && probeCtA != null)
-			jsonObj.put("probeACt", Double.parseDouble(probeCtA));
-		if (!"".equals(probeCtB) && probeCtB != null)
-			jsonObj.put("probeBCt", Double.parseDouble(probeCtB));
-		if (!"".equals(probeCtC) && probeCtC != null)
-			jsonObj.put("probeCCt", Double.parseDouble(probeCtC));
-		if (!"".equals(probeCtD) && probeCtD != null)
-			jsonObj.put("probeDCt", Double.parseDouble(probeCtD));
-		if (!"".equals(probeCtE) && probeCtE != null)
-			jsonObj.put("probeECt", Double.parseDouble(probeCtE));
-		if (!"".equals(probeCtSpc) && probeCtSpc != null)
-			jsonObj.put("probeSpcCt", Double.parseDouble(probeCtSpc));
-		if (!"".equals(probeEndptA) && probeEndptA != null)
-			jsonObj.put("probeAEndpt", Double.parseDouble(probeEndptA));
-		if (!"".equals(probeEndptB) && probeEndptB != null)
-			jsonObj.put("probeBEndpt", Double.parseDouble(probeEndptB));
-		if (!"".equals(probeEndptC) && probeEndptC != null)
-			jsonObj.put("probeCEndpt", Double.parseDouble(probeEndptC));
-		if (!"".equals(probeEndptD) && probeEndptD != null)
-			jsonObj.put("probeDEndpt", Double.parseDouble(probeEndptD));
-		if (!"".equals(probeEndptE) && probeEndptE != null)
-			jsonObj.put("probeEEndpt", Double.parseDouble(probeEndptE));
-		if (!"".equals(probeEndptSpc) && probeEndptSpc != null)
-			jsonObj.put("probeSpcEndpt", Double.parseDouble(probeEndptSpc));
-		if (!"".equals(qc1) && qc1 != null)
-			jsonObj.put("qc1", qc1);
-		if (!"".equals(qc2) && qc2 != null)
-			jsonObj.put("qc2", qc2);
-		if (!"".equals(qc1Ct) && qc1Ct != null)
-			jsonObj.put("qc1Ct", Float.parseFloat(qc1Ct));
-		if (!"".equals(qc2Ct) && qc2Ct != null)
-			jsonObj.put("qc2Ct", Float.parseFloat(qc2Ct));
-		if (!"".equals(qc1Endpt) && qc1Endpt != null)
-			jsonObj.put("qc1Endpt", Float.parseFloat(qc1Endpt));
-		if (!"".equals(qc2Endpt) && qc2Endpt != null)
-			jsonObj.put("qc2Endpt", Float.parseFloat(qc2Endpt));
+		String variables = XpertProperties.getProperty(XpertProperties.SMS_VARIABLES);
+		if(variables.contains("assayHostTestCode;"))
+			jsonObj.put("assayHostTestCode", universalTestId);
+		if(variables.contains("assay;"))
+			jsonObj.put("assay", systemDefinedTestName);
+		if(variables.contains("assayVersion;"))
+			jsonObj.put("assayVersion", systemDefinedTestVersion);
+		if(variables.contains("sampleId"))
+			jsonObj.put("sampleId", sampleId);
+		if(variables.contains("patientId"))
+			jsonObj.put("patientId", patientId);
+		if(variables.contains("user;"))
+			jsonObj.put("user", operatorId);
+		if(variables.contains("testStartedOn;"))
+			jsonObj.put("testStartedOn", testStartDate);
+		if(variables.contains("testEndedOn;"))
+			jsonObj.put("testEndedOn", testEndDate);
+		if(variables.contains("messageSentOn;"))
+			jsonObj.put("messageSentOn", messageDateTime);
+		if(variables.contains("reagentLotId;"))
+			jsonObj.put("reagentLotId", reagentLotId);
+		if(variables.contains("cartridgeExpirationDate;"))
+			jsonObj.put("cartridgeExpirationDate", expDate);
+		if(variables.contains("cartridgeSerial;"))
+			jsonObj.put("cartridgeSerial", cartridgeId);
+		if(variables.contains("moduleSerial;"))
+			jsonObj.put("moduleSerial", moduleId);
+		if(variables.contains("instrumentSerial;"))
+			jsonObj.put("instrumentSerial", instrumentSerial);
+		if(variables.contains("softwareVersion;"))
+			jsonObj.put("softwareVersion", softwareVersion);
+		if(variables.contains("resultMtb"))
+			jsonObj.put("resultMtb", mtbResult);
+		if(variables.contains("resultRif;"))
+			jsonObj.put("resultRif", rifResult);
+		if(variables.contains("resultText;"))
+			jsonObj.put("resultText", mtbResult + "|" + rifResult);
+		if(variables.contains("deviceSerial;"))
+			jsonObj.put("deviceSerial", pcId);
+		if(variables.contains("hostId"))
+			jsonObj.put("hostId", receiverId);
+		if(variables.contains("systemName"))
+			jsonObj.put("systemName", computerName);
+		if(variables.contains("computerName"))
+			jsonObj.put("computerName", computerName);
+		if(variables.contains("notes;"))
+			jsonObj.put("notes", notes);
+		if(variables.contains("errorCode"))
+			jsonObj.put("errorCode", errorCode);
+		if(variables.contains("errorNotes;"))
+			jsonObj.put("errorNotes", errorNotes);
+		if(variables.contains("externalTestId;"))
+			jsonObj.put("externalTestId", sampleId);
+		if(variables.contains("probeA;")){
+			if (!"".equals(probeResultA) && probeResultA != null)
+				jsonObj.put("probeA", probeResultA);
+		}
+		if(variables.contains("probeB;")){
+			if (!"".equals(probeResultB) && probeResultB != null)
+				jsonObj.put("probeB", probeResultB);
+		}
+		if(variables.contains("probeC;")){
+			if (!"".equals(probeResultC) && probeResultC != null)
+				jsonObj.put("probeC", probeResultC);
+		}
+		if(variables.contains("probeD;")){
+			if (!"".equals(probeResultD) && probeResultD != null)
+				jsonObj.put("probeD", probeResultD);
+		}
+		if(variables.contains("probeE;")){
+			if (!"".equals(probeResultE) && probeResultE != null)
+				jsonObj.put("probeE", probeResultE);
+		}
+		if(variables.contains("probeSpc")){
+			if (!"".equals(probeResultSpc) && probeResultSpc != null)
+				jsonObj.put("probeSpc", probeResultSpc);
+		}
+		if(variables.contains("qc1;")){
+			if (!"".equals(qc1Ct) && qc1Ct != null)
+				jsonObj.put("qc1Ct", Float.parseFloat(qc1Ct));
+		}
+		if(variables.contains("qc2;")){
+			if (!"".equals(qc2Ct) && qc2Ct != null)
+				jsonObj.put("qc2Ct", Float.parseFloat(qc2Ct));
+		}
+		if(variables.contains("probeACt;")){
+			if (!"".equals(probeCtA) && probeCtA != null)
+				jsonObj.put("probeACt", Double.parseDouble(probeCtA));
+		}
+		if(variables.contains("probeBCt")){
+			if (!"".equals(probeCtB) && probeCtB != null)
+				jsonObj.put("probeBCt", Double.parseDouble(probeCtB));
+		}
+		if(variables.contains("probeCCt;")){
+			if (!"".equals(probeCtC) && probeCtC != null)
+				jsonObj.put("probeCCt", Double.parseDouble(probeCtC));
+		}
+		if(variables.contains("probeDCt;")){
+			if (!"".equals(probeCtD) && probeCtD != null)
+				jsonObj.put("probeDCt", Double.parseDouble(probeCtD));
+		}
+		if(variables.contains("probeECt;")){
+			if (!"".equals(probeCtE) && probeCtE != null)
+				jsonObj.put("probeECt", Double.parseDouble(probeCtE));
+		}
+		if(variables.contains("probeSpcCt")){
+			if (!"".equals(probeCtSpc) && probeCtSpc != null)
+				jsonObj.put("probeSpcCt", Double.parseDouble(probeCtSpc));
+		}
+		if(variables.contains("qc1Ct;")){
+			if (!"".equals(qc1) && qc1 != null)
+				jsonObj.put("qc1", qc1);
+		}
+		if(variables.contains("qc2Ct;")){
+			if (!"".equals(qc2) && qc2 != null)
+				jsonObj.put("qc2", qc2);
+		}
+		if(variables.contains("probeAEndpt;")){
+			if (!"".equals(probeEndptA) && probeEndptA != null)
+				jsonObj.put("probeAEndpt", Double.parseDouble(probeEndptA));
+		}
+		if(variables.contains("probeBEndpt")){
+			if (!"".equals(probeEndptB) && probeEndptB != null)
+				jsonObj.put("probeBEndpt", Double.parseDouble(probeEndptB));
+		}
+		if(variables.contains("probeCEndpt;")){
+			if (!"".equals(probeEndptC) && probeEndptC != null)
+				jsonObj.put("probeCEndpt", Double.parseDouble(probeEndptC));
+		}
+		if(variables.contains("probeDEndpt;")){
+			if (!"".equals(probeEndptD) && probeEndptD != null)
+				jsonObj.put("probeDEndpt", Double.parseDouble(probeEndptD));
+		}
+		if(variables.contains("probeEEndpt;")){
+			if (!"".equals(probeEndptE) && probeEndptE != null)
+				jsonObj.put("probeEEndpt", Double.parseDouble(probeEndptE));
+		}
+		if(variables.contains("probeSpcEndpt")){
+			if (!"".equals(probeEndptSpc) && probeEndptSpc != null)
+				jsonObj.put("probeSpcEndpt", Double.parseDouble(probeEndptSpc));
+		}
+		if(variables.contains("qc1Endpt;")){
+			if (!"".equals(qc1Endpt) && qc1Endpt != null)
+				jsonObj.put("qc1Endpt", Float.parseFloat(qc1Endpt));
+		}
+		if(variables.contains("qc2Endpt;")){
+			if (!"".equals(qc2Endpt) && qc2Endpt != null)
+				jsonObj.put("qc2Endpt", Float.parseFloat(qc2Endpt));
+		}
 		return jsonObj;
 	}
 	
