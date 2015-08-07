@@ -182,7 +182,7 @@ public class CsvDialog extends JDialog implements ActionListener {
 			        "errorNotes", "externalTestId", "probeA", "probeB", "probeC", "probeD", "probeE", "probeSpc", "qc1",
 			        "qc2", "probeACt", "probeBCt", "probeCCt", "probeDCt", "probeECt", "probeSpcCt", "qc1Ct", "qc2Ct",
 			        "probeAEndpt", "probeBEndpt", "probeCEndpt", "probeDEndpt", "probeEEndpt", "probeSpcEndpt", "qc1Endpt",
-			        "qc2Endpt", "validatedLab", "validatedLocal" };
+			        "qc2Endpt" };
 			
 			public int getSize() {
 				return values.length;

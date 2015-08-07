@@ -1429,7 +1429,7 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 			smsText.append(replaceNull(qc1Endpt) + "^");
 		if(variables.contains("qc2Endpt;"))
 			smsText.append(replaceNull(qc2Endpt) + "^");
-		
+
 		smsText.replace(smsText.length() - 1, smsText.length(), "");
 		return smsText.toString();
 	}
