@@ -63,7 +63,7 @@ public class ResultsSenderTest extends ResultsSender {
 		sampleMessage.setProbeResultD("Result D");
 		sampleMessage.setProbeResultE("Result E");
 		XpertProperties.readProperties();
-		String expectedOutput = "^1/1^DEFHRXabcde^101130800001-9^TB Patient^Safwan^2015-05-23^MTB DETECTED|Rif^6002^Result A^Result B^Result C^Result D^Result E";
+		String expectedOutput = "^DEFHRXabcde^1/1^101130800001-9^TB Patient^Safwan^2015-05-23^MTB DETECTED|Rif^6002^Result A^Result B^Result C^Result D^Result E";
 		String text = sampleMessage.toSMS(true);
 		String characterHeader = result.addingCharacters(text);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
@@ -94,8 +94,8 @@ public class ResultsSenderTest extends ResultsSender {
 		sampleMessage.setProbeCtE("probeCtE");
 		XpertProperties.readProperties();
 		ArrayList<String> expectedOutput = new ArrayList<String>();
-		expectedOutput.add("^1/2^DEFHRXabcde^101130800001-9^TB Patient^Safwan^2015-05-23^MTB DETECTED|Rif^6002^Result A^Result B^Result C^Result D^Result E");
-		expectedOutput.add("^2/2^ijklm^probeCtA^probeCtB^probeCtC^probeCtD^probeCtE");
+		expectedOutput.add("^DEFHRXabcdeij^1/2^101130800001-9^TB Patient^Safwan^2015-05-23^MTB DETECTED|Rif^6002^Result A^Result B^Result C^Result D^Result E^probeCtA^probeCtB");
+		expectedOutput.add("^klm^2/2^probeCtC^probeCtD^probeCtE");
 		String text = sampleMessage.toSMS(true);
 		String characterHeader = result.addingCharacters(text);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
@@ -103,7 +103,7 @@ public class ResultsSenderTest extends ResultsSender {
 		StringBuilder addedHeaderText = new StringBuilder();
 		ArrayList<String> actualOutput = result.twoChunks(addedHeaderText, date, characterHeader, text);
 		for(int i = 0; i < expectedOutput.size(); i++){
-			Assert.assertEquals(expectedOutput.get(i), actualOutput.get(i));
+			Assert.assertEquals(expectedOutput.get(i), actualOutput.get(i).substring(17));
 		}
 		
 	}

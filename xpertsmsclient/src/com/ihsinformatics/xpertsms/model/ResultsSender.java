@@ -508,7 +508,7 @@ public class ResultsSender extends Thread {
 	}
 	
 	public String oneChunk(StringBuilder addedHeaderText, String date, String characterHeader, String text){
-		addedHeaderText.insert(0, date + "^1/1^"+ characterHeader + "^");
+		addedHeaderText.insert(0, date + "^" + characterHeader + "^" + "1/1" + "^");
 		addedHeaderText.append(text);
 		return addedHeaderText.toString();
 	}
@@ -519,6 +519,7 @@ public class ResultsSender extends Thread {
 		int startString = 0;
 		int counter = 0;
 		int characterCount = 0;
+		int j = 0;
 		ArrayList<String> completeMessage = new ArrayList<String>();
 		for(int i = 0; i < text.length(); i++){
 			if(text.charAt(i) == '^'){
@@ -544,7 +545,32 @@ public class ResultsSender extends Thread {
 				// keeping track of the last index
 				previousIndex = i;
 			}
+			j = i;
 		}
+		
+		if(previousIndex != j){
+			// store it in arraylist and then find the length
+			addedHeaderText.insert(0, date + "^" + chunkSize + "/^");
+			addedHeaderText.append(text.substring(startString)); 
+			// assigning startString the value of previousIndex so that next time the 
+			// text starts from where it was left
+			//startString = previousIndex + 1;
+			//previousIndex = i;
+			// adding the character headers at 19th place as the count of chunks
+			// is not yet calculated
+			addedHeaderText.insert(18, characterHeader.substring(characterCount, (counter + 1)) + "^");
+			//characterCount = counter;
+			//chunkSize++;
+			completeMessage.add(addedHeaderText.toString());
+			// resetting the string builder
+			addedHeaderText.setLength(0);
+		}
+		
+		for(int i = 0; i < completeMessage.size(); i++){
+			String temp = completeMessage.get(i);
+			temp.indexOf("/");
+			completeMessage.set(i, temp.substring(0, (temp.indexOf("/") + 1)) + chunkSize + temp.substring( (temp.indexOf("/") + 1) ) );
+		} 
 		return completeMessage;
 	}
 }
