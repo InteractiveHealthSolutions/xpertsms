@@ -1325,6 +1325,7 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 	
 	// modified method to that adds only the variables selected
 	// previously all were added regardless of the selection
+	// TODO add the isError() check again
 	@Override
 	public String toSMS(boolean exportProbes){
 		StringBuilder smsText = new StringBuilder();
