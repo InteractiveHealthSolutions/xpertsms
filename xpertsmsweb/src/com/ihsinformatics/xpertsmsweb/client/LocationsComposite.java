@@ -169,7 +169,7 @@ public class LocationsComposite extends Composite implements IForm,
 		refreshList();
 		try {
 			service.getColumnData("Location", "LocationID",
-					"LocationType <> 'FACILITY'",
+					"LocationType <> 'LABORATORY'",
 					new AsyncCallback<String[]>() {
 
 						@Override
@@ -193,7 +193,7 @@ public class LocationsComposite extends Composite implements IForm,
 
 	public void refreshList() {
 		String[] locationTypes = { "LABORATORY", "HOSPITAL", "CLINIC",
-				"FACILITY", "OTHER" };
+				"OTHER_REFERRAL", "OTHER" };
 		for (String type : locationTypes) {
 			locationTypeComboBox.addItem(type);
 			locationTypesComboBox.addItem(type);

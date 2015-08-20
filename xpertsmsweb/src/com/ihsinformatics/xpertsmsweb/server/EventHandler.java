@@ -139,6 +139,8 @@ public class EventHandler extends HttpServlet {
 		if (sampleId == null || sampleId.equalsIgnoreCase("null"))
 			return XmlUtil.createErrorXml("Cannot save without Sample ID");
 		String mtb = request.getParameter("mtb");
+		if (mtb != null && mtb.equalsIgnoreCase("null"))
+			mtb = null;
 		String systemId = request.getParameter("systemid");
 		String rif = request.getParameter("rif");
 		if (rif != null && rif.equalsIgnoreCase("null"))
@@ -225,7 +227,7 @@ public class EventHandler extends HttpServlet {
 			}
 			if (!update) {
 				for (int i = 0; i < gxp.length; i++) {
-					if (gxp[i].getGeneXpertResult() == null) {// F form filled
+					if (gxp[i].getGeneXpertResult() == null || "null".equalsIgnoreCase(gxp[i].getGeneXpertResult())) {// F form filled
 						update = true;
 						gxpNew = gxp[i];
 						System.out.println("ID match null result");
@@ -287,7 +289,7 @@ public class EventHandler extends HttpServlet {
 			String remarks = "";
 			if (errorCode != null) {
 				gxpNew.setErrorCode(Integer.parseInt(errorCode));
-				if (!"".equals(errorNotes)) {
+				if (!"".equals(errorNotes) && !"null".equalsIgnoreCase(errorNotes)) {
 					remarks += errorNotes + ". ";
 				}
 			}

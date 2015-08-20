@@ -317,6 +317,7 @@ public class MessageSettingsComposite extends Composite
 
 		if (validate()) {
 			try {
+				setCurrent();
 				service.saveMessageSettings(current,
 						new AsyncCallback<Boolean>() {
 							@Override

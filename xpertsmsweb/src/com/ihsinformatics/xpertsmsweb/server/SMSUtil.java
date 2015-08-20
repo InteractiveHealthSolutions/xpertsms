@@ -10,6 +10,7 @@ import org.irdresearch.smstarseel.context.TarseelServices;
 import org.irdresearch.smstarseel.data.OutboundMessage.PeriodType;
 import org.irdresearch.smstarseel.data.OutboundMessage.Priority;
 
+import com.ihsinformatics.xpertsmsweb.server.util.DateTimeUtil;
 import com.ihsinformatics.xpertsmsweb.server.util.HibernateUtil;
 import com.ihsinformatics.xpertsmsweb.shared.model.Contact;
 import com.ihsinformatics.xpertsmsweb.shared.model.GeneXpertResults;
@@ -103,7 +104,7 @@ public class SMSUtil {
 			text.append("LocationID:" + results.getModuleId() + "\n");
 		}
 		if (attachTestDate) {
-			text.append("TestDate:" + results.getDateTested() + "\n");
+			text.append("TestDate:" + DateTimeUtil.getSQLDate(results.getDateTested()) + "\n");
 		}
 		boolean send = ms.getAlertOnAll()
 				| (ms.getAlertOnAllMtb() & results.getIsPositive())
@@ -177,9 +178,9 @@ public class SMSUtil {
 				if (location == null) {
 					location = service.findLocation(results.getLaboratoryId());
 				}
-				String mobile = location.getMobile();
-				if (mobile != null) {
-					context.getSmsService().createNewOutboundSms(mobile, text,
+				String phone = location.getPhone();
+				if (phone != null) {
+					context.getSmsService().createNewOutboundSms(phone, text,
 							new Date(), Priority.HIGH, 24, PeriodType.DAY, 1,
 							null);
 				}

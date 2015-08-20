@@ -628,10 +628,14 @@ public class ServerServiceImpl extends RemoteServiceServlet
 			throws Exception {
 		// If a setting exists, update it. Create othewise
 		MessageSettings settings = findMessageSettings();
-		if (settings == null)
+		if (settings == null) {
+			messageSettings.setSettingsId(1);
 			return HibernateUtil.util.save(messageSettings);
-		else
+		}
+		else {
+			messageSettings.setSettingsId(settings.getSettingsId());
 			return HibernateUtil.util.update(messageSettings);
+		}
 	}
 
 	public Boolean saveNewPatient(Patient patient, Person person,

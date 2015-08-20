@@ -160,6 +160,7 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 		}
 	}
 	
+
 	/**
 	 * @return the computerName
 	 */
@@ -169,6 +170,12 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 	
 	/**
 	 * @param computerName the computerName to set
+	 */
+	/**
+	 * @param computerName
+	 */
+	/**
+	 * @param computerName
 	 */
 	public void setComputerName(String computerName) {
 		this.computerName = computerName;
@@ -679,6 +686,8 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 	@Override
 	public String toCsv() {
 		StringBuilder csv = new StringBuilder();
+		/*csv.append("\"" + replaceNull(dateSent) + "\",");
+		csv.append("\"" + replaceNull(chunkRecognizer) + "\",");*/
 		csv.append("\"" + replaceNull(patientId) + "\",");
 		csv.append("\"" + replaceNull(sampleId) + "\",");
 		csv.append("\"" + replaceNull(mtbResult) + "\",");
@@ -1432,6 +1441,7 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 	
 	@Override
 	public String toString() {
+		//adding dateSent and chunkRecognizer before messageId
 		return "XpertASTMResultUploadMessage [FIELD_DELIMITER=" + FIELD_DELIMITER + ", REPEAT_DELIMITER=" + REPEAT_DELIMITER
 		        + ", COMPONENT_DELIMITER=" + COMPONENT_DELIMITER + ", ESCAPE_DELIMITER=" + ESCAPE_DELIMITER + ", messageId="
 		        + messageId + ", systemId=" + systemId + ", instrumentSpecimenID=" + instrumentSpecimenID
