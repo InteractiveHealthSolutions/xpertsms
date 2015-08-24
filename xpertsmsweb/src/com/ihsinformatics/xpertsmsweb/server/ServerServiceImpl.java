@@ -514,8 +514,10 @@ public class ServerServiceImpl extends RemoteServiceServlet
 	}
 
 	public MessageSettings findMessageSettings() throws Exception {
-		return (MessageSettings) HibernateUtil.util
-				.findObject("from MessageSettings");
+		Object obj = HibernateUtil.util.findObject("from MessageSettings");
+		if (obj != null)
+			return (MessageSettings) obj;
+		return null;
 	}
 
 	public Patient findPatient(String patientID) throws Exception {

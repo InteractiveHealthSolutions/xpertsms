@@ -23,7 +23,7 @@ import com.ihsinformatics.xpertsmsweb.shared.model.MessageSettings;
  */
 public class SMSUtil {
 	public static final String status = "PENDING";
-	private TarseelServices context;
+	private TarseelServices tarseelService;
 	MessageSettings ms;
 	public static SMSUtil util = new SMSUtil();
 	public static ServerServiceImpl service = new ServerServiceImpl();
@@ -43,7 +43,7 @@ public class SMSUtil {
 	 */
 	public SMSUtil() {
 		ms = null;
-		context = TarseelContext.getServices();
+		tarseelService = TarseelContext.getServices();
 		try {
 			ms = (MessageSettings) HibernateUtil.util
 					.findObject("from MessageSettings");
@@ -64,6 +64,7 @@ public class SMSUtil {
 	}
 
 	public void sendAlertsOnAutoGXPResults(GeneXpertResults results) {
+		tarseelService = TarseelContext.getServices();
 		System.out.println("SENDING");
 		// Only when results are positive
 		String messageHeader = "*Automated Message*\n";
@@ -104,7 +105,8 @@ public class SMSUtil {
 			text.append("LocationID:" + results.getModuleId() + "\n");
 		}
 		if (attachTestDate) {
-			text.append("TestDate:" + DateTimeUtil.getSQLDate(results.getDateTested()) + "\n");
+			text.append("TestDate:"
+					+ DateTimeUtil.getSQLDate(results.getDateTested()) + "\n");
 		}
 		boolean send = ms.getAlertOnAll()
 				| (ms.getAlertOnAllMtb() & results.getIsPositive())
@@ -137,13 +139,18 @@ public class SMSUtil {
 		if (ms.getSendToManager()) {
 			String managerNumber = ms.getManagerNumber();
 			if (managerNumber != null) {
-				context.getSmsService().createNewOutboundSms(managerNumber,
-						text.toString(), new Date(), Priority.HIGH, 24,
-						PeriodType.DAY, 1, null);
+				tarseelService.getSmsService().createNewOutboundSms(
+						managerNumber, text.toString(), new Date(),
+						Priority.HIGH, 24, PeriodType.DAY, 1, null);
 			}
 		}
-		context.commitTransaction();
-		context.closeSession();
+		try {
+			tarseelService.commitTransaction();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			tarseelService.closeSession();
+		}
 	}
 
 	public void sendAlertsToPatient(GeneXpertResults results) {
@@ -155,9 +162,9 @@ public class SMSUtil {
 				throw new Exception("Patient's mobile number not found.");
 			text.append("Your test results are ready. Please pick up from the laboratory at your earliest convenience"
 					+ "\n");
-			context.getSmsService().createNewOutboundSms(mobile,
+			tarseelService.getSmsService().createNewOutboundSms(mobile,
 					text.toString(), new Date(), Priority.HIGH, 24,
-					PeriodType.DAY, 1, null);
+					PeriodType.WEEK, 1, null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -180,9 +187,9 @@ public class SMSUtil {
 				}
 				String phone = location.getPhone();
 				if (phone != null) {
-					context.getSmsService().createNewOutboundSms(phone, text,
-							new Date(), Priority.HIGH, 24, PeriodType.DAY, 1,
-							null);
+					tarseelService.getSmsService().createNewOutboundSms(phone,
+							text, new Date(), Priority.HIGH, 24,
+							PeriodType.WEEK, 1, null);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -209,24 +216,27 @@ public class SMSUtil {
 				if (location != null) {
 					String phone = location.getPhone();
 					if (phone != null) {
-						context.getSmsService().createNewOutboundSms(phone,
-								text.toString(), new Date(), Priority.HIGH, 24,
-								PeriodType.DAY, 1, null);
+						tarseelService.getSmsService().createNewOutboundSms(
+								phone, text.toString(), new Date(),
+								Priority.HIGH, 24, PeriodType.WEEK, 1, null);
 					}
 					String mobile = location.getMobile();
 					if (mobile != null) {
 						if (mobile.contains(",")) {
 							String[] mobiles = mobile.split(",");
 							for (String m : mobiles) {
-								context.getSmsService().createNewOutboundSms(m,
-										text.toString().trim(), new Date(),
-										Priority.HIGH, 24, PeriodType.DAY, 1,
-										null);
+								tarseelService.getSmsService()
+										.createNewOutboundSms(m,
+												text.toString().trim(),
+												new Date(), Priority.HIGH, 24,
+												PeriodType.WEEK, 1, null);
 							}
 						} else {
-							context.getSmsService().createNewOutboundSms(
-									mobile, text.toString(), new Date(),
-									Priority.HIGH, 24, PeriodType.DAY, 1, null);
+							tarseelService.getSmsService()
+									.createNewOutboundSms(mobile,
+											text.toString(), new Date(),
+											Priority.HIGH, 24, PeriodType.WEEK,
+											1, null);
 						}
 					}
 				}
@@ -239,9 +249,9 @@ public class SMSUtil {
 	public void sendAlertToProgram(GeneXpertResults results,
 			String programNumber, String text) {
 		try {
-			context.getSmsService().createNewOutboundSms(programNumber,
+			tarseelService.getSmsService().createNewOutboundSms(programNumber,
 					text.toString(), new Date(), Priority.HIGH, 24,
-					PeriodType.DAY, 1, null);
+					PeriodType.WEEK, 1, null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

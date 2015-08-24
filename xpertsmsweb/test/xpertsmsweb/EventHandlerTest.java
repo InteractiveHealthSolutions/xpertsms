@@ -14,12 +14,16 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import junit.framework.TestCase;
 
 import org.easymock.EasyMock;
+import org.irdresearch.smstarseel.context.TarseelContext;
+import org.irdresearch.smstarseel.context.TarseelServices;
+import org.irdresearch.smstarseel.data.OutboundMessage;
 
 /**
  * @author owais.hussain@ihsinformatics.com
@@ -114,6 +118,47 @@ public class EventHandlerTest extends TestCase {
 			while ((line = br.readLine()) != null) {
 				System.out.println(line);
 			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Test method for
+	 * {@link com.ihsinformatics.xpertsmsweb.server.EventHandler#handleEvent(javax.servlet.http.HttpServletRequest)}
+	 * .
+	 */
+	public final void testForSmsAlerts() {
+		String queryString = "type=astmresult&username=admin&password=jingle94&pid=101130800001-9&sampleid=141016_001&mtb=MTB DETECTED MEDIUM&rif=Rif Resistance NOT DETECTED&error=no&errorcode=0&errornotes=null&notes=IHS&enddate=2015-05-23&operatorid=OWAIS&pcid=CEPHEID5G183R1&receiverid=IHS&instserial=708228&moduleid=618255&cartrigeid=204304821&reagentlotid=10713-AX&systemid=Machine API Test&expdate=2014-06-21&probea=POS&probeb=NO RESULT&probec=NEG&probed=NEG&probee=POS&probespc=0&probeact=1.1&probebct=2.2&probecct=2.3&probedct=1.3&probeect=1.4&probespcct=2.5&probeaendpt=3.6&probebendpt=4.7&probecendpt=4.5&probedendpt=3.2&probeeendpt=1.0&probespcendpt=0.0";
+		HttpURLConnection httpConnection = null;
+		OutputStream outputStream = null;
+		// String url = null;
+		int responseCode = 0;
+		URL url;
+		try {
+			// Get existing number of outbound messages
+			TarseelServices services = TarseelContext.getServices();
+			List<OutboundMessage> outbounds = services.getSmsService().findPendingOutboundTillNow("XpertSMS", false, Integer.MAX_VALUE);
+			url = new URL("http://127.0.0.1:8888/xpertsmsweb.jsp");
+			httpConnection = (HttpURLConnection) url.openConnection();
+			httpConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			httpConnection.setRequestProperty("Content-Language", "en-US");
+			httpConnection.setDoOutput(true);
+			outputStream = httpConnection.getOutputStream();
+			outputStream.write(queryString.getBytes());
+			outputStream.flush();
+			responseCode = httpConnection.getResponseCode();
+			outputStream.close();
+			httpConnection.disconnect();
+			assertEquals("Positive Results not saving", responseCode, HttpURLConnection.HTTP_OK);
+			BufferedReader br = new BufferedReader(new InputStreamReader(httpConnection.getInputStream()));
+			String line = "";
+			while ((line = br.readLine()) != null) {
+				System.out.println(line);
+			}
+			List<OutboundMessage> outboundsNow = services.getSmsService().findPendingOutboundTillNow("XpertSMS", false, Integer.MAX_VALUE);
+			assertFalse("SMS Alerts either failed to generate or are disabled in MessageSettings", outbounds.size() == outboundsNow.size());
 		}
 		catch (Exception e) {
 			e.printStackTrace();

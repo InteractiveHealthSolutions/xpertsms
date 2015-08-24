@@ -98,7 +98,12 @@ public class HibernateUtil implements Serializable {
 	 * @return
 	 */
 	public Object findObject(String query) {
-		return findObjects(query)[0];
+		Object[] objects = findObjects(query);
+		if (objects == null)
+			return null;
+		if (objects.length == 0)
+			return null;
+		return objects[0];
 	}
 
 	/**
