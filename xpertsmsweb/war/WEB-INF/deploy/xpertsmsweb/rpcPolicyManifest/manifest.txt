@@ -1,2 +1,3 @@
 # Module xpertsmsweb
 # RPC service class, partial path of RPC policy file
+com.ihsinformatics.xpertsmsweb.client.ServerService, F5ACEA3A5063C7AA1B826CE9785CB9FA.gwt.rpc

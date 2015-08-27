@@ -25,7 +25,6 @@ import org.irdresearch.smstarseel.data.InboundMessage;
 import org.irdresearch.smstarseel.data.InboundMessage.InboundStatus;
 
 import com.ihsinformatics.xpertsmsweb.server.util.DateTimeUtil;
-import com.ihsinformatics.xpertsmsweb.server.util.HibernateUtil;
 import com.ihsinformatics.xpertsmsweb.shared.model.GeneXpertResults;
 
 /**
@@ -67,49 +66,56 @@ public class ResponseReader extends TimerTask {
 					String text = ib.getText();
 					if (text == null || text.length() == 0)
 						continue;
-					
-					ArrayList<String> temp = new ArrayList<String>();
-					// adding the text of first message with unique datetime stamp
-					temp.add(ib.getText().substring(15));
-					// looping to find all the messages with the same datetime stamp
-					for(InboundMessage im : list){
-						if(im == null){
+					// Decide whether the message is single or concatenated
+					String str = text.substring(15);
+					// Concatenated messages contain timestamp in the beginning
+					if(str.matches("^[0-9]{15,15}")) {
+						ArrayList<String> temp = new ArrayList<String>();
+						// adding the text of first message with unique datetime stamp
+						temp.add(ib.getText().substring(15));
+						// looping to find all the messages with the same datetime stamp
+						for(InboundMessage im : list){
+							if(im == null){
+								j++;
+								continue;
+							}
+							if(ib.getText().substring(0, 14).equals(im.getText().substring(0, 14))){
+								// if match is found, insert it into the arraylist
+								// so that the arraylist contains all the parts of the message
+								temp.add(im.getText().substring(19));
+								tsc.getSmsService().markInboundAsRead(im.getReferenceNumber());
+								list.set(j, null);
+							}
 							j++;
-							continue;
 						}
-						if(ib.getText().substring(0, 14).equals(im.getText().substring(0, 14))){
-							// if match is found, insert it into the arraylist
-							// so that the arraylist contains all the parts of the message
-							temp.add(im.getText().substring(19));
-							tsc.getSmsService().markInboundAsRead(im.getReferenceNumber());
-							list.set(j, null);
+						
+						temp.remove(0);
+						// find the part/chunk size in which message is split
+						int chunk = temp.size();
+						
+						// assigning keys with same number as the chunk so that they are
+						// concatenated in same order
+						HashMap<Integer,String> messagePart = new HashMap<Integer,String>();
+						for(int i = 0; i < temp.size(); i++){
+							messagePart.put(Integer.parseInt(temp.get(i).substring(0, 1)), temp.get(i).substring(4));
 						}
-						j++;
+						// add a for loop here to concat using the maxlength
+						// which is taken as chunk above
+						String concatenatedMessage = "";
+						for(int i = 1; i <= chunk; i++){
+							concatenatedMessage += messagePart.get(i);
+						}
+						parseText(concatenatedMessage);
+						ib.setStatus(InboundStatus.READ);
+						tsc.getSmsService().markInboundAsRead(ib.getInboundId());
 					}
-					
-					temp.remove(0);
-					// find the part/chunk size in which message is split
-					int chunk = temp.size();
-					
-					// assigning keys with same number as the chunk so that they are
-					// concatenated in same order
-					HashMap<Integer,String> messagePart = new HashMap<Integer,String>();
-					for(int i = 0; i < temp.size(); i++){
-						messagePart.put(Integer.parseInt(temp.get(i).substring(0, 1)), temp.get(i).substring(4));
+					else {
+						parseText(text);
+						ib.setStatus(InboundStatus.READ);
+						tsc.getSmsService().markInboundAsRead(ib.getInboundId());
 					}
-					
-					// add a for loop here to concat using the maxlength
-					// which is taken as chunk above
-					String concatenatedMessage = "";
-					for(int i = 1; i <= chunk; i++){
-						concatenatedMessage += messagePart.get(i);
-					}
-					
-					parseText(concatenatedMessage);
-					
 				} catch (Exception e) {
 					e.printStackTrace();
-
 				}
 				
 			}
@@ -239,7 +245,7 @@ public class ResponseReader extends TimerTask {
 		try {
 			System.out.println("Inside");
 			gxp = ssl.findGeneXpertResults(sampleId, patientId);
-			System.out.println("GXP:" + gxp);
+			System.out.println("GXP:" + gxp.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
