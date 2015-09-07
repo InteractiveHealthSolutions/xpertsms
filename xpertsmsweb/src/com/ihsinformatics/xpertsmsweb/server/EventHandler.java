@@ -204,6 +204,9 @@ public class EventHandler extends HttpServlet {
 						probeEndptC, probeEndptD, probeEndptE, probeEndptSPC,
 						errorCode, errorNotes, notes, systemId);
 				gxpU.setDateSubmitted(new Date());
+				if(gxpU.getDateTested() == null){
+					gxpU.setDateTested(new Date());
+				}
 				ssl.saveGeneXpertResults(gxpU);
 				return XmlUtil.createSuccessXml();
 			} catch (Exception e) {
@@ -278,6 +281,9 @@ public class EventHandler extends HttpServlet {
 			}
 			gxpNew.setDateSubmitted(new Date());
 			gxpNew.setDateTested(parseDate(resultDateStr));
+			if(gxpNew.getDateTested() == null){
+				gxpNew.setDateTested(new Date());
+			}
 			gxpNew.setInstrumentSerial(instrumentSerial);
 			gxpNew.setModuleId(moduleId);
 			gxpNew.setReagentLotId(reagentLotId);

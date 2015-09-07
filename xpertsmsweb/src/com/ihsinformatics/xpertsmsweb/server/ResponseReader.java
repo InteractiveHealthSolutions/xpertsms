@@ -260,6 +260,9 @@ public class ResponseReader extends TimerTask {
 					probeEndptA, probeEndptB, probeEndptC, probeEndptD,
 					probeEndptE, probeEndptSPC, errorCode, errorNotes, notes,
 					systemId);
+			if(gxpU.getDateTested() == null){
+				gxpU.setDateTested(new Date());
+			}
 			try {
 				ssl.saveGeneXpertResults(gxpU);
 				System.out.println("New GeneXpert result saved. Patient ID: "
@@ -332,6 +335,9 @@ public class ResponseReader extends TimerTask {
 				gxpNew.setDrugResistance(rifResult);
 			}
 			gxpNew.setDateTested(resultDateObj);
+			if(gxpNew.getDateTested() == null){
+				gxpNew.setDateTested(new Date());
+			}
 			gxpNew.setInstrumentSerial(instrumentSerial);
 			gxpNew.setModuleId(moduleId);
 			gxpNew.setReagentLotId(reagentLotId);

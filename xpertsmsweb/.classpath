@@ -69,7 +69,7 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/xalan.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/smstarseel.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/easymock-3.3.1.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/xml-apis-2.0.2.jar"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
+	<classpathentry kind="lib" path="E:/xml-apis-2.0.2.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
