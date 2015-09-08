@@ -232,10 +232,12 @@ public class ResultsSender extends Thread {
 		
 		StringBuilder addedHeaderText = new StringBuilder();
 		//String textCheck = text.substring(0, 130);
+		List<String> completeMessage = new ArrayList<String>();
+		String message = "";
 		if(text.length() > 130){
-			twoChunks(addedHeaderText, date, characterHeader, text);
+			completeMessage  = twoChunks(addedHeaderText, date, characterHeader, text);
 		} else {
-			oneChunk(addedHeaderText, date, characterHeader, text);
+			message = oneChunk(addedHeaderText, date, characterHeader, text);
 		}
 			
 		//int length = addedHeaderText.length();
@@ -251,21 +253,22 @@ public class ResultsSender extends Thread {
 		int start = 0;
 		int end = 135;
 		
-		
-		for(int i = 0; i < textChunk; i++){
-			temp[i] = text.substring(start,end);
+		*/
+		if( message == ""){
+		for(int i = 0; i < completeMessage.size(); i++){
+			/*temp[i] = text.substring(start,end);
 			if(i < textChunk - 1){
 				end = text.length();
 			}else {
 				end += 135;
 			}
-			start += 135;
+			start += 135;*/
 			
 			
 
 			String query = "insert into smstarseel.outboundmessage (outboundId,createdDate,description,dueDate,periodType,priority,projectId,recipient,referenceNumber,status,text,type,validityPeriod) ";
 			query += "values (0, now(), 'Sent from XpertSMS', curdate(), 'HOUR', 0, 1, '" + recipient
-			        + "', unix_timestamp(), 'PENDING', '" + addedHeaderText + "', 'SMS', 24)";
+			        + "', unix_timestamp(), 'PENDING', '" + completeMessage.get(i) + "', 'SMS', 24)";
 			try{
 				Thread.sleep(2000);
 			} catch ( Exception e ) {
@@ -274,11 +277,25 @@ public class ResultsSender extends Thread {
 			Statement stmt = null;
 			stmt = conn.createStatement();
 			stmt.executeUpdate(query);
-		}	*/	
+		}	
 		
 		
 		conn.close();
-	}
+		} else {
+			String query = "insert into smstarseel.outboundmessage (outboundId,createdDate,description,dueDate,periodType,priority,projectId,recipient,referenceNumber,status,text,type,validityPeriod) ";
+			query += "values (0, now(), 'Sent from XpertSMS', curdate(), 'HOUR', 0, 1, '" + recipient
+			        + "', unix_timestamp(), 'PENDING', '" + message + "', 'SMS', 24)";
+			try{
+				Thread.sleep(2000);
+			} catch ( Exception e ) {
+				
+			}
+			Statement stmt = null;
+			stmt = conn.createStatement();
+			stmt.executeUpdate(query);
+			conn.close();
+			}
+		}
 	
 	public synchronized void writeToCsv(String text) {
 		System.out.println(text);
