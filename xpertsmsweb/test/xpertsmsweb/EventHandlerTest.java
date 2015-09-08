@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -139,7 +140,7 @@ public class EventHandlerTest extends TestCase {
 			// Get existing number of outbound messages
 			TarseelServices services = TarseelContext.getServices();
 			List<OutboundMessage> outbounds = services.getSmsService().findPendingOutboundTillNow("XpertSMS", false, Integer.MAX_VALUE);
-			GeneXpertResults gxp = new GeneXpertResults(sputumTestId, patientId, laboratoryId, collectedBy, dateSubmitted, dateTested, geneXpertResult, isPositive, mtbBurden, drugResistance, errorCode, remarks, pcId, hostId, instrumentSerial, moduleId, cartridgeId, reagentLotId, cartridgeExpiryDate, probeResultA, probeResultB, probeResultC, probeResultD, probeResultE, probeResultSPC, probeCtA, probeCtB, probeCtC, probeCtD, probeCtE, probeCtSPC, probeEndptA, probeEndptB, probeEndptC, probeEndptD, probeEndptE, probeEndptSPC)
+			GeneXpertResults gxp = new GeneXpertResults("07-01-1297-15-R", "Muhammad Owais", "PRL-Sindh", collectedBy, new Date(), "20150709131815", geneXpertResult, false, "MTB NOT DETECTED", drugResistance, "5002", "Post analysis error", "Cepheid2H0D7V1", "PRL-SINDH", "802274", "624130", "235826832", "18303", null, "NO RESULT", "NO RESULT", "NO RESULT", "NO RESULT", "NO RESULT", "NO RESULT", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			service.saveGeneXpertResults(gxp);
 			List<OutboundMessage> outboundsNow = services.getSmsService().findPendingOutboundTillNow("XpertSMS", false, Integer.MAX_VALUE);
 			assertFalse("SMS Alerts either failed to generate or are disabled in MessageSettings", outbounds.size() == outboundsNow.size());

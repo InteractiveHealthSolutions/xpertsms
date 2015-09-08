@@ -419,6 +419,6 @@ public class ResponseReader extends TimerTask {
 		// Results without probes
 		reader.parseText("101130800001-9^141016_001^MTB DETECTED MEDIUM^Rif Resistance NOT DETECTED^Machine API Test^CEPHEID5G183R1^IHS^OWAIS^708228^618255^204304821^10713-AX^2015-05-23^no^no^yes^5002^Post-run analysis error^no^No PROBlems");*/
 		// Test Record
-		reader.parseText("Test-R^07-01-1297-15-R^MTB DETECTED^^PRL-SINDH^Cepheid2H0D7V1^PRL-SINDH^PRL-Sindh^802274^624130^235826832^18303^20150709131815^yes^no^no^no^W-02,b-54");
+		reader.parseText("Muhammad Owais Shah Afridi^07-01-1297-15-R^MTB NOT DETECTED^^123456789012345^PRL-SINDH^Cepheid2H0D7V1^PRL-Sindh^802274^624130^235826832^18303^20150709131815^yes^no^no^no^W-02,B-54");
 	}
 }
