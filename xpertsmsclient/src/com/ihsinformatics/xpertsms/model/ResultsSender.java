@@ -267,7 +267,7 @@ public class ResultsSender extends Thread {
 			
 
 			String query = "insert into smstarseel.outboundmessage (outboundId,createdDate,description,dueDate,periodType,priority,projectId,recipient,referenceNumber,status,text,type,validityPeriod) ";
-			query += "values (0, now(), 'Sent from XpertSMS', curdate(), 'HOUR', 0, 1, '" + recipient
+			query += "values (0, now(), 'Sent from XpertSMS', curdate(), 'WEEK', 0, 1, '" + recipient
 			        + "', unix_timestamp(), 'PENDING', '" + completeMessage.get(i) + "', 'SMS', 24)";
 			try{
 				Thread.sleep(2000);
@@ -283,7 +283,7 @@ public class ResultsSender extends Thread {
 		conn.close();
 		} else {
 			String query = "insert into smstarseel.outboundmessage (outboundId,createdDate,description,dueDate,periodType,priority,projectId,recipient,referenceNumber,status,text,type,validityPeriod) ";
-			query += "values (0, now(), 'Sent from XpertSMS', curdate(), 'HOUR', 0, 1, '" + recipient
+			query += "values (0, now(), 'Sent from XpertSMS', curdate(), 'WEEK', 0, 1, '" + recipient
 			        + "', unix_timestamp(), 'PENDING', '" + message + "', 'SMS', 24)";
 			try{
 				Thread.sleep(2000);
