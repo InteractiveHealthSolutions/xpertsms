@@ -67,22 +67,27 @@ public class ResponseReader extends TimerTask {
 					if (text == null || text.length() == 0)
 						continue;
 					// Decide whether the message is single or concatenated
-					String str = text.substring(15);
+					String str = text.substring(0,17);
+					String header = "";
 					// Concatenated messages contain timestamp in the beginning
-					if(str.matches("^[0-9]{15,15}")) {
+					if(str.matches("[0-9]{17,17}")) {
 						ArrayList<String> temp = new ArrayList<String>();
+						int headerRemoved = ib.getText().indexOf("^",18);
 						// adding the text of first message with unique datetime stamp
-						temp.add(ib.getText().substring(15));
+						temp.add(ib.getText().substring(headerRemoved + 1));
 						// looping to find all the messages with the same datetime stamp
 						for(InboundMessage im : list){
 							if(im == null){
 								j++;
 								continue;
 							}
-							if(ib.getText().substring(0, 14).equals(im.getText().substring(0, 14))){
+							if(ib.getText().substring(0, 18).equals(im.getText().substring(0, 18))){
 								// if match is found, insert it into the arraylist
 								// so that the arraylist contains all the parts of the message
-								temp.add(im.getText().substring(19));
+								int index = im.getText().indexOf("^", 18);
+								// adding all the headers
+								header += im.getText().substring(18, index);
+								temp.add(im.getText().substring(index + 1));
 								tsc.getSmsService().markInboundAsRead(im.getReferenceNumber());
 								list.set(j, null);
 							}
@@ -101,9 +106,15 @@ public class ResponseReader extends TimerTask {
 						}
 						// add a for loop here to concat using the maxlength
 						// which is taken as chunk above
-						String concatenatedMessage = "";
+						String concatenatedMessage = "1/1^";
+						concatenatedMessage += header;
 						for(int i = 1; i <= chunk; i++){
-							concatenatedMessage += messagePart.get(i);
+							/*if( i == 1){
+								concatenatedMessage += messagePart.get(i);
+							} else {*/
+								concatenatedMessage += "^" + messagePart.get(i);
+							//}
+							
 						}
 						parseText(concatenatedMessage);
 						ib.setStatus(InboundStatus.READ);
@@ -180,52 +191,212 @@ public class ResponseReader extends TimerTask {
 		String probeEndptSPC = null;
 		String patientId = null;
 		String expDate = null;
-
+		
 		int j = 0;
-		patientId = fields[j++];
-		sampleId = fields[j++];
-		mtb = fields[j++];
-		rif = fields[j++];
-		systemId = fields[j++];
-		pcId = fields[j++];
-		hostId = fields[j++];
-		operatorId = fields[j++];
-		instrumentSerial = fields[j++];
-		moduleId = fields[j++];
-		cartridgeId = fields[j++];
-		reagentLotId = fields[j++];
-		resultDate = fields[j++];
-		rFinal = fields[j++];
-		rPending = fields[j++];
-		rError = fields[j++];
-		if (rError != null && rError.equals("yes")) {
-			errorCode = fields[j++];
-			errorNotes = fields[j++];
-			rCorrected = fields[j++];
-		} else
-			rCorrected = fields[j++];
-		notes = fields[j++];
-		if (fields.length > j) {
-			probeResultA = fields[j++];
-			probeResultB = fields[j++];
-			probeResultC = fields[j++];
-			probeResultD = fields[j++];
-			probeResultE = fields[j++];
-			probeResultSPC = fields[j++];
 
-			probeCtA = fields[j++];
-			probeCtB = fields[j++];
-			probeCtC = fields[j++];
-			probeCtD = fields[j++];
-			probeCtE = fields[j++];
-			probeCtSPC = fields[j++];
+		if(fields[0].matches("[0-9]/[0-9]")){
+			if(fields[1].contains("E")){
+				patientId = fields[fields[1].indexOf("E") + 2];
+			}
+			if(fields[1].contains("D")){
+				sampleId = fields[fields[1].indexOf("D") + 2];
+			}
+			if(fields[1].contains("P")){
+				mtb = fields[fields[1].indexOf("P") + 2];
+			}
+			if(fields[1].contains("Q")){
+				rif = fields[fields[1].indexOf("Q") + 2];
+			}
+			if(fields[1].contains("U")){
+				systemId = fields[fields[1].indexOf("U") + 2];
+			}
+			if(fields[1].contains("S")){
+				pcId = fields[fields[1].indexOf("S") + 2];
+			}
+			if(fields[1].contains("T")){
+				hostId = fields[fields[1].indexOf("T") + 2];
+			}
+			if(fields[1].contains("F")){
+				operatorId = fields[fields[1].indexOf("F") + 2];
+			}
+			if(fields[1].contains("N")){
+				instrumentSerial = fields[fields[1].indexOf("N") + 2];
+			}
+			if(fields[1].contains("M")){
+				moduleId = fields[fields[1].indexOf("M") + 2];
+			}
+			if(fields[1].contains("L")){
+				cartridgeId = fields[fields[1].indexOf("L") + 2];
+			}
+			if(fields[1].contains("J")){
+				reagentLotId = fields[fields[1].indexOf("J") + 2];
+			}
+			if(fields[1].contains("H")){
+				resultDate = fields[fields[1].indexOf("H") + 2];
+			}
+			if(fields[1].contains("F")){
+				operatorId = fields[fields[1].indexOf("F") + 2];
+			}
+			
+			//sampleId = fields[j++];
+			//mtb = fields[j++];
+			//rif = fields[j++];
+			//systemId = fields[j++];
+			//pcId = fields[j++];
+			//hostId = fields[j++];
+			//operatorId = fields[j++];
+			//instrumentSerial = fields[j++];
+			//moduleId = fields[j++];
+			//cartridgeId = fields[j++];
+			//reagentLotId = fields[j++];
+			//resultDate = fields[j++];
+			
+			// These bits are not needed at server end but if in future needed,
+			// add them in 'DESCRIPTION' column and send from client, receive at
+			// server and then store it in variables
+			/*rFinal = fields[j++];
+			rPending = fields[j++];		
+			rError = fields[j++];*/
+			
+			//if (rError != null && rError.equals("yes")) {
+			if (fields[1].contains("X")){
+				errorCode = fields[fields[1].indexOf("X") + 2];
+			}
+			if (fields[1].contains("Y")){
+				errorNotes = fields[fields[1].indexOf("Y") + 2];
+			}
+				//errorNotes = fields[j++];
+			//	rCorrected = fields[j++];
+			//} else
+			//	rCorrected = fields[j++];
+			if(fields[1].contains("W")){
+				notes = fields[fields[1].indexOf("W") + 2];
+			}
+			
+			if (fields.length > j) {
+				if(fields[1].contains("a")){
+					probeResultA = fields[fields[1].indexOf("a") + 2];
+				}
+				if(fields[1].contains("b")){
+					probeResultB = fields[fields[1].indexOf("b") + 2];
+				}
+				if(fields[1].contains("c")){
+					probeResultC = fields[fields[1].indexOf("c") + 2];
+				}
+				if(fields[1].contains("d")){
+					probeResultD = fields[fields[1].indexOf("d") + 2];
+				}
+				if(fields[1].contains("e")){
+					probeResultE = fields[fields[1].indexOf("e") + 2];
+				}
+				if(fields[1].contains("f")){
+					probeResultSPC = fields[fields[1].indexOf("f") + 2];
+				}
+				if(fields[1].contains("i")){
+					probeCtA = fields[fields[1].indexOf("i") + 2];
+				}
+				if(fields[1].contains("j")){
+					probeCtB = fields[fields[1].indexOf("j") + 2];
+				}
+				if(fields[1].contains("k")){
+					probeCtC = fields[fields[1].indexOf("k") + 2];
+				}
+				if(fields[1].contains("l")){
+					probeCtD = fields[fields[1].indexOf("l") + 2];
+				}
+				if(fields[1].contains("m")){
+					probeCtE = fields[fields[1].indexOf("m") + 2];
+				}
+				if(fields[1].contains("n")){
+					probeCtSPC = fields[fields[1].indexOf("n") + 2];
+				}
+				if(fields[1].contains("q")){
+					probeCtA = fields[fields[1].indexOf("q") + 2];
+				}
+				if(fields[1].contains("r")){
+					probeCtB = fields[fields[1].indexOf("r") + 2];
+				}
+				if(fields[1].contains("s")){
+					probeCtC = fields[fields[1].indexOf("s") + 2];
+				}
+				if(fields[1].contains("t")){
+					probeCtD = fields[fields[1].indexOf("t") + 2];
+				}
+				if(fields[1].contains("u")){
+					probeCtE = fields[fields[1].indexOf("u") + 2];
+				}
+				if(fields[1].contains("v")){
+					probeCtSPC = fields[fields[1].indexOf("v") + 2];
+				}
+				/*probeResultA = fields[j++];
+				probeResultB = fields[j++];
+				probeResultC = fields[j++];
+				probeResultD = fields[j++];
+				probeResultE = fields[j++];
+				probeResultSPC = fields[j++];*/
 
-			probeEndptA = fields[j++];
-			probeEndptB = fields[j++];
-			probeEndptC = fields[j++];
-			probeEndptD = fields[j++];
-			probeEndptE = fields[j++];
-			probeEndptSPC = fields[j++];
+				/*probeCtA = fields[j++];
+				probeCtB = fields[j++];
+				probeCtC = fields[j++];
+				probeCtD = fields[j++];
+				probeCtE = fields[j++];
+				probeCtSPC = fields[j++];*/
+
+				/*probeEndptA = fields[j++];
+				probeEndptB = fields[j++];
+				probeEndptC = fields[j++];
+				probeEndptD = fields[j++];
+				probeEndptE = fields[j++];
+				probeEndptSPC = fields[j++];*/
+			
+			} 
+		}
+		else {
+			patientId = fields[j++];
+			sampleId = fields[j++];
+			mtb = fields[j++];
+			rif = fields[j++];
+			systemId = fields[j++];
+			pcId = fields[j++];
+			hostId = fields[j++];
+			operatorId = fields[j++];
+			instrumentSerial = fields[j++];
+			moduleId = fields[j++];
+			cartridgeId = fields[j++];
+			reagentLotId = fields[j++];
+			resultDate = fields[j++];
+			rFinal = fields[j++];
+			rPending = fields[j++];
+			rError = fields[j++];
+			if (rError != null && rError.equals("yes")) {
+				errorCode = fields[j++];
+				errorNotes = fields[j++];
+				rCorrected = fields[j++];
+			} else
+				rCorrected = fields[j++];
+			notes = fields[j++];
+			if (fields.length > j) {
+				probeResultA = fields[j++];
+				probeResultB = fields[j++];
+				probeResultC = fields[j++];
+				probeResultD = fields[j++];
+				probeResultE = fields[j++];
+				probeResultSPC = fields[j++];
+
+				probeCtA = fields[j++];
+				probeCtB = fields[j++];
+				probeCtC = fields[j++];
+				probeCtD = fields[j++];
+				probeCtE = fields[j++];
+				probeCtSPC = fields[j++];
+
+				probeEndptA = fields[j++];
+				probeEndptB = fields[j++];
+				probeEndptC = fields[j++];
+				probeEndptD = fields[j++];
+				probeEndptE = fields[j++];
+				probeEndptSPC = fields[j++];
+			}
 		}
 
 		Date resultDateObj = null;

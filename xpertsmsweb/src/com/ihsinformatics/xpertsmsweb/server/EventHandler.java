@@ -380,7 +380,7 @@ public class EventHandler extends HttpServlet {
 
 		if (rif != null && rif.equalsIgnoreCase("null"))
 			rif = null;
-
+	
 		if (mtb != null) {
 			// System.out.println("----MTB----" + mtb);
 			int index = mtb.indexOf("MTB DETECTED");
