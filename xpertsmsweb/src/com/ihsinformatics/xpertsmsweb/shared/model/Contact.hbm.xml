@@ -5,7 +5,7 @@
 <hibernate-mapping>
     <class name="com.ihsinformatics.xpertsmsweb.shared.model.Contact" table="Contact" catalog="xpertsms">
         <id name="pid" type="string">
-            <column name="PID" length="20" />
+            <column name="PID" length="50" />
             <generator class="assigned" />
         </id>
         <property name="addressHouse" type="string">
@@ -33,17 +33,14 @@
         </property>
         <property name="cityId" type="java.lang.Integer">
             <column name="CityID">
-                <comment>From SetupCity</comment>
             </column>
         </property>
         <property name="countryId" type="java.lang.Integer">
             <column name="CountryID">
-                <comment>From SetupCountry</comment>
             </column>
         </property>
         <property name="region" type="java.lang.Integer">
             <column name="Region">
-                <comment>From SetupRegion</comment>
             </column>
         </property>
         <property name="phone" type="string">

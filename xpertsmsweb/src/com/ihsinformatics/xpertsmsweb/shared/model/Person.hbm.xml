@@ -5,7 +5,7 @@
 <hibernate-mapping>
     <class name="com.ihsinformatics.xpertsmsweb.shared.model.Person" table="Person" catalog="xpertsms">
         <id name="pid" type="string">
-            <column name="PID" length="12" />
+            <column name="PID" length="50" />
             <generator class="assigned" />
         </id>
         <property name="salutation" type="string">

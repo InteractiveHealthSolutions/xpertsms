@@ -30,6 +30,7 @@ public class GeneXpertResults implements java.io.Serializable {
 	private String remarks;
 
 	private String pcId;
+	private String hostId;
 	private String instrumentSerial;
 	private String moduleId;
 	private String cartridgeId;
@@ -62,7 +63,7 @@ public class GeneXpertResults implements java.io.Serializable {
 			String laboratoryId, String collectedBy, Date dateSubmitted,
 			Date dateTested, String geneXpertResult, Boolean isPositive,
 			String mtbBurden, String drugResistance, Integer errorCode,
-			String remarks, String pcId, String instrumentSerial,
+			String remarks, String pcId, String hostId, String instrumentSerial,
 			String moduleId, String cartridgeId, String reagentLotId,
 			Date cartridgeExpiryDate, String probeResultA, String probeResultB,
 			String probeResultC, String probeResultD, String probeResultE,
@@ -85,6 +86,7 @@ public class GeneXpertResults implements java.io.Serializable {
 		this.errorCode = errorCode;
 		this.remarks = remarks;
 		this.pcId = pcId;
+		this.setHostId(hostId);
 		this.instrumentSerial = instrumentSerial;
 		this.moduleId = moduleId;
 		this.cartridgeId = cartridgeId;
@@ -228,6 +230,14 @@ public class GeneXpertResults implements java.io.Serializable {
 	 */
 	public void setPcId(String pcId) {
 		this.pcId = pcId;
+	}
+
+	public String getHostId() {
+		return hostId;
+	}
+
+	public void setHostId(String hostId) {
+		this.hostId = hostId;
 	}
 
 	/**
@@ -606,8 +616,6 @@ public class GeneXpertResults implements java.io.Serializable {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -620,7 +628,7 @@ public class GeneXpertResults implements java.io.Serializable {
 				+ ", instrumentSerial=" + instrumentSerial + ", isPositive="
 				+ isPositive + ", laboratoryId=" + laboratoryId + ", moduleId="
 				+ moduleId + ", mtbBurden=" + mtbBurden + ", patientId="
-				+ patientId + ", pcId=" + pcId + ", probeCtA=" + probeCtA
+				+ patientId + ", pcId=" + pcId + ", hostId=" + hostId + ", probeCtA=" + probeCtA
 				+ ", probeCtB=" + probeCtB + ", probeCtC=" + probeCtC
 				+ ", probeCtD=" + probeCtD + ", probeCtE=" + probeCtE
 				+ ", probeCtSPC=" + probeCtSPC + ", probeEndptA=" + probeEndptA

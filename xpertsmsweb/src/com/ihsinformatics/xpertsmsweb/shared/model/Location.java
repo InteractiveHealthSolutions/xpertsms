@@ -22,7 +22,7 @@ public class Location implements java.io.Serializable {
 	private String addressColony;
 	private String addressTown;
 	private String cityId;
-	private Integer countryId;
+	private String countryId;
 	private Float addressLocationLat;
 	private Float addressLocationLon;
 	private String phone;
@@ -35,6 +35,7 @@ public class Location implements java.io.Serializable {
 	private String secondaryEmail;
 	private String detail;
 	private String addressLandMark;
+	private String parentLocation;
 
 	public Location() {
 		// Not implemented
@@ -49,11 +50,11 @@ public class Location implements java.io.Serializable {
 	public Location(String locationId, String locationName,
 			String locationType, String addressHouse, String addressStreet,
 			String addressSector, String addressColony, String addressTown,
-			String cityId, Integer countryId, Float addressLocationLat,
+			String cityId, String countryId, Float addressLocationLat,
 			Float addressLocationLon, String phone, String mobile, String fax,
 			String email, String secondaryPhone, String secondaryMobile,
 			String secondaryFax, String secondaryEmail, String detail,
-			String addressLandMark) {
+			String addressLandMark, String parentLocation) {
 		this.locationId = locationId;
 		this.locationName = locationName;
 		this.locationType = locationType;
@@ -76,6 +77,7 @@ public class Location implements java.io.Serializable {
 		this.secondaryEmail = secondaryEmail;
 		this.detail = detail;
 		this.addressLandMark = addressLandMark;
+		this.parentLocation = parentLocation;
 	}
 
 	public String getLocationId() {
@@ -150,11 +152,11 @@ public class Location implements java.io.Serializable {
 		this.cityId = cityId;
 	}
 
-	public Integer getCountryId() {
+	public String getCountryId() {
 		return this.countryId;
 	}
 
-	public void setCountryId(Integer countryId) {
+	public void setCountryId(String countryId) {
 		this.countryId = countryId;
 	}
 
@@ -254,6 +256,14 @@ public class Location implements java.io.Serializable {
 		this.addressLandMark = addressLandMark;
 	}
 
+	public String getParentLocation() {
+		return parentLocation;
+	}
+
+	public void setParentLocation(String parentLocation) {
+		this.parentLocation = parentLocation;
+	}
+
 	@Override
 	public String toString() {
 		return locationId + ", " + locationName + ", " + locationType + ", "
@@ -263,6 +273,7 @@ public class Location implements java.io.Serializable {
 				+ addressLocationLon + ", " + phone + ", " + mobile + ", "
 				+ fax + ", " + email + ", " + secondaryPhone + ", "
 				+ secondaryMobile + ", " + secondaryFax + ", " + secondaryEmail
-				+ ", " + detail + ", " + addressLandMark;
+				+ ", " + detail + ", " + addressLandMark + ", "
+				+ parentLocation;
 	}
 }

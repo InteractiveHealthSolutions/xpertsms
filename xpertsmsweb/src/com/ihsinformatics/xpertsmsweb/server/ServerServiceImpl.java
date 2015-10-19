@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Properties;
 
-import javax.management.InstanceAlreadyExistsException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -37,7 +36,6 @@ import com.ihsinformatics.xpertsmsweb.shared.model.EncounterResultsId;
 import com.ihsinformatics.xpertsmsweb.shared.model.GeneXpertResults;
 import com.ihsinformatics.xpertsmsweb.shared.model.Location;
 import com.ihsinformatics.xpertsmsweb.shared.model.MessageSettings;
-import com.ihsinformatics.xpertsmsweb.shared.model.OtherMessageSetting;
 import com.ihsinformatics.xpertsmsweb.shared.model.Patient;
 import com.ihsinformatics.xpertsmsweb.shared.model.Person;
 import com.ihsinformatics.xpertsmsweb.shared.model.UserRights;
@@ -49,8 +47,9 @@ import com.ihsinformatics.xpertsmsweb.shared.model.Users;
  * @author owais.hussain@ihsinformatics.com
  */
 @SuppressWarnings("serial")
-public class ServerServiceImpl extends RemoteServiceServlet implements
-		ServerService {
+public class ServerServiceImpl extends RemoteServiceServlet
+		implements
+			ServerService {
 	public static final Properties prop = new Properties();
 	public static String resourcesPath;
 
@@ -73,8 +72,8 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 					if (System.getProperty("os.name", "windows").toLowerCase()
 							.contains("windows"))
 						defaultDir = "c:\\apache-tomcat-6.0\\webapps\\xpertsmsweb";
-					propFile = new File(home + sep + "xpertsms"
-							+ sep + "xpertsmsweb.properties");
+					propFile = new File(home + sep + "xpertsms" + sep
+							+ "xpertsmsweb.properties");
 				}
 				Properties prop = new Properties();
 				// If file is not found, create one
@@ -82,7 +81,8 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 					prop.setProperty("app.dir", defaultDir);
 					prop.setProperty("version", "0.0.0");
 					prop.setProperty("backup.post.url", "");
-					prop.store(new FileOutputStream(propFile), "Writing new properties file");
+					prop.store(new FileOutputStream(propFile),
+							"Writing new properties file");
 				}
 				InputStream file = new FileInputStream(propFile);
 				prop.load(file);
@@ -312,22 +312,22 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 	public Boolean[] getUserRgihts(String userName, String menuName)
 			throws Exception {
 		if (userName.equalsIgnoreCase("ADMIN")) {
-			Boolean[] rights = { true, true, true, true, true };
+			Boolean[] rights = {true, true, true, true, true};
 			return rights;
 		}
 		String role = HibernateUtil.util.selectObject(
 				"select Role from Users where UserName='" + userName + "'")
 				.toString();
 		if (role.equalsIgnoreCase("ADMIN")) {
-			Boolean[] rights = { true, true, true, true, true };
+			Boolean[] rights = {true, true, true, true, true};
 			return rights;
 		}
 		UserRights userRights = (UserRights) HibernateUtil.util
 				.findObject("from UserRights where Role='" + role
 						+ "' and MenuName='" + menuName + "'");
-		Boolean[] rights = { userRights.isSearchAccess(),
+		Boolean[] rights = {userRights.isSearchAccess(),
 				userRights.isInsertAccess(), userRights.isUpdateAccess(),
-				userRights.isDeleteAccess(), userRights.isPrintAccess() };
+				userRights.isDeleteAccess(), userRights.isPrintAccess()};
 		return rights;
 	}
 
@@ -418,10 +418,6 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 
 	public Boolean deleteLocation(Location location) throws Exception {
 		return HibernateUtil.util.delete(location);
-	}
-
-	public Boolean deleteOtherMessageSetting(OtherMessageSetting setting) {
-		return HibernateUtil.util.delete(setting);
 	}
 
 	public Boolean deletePatient(Patient patient) throws Exception {
@@ -518,8 +514,10 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 	}
 
 	public MessageSettings findMessageSettings() throws Exception {
-		return (MessageSettings) HibernateUtil.util
-				.findObject("from MessageSettings");
+		Object obj = HibernateUtil.util.findObject("from MessageSettings");
+		if (obj != null)
+			return (MessageSettings) obj;
+		return null;
 	}
 
 	public Patient findPatient(String patientID) throws Exception {
@@ -628,13 +626,18 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 		return HibernateUtil.util.save(location);
 	}
 
-	public Boolean saveOtherMessageSetting(OtherMessageSetting setting) {
-		return HibernateUtil.util.save(setting);
-	}
-
 	public Boolean saveMessageSettings(MessageSettings messageSettings)
 			throws Exception {
-		return HibernateUtil.util.save(messageSettings);
+		// If a setting exists, update it. Create othewise
+		MessageSettings settings = findMessageSettings();
+		if (settings == null) {
+			messageSettings.setSettingsId(1);
+			return HibernateUtil.util.save(messageSettings);
+		}
+		else {
+			messageSettings.setSettingsId(settings.getSettingsId());
+			return HibernateUtil.util.update(messageSettings);
+		}
 	}
 
 	public Boolean saveNewPatient(Patient patient, Person person,
@@ -686,10 +689,6 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 
 	public Boolean updateEncounter(Encounter encounter) throws Exception {
 		return HibernateUtil.util.update(encounter);
-	}
-
-	public boolean updateOtherMessageSetting(OtherMessageSetting setting) {
-		return HibernateUtil.util.update(setting);
 	}
 
 	public Boolean updateEncounterResults(EncounterResults encounterResults)
@@ -752,17 +751,6 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 		return HibernateUtil.util.update(userRights);
 	}
 
-	public Boolean updateGeneXpertResultsAuto(
-			GeneXpertResults geneXpertResults, Boolean isTBPositive,
-			String operatorId, String pcId, String instrumentSerial,
-			String moduleId, String cartridgeId, String reagentLotId)
-			throws Exception {
-		Boolean result = HibernateUtil.util.update(geneXpertResults);
-
-		SMSUtil.util.sendAlertsOnAutoGXPResults(geneXpertResults);
-		return result;
-	}
-
 	public Location[] findLocationsByType(String locationType) {
 		Object[] list = HibernateUtil.util
 				.findObjects("from Location where locationType='"
@@ -781,20 +769,6 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 		for (int i = 0; i < list.length; i++)
 			locations[i] = (Location) list[i];
 		return locations;
-	}
-
-	public OtherMessageSetting[] findOtherMessageRecipient() {
-		Object[] list = HibernateUtil.util
-				.findObjects("from OtherMessageSetting");
-		OtherMessageSetting[] locations = new OtherMessageSetting[list.length];
-		for (int i = 0; i < list.length; i++)
-			locations[i] = (OtherMessageSetting) list[i];
-		return locations;
-	}
-
-	public OtherMessageSetting findOtherMessageRecipientById(String id) {
-		return (OtherMessageSetting) HibernateUtil.util
-				.findObject("from OtherMessageSetting where id = '" + id + "'");
 	}
 
 	@Override

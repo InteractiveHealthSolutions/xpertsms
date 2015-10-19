@@ -222,6 +222,7 @@ public class ResultServer extends Thread {
 		XpertResultUploadMessage message = null;
 		try {
 			message = outgoingMessages.take();
+			System.out.println(message.toString().length());
 		}
 		catch (InterruptedException e) {
 			e.printStackTrace();

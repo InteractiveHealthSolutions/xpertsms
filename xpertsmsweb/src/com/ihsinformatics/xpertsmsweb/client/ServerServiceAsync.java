@@ -12,7 +12,6 @@ import com.ihsinformatics.xpertsmsweb.shared.model.EncounterResultsId;
 import com.ihsinformatics.xpertsmsweb.shared.model.GeneXpertResults;
 import com.ihsinformatics.xpertsmsweb.shared.model.Location;
 import com.ihsinformatics.xpertsmsweb.shared.model.MessageSettings;
-import com.ihsinformatics.xpertsmsweb.shared.model.OtherMessageSetting;
 import com.ihsinformatics.xpertsmsweb.shared.model.Patient;
 import com.ihsinformatics.xpertsmsweb.shared.model.Person;
 import com.ihsinformatics.xpertsmsweb.shared.model.UserRights;
@@ -78,11 +77,6 @@ public interface ServerServiceAsync {
 	/* Find methods */
 	void findContact(String personID, AsyncCallback<Contact> callback)
 			throws Exception;
-
-	void findOtherMessageRecipient(AsyncCallback<OtherMessageSetting[]> callback);
-
-	void findOtherMessageRecipientById(String id,
-			AsyncCallback<OtherMessageSetting> callback);
 
 	void findEncounter(EncounterId encounterID,
 			AsyncCallback<Encounter> callback) throws Exception;
@@ -254,22 +248,4 @@ public interface ServerServiceAsync {
 
 	void recordLogout(String userName, AsyncCallback<Void> callback)
 			throws Exception;
-
-	void saveOtherMessageSetting(OtherMessageSetting setting,
-			AsyncCallback<Boolean> callback);
-
-	void updateOtherMessageSetting(OtherMessageSetting setting,
-			AsyncCallback<Boolean> callback);
-
-	void deleteOtherMessageSetting(OtherMessageSetting setting,
-			AsyncCallback<Boolean> callback);
-
-	void findFacilitiesByDistrictId(String districtValue,
-			AsyncCallback<Location[]> asyncCallback);
-
-	void findDistrict(String districtValue,
-			AsyncCallback<Location> asyncCallback);
-
-	void findFacility(String facilityId, String districtId,
-			AsyncCallback<Location> asyncCallback);
 }
