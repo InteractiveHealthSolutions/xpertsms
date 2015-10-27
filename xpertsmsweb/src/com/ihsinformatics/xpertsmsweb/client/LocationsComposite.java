@@ -36,55 +36,88 @@ import com.ihsinformatics.xpertsmsweb.shared.XSMS;
 import com.ihsinformatics.xpertsmsweb.shared.model.Location;
 import com.ihsinformatics.xpertsmsweb.shared.model.Users;
 
-public class LocationsComposite extends Composite implements IForm,
-		ClickHandler, ChangeHandler {
+public class LocationsComposite extends Composite implements IForm, ClickHandler, ChangeHandler {
+	
 	private static ServerServiceAsync service = GWT.create(ServerService.class);
+	
 	private static LoadingWidget loading = new LoadingWidget();
+	
 	private static final String menuName = "SETUP";
-
+	
 	private UserRightsUtil rights = new UserRightsUtil();
+	
 	private boolean valid;
+	
 	private Location currentLocation;
-
+	
 	private FlexTable flexTable = new FlexTable();
+	
 	private FlexTable topFlexTable = new FlexTable();
+	
 	private FlexTable leftFlexTable = new FlexTable();
+	
 	private FlexTable rightFlexTable = new FlexTable();
+	
 	private Grid grid = new Grid(1, 3);
-
+	
 	private ToggleButton createButton = new ToggleButton("Create");
+	
 	private Button saveButton = new Button("Save");
+	
 	private Button deleteButton = new Button("Delete");
+	
 	private Button closeButton = new Button("Close");
-
+	
 	private Label label = new Label("Locations");
+	
 	private Label lblLocationId = new Label("Location ID:");
+	
 	private Label lblLocationName = new Label("Location Name:");
+	
 	private Label lblLocationType = new Label("Location Type:");
+	
 	private Label lblAddress = new Label("Address 1:");
+	
 	private Label lblAddress_1 = new Label("Address 2:");
+	
 	private Label lblCountry = new Label("Country:");
+	
 	private Label lblRegion = new Label("Region:");
+	
 	private Label lblPhone = new Label("Phone:");
+	
 	private Label lblMobile = new Label("Mobile(s):");
+	
 	private Label lblEmailAddress = new Label("Email Address:");
+	
 	private Label lblReportingTo = new Label("Reporting To:");
-
+	
 	private TextBox locationIdTextBox = new TextBox();
+	
 	private TextBox locationNameTextBox = new TextBox();
+	
 	private TextBox address1TextBox = new TextBox();
+	
 	private TextBox address2TextBox = new TextBox();
+	
 	private TextBox phoneTextBox = new TextBox();
+	
 	private TextBox mobileTextBox = new TextBox();
+	
 	private TextBox emailTextBox = new TextBox();
-
+	
 	private ListBox locationNamesListBox = new ListBox();
+	
 	private ListBox locationTypesComboBox = new ListBox();
+	
 	private ListBox locationTypeComboBox = new ListBox();
+	
 	private ListBox countryComboBox = new ListBox();
+	
 	private ListBox cityComboBox = new ListBox();
+	
 	private ListBox reportingToComboBox = new ListBox();
-
+	
 	public LocationsComposite() {
 		initWidget(flexTable);
 		flexTable.setSize("80%", "100%");
@@ -92,15 +125,14 @@ public class LocationsComposite extends Composite implements IForm,
 		label.setWordWrap(false);
 		label.setStyleName("title");
 		topFlexTable.setWidget(0, 0, label);
-		topFlexTable.getCellFormatter().setHorizontalAlignment(0, 0,
-				HasHorizontalAlignment.ALIGN_CENTER);
+		topFlexTable.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		flexTable.setWidget(1, 0, leftFlexTable);
 		locationTypesComboBox.setName("LOCATION_TYPE");
 		locationTypesComboBox
-				.setTitle("This box contains Location Types from Definition. Selecting anyone fills the list box below.");
+		        .setTitle("This box contains Location Types from Definition. Selecting anyone fills the list box below.");
 		leftFlexTable.setWidget(0, 0, locationTypesComboBox);
 		locationNamesListBox
-				.setTitle("This list box contains Location names of selected type. Clicking anyone fills details in right panel.");
+		        .setTitle("This list box contains Location names of selected type. Clicking anyone fills details in right panel.");
 		leftFlexTable.setWidget(1, 0, locationNamesListBox);
 		locationNamesListBox.setVisibleItemCount(10);
 		flexTable.setWidget(1, 1, rightFlexTable);
@@ -150,10 +182,10 @@ public class LocationsComposite extends Composite implements IForm,
 		deleteButton.setEnabled(false);
 		grid.setWidget(0, 1, deleteButton);
 		grid.setWidget(0, 2, closeButton);
-		flexTable.getRowFormatter().setVerticalAlign(1,
-				HasVerticalAlignment.ALIGN_TOP);
-
+		flexTable.getRowFormatter().setVerticalAlign(1, HasVerticalAlignment.ALIGN_TOP);
+		
 		mobileTextBox.addBlurHandler(new BlurHandler() {
+			
 			@Override
 			public void onBlur(BlurEvent event) {
 				Window.alert("You can use multiple comma separated numbers. This feature is used to send message alerts.");
@@ -165,49 +197,45 @@ public class LocationsComposite extends Composite implements IForm,
 		saveButton.addClickHandler(this);
 		deleteButton.addClickHandler(this);
 		closeButton.addClickHandler(this);
-
+		
 		refreshList();
 		try {
-			service.getColumnData("Location", "LocationID",
-					"LocationType <> 'LABORATORY'",
-					new AsyncCallback<String[]>() {
-
-						@Override
-						public void onSuccess(String[] result) {
-							reportingToComboBox.addItem("");
-							for (String location : result) {
-								reportingToComboBox.addItem(location);
-							}
-							setRights(menuName);
-						}
-
-						@Override
-						public void onFailure(Throwable caught) {
-							setRights(menuName);
-						}
-					});
-		} catch (Exception e) {
+			service.getColumnData("Location", "LocationID", "LocationType='LABORATORY'", new AsyncCallback<String[]>() {
+				
+				@Override
+				public void onSuccess(String[] result) {
+					reportingToComboBox.addItem("");
+					for (String location : result) {
+						reportingToComboBox.addItem(location);
+					}
+					setRights(menuName);
+				}
+				
+				@Override
+				public void onFailure(Throwable caught) {
+					setRights(menuName);
+				}
+			});
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public void refreshList() {
-		String[] locationTypes = { "LABORATORY", "HOSPITAL", "CLINIC",
-				"OTHER_REFERRAL", "OTHER" };
+		String[] locationTypes = { "LABORATORY", "HOSPITAL", "CLINIC", "OTHER_REFERRAL", "OTHER" };
 		for (String type : locationTypes) {
 			locationTypeComboBox.addItem(type);
 			locationTypesComboBox.addItem(type);
 		}
 		countryComboBox.addItem("PAKISTAN");
-		String[] cities = { "KARACHI", "LAHORE", "FAISALABAD", "RAWALPINDI",
-				"MULTAN", "HYDERABAD", "GUJRANWALA", "PESHAWAR", "QUETTA",
-				"ISLAMABAD", "SARGODHA", "SIALKOT", "BAHAWALPUR", "SUKKUR",
-				"JHANG", "SHEIKHUPURA", "LARKANA", "GUJRAT", "MARDAN", "KASUR",
-				"RAHIM YAR KHAN", "SAHIWAL", "OKARA" };
+		String[] cities = { "KARACHI", "LAHORE", "FAISALABAD", "RAWALPINDI", "MULTAN", "HYDERABAD", "GUJRANWALA",
+		        "PESHAWAR", "QUETTA", "ISLAMABAD", "SARGODHA", "SIALKOT", "BAHAWALPUR", "SUKKUR", "JHANG", "SHEIKHUPURA",
+		        "LARKANA", "GUJRAT", "MARDAN", "KASUR", "RAHIM YAR KHAN", "SAHIWAL", "OKARA" };
 		for (String city : cities)
 			cityComboBox.addItem(city);
 	}
-
+	
 	/**
 	 * Display/Hide main panel and loading widget
 	 * 
@@ -220,7 +248,7 @@ public class LocationsComposite extends Composite implements IForm,
 		else
 			loading.hide();
 	}
-
+	
 	public void clearControls(Widget w) {
 		if (w instanceof Panel) {
 			Iterator<Widget> iter = ((Panel) w).iterator();
@@ -236,83 +264,76 @@ public class LocationsComposite extends Composite implements IForm,
 			((DatePicker) w).setValue(new Date());
 		}
 	}
-
+	
 	public void setCurrent() {
-		currentLocation.setAddressHouse(XpertSmsWebClient.get(address1TextBox)
-				.toUpperCase());
-		currentLocation.setAddressStreet(XpertSmsWebClient.get(address2TextBox)
-				.toUpperCase());
+		currentLocation.setLocationType(XpertSmsWebClient.get(locationTypeComboBox));
+		currentLocation.setAddressHouse(XpertSmsWebClient.get(address1TextBox).toUpperCase());
+		currentLocation.setAddressStreet(XpertSmsWebClient.get(address2TextBox).toUpperCase());
 		currentLocation.setCityId(XpertSmsWebClient.get(cityComboBox));
 		currentLocation.setCountryId(XpertSmsWebClient.get(countryComboBox));
 		currentLocation.setPhone(XpertSmsWebClient.get(phoneTextBox));
 		currentLocation.setMobile(XpertSmsWebClient.get(mobileTextBox));
-		currentLocation.setEmail(XpertSmsWebClient.get(emailTextBox)
-				.toUpperCase());
+		currentLocation.setEmail(XpertSmsWebClient.get(emailTextBox).toUpperCase());
+		currentLocation.setParentLocation(XpertSmsWebClient.get(reportingToComboBox));
 	}
-
+	
 	@Override
 	public void fillData() {
 		try {
-			service.findLocation(XpertSmsWebClient.get(locationNamesListBox),
-					new AsyncCallback<Location>() {
-						@Override
-						public void onSuccess(Location result) {
-							if (result == null)
-								Window.alert(CustomMessage
-										.getErrorMessage(ErrorType.ITEM_NOT_FOUND));
-							else {
-								currentLocation = result;
-								locationIdTextBox.setValue(currentLocation
-										.getLocationId());
-								locationNameTextBox.setValue(currentLocation
-										.getLocationName());
-								address1TextBox.setValue(currentLocation
-										.getAddressHouse());
-								address2TextBox.setValue(currentLocation
-										.getAddressStreet());
-								cityComboBox.setSelectedIndex(XpertSmsWebClient
-										.getIndex(cityComboBox,
-												currentLocation.getCityId()));
-								countryComboBox.setSelectedIndex(XpertSmsWebClient
-										.getIndex(countryComboBox,
-												currentLocation.getCountryId()));
-								phoneTextBox.setValue(currentLocation
-										.getPhone());
-								mobileTextBox.setValue(currentLocation
-										.getMobile());
-								emailTextBox.setValue(currentLocation
-										.getEmail());
-							}
-							load(false);
+			service.findLocation(XpertSmsWebClient.get(locationNamesListBox), new AsyncCallback<Location>() {
+				
+				@Override
+				public void onSuccess(Location result) {
+					if (result == null)
+						Window.alert(CustomMessage.getErrorMessage(ErrorType.ITEM_NOT_FOUND));
+					else {
+						currentLocation = result;
+						locationIdTextBox.setValue(currentLocation.getLocationId());
+						locationNameTextBox.setValue(currentLocation.getLocationName());
+						locationTypeComboBox.setSelectedIndex(XpertSmsWebClient.getIndex(locationTypeComboBox,
+						    currentLocation.getLocationType()));
+						address1TextBox.setValue(currentLocation.getAddressHouse());
+						address2TextBox.setValue(currentLocation.getAddressStreet());
+						cityComboBox.setSelectedIndex(XpertSmsWebClient.getIndex(cityComboBox, currentLocation.getCityId()));
+						countryComboBox.setSelectedIndex(XpertSmsWebClient.getIndex(countryComboBox,
+						    currentLocation.getCountryId()));
+						phoneTextBox.setValue(currentLocation.getPhone());
+						mobileTextBox.setValue(currentLocation.getMobile());
+						emailTextBox.setValue(currentLocation.getEmail());
+						if (currentLocation.getParentLocation() != null) {
+							reportingToComboBox.setSelectedIndex(XpertSmsWebClient.getIndex(reportingToComboBox,
+							    currentLocation.getParentLocation()));
 						}
-
-						@Override
-						public void onFailure(Throwable caught) {
-							caught.printStackTrace();
-							load(false);
-						}
-					});
-		} catch (Exception e) {
+					}
+					load(false);
+				}
+				
+				@Override
+				public void onFailure(Throwable caught) {
+					caught.printStackTrace();
+					load(false);
+				}
+			});
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 			load(false);
 		}
 	}
-
+	
 	@Override
 	public void clearUp() {
 		clearControls(flexTable);
 	}
-
+	
 	@Override
 	public boolean validate() {
 		final StringBuilder errorMessage = new StringBuilder();
 		valid = true;
 		/* Validate mandatory fields */
-		if (XpertSmsWebClient.get(locationIdTextBox).equals("")
-				|| XpertSmsWebClient.get(locationNameTextBox).equals("")
-				|| XpertSmsWebClient.get(locationTypeComboBox).equals("")) {
-			errorMessage.append(CustomMessage
-					.getErrorMessage(ErrorType.EMPTY_DATA_ERROR) + "\n");
+		if (XpertSmsWebClient.get(locationIdTextBox).equals("") || XpertSmsWebClient.get(locationNameTextBox).equals("")
+		        || XpertSmsWebClient.get(locationTypeComboBox).equals("")) {
+			errorMessage.append(CustomMessage.getErrorMessage(ErrorType.EMPTY_DATA_ERROR) + "\n");
 			valid = false;
 		}
 		if (!valid) {
@@ -321,160 +342,143 @@ public class LocationsComposite extends Composite implements IForm,
 		}
 		return valid;
 	}
-
+	
 	@Override
 	public void saveData() {
 		if (validate()) {
 			/* Validate uniqueness */
 			try {
-				currentLocation = new Location(XpertSmsWebClient.get(
-						locationIdTextBox).toUpperCase(), XpertSmsWebClient
-						.get(locationNameTextBox).toUpperCase(),
-						XpertSmsWebClient.get(locationTypeComboBox));
+				currentLocation = new Location(XpertSmsWebClient.get(locationIdTextBox).toUpperCase(), XpertSmsWebClient
+				        .get(locationNameTextBox).toUpperCase(), XpertSmsWebClient.get(locationTypeComboBox));
 				setCurrent();
-				service.saveLocation(currentLocation,
-						new AsyncCallback<Boolean>() {
-							public void onSuccess(Boolean result) {
-								if (result == null)
-									Window.alert(CustomMessage
-											.getErrorMessage(ErrorType.DUPLICATION_ERROR));
-								else if (result) {
-									Window.alert(CustomMessage
-											.getInfoMessage(InfoType.INSERTED));
-									clearUp();
-								} else
-									Window.alert(CustomMessage
-											.getErrorMessage(ErrorType.INSERT_ERROR));
-								load(false);
-							}
-
-							public void onFailure(Throwable caught) {
-								Window.alert(CustomMessage
-										.getErrorMessage(ErrorType.INSERT_ERROR));
-								load(false);
-							}
-						});
-			} catch (Exception e) {
+				service.saveLocation(currentLocation, new AsyncCallback<Boolean>() {
+					
+					public void onSuccess(Boolean result) {
+						if (result == null)
+							Window.alert(CustomMessage.getErrorMessage(ErrorType.DUPLICATION_ERROR));
+						else if (result) {
+							Window.alert(CustomMessage.getInfoMessage(InfoType.INSERTED));
+							clearUp();
+						} else
+							Window.alert(CustomMessage.getErrorMessage(ErrorType.INSERT_ERROR));
+						load(false);
+					}
+					
+					public void onFailure(Throwable caught) {
+						Window.alert(CustomMessage.getErrorMessage(ErrorType.INSERT_ERROR));
+						load(false);
+					}
+				});
+			}
+			catch (Exception e) {
 				e.printStackTrace();
 				load(false);
 			}
 		}
 	}
-
+	
 	@Override
 	public void updateData() {
 		if (validate()) {
 			try {
 				setCurrent();
-				service.updateLocation(currentLocation,
-						new AsyncCallback<Boolean>() {
-							public void onSuccess(Boolean result) {
-								if (result)
-									Window.alert(CustomMessage
-											.getInfoMessage(InfoType.UPDATED));
-								else
-									Window.alert(CustomMessage
-											.getErrorMessage(ErrorType.UPDATE_ERROR));
-								load(false);
-							}
-
-							public void onFailure(Throwable caught) {
-								Window.alert(CustomMessage
-										.getErrorMessage(ErrorType.UPDATE_ERROR));
-								load(false);
-							}
-						});
-
-			} catch (Exception e) {
+				service.updateLocation(currentLocation, new AsyncCallback<Boolean>() {
+					
+					public void onSuccess(Boolean result) {
+						if (result)
+							Window.alert(CustomMessage.getInfoMessage(InfoType.UPDATED));
+						else
+							Window.alert(CustomMessage.getErrorMessage(ErrorType.UPDATE_ERROR));
+						load(false);
+					}
+					
+					public void onFailure(Throwable caught) {
+						Window.alert(CustomMessage.getErrorMessage(ErrorType.UPDATE_ERROR));
+						load(false);
+					}
+				});
+				
+			}
+			catch (Exception e) {
 				e.printStackTrace();
 				load(false);
 			}
 		}
 	}
-
+	
 	@Override
 	public void deleteData() {
 		if (validate()) {
 			try {
-				service.deleteLocation(currentLocation,
-						new AsyncCallback<Boolean>() {
-							public void onSuccess(Boolean result) {
-								if (result) {
-									Window.alert(CustomMessage
-											.getInfoMessage(InfoType.DELETED));
-									clearUp();
-									locationNamesListBox.removeItem(XpertSmsWebClient
-											.getIndex(locationNamesListBox,
-													currentLocation
-															.getLocationId()));
-								} else
-									Window.alert(CustomMessage
-											.getErrorMessage(ErrorType.DELETE_ERROR));
-								load(false);
-							}
-
-							public void onFailure(Throwable caught) {
-								Window.alert(CustomMessage
-										.getErrorMessage(ErrorType.DELETE_ERROR));
-								load(false);
-							}
-						});
-			} catch (Exception e) {
+				service.deleteLocation(currentLocation, new AsyncCallback<Boolean>() {
+					
+					public void onSuccess(Boolean result) {
+						if (result) {
+							Window.alert(CustomMessage.getInfoMessage(InfoType.DELETED));
+							clearUp();
+							locationNamesListBox.removeItem(XpertSmsWebClient.getIndex(locationNamesListBox,
+							    currentLocation.getLocationId()));
+						} else
+							Window.alert(CustomMessage.getErrorMessage(ErrorType.DELETE_ERROR));
+						load(false);
+					}
+					
+					public void onFailure(Throwable caught) {
+						Window.alert(CustomMessage.getErrorMessage(ErrorType.DELETE_ERROR));
+						load(false);
+					}
+				});
+			}
+			catch (Exception e) {
 				e.printStackTrace();
 				load(false);
 			}
 		}
 	}
-
+	
 	@Override
 	public void setRights(String menuName) {
 		try {
 			load(true);
-			service.getUserRgihts(XSMS.getCurrentUser(), menuName,
-					new AsyncCallback<Boolean[]>() {
-						public void onSuccess(Boolean[] result) {
-							final Boolean[] userRights = result;
-							try {
-								service.findUser(XSMS.getCurrentUser(),
-										new AsyncCallback<Users>() {
-											public void onSuccess(Users result) {
-												rights.setRoleRights(
-														result.getRole(),
-														userRights);
-												locationTypeComboBox.setEnabled(rights
-														.getAccess(AccessType.SELECT));
-												locationNamesListBox.setEnabled(rights
-														.getAccess(AccessType.SELECT));
-												createButton.setEnabled(rights
-														.getAccess(AccessType.INSERT));
-												saveButton.setEnabled(rights
-														.getAccess(AccessType.UPDATE));
-												deleteButton.setEnabled(rights
-														.getAccess(AccessType.DELETE));
-												load(false);
-											}
-
-											public void onFailure(
-													Throwable caught) {
-												load(false);
-											}
-										});
-							} catch (Exception e) {
-								e.printStackTrace();
+			service.getUserRgihts(XSMS.getCurrentUser(), menuName, new AsyncCallback<Boolean[]>() {
+				
+				public void onSuccess(Boolean[] result) {
+					final Boolean[] userRights = result;
+					try {
+						service.findUser(XSMS.getCurrentUser(), new AsyncCallback<Users>() {
+							
+							public void onSuccess(Users result) {
+								rights.setRoleRights(result.getRole(), userRights);
+								locationTypeComboBox.setEnabled(rights.getAccess(AccessType.SELECT));
+								locationNamesListBox.setEnabled(rights.getAccess(AccessType.SELECT));
+								createButton.setEnabled(rights.getAccess(AccessType.INSERT));
+								saveButton.setEnabled(rights.getAccess(AccessType.UPDATE));
+								deleteButton.setEnabled(rights.getAccess(AccessType.DELETE));
 								load(false);
 							}
-						}
-
-						public void onFailure(Throwable caught) {
-							load(false);
-						}
-					});
-		} catch (Exception e) {
+							
+							public void onFailure(Throwable caught) {
+								load(false);
+							}
+						});
+					}
+					catch (Exception e) {
+						e.printStackTrace();
+						load(false);
+					}
+				}
+				
+				public void onFailure(Throwable caught) {
+					load(false);
+				}
+			});
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 			load(false);
 		}
 	}
-
+	
 	public void onClick(ClickEvent event) {
 		Widget sender = (Widget) event.getSource();
 		load(true);
@@ -496,30 +500,28 @@ public class LocationsComposite extends Composite implements IForm,
 			MainMenuComposite.clear();
 		}
 	}
-
+	
 	public void onChange(ChangeEvent event) {
 		Widget sender = (Widget) event.getSource();
 		load(true);
 		if (sender == locationTypesComboBox) {
 			try {
-				String locationType = XpertSmsWebClient
-						.get(locationTypesComboBox);
-				service.findLocationsByType(locationType,
-						new AsyncCallback<Location[]>() {
-							public void onSuccess(Location[] result) {
-								locationNamesListBox.clear();
-								for (Location s : result)
-									locationNamesListBox.addItem(
-											s.getLocationName(),
-											s.getLocationId());
-								load(false);
-							}
-
-							public void onFailure(Throwable caught) {
-								load(false);
-							}
-						});
-			} catch (Exception e) {
+				String locationType = XpertSmsWebClient.get(locationTypesComboBox);
+				service.findLocationsByType(locationType, new AsyncCallback<Location[]>() {
+					
+					public void onSuccess(Location[] result) {
+						locationNamesListBox.clear();
+						for (Location s : result)
+							locationNamesListBox.addItem(s.getLocationName(), s.getLocationId());
+						load(false);
+					}
+					
+					public void onFailure(Throwable caught) {
+						load(false);
+					}
+				});
+			}
+			catch (Exception e) {
 				e.printStackTrace();
 				load(false);
 			}

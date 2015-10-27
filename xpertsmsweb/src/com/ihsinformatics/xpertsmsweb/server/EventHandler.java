@@ -349,12 +349,13 @@ public class EventHandler extends HttpServlet {
 		Date dateObj = null;
 		if (dateStr != null) {
 			try {
+				boolean isStamp = !dateStr.contains("-");
 				if (dateStr.length() > 10)
 					dateObj = DateTimeUtil.getDateFromString(dateStr,
-							DateTimeUtil.SQL_DATETIME);
+							isStamp ? DateTimeUtil.DATETIME_STAMP : DateTimeUtil.SQL_DATETIME);
 				else
 					dateObj = DateTimeUtil.getDateFromString(dateStr,
-							DateTimeUtil.SQL_DATE);
+						isStamp ? DateTimeUtil.DATE_STAMP : DateTimeUtil.SQL_DATE);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
