@@ -126,7 +126,7 @@ public class UsersComposite extends Composite implements IForm, ClickHandler,
 
 		createButton.addClickHandler(this);
 		saveButton.addClickHandler(this);
-		deleteButton.addClickHandler(this);
+		//deleteButton.addClickHandler(this);
 		closeButton.addClickHandler(this);
 
 		refreshLists();

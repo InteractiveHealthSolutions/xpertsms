@@ -9,6 +9,8 @@ public class DateTimeUtil {
 
 	public static final String FE_FORMAT = "dd/MM/yyyy HH:mm:ss";
 	public static final String SQL_DATETIME = "yyyy-MM-dd HH:mm:ss";
+	public static final String DATE_STAMP = "yyyyMMdd";
+	public static final String DATETIME_STAMP = "yyyyMMddHHmmss";
 	public static final String DOB_FORMAT = "dd/MM/yyyy";
 	public static final String SQL_DATE = "yyyy-MM-dd";
 
