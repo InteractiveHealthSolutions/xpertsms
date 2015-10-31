@@ -35,7 +35,6 @@ import com.ihsinformatics.xpertsms.XpertProperties;
 import com.ihsinformatics.xpertsms.model.MessageType;
 import com.ihsinformatics.xpertsms.net.ResultServer;
 import com.ihsinformatics.xpertsms.util.PrintWriterUtil;
-import com.ihsinformatics.xpertsms.util.SmsTarseel;
 
 /**
  * Demon GUI form to view activity of messages between GX DX and XpertSMS

@@ -498,7 +498,8 @@ public class EventHandler extends HttpServlet {
 			hc.setDoOutput(true);
 			try {
 				os = hc.getOutputStream();
-				Enumeration<String> names = request.getParameterNames();
+				@SuppressWarnings("unchecked")
+                Enumeration<String> names = request.getParameterNames();
 				StringBuilder queryString = new StringBuilder();
 				while (names.hasMoreElements()) {
 					String parameter = names.nextElement();

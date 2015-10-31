@@ -123,12 +123,6 @@ public final class XpertProperties {
 	
 	public static final String WEB_PASSWORD = "xpert_password";
 	
-	public static final String SERVER_URL = "server_url";
-	
-	public static final String SERVER_PORT = "server_port";
-	
-	public static final String EXPORT_PROBES = "export_probes";
-	
 	public static final String WEB_SSL_ENCRYPTION = "default_send_method";
 
 	/**
@@ -144,11 +138,6 @@ public final class XpertProperties {
 				e.printStackTrace();
 			}
 		} else {
-			// TODO: Legacy, remove after new LogViewer is ready
-			props.setProperty(SERVER_URL, "127.0.0.1");
-			props.setProperty(SERVER_PORT, "8080");
-			props.setProperty(EXPORT_PROBES, "YES");
-			
 			props.setProperty(VERSION, "2.0.0-beta");
 			props.setProperty(BUILD, "1");
 			props.setProperty(CSV_EXPORT, "NO");

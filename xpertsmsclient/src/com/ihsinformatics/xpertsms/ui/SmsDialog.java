@@ -67,7 +67,7 @@ public class SmsDialog extends JDialog implements ActionListener {
 	
 	private JPanel topDialogPanel;
 	
-	private JList variablesList;
+	private JList<Object> variablesList;
 	
 	private JScrollPane verticalScrollPane;
 	
@@ -83,7 +83,7 @@ public class SmsDialog extends JDialog implements ActionListener {
 	
 	private JTextField adminPhoneTextField;
 	
-	private JComboBox dateTimeFormatComboBox;
+	private JComboBox<?> dateTimeFormatComboBox;
 	
 	private JButton recommendedButton;
 	
@@ -109,17 +109,18 @@ public class SmsDialog extends JDialog implements ActionListener {
 	/**
 	 * Initialize form components and layout
 	 */
-	public void initComponents() {
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+    public void initComponents() {
 		topDialogPanel = new javax.swing.JPanel();
 		projectNameLabel = new JLabel();
 		projectNameTextField = new JTextField();
 		adminPhoneLabel = new JLabel();
 		adminPhoneTextField = new JTextField();
 		dateTimeFormatLabel = new JLabel();
-		dateTimeFormatComboBox = new JComboBox();
+		dateTimeFormatComboBox = new JComboBox<Object>();
 		variablesListLabel = new JLabel();
 		verticalScrollPane = new JScrollPane();
-		variablesList = new JList();
+		variablesList = new JList<Object>();
 		recommendedButton = new JButton("Recommended");
 		tryButton = new JButton();
 		saveButton = new JButton();
@@ -157,7 +158,7 @@ public class SmsDialog extends JDialog implements ActionListener {
 		variablesList
 		        .setToolTipText("Select all the attributes to be sent via SMS. Press Ctrl key and click multiple variables. In order to avoid long messages, choose only the essential ones. The default selections send an SMS of approximately 190 characters");
 		verticalScrollPane.setViewportView(variablesList);
-		variablesList.setModel(new AbstractListModel() {
+		variablesList.setModel(new AbstractListModel<Object>() {
 			
 			private static final long serialVersionUID = 8641812103569559442L;
 			

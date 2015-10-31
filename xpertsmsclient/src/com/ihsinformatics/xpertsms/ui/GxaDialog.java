@@ -23,6 +23,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -39,6 +40,7 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
+
 import net.sf.json.JSONObject;
 
 import com.ihsinformatics.xpertsms.XpertProperties;
@@ -73,7 +75,7 @@ public class GxaDialog extends JDialog implements ActionListener {
 	
 	private JCheckBox sslCheckBox;
 	
-	private JComboBox dateFormatComboBox;
+	private JComboBox<?> dateFormatComboBox;
 	
 	private JButton saveButton;
 	
@@ -89,7 +91,8 @@ public class GxaDialog extends JDialog implements ActionListener {
 	/**
 	 * Initialize form components and layout
 	 */
-	public void initComponents() {
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+    public void initComponents() {
 		setName("csvDialog");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setResizable(false);

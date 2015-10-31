@@ -14,7 +14,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +26,6 @@ import org.irdresearch.smstarseel.context.TarseelServices;
 import org.irdresearch.smstarseel.data.OutboundMessage;
 
 import com.ihsinformatics.xpertsmsweb.server.ServerServiceImpl;
-import com.ihsinformatics.xpertsmsweb.shared.model.GeneXpertResults;
 
 /**
  * @author owais.hussain@ihsinformatics.com

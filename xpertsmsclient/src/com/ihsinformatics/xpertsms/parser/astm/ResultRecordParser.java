@@ -61,7 +61,7 @@ public class ResultRecordParser extends BaseParser {
 				setTestEndDate(fields[12]);
 			if (fields[13].length() != 0)
 				setInstrumentData(fields[13]);
-		} else if (XpertProperties.props.getProperty(XpertProperties.EXPORT_PROBES).equals("YES")) {
+		} else {
 			setProbeResult(fields[2], fields[3]);
 		}
 	}

@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.swing.AbstractListModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -48,6 +49,7 @@ import com.ihsinformatics.xpertsms.util.SwingUtil;
 
 /**
  * GUI form to provide settings for CSV to send results to
+ * 
  * @author owais.hussain@ihsinformatics.com
  */
 public class CsvDialog extends JDialog implements ActionListener {
@@ -72,9 +74,9 @@ public class CsvDialog extends JDialog implements ActionListener {
 	
 	private JCheckBox useQuotesCheckBox;
 	
-	private JComboBox dateFormatComboBox;
+	private JComboBox<?> dateFormatComboBox;
 	
-	private JComboBox fieldSeparatorComboBox;
+	private JComboBox<?> fieldSeparatorComboBox;
 	
 	private JButton selectFolderButton;
 	
@@ -86,7 +88,7 @@ public class CsvDialog extends JDialog implements ActionListener {
 	
 	private JButton tryButton;
 	
-	private JList variablesList;
+	private JList<Object> variablesList;
 	
 	private JScrollPane variablesScrollPanel;
 	
@@ -108,6 +110,7 @@ public class CsvDialog extends JDialog implements ActionListener {
 	/**
 	 * Initialize form components and layout
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void initComponents() {
 		setName("csvDialog");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -135,9 +138,10 @@ public class CsvDialog extends JDialog implements ActionListener {
 		variablesList = new javax.swing.JList();
 		variablesList.addListSelectionListener(new ListSelectionListener() {
 			
+			@SuppressWarnings("deprecation")
 			public void valueChanged(ListSelectionEvent e) {
 				if (!e.getValueIsAdjusting()) {
-					JList list = (JList) e.getSource();
+					JList<?> list = (JList<?>) e.getSource();
 					StringBuilder sb = new StringBuilder();
 					for (Object value : list.getSelectedValues()) {
 						sb.append("- " + value.toString() + ": " + documentUtil.getDescription(value.toString()) + "\n");
@@ -168,7 +172,7 @@ public class CsvDialog extends JDialog implements ActionListener {
 		
 		selectNoneButton.setText("None");
 		
-		variablesList.setModel(new AbstractListModel() {
+		variablesList.setModel(new AbstractListModel<Object>() {
 			
 			/**
 			 * 
@@ -208,7 +212,7 @@ public class CsvDialog extends JDialog implements ActionListener {
 		selectFolderButton = new JButton("...");
 		selectFolderButton.setToolTipText("Choose a folder to save CSV files");
 		
-		fieldSeparatorComboBox = new JComboBox();
+		fieldSeparatorComboBox = new JComboBox<Object>();
 		fieldSeparatorComboBox.setToolTipText("Select field separator for CSV file");
 		fieldSeparatorComboBox.setModel(new DefaultComboBoxModel(
 		        new String[] { "COMMA", "SEMICOLON", "SPACE", "TAB", "PIPE" }));

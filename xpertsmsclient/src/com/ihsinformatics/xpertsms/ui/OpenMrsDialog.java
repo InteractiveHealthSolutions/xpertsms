@@ -18,6 +18,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
@@ -116,7 +117,8 @@ public class OpenMrsDialog extends JDialog implements ActionListener {
 	/**
 	 * Initialize form components and layout
 	 */
-	public void initComponents() {
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+    public void initComponents() {
 		setName("openMrsDialog");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setResizable(false);
@@ -366,9 +368,9 @@ public class OpenMrsDialog extends JDialog implements ActionListener {
 			// Parse the text. The pattern of each line should be String=String
 			// strictly
 			String map = SwingUtil.get(conceptsTextArea);
-			String[] pairs = map.split("\r\n");
+			String[] pairs = map.split("\n");
 			for (String pairStr : pairs) {
-				String[] pair = pairStr.split(":");
+				String[] pair = pairStr.split("=|:");
 				if (pair == null) {
 					error.append("Problem occurred while reading concept map " + pairStr);
 					valid = false;
@@ -468,7 +470,13 @@ public class OpenMrsDialog extends JDialog implements ActionListener {
 			try {
 				// Check if the encounter type already exists
 				OpenMrsApiAuthRest api = new OpenMrsApiAuthRest(username, password, url);
-				response = api.get("encountertype?q=" + SwingUtil.get(encounterTypeTextField) + "&v=custom:(uuid,name)");
+				response = api.get("encountertype?q=" + URLEncoder.encode(SwingUtil.get(encounterTypeTextField), "UTF-8") + "&v=custom:(uuid,name)");
+				if (response.startsWith("ERROR:")) {
+					JOptionPane.showMessageDialog(new JFrame(),
+					    "Uh oh! A problem occurred while checking Encounter type" + "\nServer says: " + response,
+					    "Nope! Something is wrong", JOptionPane.ERROR_MESSAGE);
+					return false;
+				}
 				JSONObject encounterObj = new JSONObject(response);
 				JSONArray encounters = encounterObj.getJSONArray("results");
 				// If not, create one
@@ -491,7 +499,7 @@ public class OpenMrsDialog extends JDialog implements ActionListener {
 				for (String key : conceptMap.keySet()) {
 					String value = conceptMap.get(key);
 					// Check if a concept exists that matches value
-					response = api.get("concept?q=" + value);
+					response = api.get("concept?q=" +  URLEncoder.encode(value, "UTF-8"));
 					JSONObject conceptObj = new JSONObject(response);
 					JSONArray concepts = conceptObj.getJSONArray("results");
 					// If not, create one
@@ -542,7 +550,7 @@ public class OpenMrsDialog extends JDialog implements ActionListener {
 			properties.put(XpertProperties.OPENMRS_USER, SwingUtil.get(usernameTextField));
 			properties.put(XpertProperties.OPENMRS_PASSWORD, String.valueOf(passwordField.getPassword()));
 			properties.put(XpertProperties.OPENMRS_ENCOUNTER_TYPE, SwingUtil.get(encounterTypeTextField));
-			properties.put(XpertProperties.OPENMRS_SSL_ENCRYPTION, sslCheckBox.isSelected() ? "NO" : "YES");
+			properties.put(XpertProperties.OPENMRS_SSL_ENCRYPTION, sslCheckBox.isSelected() ? "YES" : "NO");
 			StringBuilder concepts = new StringBuilder();
 			Set<String> keySet = conceptMap.keySet();
 			for (String key : keySet) {

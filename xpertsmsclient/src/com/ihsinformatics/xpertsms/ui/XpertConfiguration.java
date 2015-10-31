@@ -13,7 +13,6 @@ package com.ihsinformatics.xpertsms.ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,8 +22,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -37,7 +34,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
 
@@ -89,31 +85,6 @@ public class XpertConfiguration extends JFrame implements ActionListener {
 	private JButton importButton;
 	
 	private JButton startButton;
-	
-	/**
-	 * @param args the command line arguments
-	 */
-	public static void main(String args[]) {
-		try {
-			for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
-					UIManager.setLookAndFeel(info.getClassName());
-					break;
-				}
-			}
-		}
-		catch (Exception ex) {
-			Logger.getLogger(XpertConfiguration.class.getName()).log(Level.SEVERE, null, ex);
-		}
-		
-		/* Create and display the form */
-		EventQueue.invokeLater(new Runnable() {
-			
-			public void run() {
-				new XpertConfiguration().setVisible(true);
-			}
-		});
-	}
 	
 	public XpertConfiguration() {
 		XpertProperties.readProperties();

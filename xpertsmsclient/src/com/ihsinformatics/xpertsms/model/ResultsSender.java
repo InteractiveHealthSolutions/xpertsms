@@ -26,12 +26,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.irdresearch.smstarseel.context.TarseelContext;
-import org.irdresearch.smstarseel.context.TarseelServices;
-import org.irdresearch.smstarseel.data.OutboundMessage.PeriodType;
-import org.irdresearch.smstarseel.data.OutboundMessage.Priority;
-import org.irdresearch.smstarseel.data.Project;
-import org.irdresearch.smstarseel.service.SMSService;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -97,7 +91,6 @@ public class ResultsSender extends Thread {
 		// Get required properties
 		username = XpertProperties.props.getProperty(XpertProperties.WEB_USERNAME);
 		password = XpertProperties.props.getProperty(XpertProperties.WEB_PASSWORD);
-		exportProbes = XpertProperties.props.getProperty(XpertProperties.EXPORT_PROBES).equals("YES");
 		exportCsv = XpertProperties.getProperty(XpertProperties.CSV_EXPORT).equals("YES");
 		exportWeb = XpertProperties.getProperty(XpertProperties.WEB_EXPORT).equals("YES");
 		exportSms = XpertProperties.getProperty(XpertProperties.SMS_EXPORT).equals("YES");

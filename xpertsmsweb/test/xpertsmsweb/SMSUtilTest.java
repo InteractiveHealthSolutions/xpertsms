@@ -10,7 +10,6 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 package xpertsmsweb;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import com.ihsinformatics.xpertsmsweb.server.ServerServiceImpl;
 import com.ihsinformatics.xpertsmsweb.shared.model.Contact;

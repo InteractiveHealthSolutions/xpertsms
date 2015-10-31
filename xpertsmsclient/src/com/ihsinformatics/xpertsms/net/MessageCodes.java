@@ -15,6 +15,7 @@ import com.ihsinformatics.xpertsms.XpertProperties;
 
 /**
  * Error and Info messages for XpertSMS
+ * 
  * @author ali.habib@irdresearch.org
  */
 public class MessageCodes {
@@ -22,7 +23,7 @@ public class MessageCodes {
 	public static final String PROPERTIES_NOT_SET = "Please click on ControlPanel to configure the system before you start!";
 	
 	public static final String PORT_INACCESSIBLE = "Could not listen on port "
-	        + XpertProperties.props.getProperty(XpertProperties.SERVER_PORT);
+	        + XpertProperties.props.getProperty(XpertProperties.LOCAL_PORT);
 	
 	public static final String ERROR_LOADING_PROPERTIES = "Error while loading system configuration. Please recheck your ControlPanel";
 	

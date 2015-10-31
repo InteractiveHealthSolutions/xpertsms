@@ -16,6 +16,7 @@ package com.ihsinformatics.xpertsms.net;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthenticationException;
@@ -28,6 +29,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+
 import com.ihsinformatics.xpertsms.model.XpertResultUploadMessage;
 import com.ihsinformatics.xpertsms.net.exception.HttpResponseException;
 
@@ -102,10 +104,10 @@ public class OpenMrsApiAuthRest {
 	 * @return
 	 */
 	public String get(String query) {
-		String URL = urlBase + query;
 		String response = "";
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		try {
+			String URL = urlBase + query;
 			HttpGet httpGet = new HttpGet(URL);
 			UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(username, password);
 			BasicScheme scheme = new BasicScheme();

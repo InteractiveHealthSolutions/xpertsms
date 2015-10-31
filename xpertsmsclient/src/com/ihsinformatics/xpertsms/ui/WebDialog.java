@@ -84,11 +84,11 @@ public class WebDialog extends JDialog implements ActionListener {
 	
 	private JCheckBox sslCheckBox;
 	
-	private JComboBox dataFormatComboBox;
+	private JComboBox<?> dataFormatComboBox;
 	
-	private JComboBox dateTimeFormatComboBox;
+	private JComboBox<?> dateTimeFormatComboBox;
 	
-	private JComboBox authenticationComboBox;
+	private JComboBox<?> authenticationComboBox;
 	
 	private JRadioButton utf8RadioButton;
 	
@@ -116,7 +116,8 @@ public class WebDialog extends JDialog implements ActionListener {
 	/**
 	 * Initialize form components and layout
 	 */
-	public void initComponents() {
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+    public void initComponents() {
 		topDialogPanel = new javax.swing.JPanel();
 		webAddressLabel = new JLabel("* Web URI/Servlet:");
 		dataFormatLabel = new JLabel("Data Format:");

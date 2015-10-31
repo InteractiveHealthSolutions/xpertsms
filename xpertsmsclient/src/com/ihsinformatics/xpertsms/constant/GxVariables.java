@@ -12,6 +12,7 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 package com.ihsinformatics.xpertsms.constant;
 
 import java.util.ArrayList;
+
 import com.ihsinformatics.xpertsms.util.StringUtil;
 
 /**
