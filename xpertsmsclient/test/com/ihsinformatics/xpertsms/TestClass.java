@@ -39,6 +39,7 @@ public class TestClass {
 			+ "R|35|^G4v5^^Rif^^^Probe A^EndPt|^156.0|||\nR|36|^G4v5^^Rif^^^SPC^|NA^|||\nR|37|^G4v5^^Rif^^^SPC^Ct|^27.4|||\nR|38|^G4v5^^Rif^^^SPC^EndPt|^333.0|||\nR|39|^G4v5^^QC^Xpert MTB-RIF Assay G4^5^QC Check^|^|||||F||Sunil Asif|20120913003937|20120913022015|Cepheid3WDBYQ1^706593^611954^101259317^04405^20130106\nR|40|^G4v5^^QC^^^QC-1^|NEG^|||\nR|41|^G4v5^^QC^^^QC-1^Ct|^0|||\nR|42|^G4v5^^QC^^^QC-1^EndPt|^0|||\n"
 			+ "R|43|^G4v5^^QC^^^QC-2^|NEG^|||\nR|44|^G4v5^^QC^^^QC-2^Ct|^0|||\nR|45|^G4v5^^QC^^^QC-2^EndPt|^0|||\nL|1|N";
 		putMessage(message2);*/
+		XpertProperties.readProperties();
 		XpertASTMResultUploadMessage[] sampleMessages = getMessagesFromCsv();
 		for (int i = 0; i < sampleMessages.length; i++) {
 			JSONObject json = sampleMessages[i].toJson();

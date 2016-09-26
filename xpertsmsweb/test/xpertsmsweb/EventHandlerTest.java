@@ -25,6 +25,7 @@ import org.irdresearch.smstarseel.context.TarseelContext;
 import org.irdresearch.smstarseel.context.TarseelServices;
 import org.irdresearch.smstarseel.data.OutboundMessage;
 
+import com.google.gwt.editor.client.Editor.Ignore;
 import com.ihsinformatics.xpertsmsweb.server.ServerServiceImpl;
 
 /**
@@ -133,6 +134,7 @@ public class EventHandlerTest extends TestCase {
 	 * {@link com.ihsinformatics.xpertsmsweb.server.EventHandler#handleEvent(javax.servlet.http.HttpServletRequest)}
 	 * .
 	 */
+	@Ignore
 	public final void testForPositiveSmsAlerts() {
 		try {
 			// Get existing number of outbound messages
@@ -156,6 +158,7 @@ public class EventHandlerTest extends TestCase {
 	 * {@link com.ihsinformatics.xpertsmsweb.server.EventHandler#createGeneXpertResults(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.util.Date, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.util.Date, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)}
 	 * .
 	 */
+	@Ignore
 	public final void testForNegativeSmsAlerts() {
 	}
 
@@ -164,6 +167,7 @@ public class EventHandlerTest extends TestCase {
 	 * {@link com.ihsinformatics.xpertsmsweb.server.EventHandler#postToBackup(javax.servlet.http.HttpServletRequest)}
 	 * .
 	 */
+	@Ignore
 	public final void testForErrorSmsAlerts() {
 	}
 
