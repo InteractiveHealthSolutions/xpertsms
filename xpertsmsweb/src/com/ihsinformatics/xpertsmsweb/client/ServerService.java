@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.ihsinformatics.xpertsmsweb.shared.Parameter;
-import com.ihsinformatics.xpertsmsweb.shared.model.Contact;
 import com.ihsinformatics.xpertsmsweb.shared.model.Encounter;
 import com.ihsinformatics.xpertsmsweb.shared.model.EncounterId;
 import com.ihsinformatics.xpertsmsweb.shared.model.EncounterResults;
@@ -14,7 +13,6 @@ import com.ihsinformatics.xpertsmsweb.shared.model.GeneXpertResults;
 import com.ihsinformatics.xpertsmsweb.shared.model.Location;
 import com.ihsinformatics.xpertsmsweb.shared.model.MessageSettings;
 import com.ihsinformatics.xpertsmsweb.shared.model.Patient;
-import com.ihsinformatics.xpertsmsweb.shared.model.Person;
 import com.ihsinformatics.xpertsmsweb.shared.model.UserRights;
 import com.ihsinformatics.xpertsmsweb.shared.model.Users;
 
@@ -36,8 +34,6 @@ public interface ServerService extends RemoteService {
 			throws Exception;
 
 	/* Delete methods */
-	Boolean deleteContact(Contact contact) throws Exception;
-
 	Boolean deleteEncounter(Encounter encounter) throws Exception;
 
 	Boolean deleteEncounterResults(EncounterResults encounterResults)
@@ -55,15 +51,11 @@ public interface ServerService extends RemoteService {
 
 	Boolean deletePatient(Patient patient) throws Exception;
 
-	Boolean deletePerson(Person person) throws Exception;
-
 	Boolean deleteUser(Users user) throws Exception;
 
 	Boolean deleteUserRights(UserRights userRights) throws Exception;
 
 	/* Find methods */
-	Contact findContact(String personID) throws Exception;
-
 	Encounter findEncounter(EncounterId encounterID) throws Exception;
 
 	EncounterResults[] findEncounterResults(
@@ -83,12 +75,10 @@ public interface ServerService extends RemoteService {
 
 	Patient findPatient(String patientID) throws Exception;
 
-	Person findPerson(String PID) throws Exception;
-
-	Person[] findPersonsByName(String firstName, String lastName)
+	Patient[] findPatientsByName(String firstName, String lastName)
 			throws Exception;
 
-	Person findPersonsByNIC(String NIC) throws Exception;
+	Patient findPatientByNIC(String NIC) throws Exception;
 
 	Location[] findLocationsByType(String locationType) throws Exception;
 
@@ -98,8 +88,6 @@ public interface ServerService extends RemoteService {
 			throws Exception;
 
 	/* Save methods */
-	Boolean saveContact(Contact contact) throws Exception;
-
 	Boolean saveEncounter(Encounter encounter) throws Exception;
 
 	Boolean saveEncounterResults(EncounterResults encounterResults)
@@ -116,21 +104,16 @@ public interface ServerService extends RemoteService {
 	Boolean saveMessageSettings(MessageSettings messageSettings)
 			throws Exception;
 
-	Boolean saveNewPatient(Patient patient, Person person, Contact contact,
-			Encounter encounter, ArrayList<String> encounterResults)
-			throws Exception;
+	Boolean saveNewPatient(Patient patient, Encounter encounter,
+			ArrayList<String> encounterResults) throws Exception;
 
 	Boolean savePatient(Patient patient) throws Exception;
-
-	Boolean savePerson(Person person) throws Exception;
 
 	Boolean saveUser(Users user) throws Exception;
 
 	Boolean saveUserRights(UserRights userRights) throws Exception;
 
 	/* Update methods */
-	Boolean updateContact(Contact contact) throws Exception;
-
 	Boolean updateEncounter(Encounter encounter) throws Exception;
 
 	Boolean updateEncounterResults(EncounterResults encounterResults)
@@ -151,8 +134,6 @@ public interface ServerService extends RemoteService {
 			throws Exception;
 
 	Boolean updatePatient(Patient patient) throws Exception;
-
-	Boolean updatePerson(Person person) throws Exception;
 
 	Boolean updateUser(Users user) throws Exception;
 
@@ -198,8 +179,4 @@ public interface ServerService extends RemoteService {
 	Boolean execute(String[] queries) throws Exception;
 
 	Boolean executeProcedure(String procedure) throws Exception;
-
-	void recordLogin(String userName) throws Exception;
-
-	void recordLogout(String userName) throws Exception;
 }

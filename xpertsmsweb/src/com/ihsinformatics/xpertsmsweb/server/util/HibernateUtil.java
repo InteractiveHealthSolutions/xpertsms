@@ -11,7 +11,6 @@ import java.net.URL;
 import java.sql.CallableStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.ListIterator;
@@ -23,12 +22,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
-import com.ihsinformatics.xpertsmsweb.server.LogType;
 import com.ihsinformatics.xpertsmsweb.shared.XSMS;
-import com.ihsinformatics.xpertsmsweb.shared.model.LogDataChange;
-import com.ihsinformatics.xpertsmsweb.shared.model.LogDataDelete;
-import com.ihsinformatics.xpertsmsweb.shared.model.LogDataInsert;
-import com.ihsinformatics.xpertsmsweb.shared.model.LogUserLogin;
 
 /**
  * @author owais.hussain@ihsinformatics.com
@@ -184,7 +178,6 @@ public class HibernateUtil implements Serializable {
 			session.update(obj);
 			session.flush();
 			session.close();
-			recordLog(LogType.UPDATE, obj);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -218,7 +211,6 @@ public class HibernateUtil implements Serializable {
 			session.save(obj);
 			session.flush();
 			session.close();
-			recordLog(LogType.INSERT, obj);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -238,57 +230,10 @@ public class HibernateUtil implements Serializable {
 			session.delete(obj);
 			session.flush();
 			session.close();
-			recordLog(LogType.DELETE, obj);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
-		}
-	}
-
-	/**
-	 * Records an object into one of the Log tables
-	 * 
-	 * @param logType
-	 *            determine type of log (Delete Log, Change Log, etc.)
-	 * @param obj
-	 *            actual object to be logged
-	 */
-	public void recordLog(LogType logType, Object obj) {
-		Object logObj = null;
-		Class<?> objClass = obj.getClass();
-		String className = obj.getClass().getSimpleName();
-		switch (logType) {
-		case DELETE:
-			logObj = new LogDataDelete(XSMS.getCurrentUser(), new Date(),
-					className, (objClass).cast(obj).toString());
-			break;
-		case ERROR:
-			break;
-		case INSERT:
-			logObj = new LogDataInsert(XSMS.getCurrentUser(), new Date(),
-					className, (objClass).cast(obj).toString());
-			break;
-		case UPDATE:
-			logObj = new LogDataChange(XSMS.getCurrentUser(), new Date(),
-					className, (objClass).cast(obj).toString());
-			break;
-		case LOGIN:
-			logObj = new LogUserLogin(XSMS.getCurrentUser(), new Date(), null,
-					"");
-			break;
-		case LOGOUT:
-			logObj = new LogUserLogin(XSMS.getCurrentUser(), null, new Date(),
-					"");
-			break;
-		}
-		try {
-			Session session = getSession();
-			session.save(logObj);
-			session.flush();
-			session.close();
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 

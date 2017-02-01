@@ -271,20 +271,8 @@ public class XpertSmsWeb implements EntryPoint, ClickHandler {
 	 */
 	public static void logout() {
 		try {
-			service.recordLogout(XSMS.getCurrentUser(),
-					new AsyncCallback<Void>() {
-						@Override
-						public void onSuccess(Void result) {
-							flushAll();
-							removeCookies();
-						}
-
-						@Override
-						public void onFailure(Throwable caught) {
-							flushAll();
-							removeCookies();
-						}
-					});
+			flushAll();
+			removeCookies();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -361,25 +349,6 @@ public class XpertSmsWeb implements EntryPoint, ClickHandler {
 													.substring(0, 3))));
 									removeCookies();
 									setCookies();
-									try {
-										service.recordLogin(
-												XSMS.getCurrentUser(),
-												new AsyncCallback<Void>() {
-													@Override
-													public void onSuccess(
-															Void result) {
-														// Not implemented
-													}
-
-													@Override
-													public void onFailure(
-															Throwable caught) {
-														// Not implemented
-													}
-												});
-									} catch (Exception e) {
-										e.printStackTrace();
-									}
 									login();
 								} else
 									Window.alert(CustomMessage

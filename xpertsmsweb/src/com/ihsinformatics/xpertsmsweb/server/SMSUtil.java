@@ -12,10 +12,10 @@ import org.irdresearch.smstarseel.data.OutboundMessage.Priority;
 
 import com.ihsinformatics.xpertsmsweb.server.util.DateTimeUtil;
 import com.ihsinformatics.xpertsmsweb.server.util.HibernateUtil;
-import com.ihsinformatics.xpertsmsweb.shared.model.Contact;
 import com.ihsinformatics.xpertsmsweb.shared.model.GeneXpertResults;
 import com.ihsinformatics.xpertsmsweb.shared.model.Location;
 import com.ihsinformatics.xpertsmsweb.shared.model.MessageSettings;
+import com.ihsinformatics.xpertsmsweb.shared.model.Patient;
 
 /**
  * @author owais.hussain@ihsinformatics.com
@@ -156,8 +156,8 @@ public class SMSUtil {
 	public void sendAlertsToPatient(GeneXpertResults results) {
 		try {
 			StringBuilder text = new StringBuilder();
-			Contact contact = service.findContact(results.getPatientId());
-			String mobile = contact.getMobile();
+			Patient patient = service.findPatient(results.getPatientId());
+			String mobile = patient.getMobile();
 			if (mobile == null)
 				throw new Exception("Patient's mobile number not found.");
 			text.append("Your test results are ready. Please pick up from the laboratory at your earliest convenience"

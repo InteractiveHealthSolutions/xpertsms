@@ -11,15 +11,13 @@ package xpertsmsweb;
 
 import java.util.ArrayList;
 
+import junit.framework.TestCase;
+
 import com.google.gwt.editor.client.Editor.Ignore;
 import com.ihsinformatics.xpertsmsweb.server.ServerServiceImpl;
-import com.ihsinformatics.xpertsmsweb.shared.model.Contact;
 import com.ihsinformatics.xpertsmsweb.shared.model.Encounter;
 import com.ihsinformatics.xpertsmsweb.shared.model.GeneXpertResults;
 import com.ihsinformatics.xpertsmsweb.shared.model.Patient;
-import com.ihsinformatics.xpertsmsweb.shared.model.Person;
-
-import junit.framework.TestCase;
 
 /**
  * @author owais.hussain@ihsinformatics.com
@@ -29,8 +27,7 @@ public class SMSUtilTest extends TestCase {
 
 	ServerServiceImpl service;
 	Patient patient1, patient2;
-	Person person1, person2;
-	Contact contact1, contact2;
+	Patient person1, person2;
 	Encounter encounter1, encounter2;
 	GeneXpertResults normal, error, mtbPositive, rifPositive;
 
@@ -39,16 +36,13 @@ public class SMSUtilTest extends TestCase {
 	 */
 	protected void setUp() throws Exception {
 		service = new ServerServiceImpl();
-		patient1 = new Patient("101");
-		patient2 = new Patient("102");
-		person1 = new Person("101", "Sick", 'M');
-		person2 = new Person("102", "Healthy", 'F');
-		contact1 = new Contact("101");
-		contact1.setMobile("03453174270");
-		contact1 = new Contact("03332334556");
-		service.saveNewPatient(patient1, person1, contact1, encounter1,
+		patient1 = new Patient("101", "Sick", "M");
+		patient2 = new Patient("102", "Healthy", "F");
+		patient1.setMobile("03453174270");
+		patient2.setMobile("03332334556");
+		service.saveNewPatient(patient1, encounter1,
 				new ArrayList<String>());
-		service.saveNewPatient(patient2, person2, contact2, encounter2,
+		service.saveNewPatient(patient2, encounter2,
 				new ArrayList<String>());
 		String normalQuery = "insert into genexpertresults (PatientID,SputumTestID,LaboratoryID,DateTested,DrugResistance,GeneXpertResult,MTBBurden,ErrorCode,Remarks,InstrumentID,ModuleID,CartridgeID,ReagentLotID,PcID,OperatorID,CartridgeExpiryDate,ProbeResultA,ProbeResultB,ProbeResultC,ProbeResultD,ProbeResultE,ProbeResultSPC,ProbeCtA,ProbeCtB,ProbeCtC,ProbeCtD,ProbeCtE,ProbeCtSPC,ProbeEndptA,ProbeEndptB,ProbeEndptC,ProbeEndptD,ProbeEndptE,ProbeEndptSPC) VALUES "
 				+ "('102','15071','Test PC','2015-06-23','Rif Resistance NOT DETECTED','MTB NOT DETECTED',null,'0','NRL-ISB','708228','618255','204304821','10713-AX','CEPHEID5G183R1','OWAIS','2014-06-21',"

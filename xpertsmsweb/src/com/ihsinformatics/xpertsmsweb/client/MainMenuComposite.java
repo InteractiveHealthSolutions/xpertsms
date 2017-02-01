@@ -56,6 +56,8 @@ public class MainMenuComposite extends Composite {
 
 	private MenuItem geneXpertResultsMenuItem = new MenuItem(
 			"Gene Xpert Results", false, (Command) null);
+	private MenuItem patientsMenuItem = new MenuItem(
+			"Patients", false, (Command) null);
 
 	@SuppressWarnings("deprecation")
 	public MainMenuComposite() {
@@ -122,6 +124,16 @@ public class MainMenuComposite extends Composite {
 				clear();
 				Cookies.setCookie("CurrentMenu", "LABORATORY");
 				mainVerticalPanel.add(new GeneXpertResultsComposite()
+						.asWidget());
+			}
+		});
+		
+		patientsMenuItem.setCommand(new Command() {
+			@Override
+			public void execute() {
+				clear();
+				Cookies.setCookie("CurrentMenu", "PATIENT");
+				mainVerticalPanel.add(new PatientsComposite()
 						.asWidget());
 			}
 		});
@@ -198,7 +210,8 @@ public class MainMenuComposite extends Composite {
 		setupMenuBar.addItem(messageSettingsMenuItem);
 
 		formsMenuBar.addItem(geneXpertResultsMenuItem);
-
+		formsMenuBar.addItem(patientsMenuItem);
+		
 		reportingMenuBar.addItem(reportsMenuItem);
 		reportingMenuBar.addItem(logsMenuItem);
 

@@ -294,13 +294,13 @@ a:visited {
 	cursor: hand;
 }
 .title {
+	font-weight: bolder;
 	font-size: 24px;
 	font-family: Garamond;
-	font-weight: bolder;
-	vertical-align: middle;
-	letter-spacing: 2px;
-	text-align: center;
 	word-spacing: 2px;
+	letter-spacing: 2px;
+	vertical-align: middle;
+	text-align: center;
 }
 .footer {
 	color: lavender;

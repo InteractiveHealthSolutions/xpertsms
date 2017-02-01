@@ -108,7 +108,7 @@ public class EventHandler extends HttpServlet {
 			xmlResponse = XmlUtil.createErrorXml("ERROR: Request type is null");
 		} else {
 			if (reqType.equals(RequestType.REMOTE_ASTM_RESULT)) {
-				xmlResponse = doRemoteASTMResult();
+				xmlResponse = saveGeneXpertResult();
 			}
 		}
 		// If the response was successful, make another request to backup URL if
@@ -125,7 +125,7 @@ public class EventHandler extends HttpServlet {
 		return xmlResponse;
 	}
 
-	private String doRemoteASTMResult() {
+	private String saveGeneXpertResult() {
 		String xml = null;
 		boolean update = false;
 		/*

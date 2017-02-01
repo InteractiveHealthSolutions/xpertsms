@@ -28,7 +28,6 @@ import com.ihsinformatics.xpertsmsweb.server.util.ReportUtil;
 import com.ihsinformatics.xpertsmsweb.shared.ListType;
 import com.ihsinformatics.xpertsmsweb.shared.Parameter;
 import com.ihsinformatics.xpertsmsweb.shared.XSMS;
-import com.ihsinformatics.xpertsmsweb.shared.model.Contact;
 import com.ihsinformatics.xpertsmsweb.shared.model.Encounter;
 import com.ihsinformatics.xpertsmsweb.shared.model.EncounterId;
 import com.ihsinformatics.xpertsmsweb.shared.model.EncounterResults;
@@ -37,7 +36,6 @@ import com.ihsinformatics.xpertsmsweb.shared.model.GeneXpertResults;
 import com.ihsinformatics.xpertsmsweb.shared.model.Location;
 import com.ihsinformatics.xpertsmsweb.shared.model.MessageSettings;
 import com.ihsinformatics.xpertsmsweb.shared.model.Patient;
-import com.ihsinformatics.xpertsmsweb.shared.model.Person;
 import com.ihsinformatics.xpertsmsweb.shared.model.UserRights;
 import com.ihsinformatics.xpertsmsweb.shared.model.Users;
 
@@ -46,10 +44,9 @@ import com.ihsinformatics.xpertsmsweb.shared.model.Users;
  * 
  * @author owais.hussain@ihsinformatics.com
  */
-@SuppressWarnings("serial")
-public class ServerServiceImpl extends RemoteServiceServlet
-		implements
-			ServerService {
+public class ServerServiceImpl extends RemoteServiceServlet implements
+		ServerService {
+	private static final long serialVersionUID = 3525489570583922860L;
 	public static final Properties prop = new Properties();
 	public static String resourcesPath;
 
@@ -106,33 +103,31 @@ public class ServerServiceImpl extends RemoteServiceServlet
 
 	/**
 	 * Get full name (first name + middle name + last name + surname) of any
-	 * Person
+	 * Patient
 	 * 
-	 * @param Person
-	 *            ID as String
+	 * @param PatientID as String
 	 * @return full name as String
 	 */
-	public String getFullName(String PID) throws Exception {
-		if (PID.equals(""))
+	public String getFullName(String PatientID) throws Exception {
+		if (PatientID.equals(""))
 			return "";
 		return HibernateUtil.util
 				.selectObject(
-						"select LTRIM(RTRIM(IFNULL(FirstName, '') + ' ' + IFNULL(MiddleName, '') + IFNULL(LastName, '') + IFNULL(Surname, ''))) from Person where PID='"
-								+ PID + "'").toString().toUpperCase();
+						"select LTRIM(RTRIM(IFNULL(FirstName, '') + ' ' + IFNULL(LastName, '') + IFNULL(Surname, '') + IFNULL(Surname, ''))) from Patient where PatientID='"
+								+ PatientID + "'").toString().toUpperCase();
 	}
 
 	/**
-	 * Get Mobile phone number of any Person
+	 * Get Mobile phone number of any Patient
 	 * 
-	 * @param Person
-	 *            ID as String
+	 * @param PatientID as String
 	 * @return Mobile number as String
 	 */
-	public String getMobileNumber(String PID) throws Exception {
-		if (PID.equals(""))
+	public String getMobileNumber(String PatientID) throws Exception {
+		if (PatientID.equals(""))
 			return "";
 		return HibernateUtil.util.selectObject(
-				"select Mobile from Contact where PID='" + PID + "'")
+				"select Mobile from Patient where PatientID='" + PatientID + "'")
 				.toString();
 	}
 
@@ -156,7 +151,6 @@ public class ServerServiceImpl extends RemoteServiceServlet
 	 * 
 	 * @return Boolean
 	 */
-
 	public Boolean authenticateUser(String userName) throws Exception {
 		if (!UserAuthentication.userExsists(userName))
 			return false;
@@ -168,7 +162,6 @@ public class ServerServiceImpl extends RemoteServiceServlet
 	 * 
 	 * @return Boolean
 	 */
-
 	public Boolean verifySecretAnswer(String userName, String secretAnswer)
 			throws Exception {
 		if (!UserAuthentication.validateSecretAnswer(userName, secretAnswer))
@@ -181,7 +174,6 @@ public class ServerServiceImpl extends RemoteServiceServlet
 	 * 
 	 * @return Long
 	 */
-
 	public Long count(String tableName, String filter) throws Exception {
 		Object obj = HibernateUtil.util.selectObject("select count(*) from "
 				+ tableName + " " + arrangeFilter(filter));
@@ -194,7 +186,6 @@ public class ServerServiceImpl extends RemoteServiceServlet
 	 * 
 	 * @return Boolean
 	 */
-
 	public Boolean exists(String tableName, String filter) throws Exception {
 		long count = count(tableName, filter);
 		return count > 0;
@@ -206,7 +197,6 @@ public class ServerServiceImpl extends RemoteServiceServlet
 	 * @param query
 	 * @return
 	 */
-
 	public String generateCSVfromQuery(String query) throws Exception {
 		return new ReportUtil(getResourcesPath()).generateCSVfromQuery(query,
 				',');
@@ -220,7 +210,6 @@ public class ServerServiceImpl extends RemoteServiceServlet
 	 *            be exported in csv format as Boolean
 	 * @return String
 	 */
-
 	public String generateReport(String fileName, Parameter[] params,
 			boolean export) throws Exception {
 		return new ReportUtil(getResourcesPath()).generateReport(fileName,
@@ -236,7 +225,6 @@ public class ServerServiceImpl extends RemoteServiceServlet
 	 * @param export
 	 * @return
 	 */
-
 	public String generateReportFromQuery(String reportName, String query,
 			Parameter[] params, Boolean export) throws Exception {
 		return new ReportUtil(getResourcesPath()).generateReportFromQuery(
@@ -312,35 +300,23 @@ public class ServerServiceImpl extends RemoteServiceServlet
 	public Boolean[] getUserRgihts(String userName, String menuName)
 			throws Exception {
 		if (userName.equalsIgnoreCase("ADMIN")) {
-			Boolean[] rights = {true, true, true, true, true};
+			Boolean[] rights = { true, true, true, true, true };
 			return rights;
 		}
 		String role = HibernateUtil.util.selectObject(
 				"select Role from Users where UserName='" + userName + "'")
 				.toString();
 		if (role.equalsIgnoreCase("ADMIN")) {
-			Boolean[] rights = {true, true, true, true, true};
+			Boolean[] rights = { true, true, true, true, true };
 			return rights;
 		}
 		UserRights userRights = (UserRights) HibernateUtil.util
 				.findObject("from UserRights where Role='" + role
 						+ "' and MenuName='" + menuName + "'");
-		Boolean[] rights = {userRights.isSearchAccess(),
+		Boolean[] rights = { userRights.isSearchAccess(),
 				userRights.isInsertAccess(), userRights.isUpdateAccess(),
-				userRights.isDeleteAccess(), userRights.isPrintAccess()};
+				userRights.isDeleteAccess(), userRights.isPrintAccess() };
 		return rights;
-	}
-
-	public void recordLogin(String userName) throws Exception {
-		Users user = (Users) HibernateUtil.util
-				.findObject("from Users where UserName = '" + userName + "'");
-		HibernateUtil.util.recordLog(LogType.LOGIN, user);
-	}
-
-	public void recordLogout(String userName) throws Exception {
-		Users user = (Users) HibernateUtil.util
-				.findObject("from Users where UserName = '" + userName + "'");
-		HibernateUtil.util.recordLog(LogType.LOGOUT, user);
 	}
 
 	public int execute(String query) throws Exception {
@@ -361,10 +337,6 @@ public class ServerServiceImpl extends RemoteServiceServlet
 	}
 
 	/* Delete methods */
-	public Boolean deleteContact(Contact contact) throws Exception {
-		return HibernateUtil.util.delete(contact);
-	}
-
 	public Boolean deleteEncounter(Encounter encounter) throws Exception {
 		return HibernateUtil.util.delete(encounter);
 	}
@@ -424,10 +396,6 @@ public class ServerServiceImpl extends RemoteServiceServlet
 		return HibernateUtil.util.delete(patient);
 	}
 
-	public Boolean deletePerson(Person person) throws Exception {
-		return HibernateUtil.util.delete(person);
-	}
-
 	public Boolean deleteUser(Users user) throws Exception {
 		return HibernateUtil.util.delete(user);
 	}
@@ -437,12 +405,6 @@ public class ServerServiceImpl extends RemoteServiceServlet
 	}
 
 	/* Find methods */
-
-	public Contact findContact(String personID) throws Exception {
-		return (Contact) HibernateUtil.util
-				.findObject("from Contact where PID='" + personID + "'");
-	}
-
 	public Encounter findEncounter(EncounterId encounterID) throws Exception {
 		return (Encounter) HibernateUtil.util
 				.findObject("from Encounter where PID1='"
@@ -525,21 +487,16 @@ public class ServerServiceImpl extends RemoteServiceServlet
 				.findObject("from Patient where PatientID='" + patientID + "'");
 	}
 
-	public Person findPerson(String PID) throws Exception {
-		return (Person) HibernateUtil.util.findObject("from Person where PID='"
-				+ PID + "'");
-	}
-
-	public Person[] findPersonsByName(String firstName, String lastName)
+	public Patient[] findPatientsByName(String firstName, String lastName)
 			throws Exception {
-		return (Person[]) HibernateUtil.util
-				.findObjects("from Person where FirstName LIKE '" + firstName
+		return (Patient[]) HibernateUtil.util
+				.findObjects("from Patient where FirstName LIKE '" + firstName
 						+ "%' and LastName LIKE '" + lastName + "%'");
 	}
 
-	public Person findPersonsByNIC(String NIC) throws Exception {
-		return (Person) HibernateUtil.util.findObject("from Person where NIC='"
-				+ NIC + "'");
+	public Patient findPatientByNIC(String NIC) throws Exception {
+		return (Patient) HibernateUtil.util
+				.findObject("from Patient where NIC='" + NIC + "'");
 	}
 
 	public Users findUser(String userName) throws Exception {
@@ -555,10 +512,6 @@ public class ServerServiceImpl extends RemoteServiceServlet
 	}
 
 	/* Save methods */
-	public Boolean saveContact(Contact contact) throws Exception {
-		return HibernateUtil.util.save(contact);
-	}
-
 	public Boolean saveEncounter(Encounter encounter) throws Exception {
 		// Get the max encounter ID and add 1
 		EncounterId currentID = encounter.getId();
@@ -633,15 +586,13 @@ public class ServerServiceImpl extends RemoteServiceServlet
 		if (settings == null) {
 			messageSettings.setSettingsId(1);
 			return HibernateUtil.util.save(messageSettings);
-		}
-		else {
+		} else {
 			messageSettings.setSettingsId(settings.getSettingsId());
 			return HibernateUtil.util.update(messageSettings);
 		}
 	}
 
-	public Boolean saveNewPatient(Patient patient, Person person,
-			Contact contact, Encounter encounter,
+	public Boolean saveNewPatient(Patient patient, Encounter encounter,
 			ArrayList<String> encounterResults) throws Exception {
 		boolean result = false;
 		// Save an encounter
@@ -650,26 +601,12 @@ public class ServerServiceImpl extends RemoteServiceServlet
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		result = HibernateUtil.util.save(patient);
-		result = HibernateUtil.util.save(person);
-		result = HibernateUtil.util.save(contact);
-		if (!result) // In case of failure of any save, delete all 3
-		{
-			HibernateUtil.util.delete(patient);
-			HibernateUtil.util.delete(person);
-			HibernateUtil.util.delete(contact);
-			return false;
-		}
 		return result;
 	}
 
 	public Boolean savePatient(Patient patient) throws Exception {
 		return HibernateUtil.util.save(patient);
-	}
-
-	public Boolean savePerson(Person person) throws Exception {
-		return HibernateUtil.util.save(person);
 	}
 
 	public Boolean saveUser(Users user) throws Exception {
@@ -683,10 +620,6 @@ public class ServerServiceImpl extends RemoteServiceServlet
 	}
 
 	/* Update methods */
-	public Boolean updateContact(Contact contact) throws Exception {
-		return HibernateUtil.util.update(contact);
-	}
-
 	public Boolean updateEncounter(Encounter encounter) throws Exception {
 		return HibernateUtil.util.update(encounter);
 	}
@@ -735,10 +668,6 @@ public class ServerServiceImpl extends RemoteServiceServlet
 
 	public Boolean updatePatient(Patient patient) throws Exception {
 		return HibernateUtil.util.update(patient);
-	}
-
-	public Boolean updatePerson(Person person) throws Exception {
-		return HibernateUtil.util.update(person);
 	}
 
 	public Boolean updateUser(Users user) throws Exception {

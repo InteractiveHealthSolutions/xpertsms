@@ -3,30 +3,33 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated Dec 21, 2010 3:45:59 PM by Hibernate Tools 3.4.0.Beta1 -->
 <hibernate-mapping>
-    <class name="com.ihsinformatics.xpertsmsweb.shared.model.Users" table="Users" catalog="xpertsms">
-        <id name="pid" type="string">
-            <column name="PID" length="50" />
-            <generator class="assigned" />
-        </id>
-        <property name="userName" type="string">
-            <column name="UserName" length="50" not-null="true" />
-        </property>
-        <property name="role" type="string">
-            <column name="Role" length="20" not-null="true" />
-        </property>
-        <property name="status" type="string">
-            <column name="Status" length="20" not-null="true" />
-        </property>
-        <property name="password" type="string">
-            <column name="Password" not-null="true">
-                <comment>Password is not stored directly, instead, it's hashcode is stored. Hashcode is generated using an appropriate hashing algorithm.</comment>
-            </column>
-        </property>
-        <property name="secretQuestion" type="string">
-            <column name="SecretQuestion" not-null="true" />
-        </property>
-        <property name="secretAnswer" type="string">
-            <column name="SecretAnswer" not-null="true" />
-        </property>
-    </class>
+	<class name="com.ihsinformatics.xpertsmsweb.shared.model.Users"
+		table="Users" catalog="xpertsms">
+		<id name="pid" type="string">
+			<column name="PID" length="50" />
+			<generator class="assigned" />
+		</id>
+		<property name="userName" type="string">
+			<column name="UserName" length="50" not-null="true" />
+		</property>
+		<property name="role" type="string">
+			<column name="Role" length="20" not-null="true" />
+		</property>
+		<property name="status" type="string">
+			<column name="Status" length="20" not-null="true" />
+		</property>
+		<property name="password" type="string">
+			<column name="Password" not-null="true">
+				<comment>Password is not stored directly, instead, it's hashcode is
+					stored. Hashcode is generated using an appropriate hashing
+					algorithm.</comment>
+			</column>
+		</property>
+		<property name="secretQuestion" type="string">
+			<column name="SecretQuestion" not-null="true" />
+		</property>
+		<property name="secretAnswer" type="string">
+			<column name="SecretAnswer" not-null="true" />
+		</property>
+	</class>
 </hibernate-mapping>

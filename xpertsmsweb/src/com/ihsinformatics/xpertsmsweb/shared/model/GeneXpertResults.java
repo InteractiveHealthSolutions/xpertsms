@@ -63,12 +63,12 @@ public class GeneXpertResults implements java.io.Serializable {
 			String laboratoryId, String collectedBy, Date dateSubmitted,
 			Date dateTested, String geneXpertResult, Boolean isPositive,
 			String mtbBurden, String drugResistance, Integer errorCode,
-			String remarks, String pcId, String hostId, String instrumentSerial,
-			String moduleId, String cartridgeId, String reagentLotId,
-			Date cartridgeExpiryDate, String probeResultA, String probeResultB,
-			String probeResultC, String probeResultD, String probeResultE,
-			String probeResultSPC, Double probeCtA, Double probeCtB,
-			Double probeCtC, Double probeCtD, Double probeCtE,
+			String remarks, String pcId, String hostId,
+			String instrumentSerial, String moduleId, String cartridgeId,
+			String reagentLotId, Date cartridgeExpiryDate, String probeResultA,
+			String probeResultB, String probeResultC, String probeResultD,
+			String probeResultE, String probeResultSPC, Double probeCtA,
+			Double probeCtB, Double probeCtC, Double probeCtD, Double probeCtE,
 			Double probeCtSPC, Double probeEndptA, Double probeEndptB,
 			Double probeEndptC, Double probeEndptD, Double probeEndptE,
 			Double probeEndptSPC) {
@@ -628,19 +628,20 @@ public class GeneXpertResults implements java.io.Serializable {
 				+ ", instrumentSerial=" + instrumentSerial + ", isPositive="
 				+ isPositive + ", laboratoryId=" + laboratoryId + ", moduleId="
 				+ moduleId + ", mtbBurden=" + mtbBurden + ", patientId="
-				+ patientId + ", pcId=" + pcId + ", hostId=" + hostId + ", probeCtA=" + probeCtA
-				+ ", probeCtB=" + probeCtB + ", probeCtC=" + probeCtC
-				+ ", probeCtD=" + probeCtD + ", probeCtE=" + probeCtE
-				+ ", probeCtSPC=" + probeCtSPC + ", probeEndptA=" + probeEndptA
-				+ ", probeEndptB=" + probeEndptB + ", probeEndptC="
-				+ probeEndptC + ", probeEndptD=" + probeEndptD
-				+ ", probeEndptE=" + probeEndptE + ", probeEndptSPC="
-				+ probeEndptSPC + ", probeResultA=" + probeResultA
-				+ ", probeResultB=" + probeResultB + ", probeResultC="
-				+ probeResultC + ", probeResultD=" + probeResultD
-				+ ", probeResultE=" + probeResultE + ", probeResultSPC="
-				+ probeResultSPC + ", reagentLotId=" + reagentLotId
-				+ ", remarks=" + remarks + ", sputumTestId=" + sputumTestId;
+				+ patientId + ", pcId=" + pcId + ", hostId=" + hostId
+				+ ", probeCtA=" + probeCtA + ", probeCtB=" + probeCtB
+				+ ", probeCtC=" + probeCtC + ", probeCtD=" + probeCtD
+				+ ", probeCtE=" + probeCtE + ", probeCtSPC=" + probeCtSPC
+				+ ", probeEndptA=" + probeEndptA + ", probeEndptB="
+				+ probeEndptB + ", probeEndptC=" + probeEndptC
+				+ ", probeEndptD=" + probeEndptD + ", probeEndptE="
+				+ probeEndptE + ", probeEndptSPC=" + probeEndptSPC
+				+ ", probeResultA=" + probeResultA + ", probeResultB="
+				+ probeResultB + ", probeResultC=" + probeResultC
+				+ ", probeResultD=" + probeResultD + ", probeResultE="
+				+ probeResultE + ", probeResultSPC=" + probeResultSPC
+				+ ", reagentLotId=" + reagentLotId + ", remarks=" + remarks
+				+ ", sputumTestId=" + sputumTestId;
 	}
 
 }

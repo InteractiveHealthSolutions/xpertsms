@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.ihsinformatics.xpertsmsweb.shared.Parameter;
-import com.ihsinformatics.xpertsmsweb.shared.model.Contact;
 import com.ihsinformatics.xpertsmsweb.shared.model.Encounter;
 import com.ihsinformatics.xpertsmsweb.shared.model.EncounterId;
 import com.ihsinformatics.xpertsmsweb.shared.model.EncounterResults;
@@ -13,7 +12,6 @@ import com.ihsinformatics.xpertsmsweb.shared.model.GeneXpertResults;
 import com.ihsinformatics.xpertsmsweb.shared.model.Location;
 import com.ihsinformatics.xpertsmsweb.shared.model.MessageSettings;
 import com.ihsinformatics.xpertsmsweb.shared.model.Patient;
-import com.ihsinformatics.xpertsmsweb.shared.model.Person;
 import com.ihsinformatics.xpertsmsweb.shared.model.UserRights;
 import com.ihsinformatics.xpertsmsweb.shared.model.Users;
 
@@ -41,9 +39,6 @@ public interface ServerServiceAsync {
 			AsyncCallback<Boolean> asyncCallback) throws Exception;
 
 	/* Delete methods */
-	void deleteContact(Contact contact, AsyncCallback<Boolean> asyncCallback)
-			throws Exception;
-
 	void deleteEncounter(Encounter encounter,
 			AsyncCallback<Boolean> asyncCallback) throws Exception;
 
@@ -65,9 +60,6 @@ public interface ServerServiceAsync {
 	void deletePatient(Patient patient, AsyncCallback<Boolean> asyncCallback)
 			throws Exception;
 
-	void deletePerson(Person person, AsyncCallback<Boolean> asyncCallback)
-			throws Exception;
-
 	void deleteUser(Users user, AsyncCallback<Boolean> asyncCallback)
 			throws Exception;
 
@@ -75,9 +67,6 @@ public interface ServerServiceAsync {
 			throws Exception;
 
 	/* Find methods */
-	void findContact(String personID, AsyncCallback<Contact> callback)
-			throws Exception;
-
 	void findEncounter(EncounterId encounterID,
 			AsyncCallback<Encounter> callback) throws Exception;
 
@@ -102,13 +91,10 @@ public interface ServerServiceAsync {
 	void findPatient(String patientID, AsyncCallback<Patient> callback)
 			throws Exception;
 
-	void findPerson(String PID, AsyncCallback<Person> callback)
-			throws Exception;
+	void findPatientsByName(String firstName, String lastName,
+			AsyncCallback<Patient[]> callback);
 
-	void findPersonsByName(String firstName, String lastName,
-			AsyncCallback<Person[]> callback) throws Exception;
-
-	void findPersonsByNIC(String NIC, AsyncCallback<Person> callback)
+	void findPatientByNIC(String NIC, AsyncCallback<Patient> callback)
 			throws Exception;
 
 	void findUser(String currentUserName, AsyncCallback<Users> asyncCallback)
@@ -118,9 +104,6 @@ public interface ServerServiceAsync {
 			AsyncCallback<UserRights> callback) throws Exception;
 
 	/* Save methods */
-	void saveContact(Contact contact, AsyncCallback<Boolean> asyncCallback)
-			throws Exception;
-
 	void saveEncounter(Encounter encounter, AsyncCallback<Boolean> asyncCallback)
 			throws Exception;
 
@@ -140,14 +123,11 @@ public interface ServerServiceAsync {
 	void saveMessageSettings(MessageSettings messageSettings,
 			AsyncCallback<Boolean> asyncCallback) throws Exception;
 
-	void saveNewPatient(Patient patient, Person person, Contact contact,
-			Encounter encounter, ArrayList<String> encounterResults,
+	void saveNewPatient(Patient patient, Encounter encounter,
+			ArrayList<String> encounterResults,
 			AsyncCallback<Boolean> asyncCallback) throws Exception;
 
 	void savePatient(Patient patient, AsyncCallback<Boolean> asyncCallback)
-			throws Exception;
-
-	void savePerson(Person person, AsyncCallback<Boolean> asyncCallback)
 			throws Exception;
 
 	void saveUser(Users user, AsyncCallback<Boolean> asyncCallback)
@@ -157,9 +137,6 @@ public interface ServerServiceAsync {
 			throws Exception;
 
 	/* Update methods */
-	void updateContact(Contact contact, AsyncCallback<Boolean> asyncCallback)
-			throws Exception;
-
 	void updateEncounter(Encounter encounter,
 			AsyncCallback<Boolean> asyncCallback) throws Exception;
 
@@ -183,9 +160,6 @@ public interface ServerServiceAsync {
 			AsyncCallback<Boolean> asyncCallback) throws Exception;
 
 	void updatePatient(Patient patient, AsyncCallback<Boolean> asyncCallback)
-			throws Exception;
-
-	void updatePerson(Person person, AsyncCallback<Boolean> asyncCallback)
 			throws Exception;
 
 	void updateUserRights(UserRights userRights, AsyncCallback<Boolean> callback)
@@ -241,11 +215,5 @@ public interface ServerServiceAsync {
 			throws Exception;
 
 	void executeProcedure(String procedure, AsyncCallback<Boolean> asyncCallback)
-			throws Exception;
-
-	void recordLogin(String userName, AsyncCallback<Void> callback)
-			throws Exception;
-
-	void recordLogout(String userName, AsyncCallback<Void> callback)
 			throws Exception;
 }
