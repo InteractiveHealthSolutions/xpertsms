@@ -50,7 +50,7 @@ public class Patient implements java.io.Serializable {
 	private String patientType;
 	private String diseaseHistory;
 	private String fullDescription;
-	
+
 	public Patient() {
 		// TODO Auto-generated constructor stub
 	}

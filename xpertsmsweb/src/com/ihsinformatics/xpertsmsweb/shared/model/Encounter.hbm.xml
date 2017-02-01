@@ -20,7 +20,7 @@
 		</composite-id>
 		<property generated="never" lazy="false" name="encounterType"
 			type="string">
-			<column length="20" name="EncounterType" not-null="true" />
+			<column length="50" name="EncounterType" not-null="true" />
 		</property>
 		<property generated="never" lazy="false" name="locationId"
 			type="string">

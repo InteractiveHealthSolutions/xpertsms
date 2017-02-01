@@ -35,6 +35,7 @@ import com.ihsinformatics.xpertsmsweb.shared.AccessType;
 import com.ihsinformatics.xpertsmsweb.shared.CustomMessage;
 import com.ihsinformatics.xpertsmsweb.shared.ErrorType;
 import com.ihsinformatics.xpertsmsweb.shared.InfoType;
+import com.ihsinformatics.xpertsmsweb.shared.ListType;
 import com.ihsinformatics.xpertsmsweb.shared.UserRightsUtil;
 import com.ihsinformatics.xpertsmsweb.shared.XSMS;
 import com.ihsinformatics.xpertsmsweb.shared.model.Patient;
@@ -119,7 +120,7 @@ public class PatientsComposite extends Composite implements IForm,
 	@SuppressWarnings("deprecation")
 	public PatientsComposite() {
 		initWidget(flexTable);
-		flexTable.setSize("602px", "100%");
+		flexTable.setSize("600px", "100%");
 		flexTable.setWidget(0, 0, label);
 		label.setWordWrap(false);
 		label.setStyleName("title");
@@ -127,7 +128,7 @@ public class PatientsComposite extends Composite implements IForm,
 		middleFlexTable.setSize("631px", "100%");
 		middleFlexTable.setWidget(0, 0, lblPatientId);
 		middleFlexTable.setWidget(0, 1, horizontalPanel);
-		patientIdTextBox.setMaxLength(14);
+		patientIdTextBox.setMaxLength(20);
 		horizontalPanel.add(patientIdTextBox);
 		patientIdTextBox.setVisibleLength(12);
 		horizontalPanel.add(searchButton);
@@ -148,6 +149,8 @@ public class PatientsComposite extends Composite implements IForm,
 		maleRadioButton.setValue(true);
 		genderHorizontalPanel.add(maleRadioButton);
 		genderHorizontalPanel.add(femaleRadioButton);
+		dobDateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat
+				.getFormat("dd-MMM-yyyy")));
 		middleFlexTable.setWidget(3, 0, lblDateOfBirth);
 		middleFlexTable.setWidget(3, 1, dobDateBox);
 		middleFlexTable.setWidget(4, 0, lblAddress1);
@@ -167,245 +170,6 @@ public class PatientsComposite extends Composite implements IForm,
 		landmarkTextBox.setMaxLength(50);
 		middleFlexTable.setWidget(7, 1, landmarkTextBox);
 		middleFlexTable.setWidget(8, 0, lblCountry);
-		countryComboBox.addItem("PAKISTAN");
-		countryComboBox.addItem("ARUBA");
-		countryComboBox.addItem("AFGHANISTAN");
-		countryComboBox.addItem("ANGOLA");
-		countryComboBox.addItem("ANGUILLA");
-		countryComboBox.addItem("ALBANIA");
-		countryComboBox.addItem("ANDORRA");
-		countryComboBox.addItem("NETHERLANDS ANTILLES");
-		countryComboBox.addItem("UNITED ARAB EMIRATES");
-		countryComboBox.addItem("ARGENTINA");
-		countryComboBox.addItem("ARMENIA");
-		countryComboBox.addItem("AMERICAN SAMOA");
-		countryComboBox.addItem("ANTARCTICA");
-		countryComboBox.addItem("FRENCH SOUTHERN TERRITORIES");
-		countryComboBox.addItem("ANTIGUA AND BARBUDA");
-		countryComboBox.addItem("AUSTRALIA");
-		countryComboBox.addItem("AUSTRIA");
-		countryComboBox.addItem("AZERBAIJAN");
-		countryComboBox.addItem("BURUNDI");
-		countryComboBox.addItem("BELGIUM");
-		countryComboBox.addItem("BENIN");
-		countryComboBox.addItem("BURKINA FASO");
-		countryComboBox.addItem("BANGLADESH");
-		countryComboBox.addItem("BULGARIA");
-		countryComboBox.addItem("BAHRAIN");
-		countryComboBox.addItem("BAHAMAS");
-		countryComboBox.addItem("BOSNIA AND HERZEGOVINA");
-		countryComboBox.addItem("BELARUS");
-		countryComboBox.addItem("BELIZE");
-		countryComboBox.addItem("BERMUDA");
-		countryComboBox.addItem("BOLIVIA");
-		countryComboBox.addItem("BRAZIL");
-		countryComboBox.addItem("BARBADOS");
-		countryComboBox.addItem("BRUNEI");
-		countryComboBox.addItem("BHUTAN");
-		countryComboBox.addItem("BOUVET ISLAND");
-		countryComboBox.addItem("BOTSWANA");
-		countryComboBox.addItem("CENTRAL AFRICAN REPUBLIC");
-		countryComboBox.addItem("CANADA");
-		countryComboBox.addItem("COCOS (KEELING) ISLANDS");
-		countryComboBox.addItem("SWITZERLAND");
-		countryComboBox.addItem("CHILE");
-		countryComboBox.addItem("CHINA");
-		countryComboBox.addItem("C\u00C3\u00B4TE D\u00C2\u2019IVOIRE");
-		countryComboBox.addItem("CAMEROON");
-		countryComboBox.addItem("CONGO, THE DEMOCRATIC REPUBLIC OF THE");
-		countryComboBox.addItem("CONGO");
-		countryComboBox.addItem("COOK ISLANDS");
-		countryComboBox.addItem("COLOMBIA");
-		countryComboBox.addItem("COMOROS");
-		countryComboBox.addItem("CAPE VERDE");
-		countryComboBox.addItem("COSTA RICA");
-		countryComboBox.addItem("CUBA");
-		countryComboBox.addItem("CHRISTMAS ISLAND");
-		countryComboBox.addItem("CAYMAN ISLANDS");
-		countryComboBox.addItem("CYPRUS");
-		countryComboBox.addItem("CZECH REPUBLIC");
-		countryComboBox.addItem("GERMANY");
-		countryComboBox.addItem("DJIBOUTI");
-		countryComboBox.addItem("DOMINICA");
-		countryComboBox.addItem("DENMARK");
-		countryComboBox.addItem("DOMINICAN REPUBLIC");
-		countryComboBox.addItem("ALGERIA");
-		countryComboBox.addItem("ECUADOR");
-		countryComboBox.addItem("EGYPT");
-		countryComboBox.addItem("ERITREA");
-		countryComboBox.addItem("WESTERN SAHARA");
-		countryComboBox.addItem("SPAIN");
-		countryComboBox.addItem("ESTONIA");
-		countryComboBox.addItem("ETHIOPIA");
-		countryComboBox.addItem("FINLAND");
-		countryComboBox.addItem("FIJI ISLANDS");
-		countryComboBox.addItem("FALKLAND ISLANDS");
-		countryComboBox.addItem("FRANCE");
-		countryComboBox.addItem("FAROE ISLANDS");
-		countryComboBox.addItem("MICRONESIA, FEDERATED STATES OF");
-		countryComboBox.addItem("GABON");
-		countryComboBox.addItem("UNITED KINGDOM");
-		countryComboBox.addItem("GEORGIA");
-		countryComboBox.addItem("GHANA");
-		countryComboBox.addItem("GIBRALTAR");
-		countryComboBox.addItem("GUINEA");
-		countryComboBox.addItem("GUADELOUPE");
-		countryComboBox.addItem("GAMBIA");
-		countryComboBox.addItem("GUINEA-BISSAU");
-		countryComboBox.addItem("EQUATORIAL GUINEA");
-		countryComboBox.addItem("GREECE");
-		countryComboBox.addItem("GRENADA");
-		countryComboBox.addItem("GREENLAND");
-		countryComboBox.addItem("GUATEMALA");
-		countryComboBox.addItem("FRENCH GUIANA");
-		countryComboBox.addItem("GUAM");
-		countryComboBox.addItem("GUYANA");
-		countryComboBox.addItem("HONG KONG");
-		countryComboBox.addItem("HEARD ISLAND AND MCDONALD ISLANDS");
-		countryComboBox.addItem("HONDURAS");
-		countryComboBox.addItem("CROATIA");
-		countryComboBox.addItem("HAITI");
-		countryComboBox.addItem("HUNGARY");
-		countryComboBox.addItem("INDONESIA");
-		countryComboBox.addItem("INDIA");
-		countryComboBox.addItem("BRITISH INDIAN OCEAN TERRITORY");
-		countryComboBox.addItem("IRELAND");
-		countryComboBox.addItem("IRAN");
-		countryComboBox.addItem("IRAQ");
-		countryComboBox.addItem("ICELAND");
-		countryComboBox.addItem("ITALY");
-		countryComboBox.addItem("JAMAICA");
-		countryComboBox.addItem("JORDAN");
-		countryComboBox.addItem("JAPAN");
-		countryComboBox.addItem("KAZAKSTAN");
-		countryComboBox.addItem("KENYA");
-		countryComboBox.addItem("KYRGYZSTAN");
-		countryComboBox.addItem("CAMBODIA");
-		countryComboBox.addItem("KIRIBATI");
-		countryComboBox.addItem("SAINT KITTS AND NEVIS");
-		countryComboBox.addItem("SOUTH KOREA");
-		countryComboBox.addItem("KUWAIT");
-		countryComboBox.addItem("LAOS");
-		countryComboBox.addItem("LEBANON");
-		countryComboBox.addItem("LIBERIA");
-		countryComboBox.addItem("LIBYAN ARAB JAMAHIRIYA");
-		countryComboBox.addItem("SAINT LUCIA");
-		countryComboBox.addItem("LIECHTENSTEIN");
-		countryComboBox.addItem("SRI LANKA");
-		countryComboBox.addItem("LESOTHO");
-		countryComboBox.addItem("LITHUANIA");
-		countryComboBox.addItem("LUXEMBOURG");
-		countryComboBox.addItem("LATVIA");
-		countryComboBox.addItem("MACAO");
-		countryComboBox.addItem("MOROCCO");
-		countryComboBox.addItem("MONACO");
-		countryComboBox.addItem("MOLDOVA");
-		countryComboBox.addItem("MADAGASCAR");
-		countryComboBox.addItem("MALDIVES");
-		countryComboBox.addItem("MEXICO");
-		countryComboBox.addItem("MARSHALL ISLANDS");
-		countryComboBox.addItem("MACEDONIA");
-		countryComboBox.addItem("MALI");
-		countryComboBox.addItem("MALTA");
-		countryComboBox.addItem("MYANMAR");
-		countryComboBox.addItem("MONGOLIA");
-		countryComboBox.addItem("NORTHERN MARIANA ISLANDS");
-		countryComboBox.addItem("MOZAMBIQUE");
-		countryComboBox.addItem("MAURITANIA");
-		countryComboBox.addItem("MONTSERRAT");
-		countryComboBox.addItem("MARTINIQUE");
-		countryComboBox.addItem("MAURITIUS");
-		countryComboBox.addItem("MALAWI");
-		countryComboBox.addItem("MALAYSIA");
-		countryComboBox.addItem("MAYOTTE");
-		countryComboBox.addItem("NAMIBIA");
-		countryComboBox.addItem("NEW CALEDONIA");
-		countryComboBox.addItem("NIGER");
-		countryComboBox.addItem("NORFOLK ISLAND");
-		countryComboBox.addItem("NIGERIA");
-		countryComboBox.addItem("NICARAGUA");
-		countryComboBox.addItem("NIUE");
-		countryComboBox.addItem("NETHERLANDS");
-		countryComboBox.addItem("NORWAY");
-		countryComboBox.addItem("NEPAL");
-		countryComboBox.addItem("NAURU");
-		countryComboBox.addItem("NEW ZEALAND");
-		countryComboBox.addItem("OMAN");
-		countryComboBox.addItem("PANAMA");
-		countryComboBox.addItem("PITCAIRN");
-		countryComboBox.addItem("PERU");
-		countryComboBox.addItem("PHILIPPINES");
-		countryComboBox.addItem("PALAU");
-		countryComboBox.addItem("PAPUA NEW GUINEA");
-		countryComboBox.addItem("POLAND");
-		countryComboBox.addItem("PUERTO RICO");
-		countryComboBox.addItem("NORTH KOREA");
-		countryComboBox.addItem("PORTUGAL");
-		countryComboBox.addItem("PARAGUAY");
-		countryComboBox.addItem("PALESTINE");
-		countryComboBox.addItem("FRENCH POLYNESIA");
-		countryComboBox.addItem("QATAR");
-		countryComboBox.addItem("R\u00C3\u00A9UNION");
-		countryComboBox.addItem("ROMANIA");
-		countryComboBox.addItem("RUSSIAN FEDERATION");
-		countryComboBox.addItem("RWANDA");
-		countryComboBox.addItem("SAUDI ARABIA");
-		countryComboBox.addItem("SUDAN");
-		countryComboBox.addItem("SENEGAL");
-		countryComboBox.addItem("SINGAPORE");
-		countryComboBox.addItem("SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS");
-		countryComboBox.addItem("SAINT HELENA");
-		countryComboBox.addItem("SVALBARD AND JAN MAYEN");
-		countryComboBox.addItem("SOLOMON ISLANDS");
-		countryComboBox.addItem("SIERRA LEONE");
-		countryComboBox.addItem("EL SALVADOR");
-		countryComboBox.addItem("SAN MARINO");
-		countryComboBox.addItem("SOMALIA");
-		countryComboBox.addItem("SAINT PIERRE AND MIQUELON");
-		countryComboBox.addItem("SAO TOME AND PRINCIPE");
-		countryComboBox.addItem("SURINAME");
-		countryComboBox.addItem("SLOVAKIA");
-		countryComboBox.addItem("SLOVENIA");
-		countryComboBox.addItem("SWEDEN");
-		countryComboBox.addItem("SWAZILAND");
-		countryComboBox.addItem("SEYCHELLES");
-		countryComboBox.addItem("SYRIA");
-		countryComboBox.addItem("TURKS AND CAICOS ISLANDS");
-		countryComboBox.addItem("CHAD");
-		countryComboBox.addItem("TOGO");
-		countryComboBox.addItem("THAILAND");
-		countryComboBox.addItem("TAJIKISTAN");
-		countryComboBox.addItem("TOKELAU");
-		countryComboBox.addItem("TURKMENISTAN");
-		countryComboBox.addItem("EAST TIMOR");
-		countryComboBox.addItem("TONGA");
-		countryComboBox.addItem("TRINIDAD AND TOBAGO");
-		countryComboBox.addItem("TUNISIA");
-		countryComboBox.addItem("TURKEY");
-		countryComboBox.addItem("TUVALU");
-		countryComboBox.addItem("TAIWAN");
-		countryComboBox.addItem("TANZANIA");
-		countryComboBox.addItem("UGANDA");
-		countryComboBox.addItem("UKRAINE");
-		countryComboBox.addItem("UNITED STATES MINOR OUTLYING ISLANDS");
-		countryComboBox.addItem("URUGUAY");
-		countryComboBox.addItem("UNITED STATES");
-		countryComboBox.addItem("UZBEKISTAN");
-		countryComboBox.addItem("HOLY SEE (VATICAN CITY STATE)");
-		countryComboBox.addItem("SAINT VINCENT AND THE GRENADINES");
-		countryComboBox.addItem("VENEZUELA");
-		countryComboBox.addItem("VIRGIN ISLANDS, BRITISH");
-		countryComboBox.addItem("VIRGIN ISLANDS, U.S.");
-		countryComboBox.addItem("VIETNAM");
-		countryComboBox.addItem("VANUATU");
-		countryComboBox.addItem("WALLIS AND FUTUNA");
-		countryComboBox.addItem("SAMOA");
-		countryComboBox.addItem("YEMEN");
-		countryComboBox.addItem("YUGOSLAVIA");
-		countryComboBox.addItem("SOUTH AFRICA");
-		countryComboBox.addItem("ZAMBIA");
-		countryComboBox.addItem("ZIMBABWE");
-		countryComboBox.addItem("UNLISTED");
 		countryComboBox.setName("COUNTRY");
 		middleFlexTable.setWidget(8, 1, countryComboBox);
 		middleFlexTable.setWidget(9, 0, lblCity);
@@ -440,24 +204,8 @@ public class PatientsComposite extends Composite implements IForm,
 		heightDoubleBox.setVisibleLength(5);
 		middleFlexTable.setWidget(17, 1, heightDoubleBox);
 		middleFlexTable.setWidget(18, 0, lblBloodGroup);
-		bloodGroupComboBox.addItem("");
-		bloodGroupComboBox.addItem("A+");
-		bloodGroupComboBox.addItem("A-");
-		bloodGroupComboBox.addItem("B+");
-		bloodGroupComboBox.addItem("B-");
-		bloodGroupComboBox.addItem("O+");
-		bloodGroupComboBox.addItem("O-");
-		bloodGroupComboBox.addItem("AB+");
-		bloodGroupComboBox.addItem("AB-");
 		middleFlexTable.setWidget(18, 1, bloodGroupComboBox);
 		middleFlexTable.setWidget(19, 0, lblTreatmentStatus);
-		patientStatusComboBox.addItem("NEW");
-		patientStatusComboBox.addItem("CURED");
-		patientStatusComboBox.addItem("COMPLETE");
-		patientStatusComboBox.addItem("LOST TO FOLLOW-UP");
-		patientStatusComboBox.addItem("TREATMENT FAILED");
-		patientStatusComboBox.addItem("TRANSFERRED");
-		patientStatusComboBox.addItem("DIED");
 		middleFlexTable.setWidget(19, 1, patientStatusComboBox);
 		middleFlexTable.setWidget(20, 0, lblDiseaseHistory);
 		diseaseHistoryTextArea.setCharacterWidth(50);
@@ -482,7 +230,6 @@ public class PatientsComposite extends Composite implements IForm,
 		grid.setWidget(0, 2, closeButton);
 		flexTable.getRowFormatter().setVerticalAlign(1,
 				HasVerticalAlignment.ALIGN_TOP);
-
 		searchButton.addClickHandler(this);
 		saveButton.addClickHandler(this);
 		deleteButton.addClickHandler(this);
@@ -494,7 +241,21 @@ public class PatientsComposite extends Composite implements IForm,
 	}
 
 	public void refreshList() {
-		// Not implemented
+		for (String country : XSMS.getList(ListType.COUNTRIES)) {
+			countryComboBox.addItem(country);
+		}
+		for (String status : XSMS.getList(ListType.PATIENT_STATUS)) {
+			patientStatusComboBox.addItem(status);
+		}
+		bloodGroupComboBox.addItem("");
+		bloodGroupComboBox.addItem("A+");
+		bloodGroupComboBox.addItem("A-");
+		bloodGroupComboBox.addItem("B+");
+		bloodGroupComboBox.addItem("B-");
+		bloodGroupComboBox.addItem("O+");
+		bloodGroupComboBox.addItem("O-");
+		bloodGroupComboBox.addItem("AB+");
+		bloodGroupComboBox.addItem("AB-");
 	}
 
 	/**
@@ -536,8 +297,7 @@ public class PatientsComposite extends Composite implements IForm,
 		currentPatient.setAddress1(XpertSmsWebClient.get(address1TextBox));
 		currentPatient.setAddress2(XpertSmsWebClient.get(address2TextBox));
 		currentPatient.setTown(XpertSmsWebClient.get(townTextBox));
-		currentPatient.setLandmark(XpertSmsWebClient
-				.get(landmarkTextBox));
+		currentPatient.setLandmark(XpertSmsWebClient.get(landmarkTextBox));
 		currentPatient.setCountry(XpertSmsWebClient.get(countryComboBox));
 		currentPatient.setCity(XpertSmsWebClient.get(cityTextBox));
 		currentPatient.setPhone(XpertSmsWebClient.get(phoneTextBox));
@@ -568,8 +328,6 @@ public class PatientsComposite extends Composite implements IForm,
 										.getErrorMessage(ErrorType.ITEM_NOT_FOUND));
 							else {
 								currentPatient = result;
-								patientIdTextBox.setValue(currentPatient
-										.getPatientId());
 								firstNameTextBox.setValue(currentPatient
 										.getFirstName());
 								lastNameTextBox.setValue(currentPatient
@@ -641,11 +399,14 @@ public class PatientsComposite extends Composite implements IForm,
 		final StringBuilder errorMessage = new StringBuilder();
 		valid = true;
 		/* Validate mandatory fields */
-		if (XpertSmsWebClient.get(patientIdTextBox).equals("")
-				|| XpertSmsWebClient.get(firstNameTextBox).equals("")) {
-			errorMessage.append(CustomMessage
-					.getErrorMessage(ErrorType.EMPTY_DATA_ERROR) + "\n");
-			valid = false;
+		Widget[] mandatory = { patientIdTextBox, firstNameTextBox,
+				dobDateBox.getTextBox(), registrationDateBox.getTextBox() };
+		for (Widget w : mandatory) {
+			if (XpertSmsWebClient.get(w).equals("")) {
+				errorMessage.append(CustomMessage
+						.getErrorMessage(ErrorType.EMPTY_DATA_ERROR) + "\n");
+				valid = false;
+			}
 		}
 		if (!valid) {
 			Window.alert(errorMessage.toString());
@@ -811,7 +572,6 @@ public class PatientsComposite extends Composite implements IForm,
 		} else if (sender == createButton) {
 			if (createButton.isDown())
 				clearUp();
-			patientIdTextBox.setEnabled(createButton.isDown());
 			load(false);
 		} else if (sender == saveButton) {
 			if (createButton.isDown())

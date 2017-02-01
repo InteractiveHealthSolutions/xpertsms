@@ -20,6 +20,7 @@ public class XpertASTMResultUploadMessageTest {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
+		XpertProperties.readProperties();
 		sampleGxaObj.put("apiKey", "ph8trUgestejugudR6fRa6he5u6heveZpruwuWrAthUruFuhuxuRe8ruGunuthub")
 		        .put("assayHostTestCode", "MTB-RIF").put("assay", "Xpert MTB-RIF Assay").put("assayVersion", "5")
 		        .put("sampleId", "130514_12544_00001").put("patientId", "101130800001-9").put("user", "OWAIS")
@@ -97,7 +98,6 @@ public class XpertASTMResultUploadMessageTest {
 	
 	@Test
 	public void testToSMS() throws Exception {
-		setUpBeforeClass();
 		String sms = sampleMessage.toSMS(true);
 		String should = "101130800001-9^141016_001^MTB DETECTED MEDIUM^Rif Resistance NOT DETECTED^Machine API Test^CEPHEID5G183R1^IHS^OWAIS^708228^618255^204304821^10713-AX^2015-05-23^no^no^yes^5002^Post-run analysis error^no^Just XDR-TB^POS^NO RESULT^NEG^NEG^POS^0^1.1^2.2^2.3^1.3^1.4^2.5^3.6^4.7^4.5^3.2^1.0^0.0";
 		Assert.assertTrue("Parameters mismatch", sms.equalsIgnoreCase(should));

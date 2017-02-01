@@ -30,23 +30,6 @@ public class ResultsSenderTest extends ResultsSender {
 	
 	ResultsSender result = new ResultsSender();
 	
-	/*@BeforeClass
-	public static void atStartup() throws Exception {
-		sampleMessage.setMtbResult("Mtb Not Detected");
-		sampleMessage.setPatientId("TB Patient");
-		sampleMessage.setSampleId("101130800001-9");
-		sampleMessage.setProbeResultA("Result A");
-		sampleMessage.setProbeResultB("Result B");
-		sampleMessage.setProbeResultC("Result C");
-		sampleMessage.setProbeResultD("Result D");
-		sampleMessage.setProbeResultE("Result E");
-		sampleMessage.setProbeCtA("Probe Ct A");
-		sampleMessage.setProbeCtB("Probe Ct B");
-		sampleMessage.setProbeCtC("Probe Ct C");
-		sampleMessage.setProbeCtD("Probe Ct D");
-		sampleMessage.setProbeCtE("Probe Ct E");
-	}*/
-	
 	@Test
 	public void toCheckSingleChunkMessage() throws Exception {
 		sampleMessage.setOperatorId("Safwan");

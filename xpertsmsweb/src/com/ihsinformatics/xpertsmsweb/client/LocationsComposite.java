@@ -31,6 +31,7 @@ import com.ihsinformatics.xpertsmsweb.shared.AccessType;
 import com.ihsinformatics.xpertsmsweb.shared.CustomMessage;
 import com.ihsinformatics.xpertsmsweb.shared.ErrorType;
 import com.ihsinformatics.xpertsmsweb.shared.InfoType;
+import com.ihsinformatics.xpertsmsweb.shared.ListType;
 import com.ihsinformatics.xpertsmsweb.shared.UserRightsUtil;
 import com.ihsinformatics.xpertsmsweb.shared.XSMS;
 import com.ihsinformatics.xpertsmsweb.shared.model.Location;
@@ -77,12 +78,12 @@ public class LocationsComposite extends Composite implements IForm,
 	private TextBox phoneTextBox = new TextBox();
 	private TextBox mobileTextBox = new TextBox();
 	private TextBox emailTextBox = new TextBox();
+	private TextBox cityTextBox = new TextBox();
 
 	private ListBox locationNamesListBox = new ListBox();
 	private ListBox locationTypesComboBox = new ListBox();
 	private ListBox locationTypeComboBox = new ListBox();
 	private ListBox countryComboBox = new ListBox();
-	private ListBox cityComboBox = new ListBox();
 	private ListBox reportingToComboBox = new ListBox();
 
 	public LocationsComposite() {
@@ -97,7 +98,7 @@ public class LocationsComposite extends Composite implements IForm,
 		flexTable.setWidget(1, 0, leftFlexTable);
 		locationTypesComboBox.setName("LOCATION_TYPE");
 		locationTypesComboBox
-				.setTitle("This box contains Location Types from Definition. Selecting anyone fills the list box below.");
+				.setTitle("This box contains Location Types. Selecting anyone fills the list box below.");
 		leftFlexTable.setWidget(0, 0, locationTypesComboBox);
 		locationNamesListBox
 				.setTitle("This list box contains Location names of selected type. Clicking anyone fills details in right panel.");
@@ -129,8 +130,8 @@ public class LocationsComposite extends Composite implements IForm,
 		countryComboBox.setName("COUNTRY");
 		rightFlexTable.setWidget(7, 1, countryComboBox);
 		rightFlexTable.setWidget(8, 0, lblRegion);
-		cityComboBox.setName("REGION");
-		rightFlexTable.setWidget(8, 1, cityComboBox);
+		cityTextBox.setName("REGION");
+		rightFlexTable.setWidget(8, 1, cityTextBox);
 		rightFlexTable.setWidget(9, 0, lblPhone);
 		rightFlexTable.setWidget(9, 1, phoneTextBox);
 		rightFlexTable.setWidget(10, 0, lblMobile);
@@ -167,23 +168,21 @@ public class LocationsComposite extends Composite implements IForm,
 		deleteButton.addClickHandler(this);
 		closeButton.addClickHandler(this);
 
+		setRights(menuName);
 		refreshList();
 		try {
-			service.getColumnData("Location", "LocationID",
-					"LocationType='LABORATORY'", new AsyncCallback<String[]>() {
-
+			service.findLocationsByType("HOSPITAL",
+					new AsyncCallback<Location[]>() {
 						@Override
-						public void onSuccess(String[] result) {
-							reportingToComboBox.addItem("");
-							for (String location : result) {
-								reportingToComboBox.addItem(location);
+						public void onSuccess(Location[] result) {
+							for (Location location : result) {
+								reportingToComboBox.addItem(location
+										.getLocationId());
 							}
-							setRights(menuName);
 						}
 
 						@Override
 						public void onFailure(Throwable caught) {
-							setRights(menuName);
 						}
 					});
 		} catch (Exception e) {
@@ -192,20 +191,13 @@ public class LocationsComposite extends Composite implements IForm,
 	}
 
 	public void refreshList() {
-		String[] locationTypes = { "LABORATORY", "HOSPITAL", "CLINIC",
-				"OTHER_REFERRAL", "OTHER" };
-		for (String type : locationTypes) {
+		for (String type : XSMS.getList(ListType.LOCATION_TYPE)) {
 			locationTypeComboBox.addItem(type);
 			locationTypesComboBox.addItem(type);
 		}
-		countryComboBox.addItem("PAKISTAN");
-		String[] cities = { "KARACHI", "LAHORE", "FAISALABAD", "RAWALPINDI",
-				"MULTAN", "HYDERABAD", "GUJRANWALA", "PESHAWAR", "QUETTA",
-				"ISLAMABAD", "SARGODHA", "SIALKOT", "BAHAWALPUR", "SUKKUR",
-				"JHANG", "SHEIKHUPURA", "LARKANA", "GUJRAT", "MARDAN", "KASUR",
-				"RAHIM YAR KHAN", "SAHIWAL", "OKARA" };
-		for (String city : cities)
-			cityComboBox.addItem(city);
+		for (String country : XSMS.getList(ListType.COUNTRIES)) {
+			countryComboBox.addItem(country);
+		}
 	}
 
 	/**
@@ -244,7 +236,7 @@ public class LocationsComposite extends Composite implements IForm,
 				.toUpperCase());
 		currentLocation.setAddressStreet(XpertSmsWebClient.get(address2TextBox)
 				.toUpperCase());
-		currentLocation.setCityId(XpertSmsWebClient.get(cityComboBox));
+		currentLocation.setCityId(XpertSmsWebClient.get(cityTextBox));
 		currentLocation.setCountryId(XpertSmsWebClient.get(countryComboBox));
 		currentLocation.setPhone(XpertSmsWebClient.get(phoneTextBox));
 		currentLocation.setMobile(XpertSmsWebClient.get(mobileTextBox));
@@ -279,9 +271,8 @@ public class LocationsComposite extends Composite implements IForm,
 										.getAddressHouse());
 								address2TextBox.setValue(currentLocation
 										.getAddressStreet());
-								cityComboBox.setSelectedIndex(XpertSmsWebClient
-										.getIndex(cityComboBox,
-												currentLocation.getCityId()));
+								cityTextBox.setValue(currentLocation
+										.getCityId());
 								countryComboBox.setSelectedIndex(XpertSmsWebClient
 										.getIndex(countryComboBox,
 												currentLocation.getCountryId()));

@@ -15,7 +15,7 @@ import com.ihsinformatics.xpertsms.model.XpertResultUploadMessage;
 import com.ihsinformatics.xpertsms.model.astm.XpertASTMResultUploadMessage;
 import com.ihsinformatics.xpertsms.util.CsvUtil;
 
-public class TestClass {
+public class TestClassMain {
 	
 	/**
 	 * @param args
@@ -48,22 +48,20 @@ public class TestClass {
 			// Enable to test GXA
 			// response = postToGxa(json.toString());
 			// Enable to test Web
-			{
-				SimpleDateFormat messageFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				sampleMessages[i].setExpDate(messageFormat.format(new Date()));
-				sampleMessages[i].setMessageDateTime(messageFormat.format(new Date()));
-				sampleMessages[i].setOrderDateTime(messageFormat.format(new Date()));
-				sampleMessages[i].setTestStartDate(messageFormat.format(new Date()));
-				sampleMessages[i].setTestEndDate(messageFormat.format(new Date()));
-				
-				String mtb = sampleMessages[i].getMtbResult().equals("1") ? "MTB DETECTED HIGH" : sampleMessages[i]
-				        .getMtbResult().equals("2") ? "MTB DETECTED MEDIUM" : "MTB NOT DETECTED";
-				String rif = sampleMessages[i].getRifResult().equals("1") ? "RIF Resistance DETECTED" : sampleMessages[i]
-				        .getRifResult().equals("2") ? "RIF Resistance NOT DETECTED" : "RIF Resistance INDETERMINATE";
-				sampleMessages[i].setMtbResult(mtb);
-				sampleMessages[i].setRifResult(rif);
-				postToWeb(sampleMessages[i]);
-			}
+			SimpleDateFormat messageFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			sampleMessages[i].setExpDate(messageFormat.format(new Date()));
+			sampleMessages[i].setMessageDateTime(messageFormat.format(new Date()));
+			sampleMessages[i].setOrderDateTime(messageFormat.format(new Date()));
+			sampleMessages[i].setTestStartDate(messageFormat.format(new Date()));
+			sampleMessages[i].setTestEndDate(messageFormat.format(new Date()));
+			
+			String mtb = sampleMessages[i].getMtbResult().equals("1") ? "MTB DETECTED HIGH" : sampleMessages[i]
+			        .getMtbResult().equals("2") ? "MTB DETECTED MEDIUM" : "MTB NOT DETECTED";
+			String rif = sampleMessages[i].getRifResult().equals("1") ? "RIF Resistance DETECTED" : sampleMessages[i]
+			        .getRifResult().equals("2") ? "RIF Resistance NOT DETECTED" : "RIF Resistance INDETERMINATE";
+			sampleMessages[i].setMtbResult(mtb);
+			sampleMessages[i].setRifResult(rif);
+			response = postToWeb(sampleMessages[i]);
 			System.out.println(response);
 		}
 		

@@ -15,7 +15,8 @@ public class SmsProcesserService {
 		if (smsInstance == null) {
 			smsInstance = new SmsProcesserService();
 			Timer responseReaderTimer = new Timer();
-			responseReaderTimer.schedule(new ResponseReader(), DELAY, DELAY * 3);
+			responseReaderTimer
+					.schedule(new ResponseReader(), DELAY, DELAY * 3);
 			return true;
 		} else {
 			throw new InstantiationError(

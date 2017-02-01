@@ -15,7 +15,7 @@
 		</property>
 		<property generated="never" lazy="false" name="locationType"
 			type="java.lang.String">
-			<column length="20" name="LocationType" />
+			<column length="50" name="LocationType" />
 		</property>
 		<property generated="never" lazy="false" name="addressHouse"
 			type="java.lang.String">

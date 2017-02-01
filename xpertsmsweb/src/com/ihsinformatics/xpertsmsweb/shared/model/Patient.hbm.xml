@@ -6,15 +6,15 @@
 	<class catalog="xpertsms"
 		name="com.ihsinformatics.xpertsmsweb.shared.model.Patient" table="Patient">
 		<id name="patientId" type="string">
-			<column length="14" name="PatientID" />
+			<column length="50" name="PatientID" />
 			<generator class="assigned" />
 		</id>
 		<property generated="never" lazy="false" name="providerId"
 			type="string">
-			<column length="12" name="ProviderID" />
+			<column length="50" name="ProviderID" />
 		</property>
 		<property generated="never" lazy="false" name="mrNo" type="string">
-			<column length="11" name="MRNo">
+			<column length="50" name="MRNo">
 			</column>
 		</property>
 		<property generated="never" lazy="false" name="weight"
@@ -35,7 +35,7 @@
 		</property>
 		<property generated="never" lazy="false" name="treatmentCenter"
 			type="string">
-			<column length="20" name="TreatmentCenter" />
+			<column length="50" name="TreatmentCenter" />
 		</property>
 		<property generated="never" lazy="false" name="diseaseSuspected"
 			type="java.lang.Boolean">
@@ -47,7 +47,7 @@
 		</property>
 		<property generated="never" lazy="false" name="diseaseCategory"
 			type="string">
-			<column length="20" name="DiseaseCategory" />
+			<column length="50" name="DiseaseCategory" />
 		</property>
 		<property generated="never" lazy="false" name="diseaseSite"
 			type="string">
@@ -55,7 +55,7 @@
 		</property>
 		<property generated="never" lazy="false" name="patientStatus"
 			type="string">
-			<column length="20" name="PatientStatus" />
+			<column length="50" name="PatientStatus" />
 		</property>
 		<property generated="never" lazy="false" name="patientType"
 			type="string">

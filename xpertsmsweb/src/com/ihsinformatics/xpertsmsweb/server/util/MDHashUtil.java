@@ -66,4 +66,3 @@ public final class MDHashUtil {
 		return hexString.toString();
 	}
 }
-

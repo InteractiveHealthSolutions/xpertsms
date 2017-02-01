@@ -89,11 +89,11 @@
 
 		<property generated="never" lazy="false" name="programNumber"
 			type="string">
-			<column name="ProgramNumber" length="15" />
+			<column name="ProgramNumber" length="20" />
 		</property>
 		<property generated="never" lazy="false" name="managerNumber"
 			type="string">
-			<column name="ManagerNumber" length="15" />
+			<column name="ManagerNumber" length="20" />
 		</property>
 	</class>
 </hibernate-mapping>

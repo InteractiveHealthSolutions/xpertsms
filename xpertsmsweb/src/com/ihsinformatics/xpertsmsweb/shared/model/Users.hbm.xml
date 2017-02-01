@@ -13,10 +13,10 @@
 			<column name="UserName" length="50" not-null="true" />
 		</property>
 		<property name="role" type="string">
-			<column name="Role" length="20" not-null="true" />
+			<column name="Role" length="50" not-null="true" />
 		</property>
 		<property name="status" type="string">
-			<column name="Status" length="20" not-null="true" />
+			<column name="Status" length="50" not-null="true" />
 		</property>
 		<property name="password" type="string">
 			<column name="Password" not-null="true">

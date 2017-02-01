@@ -32,7 +32,8 @@ public class SmsTarseel {
 			TarseelContext.instantiate(prop, null);
 			return true;
 		} catch (InstanceAlreadyExistsException e) {
-			System.out.println("An instance of the same service already exists.");
+			System.out
+					.println("An instance of the same service already exists.");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

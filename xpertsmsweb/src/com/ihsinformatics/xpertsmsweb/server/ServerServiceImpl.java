@@ -105,7 +105,8 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 	 * Get full name (first name + middle name + last name + surname) of any
 	 * Patient
 	 * 
-	 * @param PatientID as String
+	 * @param PatientID
+	 *            as String
 	 * @return full name as String
 	 */
 	public String getFullName(String PatientID) throws Exception {
@@ -120,15 +121,16 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 	/**
 	 * Get Mobile phone number of any Patient
 	 * 
-	 * @param PatientID as String
+	 * @param PatientID
+	 *            as String
 	 * @return Mobile number as String
 	 */
 	public String getMobileNumber(String PatientID) throws Exception {
 		if (PatientID.equals(""))
 			return "";
 		return HibernateUtil.util.selectObject(
-				"select Mobile from Patient where PatientID='" + PatientID + "'")
-				.toString();
+				"select Mobile from Patient where PatientID='" + PatientID
+						+ "'").toString();
 	}
 
 	/**
@@ -581,7 +583,7 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 
 	public Boolean saveMessageSettings(MessageSettings messageSettings)
 			throws Exception {
-		// If a setting exists, update it. Create othewise
+		// If a setting exists, update it. Create otherwise
 		MessageSettings settings = findMessageSettings();
 		if (settings == null) {
 			messageSettings.setSettingsId(1);

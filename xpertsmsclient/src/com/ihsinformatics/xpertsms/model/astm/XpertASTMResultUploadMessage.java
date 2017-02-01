@@ -160,7 +160,6 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 			e.printStackTrace();
 		}
 	}
-	
 
 	/**
 	 * @return the computerName

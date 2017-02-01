@@ -37,12 +37,8 @@ import com.ihsinformatics.xpertsmsweb.shared.XSMS;
 import com.ihsinformatics.xpertsmsweb.shared.model.MessageSettings;
 import com.ihsinformatics.xpertsmsweb.shared.model.Users;
 
-public class MessageSettingsComposite extends Composite
-		implements
-			IForm,
-			ClickHandler,
-			ChangeHandler,
-			ValueChangeHandler<Boolean> {
+public class MessageSettingsComposite extends Composite implements IForm,
+		ClickHandler, ChangeHandler, ValueChangeHandler<Boolean> {
 	private static ServerServiceAsync service = GWT.create(ServerService.class);
 	private static LoadingWidget loading = new LoadingWidget();
 	private static final String menuName = "SETUP";
@@ -335,6 +331,7 @@ public class MessageSettingsComposite extends Composite
 											.getErrorMessage(ErrorType.UPDATE_ERROR));
 								load(false);
 							}
+
 							@Override
 							public void onFailure(Throwable caught) {
 								Window.alert(CustomMessage

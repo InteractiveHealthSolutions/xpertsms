@@ -8,7 +8,7 @@
 		<composite-id name="id"
 			class="com.ihsinformatics.xpertsmsweb.shared.model.UserRightsId">
 			<key-property name="role" type="string">
-				<column name="Role" length="20" />
+				<column name="Role" length="50" />
 			</key-property>
 			<key-property name="menuName" type="string">
 				<column name="MenuName" length="50" />

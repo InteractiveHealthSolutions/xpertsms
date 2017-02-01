@@ -204,7 +204,7 @@ public class EventHandler extends HttpServlet {
 						probeEndptC, probeEndptD, probeEndptE, probeEndptSPC,
 						errorCode, errorNotes, notes, systemId);
 				gxpU.setDateSubmitted(new Date());
-				if(gxpU.getDateTested() == null){
+				if (gxpU.getDateTested() == null) {
 					gxpU.setDateTested(new Date());
 				}
 				ssl.saveGeneXpertResults(gxpU);
@@ -230,7 +230,11 @@ public class EventHandler extends HttpServlet {
 			}
 			if (!update) {
 				for (int i = 0; i < gxp.length; i++) {
-					if (gxp[i].getGeneXpertResult() == null || "null".equalsIgnoreCase(gxp[i].getGeneXpertResult())) {// F form filled
+					if (gxp[i].getGeneXpertResult() == null
+							|| "null".equalsIgnoreCase(gxp[i]
+									.getGeneXpertResult())) {// F
+																// form
+																// filled
 						update = true;
 						gxpNew = gxp[i];
 						System.out.println("ID match null result");
@@ -281,7 +285,7 @@ public class EventHandler extends HttpServlet {
 			}
 			gxpNew.setDateSubmitted(new Date());
 			gxpNew.setDateTested(parseDate(resultDateStr));
-			if(gxpNew.getDateTested() == null){
+			if (gxpNew.getDateTested() == null) {
 				gxpNew.setDateTested(new Date());
 			}
 			gxpNew.setInstrumentSerial(instrumentSerial);
@@ -295,7 +299,8 @@ public class EventHandler extends HttpServlet {
 			String remarks = "";
 			if (errorCode != null) {
 				gxpNew.setErrorCode(Integer.parseInt(errorCode));
-				if (!"".equals(errorNotes) && !"null".equalsIgnoreCase(errorNotes)) {
+				if (!"".equals(errorNotes)
+						&& !"null".equalsIgnoreCase(errorNotes)) {
 					remarks += errorNotes + ". ";
 				}
 			}
@@ -352,10 +357,12 @@ public class EventHandler extends HttpServlet {
 				boolean isStamp = !dateStr.contains("-");
 				if (dateStr.length() > 10)
 					dateObj = DateTimeUtil.getDateFromString(dateStr,
-							isStamp ? DateTimeUtil.DATETIME_STAMP : DateTimeUtil.SQL_DATETIME);
+							isStamp ? DateTimeUtil.DATETIME_STAMP
+									: DateTimeUtil.SQL_DATETIME);
 				else
 					dateObj = DateTimeUtil.getDateFromString(dateStr,
-						isStamp ? DateTimeUtil.DATE_STAMP : DateTimeUtil.SQL_DATE);
+							isStamp ? DateTimeUtil.DATE_STAMP
+									: DateTimeUtil.SQL_DATE);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
@@ -366,14 +373,15 @@ public class EventHandler extends HttpServlet {
 	public GeneXpertResults createGeneXpertResults(String patientId,
 			String sampleId, String mtb, String rif, Date resultDate,
 			String instrumentSerial, String moduleId, String cartridgeId,
-			String reagentLotId, Date expDate, String operatorId, String pcId, String hostId,
-			String probeResultA, String probeResultB, String probeResultC,
-			String probeResultD, String probeResultE, String probeResultSPC,
-			String probeCtA, String probeCtB, String probeCtC, String probeCtD,
-			String probeCtE, String probeCtSPC, String probeEndptA,
-			String probeEndptB, String probeEndptC, String probeEndptD,
-			String probeEndptE, String probeEndptSPC, String errorCode,
-			String errorNotes, String notes, String systemId) {
+			String reagentLotId, Date expDate, String operatorId, String pcId,
+			String hostId, String probeResultA, String probeResultB,
+			String probeResultC, String probeResultD, String probeResultE,
+			String probeResultSPC, String probeCtA, String probeCtB,
+			String probeCtC, String probeCtD, String probeCtE,
+			String probeCtSPC, String probeEndptA, String probeEndptB,
+			String probeEndptC, String probeEndptD, String probeEndptE,
+			String probeEndptSPC, String errorCode, String errorNotes,
+			String notes, String systemId) {
 		GeneXpertResults gxp = new GeneXpertResults();
 		gxp.setSputumTestId(sampleId);
 		gxp.setPatientId(patientId);
@@ -381,7 +389,7 @@ public class EventHandler extends HttpServlet {
 
 		if (rif != null && rif.equalsIgnoreCase("null"))
 			rif = null;
-	
+
 		if (mtb != null) {
 			// System.out.println("----MTB----" + mtb);
 			int index = mtb.indexOf("MTB DETECTED");
@@ -499,7 +507,7 @@ public class EventHandler extends HttpServlet {
 			try {
 				os = hc.getOutputStream();
 				@SuppressWarnings("unchecked")
-                Enumeration<String> names = request.getParameterNames();
+				Enumeration<String> names = request.getParameterNames();
 				StringBuilder queryString = new StringBuilder();
 				while (names.hasMoreElements()) {
 					String parameter = names.nextElement();
@@ -507,8 +515,8 @@ public class EventHandler extends HttpServlet {
 					queryString.append(parameter + "=" + value + "&");
 				}
 				String requestStr = queryString.toString();
-//				System.out.println(">>> DEBUG >>> request string: "
-//						+ requestStr);
+				// System.out.println(">>> DEBUG >>> request string: "
+				// + requestStr);
 				os.write(requestStr.getBytes());
 				os.flush();
 				responseCode = hc.getResponseCode();

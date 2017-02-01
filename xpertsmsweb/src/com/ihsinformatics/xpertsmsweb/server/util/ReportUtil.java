@@ -46,7 +46,7 @@ public class ReportUtil {
 		ReportUtil.resourcesPath = resourcesPath;
 		ReportUtil.reportsPath = resourcesPath + "rpt" + separatorChar;
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public String generateCSVfromQuery(String query, char separator) {
 		try {
