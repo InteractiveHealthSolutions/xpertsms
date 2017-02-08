@@ -11,7 +11,7 @@
 		</id>
 		<property generated="never" lazy="false" name="locationName"
 			type="java.lang.String">
-			<column length="50" name="locationName" />
+			<column length="50" name="LocationName" />
 		</property>
 		<property generated="never" lazy="false" name="locationType"
 			type="java.lang.String">
@@ -47,7 +47,7 @@
 		</property>
 		<property generated="never" lazy="false" name="addressLocationLat"
 			type="java.lang.Float">
-			<column name="AddressLocationLAt" />
+			<column name="AddressLocationLat" />
 		</property>
 		<property generated="never" lazy="false" name="addressLocationLon"
 			type="java.lang.Float">

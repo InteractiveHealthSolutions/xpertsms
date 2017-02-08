@@ -2,8 +2,8 @@ CREATE DATABASE  IF NOT EXISTS `xpertsms`;
 USE `xpertsms`;
 
 -- Table structure for table `encounter`
-DROP TABLE IF EXISTS `encounter`;
-CREATE TABLE `encounter` (
+DROP TABLE IF EXISTS `Encounter`;
+CREATE TABLE `Encounter` (
   `EncounterID` int(11) NOT NULL,
   `PID1` varchar(50) NOT NULL,
   `PID2` varchar(50) NOT NULL,
@@ -17,8 +17,8 @@ CREATE TABLE `encounter` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Table structure for table `encounterresults`
-DROP TABLE IF EXISTS `encounterresults`;
-CREATE TABLE `encounterresults` (
+DROP TABLE IF EXISTS `EncounterResults`;
+CREATE TABLE `EncounterResults` (
   `EncounterID` int(11) NOT NULL,
   `PID1` varchar(50) NOT NULL,
   `PID2` varchar(50) NOT NULL,
@@ -28,8 +28,8 @@ CREATE TABLE `encounterresults` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Table structure for table `genexpertresults`
-DROP TABLE IF EXISTS `genexpertresults`;
-CREATE TABLE `genexpertresults` (
+DROP TABLE IF EXISTS `GeneXpertResults`;
+CREATE TABLE `GeneXpertResults` (
   `TestID` int(11) NOT NULL AUTO_INCREMENT,
   `PatientID` varchar(50) NOT NULL,
   `SputumTestID` varchar(50) NOT NULL,
@@ -70,13 +70,13 @@ CREATE TABLE `genexpertresults` (
   `ProbeEndptE` double DEFAULT NULL,
   `ProbeEndptSPC` double DEFAULT NULL,
   PRIMARY KEY (`TestID`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Table structure for table `location`
-DROP TABLE IF EXISTS `location`;
-CREATE TABLE `location` (
+DROP TABLE IF EXISTS `Location`;
+CREATE TABLE `Location` (
   `LocationID` varchar(50) NOT NULL,
-  `locationName` varchar(50) DEFAULT NULL,
+  `LocationName` varchar(50) DEFAULT NULL,
   `LocationType` varchar(20) DEFAULT NULL,
   `AddressHouse` varchar(50) DEFAULT NULL,
   `AddressStreet` varchar(50) DEFAULT NULL,
@@ -85,7 +85,7 @@ CREATE TABLE `location` (
   `AddressTown` varchar(50) DEFAULT NULL,
   `CityID` varchar(50) DEFAULT NULL,
   `CountryID` varchar(50) DEFAULT NULL,
-  `AddressLocationLAt` float DEFAULT NULL,
+  `AddressLocationLat` float DEFAULT NULL,
   `AddressLocationLon` float DEFAULT NULL,
   `Phone` varchar(20) DEFAULT NULL,
   `Mobile` varchar(50) DEFAULT NULL,
@@ -102,8 +102,8 @@ CREATE TABLE `location` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Table structure for table `messagesettings`
-DROP TABLE IF EXISTS `messagesettings`;
-CREATE TABLE `messagesettings` (
+DROP TABLE IF EXISTS `MessageSettings`;
+CREATE TABLE `MessageSettings` (
   `SettingsID` int(11) NOT NULL AUTO_INCREMENT,
   `SendToPatient` bit(1) DEFAULT NULL,
   `SendToProvider` bit(1) DEFAULT NULL,
@@ -130,8 +130,8 @@ CREATE TABLE `messagesettings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Table structure for table `patient`
-DROP TABLE IF EXISTS `patient`;
-CREATE TABLE `patient` (
+DROP TABLE IF EXISTS `Patient`;
+CREATE TABLE `Patient` (
   `PatientID` varchar(50) NOT NULL,
   `ProviderID` varchar(50) DEFAULT NULL,
   `MRNo` varchar(50) DEFAULT NULL,
@@ -171,17 +171,17 @@ CREATE TABLE `patient` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Table structure for table `setuprole`
-DROP TABLE IF EXISTS `setuprole`;
-CREATE TABLE `setuprole` (
+DROP TABLE IF EXISTS `SetupRole`;
+CREATE TABLE `SetupRole` (
   `Role` varchar(50) NOT NULL,
   PRIMARY KEY (`Role`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 -- Dumping data for table `setuprole`
-INSERT INTO `setuprole` VALUES ('ADMIN');
+INSERT INTO `SetupRole` VALUES ('ADMIN'),('GUEST');
 
 -- Table structure for table `userrights`
-DROP TABLE IF EXISTS `userrights`;
-CREATE TABLE `userrights` (
+DROP TABLE IF EXISTS `UserRights`;
+CREATE TABLE `UserRights` (
   `Role` varchar(50) NOT NULL,
   `MenuName` varchar(50) NOT NULL,
   `SearchAccess` bit(1) NOT NULL,
@@ -193,11 +193,11 @@ CREATE TABLE `userrights` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Dumping data for table `userrights`
-INSERT INTO `userrights` VALUES ('ADMIN','DATALOG','\0','\0','\0','\0','\0');
+INSERT INTO `UserRights` VALUES ('ADMIN','DATALOG','1','1','1','1','1'),('ADMIN','ENCOUNTER','1','1','1','1','1'),('ADMIN','LOCATION','1','1','1','1','1'),('ADMIN','PATIENT','1','1','1','1','1'),('ADMIN','SETUP','1','1','1','1','1'),('ADMIN','SMS','1','1','1','1','1'),('ADMIN','USERS','1','1','1','1','1');
 
 -- Table structure for table `users`
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE `users` (
+DROP TABLE IF EXISTS `Users`;
+CREATE TABLE `Users` (
   `PID` varchar(50) NOT NULL,
   `UserName` varchar(50) NOT NULL,
   `Role` varchar(50) NOT NULL,
@@ -209,4 +209,4 @@ CREATE TABLE `users` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- Dumping data for table `users`
-INSERT INTO `users` VALUES ('ADMIN','ADMIN','ADMIN','ACTIVE','222117643951139901822193410624612819104125573923922','Dexter says: That number again is...','2191831962519017590304654193246402381779617073140137');
+INSERT INTO `Users` VALUES ('ADMIN','ADMIN','ADMIN','ACTIVE','222117643951139901822193410624612819104125573923922','Dexter says: That number again is...','2191831962519017590304654193246402381779617073140137');

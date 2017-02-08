@@ -1244,14 +1244,14 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 	@Override
 	public String toPostParams(boolean exportProbes, String username, String password) {
 		String postParams = "";
-		String variables = XpertProperties.getProperty(XpertProperties.SMS_VARIABLES);
+		String variables = XpertProperties.getProperty(XpertProperties.CSV_VARIABLES);
 		postParams += "type=astmresult";
 		if (username != null)
 			postParams += "&username=" + username;
 		if (password != null)
 			postParams += "&password=" + password;
 		if (variables.contains("patientId") && patientId != null)
-			postParams += "&pid=" + patientId;
+			postParams += "&patientid=" + patientId;
 		if (variables.contains("sampleId") && sampleId != null)
 			postParams += "&sampleid=" + sampleId.replaceAll("\\(", "").replaceAll("\\)", "");
 		if (variables.contains("resultMtb") && mtbResult != null)
@@ -1337,7 +1337,7 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 	@Override
 	public String toSMS(boolean exportProbes){
 		StringBuilder smsText = new StringBuilder();
-		String variables = XpertProperties.getProperty(XpertProperties.SMS_VARIABLES);
+		String variables = XpertProperties.getProperty(XpertProperties.CSV_VARIABLES);
 		if(variables.contains("assayHostTestCode;"))
 			smsText.append(replaceNull(universalTestId) + "^");
 		if(variables.contains("assay;"))
@@ -1449,7 +1449,7 @@ public class XpertASTMResultUploadMessage extends XpertResultUploadMessage {
 	@Override
 	public JSONObject toJson() {
 		JSONObject jsonObj = new JSONObject();
-		String variables = XpertProperties.getProperty(XpertProperties.SMS_VARIABLES);
+		String variables = XpertProperties.getProperty(XpertProperties.CSV_VARIABLES);
 		if(variables.contains("assayHostTestCode;"))
 			jsonObj.put("assayHostTestCode", universalTestId);
 		if(variables.contains("assay;"))

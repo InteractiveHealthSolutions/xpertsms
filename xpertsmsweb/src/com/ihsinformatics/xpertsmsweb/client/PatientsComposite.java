@@ -29,7 +29,6 @@ import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
-import com.google.gwt.user.datepicker.client.DateBox.DefaultFormat;
 import com.google.gwt.user.datepicker.client.DatePicker;
 import com.ihsinformatics.xpertsmsweb.shared.AccessType;
 import com.ihsinformatics.xpertsmsweb.shared.CustomMessage;
@@ -117,7 +116,6 @@ public class PatientsComposite extends Composite implements IForm,
 	private ListBox bloodGroupComboBox = new ListBox();
 	private ListBox patientStatusComboBox = new ListBox();
 
-	@SuppressWarnings("deprecation")
 	public PatientsComposite() {
 		initWidget(flexTable);
 		flexTable.setSize("600px", "100%");
@@ -190,8 +188,8 @@ public class PatientsComposite extends Composite implements IForm,
 		middleFlexTable.setWidget(12, 1, emailTextBox);
 		middleFlexTable.setWidget(13, 1, lblPatientInformation);
 		middleFlexTable.setWidget(14, 0, lblRegistrationDate);
-		registrationDateBox.setFormat(new DefaultFormat(DateTimeFormat
-				.getShortDateFormat()));
+		registrationDateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat
+				.getFormat("dd-MMM-yyyy")));
 		middleFlexTable.setWidget(14, 1, registrationDateBox);
 		middleFlexTable.setWidget(15, 0, lblMrNo);
 		mrNoTextBox.setVisibleLength(12);
@@ -305,8 +303,12 @@ public class PatientsComposite extends Composite implements IForm,
 		currentPatient.setEmail(XpertSmsWebClient.get(emailTextBox));
 		currentPatient.setDateRegistered(registrationDateBox.getValue());
 		currentPatient.setMrNo(XpertSmsWebClient.get(mrNoTextBox));
-		currentPatient.setWeight(weightDoubleBox.getValue().floatValue());
-		currentPatient.setHeight(heightDoubleBox.getValue().floatValue());
+		if (!"".equals(weightDoubleBox.getText())) {
+			currentPatient.setWeight(weightDoubleBox.getValue().floatValue());
+		}
+		if (!"".equals(heightDoubleBox.getText())) {
+			currentPatient.setHeight(heightDoubleBox.getValue().floatValue());
+		}
 		currentPatient.setBloodGroup(XpertSmsWebClient.get(bloodGroupComboBox));
 		currentPatient.setPatientStatus(XpertSmsWebClient
 				.get(patientStatusComboBox));
@@ -358,10 +360,14 @@ public class PatientsComposite extends Composite implements IForm,
 								registrationDateBox.setValue(currentPatient
 										.getDateRegistered());
 								mrNoTextBox.setValue(currentPatient.getMrNo());
-								weightDoubleBox.setValue(currentPatient
-										.getWeight().doubleValue());
-								heightDoubleBox.setValue(currentPatient
-										.getHeight().doubleValue());
+								if (currentPatient.getWeight() != null) {
+									weightDoubleBox.setValue(currentPatient
+											.getWeight().doubleValue());
+								}
+								if (currentPatient.getHeight() != null) {
+									heightDoubleBox.setValue(currentPatient
+											.getHeight().doubleValue());
+								}
 								bloodGroupComboBox.setSelectedIndex(XpertSmsWebClient
 										.getIndex(bloodGroupComboBox,
 												currentPatient.getBloodGroup()));

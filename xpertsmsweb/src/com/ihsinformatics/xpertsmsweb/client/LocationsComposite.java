@@ -65,7 +65,7 @@ public class LocationsComposite extends Composite implements IForm,
 	private Label lblAddress = new Label("Address 1:");
 	private Label lblAddress_1 = new Label("Address 2:");
 	private Label lblCountry = new Label("Country:");
-	private Label lblRegion = new Label("Region:");
+	private Label lblCity = new Label("City:");
 	private Label lblPhone = new Label("Phone:");
 	private Label lblMobile = new Label("Mobile(s):");
 	private Label lblEmailAddress = new Label("Email Address:");
@@ -129,7 +129,7 @@ public class LocationsComposite extends Composite implements IForm,
 		rightFlexTable.setWidget(7, 0, lblCountry);
 		countryComboBox.setName("COUNTRY");
 		rightFlexTable.setWidget(7, 1, countryComboBox);
-		rightFlexTable.setWidget(8, 0, lblRegion);
+		rightFlexTable.setWidget(8, 0, lblCity);
 		cityTextBox.setName("REGION");
 		rightFlexTable.setWidget(8, 1, cityTextBox);
 		rightFlexTable.setWidget(9, 0, lblPhone);
@@ -242,8 +242,10 @@ public class LocationsComposite extends Composite implements IForm,
 		currentLocation.setMobile(XpertSmsWebClient.get(mobileTextBox));
 		currentLocation.setEmail(XpertSmsWebClient.get(emailTextBox)
 				.toUpperCase());
-		currentLocation.setParentLocation(XpertSmsWebClient
-				.get(reportingToComboBox));
+		if (reportingToComboBox.getItemCount() > 0) {
+			currentLocation.setParentLocation(XpertSmsWebClient
+					.get(reportingToComboBox));
+		}
 	}
 
 	@Override

@@ -122,6 +122,7 @@ public class EventHandler extends HttpServlet {
 			System.out
 					.println("Warning! No backup post URL defiend. Skipping backup...s");
 		}
+		System.out.println("RESPONSE: " + xmlResponse);
 		return xmlResponse;
 	}
 
@@ -132,7 +133,7 @@ public class EventHandler extends HttpServlet {
 		 * MTB DETECTED (HIGH|LOW|MEDIUM|VERY LOW); RIF Resistance (DETECTED|NOT
 		 * DETECTED|INDETERMINATE) MTB NOT DETECTED NO RESULT ERROR INVALID
 		 */
-		String patientId = request.getParameter("pid");
+		String patientId = request.getParameter("patientid");
 		String sampleId = request.getParameter("sampleid");
 		if (patientId == null || patientId.equalsIgnoreCase("null"))
 			return XmlUtil.createErrorXml("Cannot save without Patient ID");
@@ -529,7 +530,7 @@ public class EventHandler extends HttpServlet {
 			}
 			try {
 				// Save the error in DB
-				String patientId = request.getParameter("pid");
+				String patientId = request.getParameter("patientid");
 				String systemId = request.getParameter("systemid");
 				String sampleId = request.getParameter("sampleid");
 				String operatorId = request.getParameter("operatorid");

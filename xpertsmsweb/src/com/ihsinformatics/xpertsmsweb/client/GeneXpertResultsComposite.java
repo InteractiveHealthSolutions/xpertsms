@@ -110,7 +110,7 @@ public class GeneXpertResultsComposite extends Composite implements IForm,
 	private TextBox patientIdTextBox = new TextBox();
 	private TextBox sputumTestID = new TextBox();
 	private TextBox sampleIdSearchTextBox = new TextBox();
-	private TextBox pidSearchTextBox = new TextBox();
+	private TextBox patientIdSearchTextBox = new TextBox();
 	private TextBox remarksTextBox = new TextBox();
 	private IntegerBox errorCodeIntegerBox = new IntegerBox();
 
@@ -162,7 +162,7 @@ public class GeneXpertResultsComposite extends Composite implements IForm,
 		sampleIdSearchTextBox.setMaxLength(12);
 
 		leftFlexTable.setWidget(1, 0, lblPatientIdSearch);
-		leftFlexTable.setWidget(1, 1, pidSearchTextBox);
+		leftFlexTable.setWidget(1, 1, patientIdSearchTextBox);
 		sampleIdSearchTextBox.setVisibleLength(12);
 		sampleIdSearchTextBox.setMaxLength(12);
 
@@ -400,7 +400,7 @@ public class GeneXpertResultsComposite extends Composite implements IForm,
 		try {
 			final String sampleId = XpertSmsWebClient
 					.get(sampleIdSearchTextBox);
-			final String patientId = XpertSmsWebClient.get(pidSearchTextBox);
+			final String patientId = XpertSmsWebClient.get(patientIdSearchTextBox);
 			if (sampleId.equals("") & patientId.equals("")) {
 				Window.alert(CustomMessage
 						.getErrorMessage(ErrorType.PARAMETER_MISSING));

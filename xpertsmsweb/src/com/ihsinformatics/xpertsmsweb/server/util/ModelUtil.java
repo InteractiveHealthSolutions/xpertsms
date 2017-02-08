@@ -50,13 +50,13 @@ public class ModelUtil {
 		return result;
 	}
 
-	public static Boolean isPatientClosed(String pid) throws Exception {
+	public static Boolean isPatientClosed(String patientId) throws Exception {
 
 		ServerServiceImpl ssl = new ServerServiceImpl();
 		Boolean result = false;
 		Patient p = null;
 
-		p = ssl.findPatient(pid);
+		p = ssl.findPatient(patientId);
 
 		return new Boolean(p.getPatientStatus().equals("CLOSED"));
 	}
