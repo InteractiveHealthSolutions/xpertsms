@@ -1,15 +1,9 @@
 package com.ihsinformatics.xpertsmsweb.server;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -47,51 +41,32 @@ import com.ihsinformatics.xpertsmsweb.shared.model.Users;
 public class ServerServiceImpl extends RemoteServiceServlet implements
 		ServerService {
 	private static final long serialVersionUID = 3525489570583922860L;
-	public static final Properties prop = new Properties();
-	public static String resourcesPath;
+	private static String resourcesPath;
+	private static ReportUtil reporter;
 
 	/**
 	 * 
 	 */
 	public ServerServiceImpl() {
-	}
-
-	public String getResourcesPath() {
 		if (resourcesPath == null) {
 			try {
 				// First, check the tomcat installation directory
-				String defaultDir = "/var/lib/tomcat6/webapps/xpertsmsweb";
-				String sep = System.getProperty("file.separator");
-				String home = System.getProperty("user.home");
-				File propFile = new File("xpertsmsweb.properties");
-				if (!propFile.exists()) {
-					// Try to read tomcat home directory from properties file
-					if (System.getProperty("os.name", "windows").toLowerCase()
-							.contains("windows"))
-						defaultDir = "c:\\apache-tomcat-6.0\\webapps\\xpertsmsweb";
-					propFile = new File(home + sep + "xpertsms" + sep
-							+ "xpertsmsweb.properties");
-				}
-				Properties prop = new Properties();
-				// If file is not found, create one
-				if (!propFile.exists()) {
-					prop.setProperty("app.dir", defaultDir);
-					prop.setProperty("version", "0.0.0");
-					prop.setProperty("backup.post.url", "");
-					prop.store(new FileOutputStream(propFile),
-							"Writing new properties file");
-				}
-				InputStream file = new FileInputStream(propFile);
-				prop.load(file);
-				resourcesPath = prop.getProperty("app.dir", defaultDir) + sep;
-				System.out.println("CURRENT RESOURCE PATH: " + resourcesPath);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
+				resourcesPath = "/var/lib/tomcat6/webapps/xpertsmsweb/";
+				if (System.getProperty("os.name", "windows").toLowerCase()
+						.contains("windows"))
+					resourcesPath = "c:\\apache-tomcat-6.0\\webapps\\xpertsmsweb\\";
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		return resourcesPath;
+		reporter = new ReportUtil(resourcesPath);
+	}
+
+	public ReportUtil getReporter() {
+		if (reporter == null) {
+			reporter = new ReportUtil(resourcesPath);
+		}
+		return reporter;
 	}
 
 	private String arrangeFilter(String filter) throws Exception {
@@ -200,8 +175,7 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 	 * @return
 	 */
 	public String generateCSVfromQuery(String query) throws Exception {
-		return new ReportUtil(getResourcesPath()).generateCSVfromQuery(query,
-				',');
+		return reporter.generateCSVfromQuery(query, ',');
 	}
 
 	/**
@@ -214,8 +188,7 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 	 */
 	public String generateReport(String fileName, Parameter[] params,
 			boolean export) throws Exception {
-		return new ReportUtil(getResourcesPath()).generateReport(fileName,
-				params, export);
+		return reporter.generateReport(fileName, params, export);
 	}
 
 	/**
@@ -229,8 +202,8 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 	 */
 	public String generateReportFromQuery(String reportName, String query,
 			Parameter[] params, Boolean export) throws Exception {
-		return new ReportUtil(getResourcesPath()).generateReportFromQuery(
-				reportName, query, params, export);
+		return reporter.generateReportFromQuery(reportName, query, params,
+				export);
 	}
 
 	public String[] getColumnData(String tableName, String columnName,
@@ -256,7 +229,7 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 	}
 
 	public String[][] getReportsList() throws Exception {
-		return new ReportUtil(getResourcesPath()).getReportList();
+		return reporter.getReportList();
 	}
 
 	public String[] getRowRecord(String tableName, String[] columnNames,
@@ -710,7 +683,7 @@ public class ServerServiceImpl extends RemoteServiceServlet implements
 			DocumentBuilderFactory buildFactory = DocumentBuilderFactory
 					.newInstance();
 			DocumentBuilder documentBuilder = buildFactory.newDocumentBuilder();
-			File file = new File(getResourcesPath());
+			File file = new File(resourcesPath);
 			Document doc = documentBuilder.parse(file);
 			Element docElement = doc.getDocumentElement();
 			for (ListType type : ListType.values()) {

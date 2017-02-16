@@ -135,8 +135,13 @@ public class EventHandler extends HttpServlet {
 		 */
 		String patientId = request.getParameter("patientid");
 		String sampleId = request.getParameter("sampleid");
-		if (patientId == null || patientId.equalsIgnoreCase("null"))
-			return XmlUtil.createErrorXml("Cannot save without Patient ID");
+		if (patientId == null) {
+			// This is for backwards compatibility, some older version of client is sending "pid"
+			patientId = request.getParameter("pid");
+			if (patientId == null || patientId.equalsIgnoreCase("null")) {
+				return XmlUtil.createErrorXml("Cannot save without Patient ID");
+			}
+		}
 		if (sampleId == null || sampleId.equalsIgnoreCase("null"))
 			return XmlUtil.createErrorXml("Cannot save without Sample ID");
 		String mtb = request.getParameter("mtb");
